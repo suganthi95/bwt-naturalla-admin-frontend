@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Layout from "./components/layout/Layout"
 import Reviews from "./pages/Reviews"
+import ReplyReview from "./pages/ReplyReview"
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
         <Route index element={<Home/>}/>
         <Route path="/overview" element={<Home/>}/>
         <Route path="/reviews" element={<Reviews/>}/>
-        <Route path="/search" element={<Home/>}/>
+        <Route path="/reviews/generate-response" element={<ReplyReview/>}/>
         <Route path="/bookmark" element={<Home/>}/>
         <Route path="/billing" element={<Home/>}/>
         <Route path="/feedback" element={<Home/>}/>
