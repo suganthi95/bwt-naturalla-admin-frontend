@@ -6,6 +6,7 @@ import { getReviews } from "@/lib/apis"
 import { ReviewType } from "@/types";
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom";
+import Home from "./Home";
 
 function Reviews() {
 
@@ -17,8 +18,13 @@ function Reviews() {
         refetchInterval: 0,
         retry: 3,
         refetchOnWindowFocus: false,
-        refetchIntervalInBackground: false
+        refetchIntervalInBackground: false,
+        enabled: Boolean(activeBusiness?.placeId)
     });
+
+    if(!activeBusiness){
+        return <Home/>
+    }
 
     let content;
 

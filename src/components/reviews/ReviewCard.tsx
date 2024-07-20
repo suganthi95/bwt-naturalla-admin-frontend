@@ -1,4 +1,4 @@
-import { Bookmark, Star, ThumbsUp } from "lucide-react"
+import { Bookmark, Star, ThumbsDown, ThumbsUp } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
 import { Button } from "../ui/button"
@@ -22,7 +22,8 @@ function ReviewCard(props: ReviewType) {
                 <div>
                     <div className="flex flex-row items-start gap-2">
                         <p className="font-semibold">{props.author_title}</p>
-                        <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />
+                        {props.sentimentScore <= 0 ? <ThumbsDown className="stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />}
+                        
                     </div>
                     <span className="text-xs text-light-grey">{dayjs(props.review_datetime_utc).fromNow()}</span>
                 </div>

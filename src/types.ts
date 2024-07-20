@@ -25,7 +25,9 @@ export type ReviewType = {
     "review_timestamp": number,
     "review_datetime_utc": string | null,
     "review_likes": number,
-    "reviews_id": string | null
+    "reviews_id": string | null,
+    "sentiment": "Strongly Positive",
+    "sentimentScore": 0.75
 }
 
 export type ReviewSuggestionType = {
