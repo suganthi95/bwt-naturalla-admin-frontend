@@ -1,4 +1,4 @@
-import { Bookmark, MessageCircle, Star, ThumbsUp } from "lucide-react"
+import { Bookmark, Star, ThumbsUp } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
 import { Button } from "../ui/button"
@@ -20,13 +20,14 @@ function ReviewCard(props: ReviewType) {
                 </Avatar>
 
                 <div>
-                    <p className="font-semibold">{props.author_title}</p>
+                    <div className="flex flex-row items-start gap-2">
+                        <p className="font-semibold">{props.author_title}</p>
+                        <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />
+                    </div>
                     <span className="text-xs text-light-grey">{dayjs(props.review_datetime_utc).fromNow()}</span>
                 </div>
 
-                <div>
-                    <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />
-                </div>
+                
             </div>
 
             <div className="flex flex-row gap-1 items-center">
@@ -56,9 +57,9 @@ function ReviewCard(props: ReviewType) {
         <CardFooter className="flex flex-row items-center justify-between py-1 px-3 border-b-2 border-b-slate-200">
             <p className="text-sm text-light-grey font-semibold">Yet to Respond</p>
             <div>
-                <Button size="icon" variant="ghost">
+                {/* <Button size="icon" variant="ghost">
                     <MessageCircle />
-                </Button>
+                </Button> */}
 
                 <Button size="icon"  variant="ghost">
                     <Bookmark />

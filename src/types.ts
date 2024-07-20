@@ -27,3 +27,55 @@ export type ReviewType = {
     "review_likes": number,
     "reviews_id": string | null
 }
+
+export type ReviewSuggestionType = {
+    casual_tone: string,
+    balanced_tone: string,
+    professional_tone: string,
+    overall_sentiment: "positive" | "negative",
+    _id: string,
+    review: {
+        _id: string,
+        createdAt: string,
+        updatedAt: string
+    }
+}
+
+export interface AuthType {
+    user: User
+    server_token: string
+}
+
+export interface User {
+    _id: string
+    email: string
+    profilePic: string
+    fullname: string
+    username: string
+    businessId: string[]
+    loggedIn: LoggedIn[]
+    createdAt: string
+    updatedAt: string
+    __v: number
+}
+  
+export interface LoggedIn {
+    timeStamp: string
+    createdAt: string
+    updatedAt: string
+}
+
+export interface GetBusinessType {
+    _id: string
+    placeId: string
+    businessName: string
+    streetNumber: string
+    street: string
+    city: string
+    zipCode: string
+    userId: string
+    userEmail: string
+    createdAt: string
+    updatedAt: string
+    __v: number
+}
