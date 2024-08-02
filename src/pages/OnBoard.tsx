@@ -7,7 +7,7 @@ import OnBoardThree from "@/components/onboard/OnBoardThree";
 import OnBoardTwo from "@/components/onboard/OnBoardTwo";
 import { useAppContext } from "@/contexts/AuthContext";
 import { onBoardUser } from "@/lib/apis";
-import { OnBoardType } from "@/types";
+import { AuthType, OnBoardType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react"
@@ -28,7 +28,7 @@ function OnBoard() {
         mutationKey: [ "onBoardUser" ],
         mutationFn: onBoardUser,
         onSuccess: (data) => {
-            setAuth(data.data);
+            setAuth((prev) => ({ ...prev, data: data.data.data } as AuthType));
             toast.success("Request Success", { description: "Signed In Successfully" })
             navigate(`/overview`, { replace: true });
         },

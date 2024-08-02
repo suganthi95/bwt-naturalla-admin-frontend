@@ -52,7 +52,7 @@ function SignUp() {
     if(isSuccess){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/overview`, { replace: true });
+        navigate(`/onboard`, { replace: true });
     }
 
     if(isError){
