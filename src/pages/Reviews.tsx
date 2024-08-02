@@ -7,6 +7,7 @@ import { ReviewType } from "@/types";
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom";
 import Home from "./Home";
+import { v4 as uuidv4 } from "uuid";
 
 function Reviews() {
 
@@ -14,7 +15,10 @@ function Reviews() {
 
     const { isLoading, isError, isSuccess, data, error } = useQuery({
         queryKey: [ "getReviews" ],
-        queryFn: () => getReviews(activeBusiness?.placeId as string),
+        queryFn: () => getReviews({
+            placeId: activeBusiness?.placeId as string,
+            uuid: uuidv4()
+        }),
         refetchInterval: 0,
         retry: 3,
         refetchOnWindowFocus: false,
@@ -37,7 +41,7 @@ function Reviews() {
     }
 
     if(isSuccess){
-        content = data?.data?.map((item : ReviewType) => (
+        content = data?.data?.data?.map((item : ReviewType) => (
             <Link to="/reviews/generate-response" key={item.review_id} state={item}>
                 <ReviewCard {...item}/>
             </Link>

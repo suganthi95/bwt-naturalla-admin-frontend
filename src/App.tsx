@@ -5,7 +5,7 @@ import Layout from "./components/layout/Layout"
 // import ReplyReview from "./pages/ReplyReview"
 import SignIn from "./pages/SignIn"
 import { useAppContext } from "./contexts/AuthContext"
-// import Business from "./pages/Business"
+import Business from "./pages/Business"
 import SignUp from "./pages/SignUp"
 import OnBoard from "./pages/OnBoard"
 
@@ -21,9 +21,9 @@ function App() {
       <Route path="/" element={<PrivateRoute/>}>
         <Route index element={<Home/>}/>
         <Route path="/overview" element={<Home/>}/>
-        {/* <Route path="/reviews" element={<Reviews/>}/> */}
-        {/* <Route path="/reviews/generate-response" element={<ReplyReview/>}/> */}
-        {/* <Route path="/business" element={<Business/>}/> */}
+        <Route path="/reviews" element={<Home/>}/>
+        <Route path="/reviews/generate-response" element={<Home/>}/>
+        <Route path="/business" element={<Business/>}/>
         <Route path="/bookmark" element={<Home/>}/>
         <Route path="/billing" element={<Home/>}/>
         <Route path="/feedback" element={<Home/>}/>

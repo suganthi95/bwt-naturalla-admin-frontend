@@ -7,7 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover"
 import { Button } from "./button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "./command"
 import { cn } from "@/lib/utils"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { addBusiness, getBusinessDetails, getBusinessSuggestions } from "@/lib/apis"
 import { Input } from "./input"
 import { Card } from "./card"
@@ -21,11 +21,12 @@ export function SearchBox() {
   const [open, setOpen] = useState(false);
   const [ input, setInput ] = useState("");
   const [value, setValue] = useState("");
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: [ "getBusinessSuggestions", input ],
-    queryFn: () => getBusinessSuggestions(input),
-    select: (res) => res.data?.predictions?.map((item: any) => ({
+    queryFn: () => getBusinessSuggestions({ input, uuid: uuidv4() }),
+    select: (res) => res?.data?.data?.predictions?.map((item: any) => ({
       label: item.description,
       value: item.place_id
     })),
@@ -53,15 +54,15 @@ export function SearchBox() {
     onSuccess: (res) => {
       addBusinessMutation({
         placeId: value,
-        businessName: res.data?.result?.name,
-        streetNumber: "",
-        street: "",
-        city: "",
-        zipCode: "",
-        userId: auth?.user?._id,
-        userEmail: auth?.user?.email
+        businessName: res?.data?.data?.result?.name,
+        streetNumber: res?.data?.data?.result?.address_components[1].long_name,
+        street: res?.data?.data?.result?.address_components[2].long_name,
+        city: res?.data?.data?.result?.address_components[3].long_name,
+        zipCode: res?.data?.data?.result?.address_components.at(-1).long_name,
+        email: auth?.data?.email
       });
 
+      queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       setValue("");
     },
     onError: (error) => {

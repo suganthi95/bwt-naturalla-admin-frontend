@@ -4,17 +4,16 @@ import { AuthType } from "@/types";
 import { TokenResponse } from "@react-oauth/google";
 import axios from "axios";
 
-const BASE_URL = "https://rising-memory-402507.el.r.appspot.com";
 const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
+const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
 const auth: AuthType = JSON.parse(localStorage.getItem("auth") as string);
 
-console.log(auth)
 
 
-export const getReviews = async (reviewId: string) => {
+export const getReviews = async ({ placeId, uuid }: { placeId: string, uuid: string }) => {
     return await axios({
         method: "get",
-        url: `${BASE_URL}/review/getReviews/${reviewId}`,
+        url: `${BUSINESS_BASE_URL}/reviews/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
         headers: {
             "Content-Type": "application/json",
             "Authorization": auth.token
@@ -25,7 +24,7 @@ export const getReviews = async (reviewId: string) => {
 export const getSuggestions = async (body: any) => {
     return await axios({
         method: "post",
-        url: `${BASE_URL}/suggestion/getSuggestion`,
+        url: `${BASE_URL_V2}/suggestion/getSuggestion`,
         headers: {
             "Content-Type": "application/json",
             "Authorization": auth.token
@@ -34,17 +33,6 @@ export const getSuggestions = async (body: any) => {
     })
 } 
 
-export const copyToClipboard = async (data: { tone: string, id: string }) => {
-    return await axios({
-        method: "post",
-        url: `${BASE_URL}/suggestion/copyToClipboard`,
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": auth.token
-        },
-        data: data
-    })
-} 
 
 export const verifyGoogleUser = async (user: Omit<TokenResponse, "error" | "error_description" | "error_uri"> | undefined) => {
     return await axios({
@@ -105,43 +93,68 @@ export const signInUserByGoogle = async (data: { email: string, name: string }) 
     })
 }
 
-export const getBusinessSuggestions = async (input: string) => {
-
+export const getBusinessSuggestions = async ({ input, uuid }: { input: string, uuid: string }) => {
     return await axios({
         method: "get",
-        url: `${BASE_URL}/business/businessSuggestions?query=${input}&language=en`,
+        url: `${BUSINESS_BASE_URL}/reviews/business/google/suggestions?query=${input}&session_token=${uuid}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": auth.token
+        },
     })
 }
 
 export const getBusinessDetails = async ({ placeId, uuid }: { placeId: string, uuid: string }) => {
     return await axios({
         method: "get",
-        url: `${BASE_URL}/business/placeDetails?placeId=${placeId}&sessionToken=${uuid}`,
+        url: `${BUSINESS_BASE_URL}/reviews/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": auth.token
+        },
     })
 }
 
 export const addBusiness = async (data: any) => {
     return await axios({
         method: "post",
-        url: `${BASE_URL}/business/addBusiness`,
+        url: `${BUSINESS_BASE_URL}/reviews/business`,
         headers: {
-            Accept: 'application/json'
+            Accept: 'application/json',
+            "Authorization": auth.token
+        },
+        data: {
+            place_id: data.placeId,
+            business_name: data.businessName,
+            street_number: data.streetNumber,
+            street: data.street,
+            city: data.city,
+            email: data.email,
+            zip_code: data.zipCode
+        }
+    })
+}
+
+export const removeBusiness = async (data: { place_id: string, email: string }) => {
+    return await axios({
+        method: "delete",
+        url: `${BUSINESS_BASE_URL}/reviews/business`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": auth.token
         },
         data
     })
 }
 
-export const getAllBusiness = async ({ email, userId }: { email: string, userId: string }) => {
+export const getAllBusiness = async () => {
     return await axios({
-        method: "post",
-        url: `${BASE_URL}/business/getBusiness`,
+        method: "get",
+        url: `${BUSINESS_BASE_URL}/reviews/business`,
         headers: {
-            Accept: 'application/json'
+            Accept: 'application/json',
+            "Authorization": auth.token
         },
-        data: {
-            email,
-            userId
-        }
     })
 }
 

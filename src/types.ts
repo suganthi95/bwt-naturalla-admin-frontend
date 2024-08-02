@@ -65,18 +65,13 @@ export interface User {
 }
 
 export interface GetBusinessType {
-    _id: string
-    placeId: string
-    businessName: string
-    streetNumber: string
+    business_name: string
+    street_number: string
     street: string
     city: string
-    zipCode: string
-    userId: string
-    userEmail: string
-    createdAt: string
-    updatedAt: string
-    __v: number
+    email: string
+    zip_code: string
+    place_id: string
 }
 
 export type SignUpType = {

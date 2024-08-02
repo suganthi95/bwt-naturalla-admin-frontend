@@ -22,8 +22,8 @@ function Navbar({content}: { content: ReactNode }){
                         <span className="text-sm text-light-grey">25/25 credits</span>
                     </Card>
                     {activeBusiness ? 
-                        <Card className="py-1 px-2 flex flex-row items-center gap-1">
-                            <span className="text-sm text-light-grey text-ellipsis overflow-hidden">{activeBusiness.businessName}</span>
+                        <Card className="py-1 px-2 flex flex-row items-center gap-1 bg-secondary">
+                            <span className="text-sm text-white text-ellipsis overflow-hidden">{activeBusiness.businessName}</span>
                         </Card> :
                         <Link to="/business">
                             <Button>

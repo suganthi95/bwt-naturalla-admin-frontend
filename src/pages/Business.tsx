@@ -4,23 +4,36 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import Loader from "@/components/ui/Loader";
 import { SearchBox } from "@/components/ui/SearchBox"
 import { useAppContext } from "@/contexts/AuthContext"
-import { getAllBusiness } from "@/lib/apis"
+import { getAllBusiness, removeBusiness } from "@/lib/apis"
 import { GetBusinessType } from "@/types";
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
+import { toast } from "sonner";
 
 function Business() {
 
   dayjs.extend(relativeTime);
-  const { auth, setActiveBusiness } = useAppContext();
+  const { setActiveBusiness } = useAppContext();
+  const { auth } = useAppContext();
+  const queryClient = useQueryClient()
   const { data, isLoading, isError, isSuccess, error } = useQuery({
     queryKey: [ "getAllBusiness" ],
-    queryFn: () => getAllBusiness({ userId: auth?.user?._id as string, email: auth?.user?.email as string }),
+    queryFn: () => getAllBusiness(),
     retry: 2,
     refetchOnWindowFocus: false
   });
+
+  const { mutate } = useMutation({
+    mutationKey: [ "removeBusiness" ],
+    mutationFn: removeBusiness,
+    onSuccess: () => {
+      toast.success("Request Success", { description: "Business Deleted Successfully" });
+      queryClient.invalidateQueries({ queryKey: [ "getAllBusiness" ] })
+    },
+    onError: (error) => console.log(error),
+  })
 
   let content;
 
@@ -33,13 +46,22 @@ function Business() {
     content = <p>{error?.message}</p>
   }
 
-  if(isSuccess){
+  if(isSuccess && data?.data?.data?.length === 0){
+      content = (
+        <div className="flex flex-col items-center justify-center p-2 ml-1 mr-2 mb-2 flex-1 overflow-hidden">
+          <h1 className="text-xl font-semibold">No Business added</h1>
+          <p className="text-slate-300">Search or Add your business account</p>
+        </div>
+      )
+  }
+
+  if(isSuccess && data?.data?.data?.length > 0){
     content = (<div className="mt-10 grid grid-cols-3 gap-5">
-      {data.data.map((item: GetBusinessType, index: number) => (
-        <Card key={item.placeId + index}>
+      {data?.data?.data?.map((item: GetBusinessType, index: number) => (
+        <Card key={item.place_id + index}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between gap-2">
-              <span className="text-xl">{item.businessName}</span>
+              <span className="text-xl">{item.business_name}</span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" variant="ghost" className="rounded-full">
@@ -50,8 +72,11 @@ function Business() {
                   <DropdownMenuLabel>Options</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => setActiveBusiness({ businessName: item.businessName, placeId: item.placeId })}>
+                    <DropdownMenuItem onClick={() => setActiveBusiness({ businessName: item.business_name, placeId: item.place_id })}>
                       <span>Set Active Business</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string})}>
+                      <span>Remove Business</span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
@@ -60,7 +85,7 @@ function Business() {
             <CardDescription></CardDescription>
           </CardHeader>
           <CardContent>
-              <span className="text-sm text-slate-400">Added {dayjs(item.createdAt).fromNow()}</span>
+              <span className="text-sm text-slate-400">{item?.street_number}, {item?.street}, {item?.city}, {item?.zip_code}</span>
           </CardContent>
         </Card>
       ))}
