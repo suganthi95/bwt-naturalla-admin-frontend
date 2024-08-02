@@ -25,7 +25,7 @@ export function SearchBox() {
 
   const { data, isLoading } = useQuery({
     queryKey: [ "getBusinessSuggestions", input ],
-    queryFn: () => getBusinessSuggestions({ input, uuid: uuidv4() }),
+    queryFn: () => getBusinessSuggestions({ input, uuid: uuidv4(), token: auth?.token as string }),
     select: (res) => res?.data?.data?.predictions?.map((item: any) => ({
       label: item.description,
       value: item.place_id
@@ -59,7 +59,8 @@ export function SearchBox() {
         street: res?.data?.data?.result?.address_components[2].long_name,
         city: res?.data?.data?.result?.address_components[3].long_name,
         zipCode: res?.data?.data?.result?.address_components.at(-1).long_name,
-        email: auth?.data?.email
+        email: auth?.data?.email,
+        token: auth?.token
       });
 
       queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
@@ -74,7 +75,8 @@ export function SearchBox() {
   const getDetailedBusiness = () => {
     mutate({
       placeId: value,
-      uuid: uuidv4()
+      uuid: uuidv4(),
+      token: auth?.token as string
     })
   }
   

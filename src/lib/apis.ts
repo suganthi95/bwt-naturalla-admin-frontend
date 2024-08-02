@@ -1,40 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { AuthType } from "@/types";
 import { TokenResponse } from "@react-oauth/google";
 import axios from "axios";
 
 const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
-const auth: AuthType = JSON.parse(localStorage.getItem("auth") as string);
 
 
 
-export const getReviews = async ({ placeId, uuid }: { placeId: string, uuid: string }) => {
+export const getReviews = async ({ placeId, uuid, token }: { placeId: string, uuid: string, token: string }) => {
+
     return await axios({
         method: "get",
         url: `${BUSINESS_BASE_URL}/reviews/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
         headers: {
             "Content-Type": "application/json",
-            "Authorization": auth.token
+            "Authorization": token
         }
     })
 }
 
 export const getSuggestions = async (body: any) => {
+
+    const { token, ...data } = body;
+
     return await axios({
         method: "post",
         url: `${BASE_URL_V2}/suggestion/getSuggestion`,
         headers: {
             "Content-Type": "application/json",
-            "Authorization": auth.token
+            "Authorization": token
         },
-        data: body
+        data
     })
 } 
 
 
 export const verifyGoogleUser = async (user: Omit<TokenResponse, "error" | "error_description" | "error_uri"> | undefined) => {
+
     return await axios({
         method: "get",
         url: `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user?.access_token}`,
@@ -93,35 +95,39 @@ export const signInUserByGoogle = async (data: { email: string, name: string }) 
     })
 }
 
-export const getBusinessSuggestions = async ({ input, uuid }: { input: string, uuid: string }) => {
+export const getBusinessSuggestions = async ({ input, uuid, token }: { input: string, uuid: string, token: string }) => {
+
+
     return await axios({
         method: "get",
         url: `${BUSINESS_BASE_URL}/reviews/business/google/suggestions?query=${input}&session_token=${uuid}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": auth.token
+            "Authorization": token
         },
     })
 }
 
-export const getBusinessDetails = async ({ placeId, uuid }: { placeId: string, uuid: string }) => {
+export const getBusinessDetails = async ({ placeId, uuid, token }: { placeId: string, uuid: string, token: string }) => {
+
     return await axios({
         method: "get",
         url: `${BUSINESS_BASE_URL}/reviews/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": auth.token
+            "Authorization": token
         },
     })
 }
 
 export const addBusiness = async (data: any) => {
+
     return await axios({
         method: "post",
         url: `${BUSINESS_BASE_URL}/reviews/business`,
         headers: {
             Accept: 'application/json',
-            "Authorization": auth.token
+            "Authorization": data.token
         },
         data: {
             place_id: data.placeId,
@@ -135,25 +141,29 @@ export const addBusiness = async (data: any) => {
     })
 }
 
-export const removeBusiness = async (data: { place_id: string, email: string }) => {
+export const removeBusiness = async (data: { place_id: string, email: string, token: string }) => {
+
+    const { token, ...body } = data;
+
     return await axios({
         method: "delete",
         url: `${BUSINESS_BASE_URL}/reviews/business`,
         headers: {
             Accept: 'application/json',
-            "Authorization": auth.token
+            "Authorization": token
         },
-        data
+        data: body
     })
 }
 
-export const getAllBusiness = async () => {
+export const getAllBusiness = async (token: string) => {
+    
     return await axios({
         method: "get",
         url: `${BUSINESS_BASE_URL}/reviews/business`,
         headers: {
             Accept: 'application/json',
-            "Authorization": auth.token
+            "Authorization": token
         },
     })
 }

@@ -14,17 +14,16 @@ import { useLocation } from "react-router-dom";
 function ReplyReview() {
 
 
-    const { auth } = useAppContext();
     const { state }: { state: ReviewType } = useLocation();
     const [ generate, setGenerate ] = useState<number>(0);
+    const { auth } = useAppContext();
 
     const { isLoading, isSuccess, isError, data, error } = useQuery({
       queryKey: [ "getSuggestions", generate ],
       queryFn: () => getSuggestions({
           prompt: state.review_text,
-          userId: auth?.user._id,
-          userEmail: auth?.user.email,
-          review: state
+          review: state,
+          token: auth?.token
       }),
       retry: 3,
       refetchOnWindowFocus: false,

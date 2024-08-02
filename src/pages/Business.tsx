@@ -20,7 +20,7 @@ function Business() {
   const queryClient = useQueryClient()
   const { data, isLoading, isError, isSuccess, error } = useQuery({
     queryKey: [ "getAllBusiness" ],
-    queryFn: () => getAllBusiness(),
+    queryFn: () => getAllBusiness(auth?.token as string),
     retry: 2,
     refetchOnWindowFocus: false
   });
@@ -75,7 +75,7 @@ function Business() {
                     <DropdownMenuItem onClick={() => setActiveBusiness({ businessName: item.business_name, placeId: item.place_id })}>
                       <span>Set Active Business</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string})}>
+                    <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string, token: auth?.token as string})}>
                       <span>Remove Business</span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>

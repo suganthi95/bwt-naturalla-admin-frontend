@@ -11,13 +11,14 @@ import { v4 as uuidv4 } from "uuid";
 
 function Reviews() {
 
-    const { activeBusiness } = useAppContext();
+    const { activeBusiness, auth } = useAppContext();
 
     const { isLoading, isError, isSuccess, data, error } = useQuery({
         queryKey: [ "getReviews" ],
         queryFn: () => getReviews({
             placeId: activeBusiness?.placeId as string,
-            uuid: uuidv4()
+            uuid: uuidv4(),
+            token: auth?.token as string
         }),
         refetchInterval: 0,
         retry: 3,
