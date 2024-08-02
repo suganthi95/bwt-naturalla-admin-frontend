@@ -23,7 +23,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         const activeBusiness = localStorage.getItem("activeBusiness");
         if(activeBusiness === null) return null;
         return JSON.parse(activeBusiness)
-    })
+    });
 
     useEffect(() => {
         if(auth){

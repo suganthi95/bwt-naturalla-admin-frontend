@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import { Award, BarChartBig, Bookmark, CircleAlert, CreditCard, DoorOpen, House, Search, Settings, UserCog } from "lucide-react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
 import LogoutDialog from "../ui/LogoutDialog";
@@ -23,6 +23,7 @@ function Layout() {
     const signout = () => {
         googleLogout();
         setAuth(null);
+        localStorage.removeItem("auth");
         navigate("/sign-in", { replace: true });
     };
 
@@ -90,10 +91,10 @@ function Layout() {
                     <TabsList className="flex flex-col h-full rounded-none bg-white">
                         <TabsTrigger onClick={() => navigate("profile")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="profile">
                             <Avatar className="h-7 w-7">
-                                <AvatarImage src={auth?.user?.profilePic} />
-                                <AvatarFallback className="text-secondary">{auth?.user.fullname[0]}</AvatarFallback>
+                                {/* <AvatarImage src={auth?.data} /> */}
+                                <AvatarFallback className="text-secondary">{auth?.data?.name[0]}</AvatarFallback>
                             </Avatar>
-                            <p>{auth?.user.fullname}</p>
+                            <p>{auth?.data?.name}</p>
                         </TabsTrigger>
                         <TabsTrigger onClick={() => setOpenLogoutDialog(true)} className="px-3 py-2 mt-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white hover:bg-secondary hover:text-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="logout">
                             <DoorOpen className="w-5" />

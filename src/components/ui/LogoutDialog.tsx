@@ -12,7 +12,7 @@ function LogoutDialog(props : Props) {
     <AlertDialog open={props.openLogoutDialog} onOpenChange={() => props.setOpenLogoutDialog(false)}>
         <AlertDialogContent>
             <AlertDialogHeader>
-            <AlertDialogTitle>Do you wanna Sign out?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure you want to Sign out?</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>

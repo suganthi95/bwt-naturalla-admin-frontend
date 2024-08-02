@@ -44,27 +44,24 @@ export type ReviewSuggestionType = {
 }
 
 export interface AuthType {
-    user: User
-    server_token: string
+    data: User
+    message: "Success",
+    token: string
 }
 
 export interface User {
-    _id: string
-    email: string
-    profilePic: string
-    fullname: string
-    username: string
-    businessId: string[]
-    loggedIn: LoggedIn[]
-    createdAt: string
-    updatedAt: string
-    __v: number
-}
-  
-export interface LoggedIn {
-    timeStamp: string
-    createdAt: string
-    updatedAt: string
+    name: string,
+    email: string,
+    password: string | null,
+    role: string | null,
+    industry: string | null,
+    created_at: Date,
+    through: "google",
+    workspaces: string[],
+    business_type: string | null,
+    heard_through: string | null,
+    activeWorkspace: string,
+    onboarded: boolean
 }
 
 export interface GetBusinessType {
@@ -80,4 +77,19 @@ export interface GetBusinessType {
     createdAt: string
     updatedAt: string
     __v: number
+}
+
+export type SignUpType = {
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+}
+
+export type OnBoardType = {
+    business: string,
+    role: string,
+    industry: string,
+    heardThrough: string,
+    workspaceName: string
 }

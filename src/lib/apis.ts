@@ -5,7 +5,10 @@ import { TokenResponse } from "@react-oauth/google";
 import axios from "axios";
 
 const BASE_URL = "https://rising-memory-402507.el.r.appspot.com";
+const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 const auth: AuthType = JSON.parse(localStorage.getItem("auth") as string);
+
+console.log(auth)
 
 
 export const getReviews = async (reviewId: string) => {
@@ -14,7 +17,7 @@ export const getReviews = async (reviewId: string) => {
         url: `${BASE_URL}/review/getReviews/${reviewId}`,
         headers: {
             "Content-Type": "application/json",
-            "Authorization": auth.server_token
+            "Authorization": auth.token
         }
     })
 }
@@ -25,7 +28,7 @@ export const getSuggestions = async (body: any) => {
         url: `${BASE_URL}/suggestion/getSuggestion`,
         headers: {
             "Content-Type": "application/json",
-            "Authorization": auth.server_token
+            "Authorization": auth.token
         },
         data: body
     })
@@ -37,7 +40,7 @@ export const copyToClipboard = async (data: { tone: string, id: string }) => {
         url: `${BASE_URL}/suggestion/copyToClipboard`,
         headers: {
             "Content-Type": "application/json",
-            "Authorization": auth.server_token
+            "Authorization": auth.token
         },
         data: data
     })
@@ -54,10 +57,47 @@ export const verifyGoogleUser = async (user: Omit<TokenResponse, "error" | "erro
     })
 }
 
-export const signInUser = async (data: any) => {
+export const signupUser = async (data: { name: string, email: string, password: string }) => {
     return await axios({
         method: "post",
-        url: `${BASE_URL}/user/signInUser`,
+        url: `${BASE_URL_V2}/auth/register`,
+        headers: {
+            Accept: 'application/json'
+        },
+        data
+    })
+}
+
+export const onBoardUser = async (data: { role: string, industry: string, business_type: string, heard_through: string, workspace_name: string, token: string }) => {
+
+    const { token, ...body } = data;
+    
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/onboarding`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: body
+    })
+}
+
+export const signinUser = async (data: { email: string, password: string }) => {
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/login`,
+        headers: {
+            Accept: 'application/json'
+        },
+        data
+    })
+}
+
+export const signInUserByGoogle = async (data: { email: string, name: string }) => {
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/google-signin`,
         headers: {
             Accept: 'application/json'
         },
