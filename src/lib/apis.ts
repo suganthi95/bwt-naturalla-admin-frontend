@@ -11,7 +11,7 @@ export const getReviews = async ({ placeId, sort, token }: { placeId: string, so
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/reviews/google?placeId=${placeId}&sort=${sort}`,
+        url: `${BUSINESS_BASE_URL}/workspace/google?placeId=${placeId}&sort=${sort}`,
         headers: {
             "Content-Type": "application/json",
             "Authorization": token
@@ -25,7 +25,7 @@ export const getSuggestions = async (body: any) => {
 
     return await axios({
         method: "post",
-        url: `${BUSINESS_BASE_URL}/reviews/suggestions/generate`,
+        url: `${BUSINESS_BASE_URL}/workspace/suggestions/generate`,
         headers: {
             "Content-Type": "application/json",
             "Authorization": token
@@ -100,7 +100,7 @@ export const getBusinessSuggestions = async ({ input, uuid, token }: { input: st
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/reviews/business/google/suggestions?query=${input}&session_token=${uuid}`,
+        url: `${BUSINESS_BASE_URL}/workspace/business/google/suggestions?query=${input}&session_token=${uuid}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -112,7 +112,7 @@ export const getBusinessDetails = async ({ placeId, uuid, token }: { placeId: st
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/reviews/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
+        url: `${BUSINESS_BASE_URL}/workspace/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -124,7 +124,7 @@ export const addBusiness = async (data: any) => {
 
     return await axios({
         method: "post",
-        url: `${BUSINESS_BASE_URL}/reviews/business`,
+        url: `${BUSINESS_BASE_URL}/workspace/business`,
         headers: {
             Accept: 'application/json',
             "Authorization": data.token
@@ -147,7 +147,7 @@ export const removeBusiness = async (data: { place_id: string, email: string, to
 
     return await axios({
         method: "delete",
-        url: `${BUSINESS_BASE_URL}/reviews/business`,
+        url: `${BUSINESS_BASE_URL}/workspace/business`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -160,7 +160,7 @@ export const getAllBusiness = async (token: string) => {
     
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/reviews/business`,
+        url: `${BUSINESS_BASE_URL}/workspace/business`,
         headers: {
             Accept: 'application/json',
             "Authorization": token

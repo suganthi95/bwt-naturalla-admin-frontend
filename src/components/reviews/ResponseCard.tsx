@@ -34,7 +34,7 @@ function ResponseCard(props: ReviewSuggestionType) {
         <CardContent>
             <p className="text-sm font-semibold">Tap on the card below to send</p>
 
-            <div className="pt-5 grid grid-cols-3 gap-5">
+            <div className="pt-5 grid grid-cols-2 gap-5">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
                         <div className="flex flex-row items-center gap-2 pt-2">
@@ -78,32 +78,6 @@ function ResponseCard(props: ReviewSuggestionType) {
                         <div className="pt-1">
                             <Button onClick={() => copyToClipboard(props.professional_tone)} size="icon" variant="ghost">
                             {/* {isPending && tone === "professional" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
-                                <Copy className="stroke-light-grey h-5" strokeWidth={1} />
-                            </Button>
-                            <Button size="icon" variant="ghost">
-                                <Bookmark className="stroke-light-grey h-5" strokeWidth={1} />
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
-                        <div className="flex flex-row items-center gap-2 pt-2">
-                            <div className="rounded-full overflow-hidden">
-                                <Icons.toneIcon/>
-                            </div>
-
-                            <div>
-                                <p className="font-semibold">Balanced Tone</p>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="pt-1">
-                        <p className="text-sm text-light-grey">{props.balanced_tone}</p>
-                        <div className="pt-1">
-                            <Button onClick={() => copyToClipboard(props.balanced_tone)} size="icon" variant="ghost">
-                            {/* {isPending && tone === "balanced" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
                             <Button size="icon" variant="ghost">

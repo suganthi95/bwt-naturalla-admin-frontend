@@ -15,7 +15,7 @@ function Layout() {
 
   const navigate = useNavigate();
   const path = useLocation();
-  const { auth, setAuth } = useAppContext();
+  const { auth, setAuth, setActiveBusiness } = useAppContext();
   const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
 
   const tabValue = path.pathname.split("/").at(-1);
@@ -23,7 +23,9 @@ function Layout() {
     const signout = () => {
         googleLogout();
         setAuth(null);
+        setActiveBusiness(null);
         localStorage.removeItem("auth");
+        localStorage.removeItem("activeBusiness");
         navigate("/sign-in", { replace: true });
     };
 
