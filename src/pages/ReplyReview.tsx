@@ -22,7 +22,6 @@ function ReplyReview() {
       queryKey: [ "getSuggestions", generate ],
       queryFn: () => getSuggestions({
           prompt: state.review_text,
-          review: state,
           token: auth?.token
       }),
       retry: 3,
@@ -44,7 +43,7 @@ function ReplyReview() {
     }
 
     if(isSuccess){
-      content = <ResponseCard {...data?.data}/>
+      content = <ResponseCard {...data?.data?.data}/>
     }
 
 

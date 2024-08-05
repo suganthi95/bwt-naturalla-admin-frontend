@@ -7,17 +7,18 @@ import { ReviewType } from "@/types";
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom";
 import Home from "./Home";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 function Reviews() {
 
     const { activeBusiness, auth } = useAppContext();
+    const [ sortKey, setSortKey ] = useState<string>("newest");
 
     const { isLoading, isError, isSuccess, data, error } = useQuery({
-        queryKey: [ "getReviews" ],
+        queryKey: [ "getReviews", sortKey ],
         queryFn: () => getReviews({
             placeId: activeBusiness?.placeId as string,
-            uuid: uuidv4(),
+            sort: sortKey,
             token: auth?.token as string
         }),
         refetchInterval: 0,
@@ -38,10 +39,14 @@ function Reviews() {
     }
 
     if(isError){
-        content = <p>{error?.message}</p>
+        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
     }
 
-    if(isSuccess){
+    if(isSuccess && data?.data?.data.length === 0){
+        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
+    }
+
+    if(isSuccess && data?.data?.data.length > 0){
         content = data?.data?.data?.map((item : ReviewType) => (
             <Link to="/reviews/generate-response" key={item.review_id} state={item}>
                 <ReviewCard {...item}/>
@@ -52,16 +57,16 @@ function Reviews() {
 
   return (
     <div className="p-2 border-2 border-slate-200 rounded-xl ml-1 mr-2 mb-2 flex flex-col flex-1 overflow-hidden">
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Reviews</h1>
-            <Select>
+            <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
                 <SelectTrigger className="w-[100px] h-8">
                     <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="zds">Newest</SelectItem>
-                    <SelectItem value="light">Positive</SelectItem>
-                    <SelectItem value="dark">Negative</SelectItem>
+                    <SelectItem value="newest">Newest</SelectItem>
+                    <SelectItem value="highest_rating">Positive</SelectItem>
+                    <SelectItem value="lowest_rating">Negative</SelectItem>
                 </SelectContent>
             </Select>
         </div>

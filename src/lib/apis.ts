@@ -7,11 +7,11 @@ const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v
 
 
 
-export const getReviews = async ({ placeId, uuid, token }: { placeId: string, uuid: string, token: string }) => {
+export const getReviews = async ({ placeId, sort, token }: { placeId: string, sort: string, token: string }) => {
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/reviews/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
+        url: `${BUSINESS_BASE_URL}/reviews/google?placeId=${placeId}&sort=${sort}`,
         headers: {
             "Content-Type": "application/json",
             "Authorization": token
@@ -25,7 +25,7 @@ export const getSuggestions = async (body: any) => {
 
     return await axios({
         method: "post",
-        url: `${BASE_URL_V2}/suggestion/getSuggestion`,
+        url: `${BUSINESS_BASE_URL}/reviews/suggestions/generate`,
         headers: {
             "Content-Type": "application/json",
             "Authorization": token

@@ -1,8 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import Layout from "./components/layout/Layout"
-// import Reviews from "./pages/Reviews"
-// import ReplyReview from "./pages/ReplyReview"
+import Reviews from "./pages/Reviews"
+import ReplyReview from "./pages/ReplyReview"
 import SignIn from "./pages/SignIn"
 import { useAppContext } from "./contexts/AuthContext"
 import Business from "./pages/Business"
@@ -21,8 +21,8 @@ function App() {
       <Route path="/" element={<PrivateRoute/>}>
         <Route index element={<Home/>}/>
         <Route path="/overview" element={<Home/>}/>
-        <Route path="/reviews" element={<Home/>}/>
-        <Route path="/reviews/generate-response" element={<Home/>}/>
+        <Route path="/reviews" element={<Reviews/>}/>
+        <Route path="/reviews/generate-response" element={<ReplyReview/>}/>
         <Route path="/business" element={<Business/>}/>
         <Route path="/bookmark" element={<Home/>}/>
         <Route path="/billing" element={<Home/>}/>
