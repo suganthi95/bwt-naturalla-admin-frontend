@@ -62,12 +62,18 @@ function SignIn() {
             console.log(error)
             toast.error("Request Failed", { description: error?.response?.data?.message })
         }
-    })
+    });
 
-    if(isSuccess){
+    if(isSuccess && data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
         navigate(`/overview`, { replace: true });
+    }
+
+    if(isSuccess && !data?.data?.data?.onboarded){
+        setAuth(data.data);
+        toast.success("Request Success", { description: "Signed In Successfully" })
+        navigate(`/onboard`, { replace: true });
     }
 
     if(isError){

@@ -15,7 +15,7 @@ function Navbar({content}: { content: ReactNode }){
     return(
         <div className="my-2 pl-1 pr-2 relative top-0 w-full z-10">
             <div className="py-3 px-3 border-slate-200 border-2 rounded-xl flex items-center flex-row justify-between w-full">
-                <h1 className="hidden lg:block text-xl font-semibold"><span className="text-primary">Welcome to</span> {auth?.data?.activeWorkspace}</h1>
+                <h1 className="hidden lg:block text-xl font-semibold"><span className="text-primary">Welcome to</span> {auth?.data?.active_workspace_name || "Demo Account"}</h1>
                 <div className="flex flex-row  items-center justify-center gap-5">
                     <Card className="py-1 px-2 flex flex-row items-center gap-1">
                         <Zap className="w-5 text-secondary" />

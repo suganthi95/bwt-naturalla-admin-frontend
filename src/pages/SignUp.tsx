@@ -49,7 +49,13 @@ function SignUp() {
         enabled: Boolean(googleData)
     });
 
-    if(isSuccess){
+    if(isSuccess && data?.data?.data?.onboarded){
+        setAuth(data.data);
+        toast.success("Request Success", { description: "Signed In Successfully" })
+        navigate(`/overview`, { replace: true });
+    }
+
+    if(isSuccess && !data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
         navigate(`/onboard`, { replace: true });

@@ -60,7 +60,7 @@ export interface User {
     workspaces: string[],
     business_type: string | null,
     heard_through: string | null,
-    activeWorkspace: string,
+    active_workspace_name: string,
     onboarded: boolean
 }
 

@@ -1,8 +1,8 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { Award, BarChartBig, Bookmark, CircleAlert, CreditCard, DoorOpen, House, Search, Settings, UserCog } from "lucide-react";
+import { Award, BarChartBig, Bookmark, ChevronDown, CircleAlert, CreditCard, DoorOpen, Gift, House, Search, Settings, UserCog } from "lucide-react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
@@ -10,6 +10,7 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
 import LogoutDialog from "../ui/LogoutDialog";
 import { useState } from "react";
+import { ASSETS } from "@/assets/assets";
 
 function Layout() {
 
@@ -110,17 +111,42 @@ function Layout() {
 
   
     return (
-        <main className="flex flex-row font-inter bg-white">
-            <Sidebar content={content}/>
-            <section className="w-[100%] max-h-screen flex flex-col">
-                <Navbar content={content}/>
-                <Outlet/>
-            </section>
-            <LogoutDialog 
-                openLogoutDialog={openLogoutDialog} 
-                setOpenLogoutDialog={setOpenLogoutDialog}
-                signout={signout}
-            />
+        <main>
+            <div className="flex flex-row items-center justify-between px-5 py-2 border bg-slate-100">
+                <Link to="/" className="flex flex-row items-center gap-1">
+                    <img src={ASSETS.LOGO} alt="logo" />
+                    <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+                </Link>
+
+                <div className="flex items-center flex-row gap-10">
+                    <button className="flex items-center gap-2 bg-gradient-to-r from-[#CD84F1] to-[#7158E2] text-white py-1 px-2 rounded-lg">
+                        <Gift className="h-5 w-5" />
+                        <span className="text-xs">Upgrade</span>
+                    </button>
+
+                    <p>Welcome, {auth?.data?.name}</p>
+                    <div className="flex flex-row items-center gap-2">
+                        <Avatar>
+                            <AvatarFallback className="bg-primary text-white">{auth?.data?.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <Button variant="ghost" className="h-7 w-7 hover:bg-white" size="icon">
+                            <ChevronDown />
+                        </Button>
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-row font-inter bg-white">
+                <Sidebar content={content}/>
+                <section className="w-[100%] max-h-screen flex flex-col">
+                    <Navbar content={content}/>
+                    <Outlet/>
+                </section>
+                <LogoutDialog 
+                    openLogoutDialog={openLogoutDialog} 
+                    setOpenLogoutDialog={setOpenLogoutDialog}
+                    signout={signout}
+                />
+            </div>
         </main>
     )
 }
