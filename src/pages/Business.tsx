@@ -1,3 +1,4 @@
+import { Icons } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -56,12 +57,14 @@ function Business() {
   }
 
   if(isSuccess && data?.data?.data?.length > 0){
-    content = (<div className="mt-10 grid grid-cols-3 gap-5">
+    content = (<div className="grid grid-cols-3 gap-5 mt-5">
       {data?.data?.data?.map((item: GetBusinessType, index: number) => (
         <Card key={item.place_id + index}>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between gap-2">
-              <span className="text-xl">{item.business_name}</span>
+            <CardTitle className="flex items-center text-secondary justify-between gap-2">
+              <div className="border p-2 rounded-full">
+                <Icons.googleIcon/>
+              </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" variant="ghost" className="rounded-full">
@@ -82,7 +85,9 @@ function Business() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </CardTitle>
-            <CardDescription></CardDescription>
+            <CardDescription className="flex items-center text-secondary justify-between gap-2">
+              <span className="text-xl font-bold mt-3">{item.business_name}</span>
+            </CardDescription>
           </CardHeader>
           <CardContent>
               <span className="text-sm text-slate-400">{item?.street_number}, {item?.street}, {item?.city}, {item?.zip_code}</span>
@@ -95,9 +100,9 @@ function Business() {
   }
 
   return (
-    <div className="p-2 border-2 border-slate-200 rounded-xl ml-1 mr-2 mb-2 flex flex-col flex-1 overflow-y-scroll">
+    <div className="p-3 flex flex-col flex-1">
         <div className="flex h-fit items-center justify-center w-full gap-3 pt-3">
-            <SearchBox/>
+          <SearchBox/>
         </div>
         {content}
     </div>

@@ -48,7 +48,7 @@ function ReplyReview() {
 
 
   return (
-    <div className="p-2 border-2 border-slate-200 rounded-xl ml-1 mr-2 mb-2 flex flex-1 flex-col overflow-y-scroll relative">
+    <div className="p-2 flex flex-1 flex-col relative">
         <div className="flex flex-row items-center justify-between">
             <h1 className="font-semibold">Suggestions</h1>
             <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>

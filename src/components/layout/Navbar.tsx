@@ -1,11 +1,10 @@
-import { Menu, PlusCircle, Zap } from "lucide-react";
+import { Menu } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { Icons } from "@/assets/icons";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Card } from "../ui/card";
 import { useAppContext } from "@/contexts/AuthContext";
-import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { BusinessBox } from "../ui/BusinessBox";
 
 function Navbar({content}: { content: ReactNode }){
 
@@ -13,25 +12,17 @@ function Navbar({content}: { content: ReactNode }){
     const { auth, activeBusiness } = useAppContext();
 
     return(
-        <div className="my-2 pl-1 pr-2 relative top-0 w-full z-10">
-            <div className="py-3 px-3 border-slate-200 border-2 rounded-xl flex items-center flex-row justify-between w-full">
+        <div>
+            <div className="px-3 py-3 border-slate-200 border flex items-center flex-row justify-between w-full">
                 <h1 className="hidden lg:block text-xl font-semibold"><span className="text-primary">Welcome to</span> {auth?.data?.active_workspace_name || "Demo Account"}</h1>
                 <div className="flex flex-row  items-center justify-center gap-5">
-                    <Card className="py-1 px-2 flex flex-row items-center gap-1">
-                        <Zap className="w-5 text-secondary" />
-                        <span className="text-sm text-light-grey">25/25 credits</span>
-                    </Card>
-                    {activeBusiness ? 
+                    {activeBusiness && 
                         <Card className="py-1 px-2 flex flex-row items-center gap-1 bg-secondary">
                             <span className="text-sm text-white text-ellipsis overflow-hidden">{activeBusiness.businessName}</span>
-                        </Card> :
-                        <Link to="/business">
-                            <Button>
-                                <PlusCircle className="w-5 text-light-grey" />
-                                <span className="text-sm text-light-grey font-semibold ml-2">Add Business</span>
-                            </Button>
-                        </Link>
+                        </Card>
                     }
+
+                    {/* <BusinessBox/> */}
                     
                 </div>
                 <div className="block lg:hidden">

@@ -60,7 +60,7 @@ function Reviews() {
 
 
   return (
-    <div className="p-2 border-2 border-slate-200 rounded-xl ml-1 mr-2 mb-2 flex flex-col flex-1 overflow-hidden">
+    <div className="p-2 flex flex-col flex-1 overflow-hidden">
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Reviews</h1>
             <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
