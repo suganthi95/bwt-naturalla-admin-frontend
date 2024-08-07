@@ -1,28 +1,70 @@
-import { Menu } from "lucide-react";
+import { Menu, PlusCircle } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { Icons } from "@/assets/icons";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { Card } from "../ui/card";
+import { ValidateUserType } from "@/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { setActiveBusiness } from "@/lib/apis";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 import { useAppContext } from "@/contexts/AuthContext";
-import { BusinessBox } from "../ui/BusinessBox";
+import { Link } from "react-router-dom";
+import { Button } from "../ui/button";
 
-function Navbar({content}: { content: ReactNode }){
+function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType }){
 
+    const { auth } = useAppContext();
     const [ openSheet, setOpenSheet ] = useState(false);
-    const { auth, activeBusiness } = useAppContext();
+    const queryClient = useQueryClient();
+    const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
+
+    const [ activeBusiness ] = data?.businessList.filter(item => item.place_id === activeWorkspace.active_business);
+
+    const [ activeBusinessState, setActiveBusinessState ] = useState(activeBusiness?.place_id);
+
+    const { mutate: setActiveBusinessMutate } = useMutation({
+        mutationKey: [ "setActiveBusiness" ],
+        mutationFn: setActiveBusiness,
+        onSuccess: () => {
+          toast.success("Request Success", { description: "Business Activated Successfully" });
+          queryClient.invalidateQueries({ queryKey: [ "validateUser" ] })
+        },
+        onError: (error: AxiosError<any>) => {
+          toast.error("Request Failed", { description: error?.response?.data?.message })
+        }
+    });
+
+    const activateBusiness = (value: string) => {
+        setActiveBusinessState(value);
+        setActiveBusinessMutate({ place_id: value, token: auth?.token as string })
+    }
 
     return(
         <div>
             <div className="px-3 py-3 border-slate-200 border flex items-center flex-row justify-between w-full">
-                <h1 className="hidden lg:block text-xl font-semibold"><span className="text-primary">Welcome to</span> {auth?.data?.active_workspace_name || "Demo Account"}</h1>
+                <h1 className="hidden lg:block text-xl font-semibold"><span className="text-primary">Welcome to</span> {activeWorkspace?.workspace_name}</h1>
                 <div className="flex flex-row  items-center justify-center gap-5">
-                    {activeBusiness && 
-                        <Card className="py-1 px-2 flex flex-row items-center gap-1 bg-secondary">
-                            <span className="text-sm text-white text-ellipsis overflow-hidden">{activeBusiness.businessName}</span>
-                        </Card>
-                    }
 
-                    {/* <BusinessBox/> */}
+                    {data?.businessList.length > 0 ? 
+                        <Select value={activeBusinessState} onValueChange={(value) => activateBusiness(value)}>
+                            <SelectTrigger className="h-7 bg-secondary text-white flex gap-2">
+                                <SelectValue placeholder="" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {data?.businessList.map(item => (
+                                    <SelectItem key={item.place_id} value={item.place_id}>{item.business_name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select> :
+                        <Link className="h-7" to="/business">
+                            <Button className="h-7">
+                                <PlusCircle className="h-4 w-4 text-light-grey" />
+                                <span className="text-xs text-light-grey font-semibold ml-2">Add Business</span>
+                            </Button>
+                        </Link>
+                    
+                    }
                     
                 </div>
                 <div className="block lg:hidden">

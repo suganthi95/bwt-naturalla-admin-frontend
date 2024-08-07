@@ -1,8 +1,8 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, Gift, House, Settings, UserCog } from "lucide-react";
+import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, House, Settings, UserCog } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
@@ -12,25 +12,22 @@ import { ASSETS } from "@/assets/assets";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Icons } from "@/assets/icons";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
+import { validateUser } from "@/lib/apis";
+import Loader from "../ui/Loader";
+import { toast } from "sonner";
+import { ValidateUserType } from "@/types";
+import UpgradeModal from "../ui/UpgradeModal";
 
 function Layout() {
 
   const navigate = useNavigate();
   const path = useLocation();
-  const { auth, setAuth, setActiveBusiness } = useAppContext();
+  const { auth, setAuth } = useAppContext();
   const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
   const [ collapse, setCollapse ] = useState<string[]>([ "general", "menu", "apps" ])
 
   const tabValue = path.pathname.split("/").at(-1);
-
-    const signout = () => {
-        googleLogout();
-        setAuth(null);
-        setActiveBusiness(null);
-        localStorage.removeItem("auth");
-        localStorage.removeItem("activeBusiness");
-        navigate("/sign-in", { replace: true });
-    };
 
   const content = (
         <div className="overflow-y-scroll h-[82vh]">
@@ -102,59 +99,94 @@ function Layout() {
         </div>
     )
 
-  
-    return (
-        <main className="flex flex-col h-screen">
-            <div className="flex flex-row items-center justify-between px-5 py-2 border bg-slate-100">
-                <Link to="/" className="flex flex-row items-center gap-1">
-                    <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
-                    <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
-                </Link>
+    const signout = () => {
+        googleLogout();
+        setAuth(null);
+        localStorage.removeItem("auth");
+        navigate("/sign-in", { replace: true });
+    };
 
-                <div className="flex items-center flex-row gap-10">
-                    <button className="flex items-center gap-2 bg-gradient-to-r from-[#CD84F1] to-[#7158E2] text-white py-1 px-2 rounded-lg">
-                        <Gift className="h-5 w-5" />
-                        <span className="text-xs">Upgrade</span>
-                    </button>
+    const { isLoading, isError, isSuccess, data } = useQuery({
+        queryKey: [ "validateUser" ],
+        queryFn: () => validateUser(auth?.token as string),
+        refetchOnWindowFocus: true,
+        retry: 3,
+        select: (data): ValidateUserType => data?.data?.data,
+        enabled: Boolean(auth?.token) 
+    });
 
-                    <p>Welcome, {auth?.data?.name}</p>
-                    <div className="flex flex-row items-center gap-2">
-                        <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Avatar className="cursor-pointer">
-                                <AvatarFallback className="bg-primary text-white">{auth?.data?.name[0]}</AvatarFallback>
-                            </Avatar>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-40">
-                            <DropdownMenuLabel>{auth?.data?.name}</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                                <DropdownMenuItem>
-                                    <span>Profile</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setOpenLogoutDialog(true)}>
-                                    <span>Logout</span>
-                                </DropdownMenuItem>
-                        </DropdownMenuContent>
-                        </DropdownMenu>
+    let main;
+
+    if(isLoading){
+        main = <Loader/>
+    }
+
+    if(isError){
+        toast.error("Session Expired", { description: "Please Sign In" })
+        main = <Navigate to="/sign-in"/>
+    }
+
+    if(isSuccess){
+        main = (
+            <main className="flex flex-col h-screen">
+                <div className="flex flex-row items-center justify-between px-5 py-2 border bg-slate-100">
+                    <Link to="/" className="flex flex-row items-center gap-1">
+                        <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                        <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+                    </Link>
+
+                    <div className="flex items-center flex-row gap-10">
+                        
+                        <UpgradeModal/>
+
+                        <p>Welcome, {data?.name}</p>
+                        <div className="flex flex-row items-center gap-2">
+                            <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Avatar className="cursor-pointer">
+                                    <AvatarFallback className="bg-primary text-white">{data?.name[0]}</AvatarFallback>
+                                </Avatar>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-40">
+                                <DropdownMenuLabel>{data?.name}</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                    <DropdownMenuItem>
+                                        <span>Profile</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setOpenLogoutDialog(true)}>
+                                        <span>Logout</span>
+                                    </DropdownMenuItem>
+                            </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex flex-row h-full font-inter bg-white">
-                <Sidebar content={content}/>
-                <section className="w-[100%] flex flex-col">
-                    <Navbar content={content}/>
-                    <div className="flex flex-1 overflow-y-scroll pb-14">
-                        <Outlet/>
-                    </div>
-                </section>
-                <LogoutDialog 
-                    openLogoutDialog={openLogoutDialog} 
-                    setOpenLogoutDialog={setOpenLogoutDialog}
-                    signout={signout}
-                />
-            </div>
-        </main>
-    )
+                <div className="flex flex-row h-full font-inter bg-white">
+                    <Sidebar 
+                        content={content}
+                        data={data}
+                    />
+                    <section className="w-[100%] flex flex-col">
+                        <Navbar 
+                            content={content}
+                            data={data}
+                        />
+                        <div className="flex flex-1 overflow-y-scroll pb-14">
+                            <Outlet/>
+                        </div>
+                    </section>
+                    <LogoutDialog 
+                        openLogoutDialog={openLogoutDialog} 
+                        setOpenLogoutDialog={setOpenLogoutDialog}
+                        signout={signout}
+                    />
+                </div>
+            </main>
+        )
+    }
+
+  
+    return main;
 }
 
 export default Layout

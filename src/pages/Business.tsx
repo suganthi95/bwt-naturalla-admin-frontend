@@ -16,9 +16,9 @@ import { toast } from "sonner";
 function Business() {
 
   dayjs.extend(relativeTime);
-  const { setActiveBusiness } = useAppContext();
   const { auth } = useAppContext();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError, isSuccess, error } = useQuery({
     queryKey: [ "getAllBusiness" ],
     queryFn: () => getAllBusiness(auth?.token as string),
@@ -75,9 +75,9 @@ function Business() {
                   <DropdownMenuLabel>Options</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => setActiveBusiness({ businessName: item.business_name, placeId: item.place_id })}>
+                    {/* <DropdownMenuItem onClick={() => setActiveBusinessMutate({ place_id: item.place_id, token: auth?.token as string })}>
                       <span>Set Active Business</span>
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string, token: auth?.token as string})}>
                       <span>Remove Business</span>
                     </DropdownMenuItem>

@@ -47,7 +47,7 @@ function OnBoardFour({ setPage }: Props) {
                 </RadioGroup>
             )}  
         />
-         <p className="text-xs mt-1 font-medium text-red-500">{errors?.heardThrough?.message}</p>
+        <p className="text-xs mt-1 font-medium text-red-500">{errors?.heardThrough?.message}</p>
 
 
         <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50">

@@ -88,3 +88,33 @@ export type OnBoardType = {
     heardThrough: string,
     workspaceName: string
 }
+
+export interface ValidateUserType {
+    name: string
+    email: string
+    password: string
+    role: string
+    industry: string
+    created_at: string
+    through: string
+    workspaces: string[]
+    business_type: string
+    heard_through: string
+    onboarded: boolean
+    active_workspace: string
+    onboarded_at: Date | null
+    credit: number
+    workspaceList: WorkspaceList[]
+    businessList: BusinessList[]
+}
+  
+export interface WorkspaceList {
+    workspace_name: string
+    workspace_id: string
+    active_business: string | null
+}
+
+export interface BusinessList {
+    business_name: string,
+    place_id: string
+}

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAppContext } from "@/contexts/AuthContext";
 import { getSuggestions } from "@/lib/apis";
 import { ReviewType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Send } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -16,6 +16,7 @@ function ReplyReview() {
 
     const { state }: { state: ReviewType } = useLocation();
     const [ generate, setGenerate ] = useState<number>(0);
+    const queryClient = useQueryClient();
     const { auth } = useAppContext();
 
     const { isLoading, isSuccess, isError, data, error } = useQuery({
@@ -43,6 +44,7 @@ function ReplyReview() {
     }
 
     if(isSuccess){
+      queryClient.invalidateQueries({ queryKey: [ "validateUser" ] })
       content = <ResponseCard {...data?.data?.data}/>
     }
 

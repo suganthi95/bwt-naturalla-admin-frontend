@@ -95,6 +95,17 @@ export const signInUserByGoogle = async (data: { email: string, name: string }) 
     })
 }
 
+export const validateUser = async (token: string) => {
+    return await axios({
+        method: "get",
+        url: `${BUSINESS_BASE_URL}/workspace/validate-user`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
 export const getBusinessSuggestions = async ({ input, uuid, token }: { input: string, uuid: string, token: string }) => {
 
 
@@ -167,4 +178,20 @@ export const getAllBusiness = async (token: string) => {
         },
     })
 }
+
+export const setActiveBusiness = async ({ place_id, token }: { place_id: string, token: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BUSINESS_BASE_URL}/workspace/business/set-active`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            place_id
+        }
+    })
+}
+
 

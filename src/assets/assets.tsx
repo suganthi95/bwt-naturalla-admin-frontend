@@ -9,4 +9,5 @@ export const ASSETS = {
     ONBOARD_03: "https://ik.imagekit.io/zshycew5c/intelliresponse/onboard_3?updatedAt=1722493046419",
     ONBOARD_04: "https://ik.imagekit.io/zshycew5c/intelliresponse/onboard_4?updatedAt=1722493045698",
     ONBOARD_05: "https://ik.imagekit.io/zshycew5c/intelliresponse/onboard_5?updatedAt=1722493046457",
+    PAYMENT_BG_IMG: "https://ik.imagekit.io/zshycew5c/intelliresponse/payment-img.png?updatedAt=1723028687144",
 }
