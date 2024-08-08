@@ -7,10 +7,11 @@ const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v
 const PAYMENT_BASE_URL = "https://backend-payment-c62gk7tmha-el.a.run.app/api/v1"
 
 
-export const getReviews = async ({ placeId, sort, token }: { placeId: string, sort: string, token: string }) => {
+export const getReviews = async ({ placeId, sort, token }: { placeId: string, reviewPaginationId: number, sort: string, token: string }) => {
 
     return await axios({
         method: "get",
+        // url: `${BUSINESS_BASE_URL}/workspace/google?placeId=${placeId}${reviewPaginationId > 0 ? `&lastPaginationId=${reviewPaginationId}` : ""}&sort=${sort}`,
         url: `${BUSINESS_BASE_URL}/workspace/google?placeId=${placeId}&sort=${sort}`,
         headers: {
             "Content-Type": "application/json",

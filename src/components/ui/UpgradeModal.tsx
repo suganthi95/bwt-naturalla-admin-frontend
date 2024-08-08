@@ -1,10 +1,11 @@
-import { ArrowRight, Check, CircleCheck, Gift } from "lucide-react"
+import { Check, CircleCheck, Gift, X } from "lucide-react"
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "./alert-dialog"
 import { ASSETS } from "@/assets/assets"
 import { Button } from "./button"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { RadioGroup, RadioGroupItem } from "./radio-group"
+import dayjs from "dayjs"
 
 function UpgradeModal() {
 
@@ -19,7 +20,7 @@ function UpgradeModal() {
 
     const paymentScreenOne = (
         <div className="flex flex-1 flex-col p-5 gap-3">
-            <h1 className="text-secondary text-2xl font-bold">Try <span className="text-primary">IntelliResponse</span> Free for 7 Days</h1>
+            <h1 className="text-secondary text-2xl font-bold">Try <span className="text-primary">IntelliResponse</span> Pro</h1>
             <p className="text-slate-500">Experience the full capabilities of IntelliResponse without any commitment.</p>
 
             <div className="border-t border-b flex flex-col gap-5 py-5">
@@ -47,10 +48,10 @@ function UpgradeModal() {
                 <Button onClick={() => setProceedToPay(true)} className="bg-primary hover:bg-primary/50 font-thin">
                     Buy Now
                 </Button>
-                <Button onClick={() => setOpenPaymentDialog(false)} className="font-thin flex flex-row items-center gap-2 group">
+                {/* <Button onClick={() => setOpenPaymentDialog(false)} className="font-thin flex flex-row items-center gap-2 group">
                     Start Free Trial
                     <ArrowRight className="h-5 w-5 group-hover:transition group-hover:translate-x-1 ease-linear" />
-                </Button>
+                </Button> */}
             </div>
         </div>
     )
@@ -75,7 +76,7 @@ function UpgradeModal() {
                             >
                                 <div>
                                     Annual plan 
-                                    <p className="font-light text-slate-400 text-sm mt-1">Pay $359.99 per year after 7 days trial</p>
+                                    <p className="font-light text-slate-500 text-sm mt-1">Pay $359 per year after 7 days trial</p>
                                 </div>
                                 {watch("plan") === "annual" && <CircleCheck className="fill-primary stroke-white" />}
                             </label>
@@ -88,7 +89,7 @@ function UpgradeModal() {
                             >
                                 <div>
                                     Monthly plan
-                                    <p className="font-light text-slate-400 text-sm mt-1">Pay $29.99 per month after 7 days trial</p>
+                                    <p className="font-light text-slate-500 text-sm mt-1">Pay $29 per month after 7 days trial <span>(at just a dollar day)</span></p>
                                 </div>
                                 {watch("plan") === "monthly" && <CircleCheck className="fill-primary stroke-white" />}
                             </label>
@@ -126,9 +127,15 @@ function UpgradeModal() {
                 
             </div>
 
-            <div>
-                <p>Due today</p>
-                <p className="text-slate-500">Tue, Jul 30 2024</p>
+            <div className="flex flex-row items-center justify-between">
+                <div>
+                    <p>Due today</p>
+                    <p className="text-slate-500">{dayjs(new Date()).format("ddd, MMM DD YYYY")}</p>
+                </div>
+
+                <div>
+                    <p className="text-xl font-bold">{watch("plan") === "monthly" ? "$ 29" : "$ 359"}</p>
+                </div>
             </div>
 
             <div className="flex flex-row items-center gap-3">
@@ -151,7 +158,10 @@ function UpgradeModal() {
             <div className="flex flex-row">
                 {proceedToPay ? paymentScreenTwo : paymentScreenOne}
                 
-                <div className="bg-sandal flex flex-1">
+                <div className="bg-sandal flex flex-1 relative">
+                    <Button onClick={() => setOpenPaymentDialog(false)} className="p-1 absolute top-3 right-3" variant="secondary" size="icon">
+                        <X className="h-5 w-5" />
+                    </Button>
                     <img className="h-full w-full object-contain" src={ASSETS.PAYMENT_BG_IMG} alt="img" />
                 </div>
             </div>

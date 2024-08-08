@@ -13,16 +13,21 @@ function Reviews() {
 
     const { auth } = useAppContext();
     const [ sortKey, setSortKey ] = useState<string>("newest");
+    // const [ page, setPage ] = useState(0);
     const queryClient = useQueryClient();
     const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);
     const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];
     const [ activeBusiness ] = validateUser?.data?.data?.businessList.filter(item => item.place_id === activeWorkspace.active_business) as BusinessList[];
+
+    // const nextPage = () => setPage(prev => prev + 1);
+    // const prevPage = () => setPage(prev => prev - 1);
 
     const { isLoading, isError, isSuccess, data, error, isRefetching } = useQuery({
         queryKey: [ "getReviews", sortKey, activeBusiness?.place_id ],
         queryFn: () => getReviews({
             placeId: activeBusiness?.place_id,
             sort: sortKey,
+            reviewPaginationId: 1,
             token: auth?.token as string
         }),
         retry: 3,

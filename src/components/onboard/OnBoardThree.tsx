@@ -19,10 +19,10 @@ function OnBoardThree({ setPage }: Props) {
         }
     }
 
-    const roles = [ "personal use", "media", "fitness", "clothing", "pastery", "healthcare" ]
+    const roles = [ "Healthcare", "Education", "Technology", "Finance", "Retail", "Manufacturing", "Hospitality", "Real Estate", "Transportation", "Media & Entertainment", "Legal Services", "Agriculture", "Non-Profit", "Government", "Automotive", "Telecommunications", "Energy", "Fashion", "Consulting", "Construction" ]
 
   return (
-    <div className="mt-10">
+    <div className="mt-3">
         <h1 className="text-5xl font-medium">Pick Your industry/category</h1>
 
         <Controller
@@ -32,7 +32,7 @@ function OnBoardThree({ setPage }: Props) {
                 <RadioGroup 
                     value={field.value} 
                     onValueChange={(val) => field.onChange(val)} 
-                    className="flex flex-row flex-wrap items-center mt-3 gap-5 capitalize"
+                    className="flex flex-row flex-wrap items-center mt-3 gap-2 capitalize"
                     {...register("industry")}
                 >
                     {roles.map((item: string) => (

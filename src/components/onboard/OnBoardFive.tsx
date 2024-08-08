@@ -29,11 +29,13 @@ function OnBoardFive({ submitOnboardForm, isPending }: Props) {
                     }
                 })}
             />
-            {errors?.workspaceName?.message ? <span className='text-red-500 text-xs mt-1'>{errors?.workspaceName?.message}</span> : <span className='text-slate-500 text-xs mt-1'>{errors?.workspaceName?.message}</span>}
+            {errors?.workspaceName?.message ? <span className='text-red-500 text-xs mt-1'>{errors?.workspaceName?.message}</span> : <span className='text-slate-500 text-xs mt-1'>Use a name that best represents your organization or project. This will <br /> help you easily identify your workspace and keep things organized</span>}
 
         </div>
 
-        <Button onClick={submitOnboardForm} className="mt-10 bg-primary hover:bg-primary/50">
+        <p className='text-slate-500 text-xs mt-10'><span className='font-bold'>Note:</span> You can always change the workspace name later in your settings</p>
+
+        <Button onClick={submitOnboardForm} className="mt-5 bg-primary hover:bg-primary/50">
             {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Continue"}
         </Button>
     </div>

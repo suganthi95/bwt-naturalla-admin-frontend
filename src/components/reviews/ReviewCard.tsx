@@ -15,17 +15,17 @@ function ReviewCard(props: ReviewType) {
         <CardHeader className="flex flex-row items-center justify-between py-1 px-3">
             <div className="flex flex-row items-center gap-2 pt-2">
                 <Avatar>
-                    <AvatarImage src={props.author_image} />
-                    <AvatarFallback>{props.author_title[0]}</AvatarFallback>
+                    <AvatarImage src={props?.author_image} />
+                    <AvatarFallback>{props?.author_title[0]}</AvatarFallback>
                 </Avatar>
 
                 <div>
                     <div className="flex flex-row items-start gap-2">
-                        <p className="font-semibold">{props.author_title}</p>
-                        {props.sentimentScore <= 0 ? <ThumbsDown className="stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />}
+                        <p className="font-semibold">{props?.author_title}</p>
+                        {props?.sentiment === "negative" ? <ThumbsDown className="stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />}
                         
                     </div>
-                    <span className="text-xs text-light-grey">{dayjs(props.review_datetime_utc).fromNow()}</span>
+                    <span className="text-xs text-light-grey">{dayjs(props?.review_datetime_utc).fromNow()}</span>
                 </div>
 
                 
@@ -33,12 +33,12 @@ function ReviewCard(props: ReviewType) {
 
             <div className="flex flex-row gap-1 items-center">
                 {[ 1, 2, 3, 4, 5 ].map(item => (
-                    <Star key={`star-${item}`} className={`${item <= props.review_rating ? "fill-yellow-400" : "fill-slate-300"} stroke-none`} />
+                    <Star key={`star-${item}`} className={`${item <= props?.review_rating ? "fill-yellow-400" : "fill-slate-300"} stroke-none`} />
                 ))}
             </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-2 py-1 px-3">
-            <p className="text-sm">{props.review_text}</p>
+            <p className="text-sm">{props?.review_text}</p>
 
             {/* <div className="flex flex-row gap-2 items-center">
                 <div className="h-14 w-14 rounded-md overflow-hidden">
