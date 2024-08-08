@@ -7,7 +7,7 @@ import { SearchBox } from "@/components/ui/SearchBox"
 import { useAppContext } from "@/contexts/AuthContext"
 import { getAllBusiness, removeBusiness } from "@/lib/apis"
 import { GetBusinessType } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
@@ -17,7 +17,7 @@ function Business() {
 
   dayjs.extend(relativeTime);
   const { auth } = useAppContext();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const { data, isLoading, isError, isSuccess, error } = useQuery({
     queryKey: [ "getAllBusiness" ],
@@ -31,7 +31,8 @@ function Business() {
     mutationFn: removeBusiness,
     onSuccess: () => {
       toast.success("Request Success", { description: "Business Deleted Successfully" });
-      queryClient.invalidateQueries({ queryKey: [ "getAllBusiness" ] })
+      window.location.reload();
+
     },
     onError: (error) => console.log(error),
   })

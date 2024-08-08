@@ -26,9 +26,10 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
     const { mutate: setActiveBusinessMutate } = useMutation({
         mutationKey: [ "setActiveBusiness" ],
         mutationFn: setActiveBusiness,
-        onSuccess: () => {
-          toast.success("Request Success", { description: "Business Activated Successfully" });
-          queryClient.invalidateQueries({ queryKey: [ "validateUser" ] })
+        onSuccess: async () => {
+            toast.success("Request Success", { description: "Business Activated Successfully" });
+            queryClient.invalidateQueries({ queryKey: [ "validateUser" ] });
+            queryClient.invalidateQueries({ queryKey: [ "getReviews" ] })
         },
         onError: (error: AxiosError<any>) => {
           toast.error("Request Failed", { description: error?.response?.data?.message })
@@ -49,7 +50,7 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
                     {data?.businessList.length > 0 ? 
                         <Select value={activeBusinessState} onValueChange={(value) => activateBusiness(value)}>
                             <SelectTrigger className="h-7 bg-secondary text-white flex gap-2">
-                                <SelectValue placeholder="" />
+                                <SelectValue placeholder="Select Business" />
                             </SelectTrigger>
                             <SelectContent>
                                 {data?.businessList.map(item => (

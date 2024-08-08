@@ -19,7 +19,7 @@ function Reviews() {
     const [ activeBusiness ] = validateUser?.data?.data?.businessList.filter(item => item.place_id === activeWorkspace.active_business) as BusinessList[];
 
     const { isLoading, isError, isSuccess, data, error, isRefetching } = useQuery({
-        queryKey: [ "getReviews", sortKey ],
+        queryKey: [ "getReviews", sortKey, activeBusiness?.place_id ],
         queryFn: () => getReviews({
             placeId: activeBusiness?.place_id,
             sort: sortKey,

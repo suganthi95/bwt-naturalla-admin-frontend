@@ -75,7 +75,7 @@ function UpgradeModal() {
                             >
                                 <div>
                                     Annual plan 
-                                    <p className="font-light text-slate-400 text-sm mt-1">Pay $359.99 per year after 7 days trail</p>
+                                    <p className="font-light text-slate-400 text-sm mt-1">Pay $359.99 per year after 7 days trial</p>
                                 </div>
                                 {watch("plan") === "annual" && <CircleCheck className="fill-primary stroke-white" />}
                             </label>
@@ -88,7 +88,7 @@ function UpgradeModal() {
                             >
                                 <div>
                                     Monthly plan
-                                    <p className="font-light text-slate-400 text-sm mt-1">Pay $29.99 per month after 7 days trail</p>
+                                    <p className="font-light text-slate-400 text-sm mt-1">Pay $29.99 per month after 7 days trial</p>
                                 </div>
                                 {watch("plan") === "monthly" && <CircleCheck className="fill-primary stroke-white" />}
                             </label>

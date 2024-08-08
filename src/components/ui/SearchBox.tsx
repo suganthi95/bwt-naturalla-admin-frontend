@@ -41,7 +41,8 @@ export function SearchBox() {
     mutationKey: [ "addBusiness" ],
     mutationFn: addBusiness,
     onSuccess: () => {
-      toast.success("Request Success", { description: "Business Added Successfully" })
+      window.location.reload();
+      toast.success("Request Success", { description: "Business Added Successfully" });
     },
     onError: (error) => {
       toast.success("Request Failed", { description: error.message })

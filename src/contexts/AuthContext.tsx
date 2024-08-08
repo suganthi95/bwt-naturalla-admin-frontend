@@ -5,6 +5,8 @@ import { ReactNode, createContext, useContext, useEffect, useState } from "react
 type AppContextType = {
     auth: AuthType | null,
     setAuth: React.Dispatch<React.SetStateAction<AuthType | null>>,
+    placeId: string,
+    setPlaceId: React.Dispatch<React.SetStateAction<string>>,
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -17,6 +19,8 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         return JSON.parse(user)
     });
 
+    const [ placeId, setPlaceId ] = useState("");
+
     useEffect(() => {
         if(auth){
             localStorage.setItem("auth", JSON.stringify(auth));
@@ -27,7 +31,9 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         <AppContext.Provider 
             value={{
                 auth,
-                setAuth
+                setAuth,
+                placeId,
+                setPlaceId
             }}
         >
             {children}

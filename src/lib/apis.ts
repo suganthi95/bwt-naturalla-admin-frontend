@@ -4,7 +4,7 @@ import axios from "axios";
 
 const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
-
+const PAYMENT_BASE_URL = "https://backend-payment-c62gk7tmha-el.a.run.app/api/v1"
 
 
 export const getReviews = async ({ placeId, sort, token }: { placeId: string, sort: string, token: string }) => {
@@ -190,6 +190,22 @@ export const setActiveBusiness = async ({ place_id, token }: { place_id: string,
         },
         data: {
             place_id
+        }
+    })
+}
+
+export const createSubscription = async ({ email, workspace_id, token }: { email: string, workspace_id: string, token: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${PAYMENT_BASE_URL}/workspace/business/set-active`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            email,
+            workspace_id
         }
     })
 }
