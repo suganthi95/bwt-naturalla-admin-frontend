@@ -15,11 +15,11 @@ function OnBoardFive({ submitOnboardForm, isPending }: Props) {
 
   return (
     <div className="mt-10">
-        <h1 className="text-5xl font-medium">Lastly, What would you like to name your workspace ?</h1>
+        <h1 className="text-2xl lg:text-5xl font-medium">Lastly, What would you like to name your workspace ?</h1>
 
         <div>
             <Input
-                className='mt-5 w-1/2'
+                className='mt-5 w-full md:w-1/2'
                 placeholder='Enter Workspace Name'
                 type='text'
                 {...register("workspaceName", {

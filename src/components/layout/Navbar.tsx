@@ -1,22 +1,21 @@
 import { Menu, PlusCircle } from "lucide-react";
 import { ReactNode, useState } from "react";
-import { Icons } from "@/assets/icons";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { ValidateUserType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { setActiveBusiness } from "@/lib/apis";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useAppContext } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
+import { ASSETS } from "@/assets/assets";
 
 function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType }){
 
     const { auth } = useAppContext();
     const [ openSheet, setOpenSheet ] = useState(false);
-    const queryClient = useQueryClient();
     const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
 
     const [ activeBusiness ] = data?.businessList.filter(item => item.place_id === activeWorkspace.active_business);
@@ -27,12 +26,12 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
         mutationKey: [ "setActiveBusiness" ],
         mutationFn: setActiveBusiness,
         onSuccess: async () => {
-            toast.success("Request Success", { description: "Business Activated Successfully" });
-            queryClient.invalidateQueries({ queryKey: [ "validateUser" ] });
-            queryClient.invalidateQueries({ queryKey: [ "getReviews" ] })
+            // queryClient.invalidateQueries({ queryKey: [ "validateUser" ] });
+            // queryClient.invalidateQueries({ queryKey: [ "getReviews" ] });
+            window.location.reload();
         },
         onError: (error: AxiosError<any>) => {
-          toast.error("Request Failed", { description: error?.response?.data?.message })
+            toast.error("Request Failed", { description: error?.response?.data?.message })
         }
     });
 
@@ -73,14 +72,15 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
                         <SheetTrigger>
                             <Menu />
                         </SheetTrigger>
-                        <SheetContent className="bg-secondary w-fit">
+                        <SheetContent className="bg-white w-fit">
                             <div className={`h-full w-full relative overflow-hidden`}>
                                 <div className={`p-5 flex flex-row items-center space-x-5`}>
-                                    <div className='w-14 h-14 rounded-lg overflow-hidden'>
-                                        <Icons.logo/>
-                                    </div>
-                                    <h1 className="text-white font-bold text-2xl">IntelliResponse</h1>
+                                    <Link to="/" className="flex flex-row items-center gap-1">
+                                        <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                                        <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+                                    </Link>
                                 </div>
+                                
                                 <div onClickCapture={() => setOpenSheet(!openSheet)}>
                                     {content}
                                 </div>

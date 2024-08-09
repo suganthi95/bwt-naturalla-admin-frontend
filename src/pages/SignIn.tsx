@@ -84,10 +84,10 @@ function SignIn() {
 
 
   return (
-    <div className="min-h-screen p-2 flex">
+    <div className="min-h-screen p-0 lg:p-2 flex">
         <div className="bg-[#F8F7F8] rounded-lg flex-1 flex items-center justify-center relative">
-            <img className="absolute z-0" src={ASSETS.SIGNIN_BG_IMG} alt="img" />
-            <Card className="relative z-10 px-6 py-3">
+            <img className="hidded lg:block absolute z-0" src={ASSETS.SIGNIN_BG_IMG} alt="img" />
+            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3">
                 <CardHeader>
                     <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                         <img src={ASSETS.LOGO} alt="logo" />
@@ -147,7 +147,7 @@ function SignIn() {
                 </CardFooter>
             </Card>
 
-            <h1 className="text-sm absolute bottom-0">
+            <h1 className="text-sm absolute bottom-0 hidden md:block">
                 © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/">IntelliResponse</Link> All Rights Reserved. Developed by <Link className="font-bold hover:underline" to="https://blackwinstech.com/">Blackwins Tech Solutions</Link>
             </h1>
         </div>

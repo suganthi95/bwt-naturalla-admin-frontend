@@ -89,8 +89,8 @@ function SignUp() {
 
 
   return (
-    <div className="min-h-screen p-2 flex bg-sandal">
-        <div className="flex flex-1">
+    <div className="min-h-screen p-0 lg:p-2 flex bg-sandal">
+        <div className="hidden lg:flex flex-1">
             <div className="flex items-center justify-center w-full">
                 <img className="w-2/3" src={ASSETS.SIGNUP_BG_IMG} alt="bg-img" />
             </div>
@@ -105,7 +105,7 @@ function SignUp() {
                     </span>
                 </div>
             </Link>
-            <div className="py-0 px-32 space-y-2">
+            <div className="py-0 px-2 md:px-20 lg:px-32 space-y-2">
                 <h1 className="text-secondary text-2xl font-bold text-center">Sign Up</h1>
                 <p className="text-sm text-slate-500 text-center">Create your review management account here.</p>
 

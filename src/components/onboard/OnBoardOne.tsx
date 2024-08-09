@@ -21,7 +21,7 @@ function OnBoardOne({ setPage }: Props) {
 
   return (
     <div className="mt-10">
-        <h1 className="text-5xl font-medium">What would you like to use intelliresponse for ?</h1>
+        <h1 className="text-2xl lg:text-5xl font-medium">What would you like to use intelliresponse for ?</h1>
 
         <Controller
             name='business'

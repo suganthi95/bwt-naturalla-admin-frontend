@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { RadioGroup, RadioGroupItem } from "./radio-group"
 import dayjs from "dayjs"
+import { Icons } from "@/assets/icons"
 
 function UpgradeModal() {
 
@@ -27,15 +28,21 @@ function UpgradeModal() {
                 <p className="text-secondary text-md">Here's what you will get in Pro:</p>
 
                 <div className="flex flex-row gap-3 items-center">
-                    <div className="p-5 rounded-lg bg-slate-300"></div>
+                    <div>   
+                        <Icons.aiIcon/>
+                    </div>
                     <p><span className="font-bold">AI-Generated Responses:</span> Generate  context aware responses to your customer reviews.</p>
                 </div>
                 <div className="flex flex-row gap-3 items-center">
-                    <div className="p-5 rounded-lg bg-slate-300"></div>
+                    <div>
+                        <Icons.analyticsIcon/>
+                    </div>
                     <p><span className="font-bold">Analytics Dashboard:</span> Gain insights into customer sentiment and review trends.</p>
                 </div>
                 <div className="flex flex-row gap-3 items-center">
-                    <div className="p-5 rounded-lg bg-slate-300"></div>
+                    <div>
+                        <Icons.languageIcon/>
+                    </div>
                     <p><span className="font-bold">Multilingual Support:</span> Respond to reviews in multiple languages seamlessly.</p>
                 </div>
             </div>

@@ -74,7 +74,7 @@ function OnBoard() {
 
   return (
     <div className="min-h-screen p-2 flex bg-white">
-        <div className="flex flex-1 flex-col justify-center p-10">
+        <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">
             {page === 0 && 
                 <>
                     <h1 className="text-2xl font-medium">Welcome to IntelliResponse!</h1>
@@ -104,7 +104,7 @@ function OnBoard() {
                 {section[page].form}
             </FormProvider>
         </div>
-        <div className="flex flex-1 bg-sandal rounded-lg">
+        <div className="hidden lg:flex flex-1 bg-sandal rounded-lg">
             <div className="flex items-center justify-center w-full">
                 <img className="w-2/3" src={section[page].image} alt="bg-img" />
             </div>

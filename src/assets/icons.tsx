@@ -133,5 +133,82 @@ export const Icons = {
         ></image>
       </defs>
     </svg>
+  ),
+
+  aiIcon: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      fill="none"
+      viewBox="0 0 36 36"
+    >
+      <path
+        stroke="#FF840F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+        d="M21.616 32.817c6.973-.462 12.527-6.095 12.983-13.167a33.291 33.291 0 000-4.2c-.456-7.07-6.01-12.7-12.983-13.165a55 55 0 00-7.233 0C7.409 2.748 1.856 8.38 1.399 15.452a33.336 33.336 0 000 4.2c.167 2.575 1.305 4.96 2.647 6.973.778 1.408.265 3.167-.547 4.705-.583 1.108-.876 1.662-.641 2.062.233.4.758.413 1.806.438 2.075.05 3.474-.537 4.584-1.355.628-.465.943-.697 1.16-.723.216-.027.645.15 1.498.5a8.12 8.12 0 002.475.566c2.375.157 4.857.157 7.237 0"
+      ></path>
+      <path
+        stroke="#FF840F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+        d="M10.5 23l3.07-9.21a1.157 1.157 0 012.193 0l3.07 9.21m5-10v10m-11.666-3.333h5"
+      ></path>
+    </svg>
+  ),
+  analyticsIcon: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="40"
+      height="40"
+      fill="none"
+      viewBox="0 0 40 40"
+    >
+      <path
+        stroke="#FF840F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+        d="M28.332 30v-3.333M20 30v-5m-8.333 5v-8.333m-1.667-10c5.328 5.446 12.057 6.801 18.568 4.986m-2.421-2.533l3.456 1.693c.41.202.52.667.247 1.04L27.544 20"
+      ></path>
+      <path
+        stroke="#FF840F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+        d="M4.166 20c0-7.463 0-11.197 2.318-13.515C8.803 4.167 12.534 4.167 20 4.167c7.464 0 11.197 0 13.515 2.318 2.319 2.318 2.319 6.05 2.319 13.515 0 7.463 0 11.197-2.319 13.515-2.318 2.318-6.05 2.318-13.515 2.318-7.463 0-11.196 0-13.515-2.318C4.166 31.197 4.166 27.465 4.166 20z"
+      ></path>
+    </svg>
+  ),
+
+  languageIcon: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="40"
+      height="40"
+      fill="none"
+      viewBox="0 0 40 40"
+    >
+      <path
+        stroke="#FF840F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+        d="M11.666 13.967h7.5m0 0h5m-5 0v-2.3m9.167 2.3h-4.167m0 0c-.878 3.143-2.72 6.115-4.822 8.726m0 0c-1.74 2.162-3.658 4.079-5.356 5.64m5.356-5.64c-1.071-1.256-2.571-3.288-3-4.208m3 4.208l3.215 3.342"
+      ></path>
+      <path
+        stroke="#FF840F"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.5"
+        d="M4.166 20c0-7.463 0-11.197 2.318-13.515C8.803 4.167 12.534 4.167 20 4.167c7.464 0 11.197 0 13.515 2.318 2.319 2.318 2.319 6.05 2.319 13.515 0 7.463 0 11.197-2.319 13.515-2.318 2.318-6.05 2.318-13.515 2.318-7.463 0-11.196 0-13.515-2.318C4.166 31.197 4.166 27.465 4.166 20z"
+      ></path>
+    </svg>
   )
 }

@@ -23,7 +23,7 @@ function OnBoardThree({ setPage }: Props) {
 
   return (
     <div className="mt-3">
-        <h1 className="text-5xl font-medium">Pick Your industry/category</h1>
+        <h1 className="text-2xl lg:text-5xl font-medium">Pick Your industry/category</h1>
 
         <Controller
             name='industry'

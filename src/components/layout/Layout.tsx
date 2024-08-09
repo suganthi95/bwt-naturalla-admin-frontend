@@ -127,10 +127,20 @@ function Layout() {
     }
 
     if(isSuccess){
+        const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
         main = (
             <main className="flex flex-col h-screen">
                 <div className="flex flex-row items-center justify-between px-5 py-2 border bg-slate-100">
-                    <Link to="/" className="flex flex-row items-center gap-1">
+                    <div className="flex lg:hidden flex-row items-center gap-3">
+                        <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-secondary text-white">
+                            {activeWorkspace.workspace_name[0]}
+                        </div>
+                        <div>
+                            <p className="font-medium">{activeWorkspace.workspace_name}</p>
+                            <span className="text-xs text-slate-500">{data?.credit} credits left</span>
+                        </div>
+                    </div>
+                    <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
                         <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
                         <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                     </Link>

@@ -23,7 +23,7 @@ function OnBoardFour({ setPage }: Props) {
 
   return (
     <div className="mt-10">
-        <h1 className="text-5xl font-medium">How did you hear about us ?</h1>
+        <h1 className="text-2xl lg:text-5xl font-medium">How did you hear about us ?</h1>
 
         <Controller
             name='heardThrough'
