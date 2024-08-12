@@ -7,14 +7,15 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { getSuggestions } from "@/lib/apis";
 import { ReviewType } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Send } from "lucide-react";
+import { ChevronLeft, Send } from "lucide-react";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ReplyReview() {
 
 
     const { state }: { state: ReviewType } = useLocation();
+    const navigate = useNavigate();
     const [ generate, setGenerate ] = useState<number>(0);
     const queryClient = useQueryClient();
     const { auth } = useAppContext();
@@ -52,7 +53,10 @@ function ReplyReview() {
   return (
     <div className="p-2 flex flex-1 flex-col relative">
         <div className="flex flex-row items-center justify-between">
-            <h1 className="font-semibold">Suggestions</h1>
+            <div className="flex flex-row items-center gap-2">
+              <Button onClick={() => navigate(-1)} title="Go Back" className="h-6 w-6" variant="secondary" size="icon"><ChevronLeft className="h-4 w-4" /></Button>
+              <h1 className="font-semibold">Suggestions</h1>
+            </div>
             <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
         </div>
 

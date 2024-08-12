@@ -1,20 +1,24 @@
 import { Menu, PlusCircle } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { ValidateUserType } from "@/types";
+import { CollapseType, MenuType, ValidateUserType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useMutation } from "@tanstack/react-query";
 import { setActiveBusiness } from "@/lib/apis";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useAppContext } from "@/contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { ASSETS } from "@/assets/assets";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
-function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType }){
+function Navbar({ content, data }: { content: CollapseType, data: ValidateUserType }){
 
     const { auth } = useAppContext();
+    const path = useLocation();
+    const navigate = useNavigate();
+    const tabValue = path.pathname.split("/").at(-1);
     const [ openSheet, setOpenSheet ] = useState(false);
     const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
 
@@ -26,8 +30,6 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
         mutationKey: [ "setActiveBusiness" ],
         mutationFn: setActiveBusiness,
         onSuccess: async () => {
-            // queryClient.invalidateQueries({ queryKey: [ "validateUser" ] });
-            // queryClient.invalidateQueries({ queryKey: [ "getReviews" ] });
             window.location.reload();
         },
         onError: (error: AxiosError<any>) => {
@@ -43,7 +45,7 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
     return(
         <div>
             <div className="px-3 py-3 border-slate-200 border flex items-center flex-row justify-between w-full">
-                <h1 className="hidden lg:block text-xl font-semibold"><span className="text-primary">Welcome to</span> {activeWorkspace?.workspace_name}</h1>
+                <h1 className="hidden lg:block text-xl font-semibold ml-3"><span className="text-primary">Welcome to</span> {activeWorkspace?.workspace_name}</h1>
                 <div className="flex flex-row  items-center justify-center gap-5">
 
                     {data?.businessList.length > 0 ? 
@@ -82,7 +84,18 @@ function Navbar({ content, data }: { content: ReactNode, data: ValidateUserType 
                                 </div>
                                 
                                 <div onClickCapture={() => setOpenSheet(!openSheet)}>
-                                    {content}
+                                    {Object.keys(content).map((menu: string, index: number) => (
+                                        <Tabs key={`menu-nav-${index}`} value={tabValue}>
+                                            <TabsList className="flex flex-col h-full rounded-none bg-white">
+                                                {content[menu as keyof CollapseType].map((item: MenuType) => (
+                                                    <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => navigate(item.route)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
+                                                        {item.icon}
+                                                        <p>{item.name}</p>
+                                                    </TabsTrigger>
+                                                ))}
+                                            </TabsList>
+                                        </Tabs>
+                                    ))}
                                 </div>
                             </div>
                         </SheetContent>

@@ -1,3 +1,5 @@
+import { ReactElement } from "react"
+
 export type ReviewType = {
     "google_id": string,
     "review_id": string,
@@ -116,4 +118,22 @@ export interface WorkspaceList {
 export interface BusinessList {
     business_name: string,
     place_id: string
+}
+
+export interface DashboardDataType {
+    credits: number
+    totalRatings: number
+    chartData: any
+}
+
+export type CollapseType  = {
+    "general": MenuType[]
+    "menu": MenuType[]
+    "apps/integrations": MenuType[]
+}
+
+export type MenuType = {
+    name: string
+    route: string
+    icon: ReactElement
 }

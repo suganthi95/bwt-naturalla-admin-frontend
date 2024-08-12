@@ -1,5 +1,4 @@
-import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom"
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom"
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, House, Settings, UserCog } from "lucide-react";
@@ -9,95 +8,76 @@ import { googleLogout } from "@react-oauth/google";
 import LogoutDialog from "../ui/LogoutDialog";
 import { useState } from "react";
 import { ASSETS } from "@/assets/assets";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Icons } from "@/assets/icons";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { validateUser } from "@/lib/apis";
 import Loader from "../ui/Loader";
 import { toast } from "sonner";
-import { ValidateUserType } from "@/types";
+import { CollapseType, ValidateUserType } from "@/types";
 import UpgradeModal from "../ui/UpgradeModal";
 
 function Layout() {
 
-  const navigate = useNavigate();
-  const path = useLocation();
-  const { auth, setAuth } = useAppContext();
-  const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
-  const [ collapse, setCollapse ] = useState<string[]>([ "general", "menu", "apps" ])
+    const navigate = useNavigate();
+    const { auth, setAuth } = useAppContext();
+    const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
 
-  const tabValue = path.pathname.split("/").at(-1);
+    const menus: CollapseType = {
+        "general" : [
+            {
+                name: "Dashboard",
+                route: "dashboard",
+                icon: <House className="w-5" />
+            },
+            {
+                name: "Reviews",
+                route: "reviews",
+                icon: <BarChartBig className="w-5" />
+            },
+            {
+                name: "My Business",
+                route: "business",
+                icon: <Briefcase className="w-5" />
+            },
+        ],
+        "menu" : [
+            {
+                name: "Bookmark",
+                route: "bookmark",
+                icon: <Bookmark className="w-5" />
+            },
+            {
+                name: "Billing",
+                route: "billing",
+                icon:  <CreditCard className="w-5" />
+            },
+            {
+                name: "Feedback",
+                route: "feedback",
+                icon: <UserCog className="w-5" />
+            },
+            {
+                name: "Terms & Conditions",
+                route: "terms-and-conditions",
+                icon: <CircleAlert className="w-5" />
+            },
+            {
+                name: "Settings",
+                route: "settings",
+                icon: <Settings className="w-5" />
+            },
+        ],
 
-  const content = (
-        <div className="overflow-y-scroll h-[82vh]">
-            <Accordion value={collapse} onValueChange={setCollapse} type="multiple" className="w-full">
-                <AccordionItem value="general">
-                    <AccordionTrigger className="px-2 text-sm text-secondary py-2 hover:no-underline">GENERAL</AccordionTrigger>
-                    <AccordionContent>
-                        <Tabs value={tabValue}>
-                            <TabsList className="flex flex-col h-full rounded-none bg-white">
-                                <TabsTrigger onClick={() => navigate("overview")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="overview">
-                                    <House className="w-5" />
-                                    <p>Dashboard</p>
-                                </TabsTrigger>
-                                <TabsTrigger onClick={() => navigate("reviews")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="reviews">
-                                    <BarChartBig className="w-5" />
-                                    <p>Reviews</p>
-                                </TabsTrigger>
-                                <TabsTrigger onClick={() => navigate("business")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="business">
-                                    <Briefcase className="w-5" />
-                                    <p>My Business</p>
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="menu">
-                    <AccordionTrigger className="px-2 text-sm text-secondary py-2 hover:no-underline">MENU</AccordionTrigger>
-                    <AccordionContent>
-                        <Tabs value={tabValue}>
-                            <TabsList className="flex flex-col h-full rounded-none bg-white">
-                                <TabsTrigger onClick={() => navigate("bookmark")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="bookmark">
-                                    <Bookmark className="w-5" />
-                                    <p>Bookmark</p>
-                                </TabsTrigger>
-                                <TabsTrigger onClick={() => navigate("billing")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="billing">
-                                    <CreditCard className="w-5" />
-                                    <p>Billing</p>
-                                </TabsTrigger>
-                                <TabsTrigger onClick={() => navigate("feedback")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="feedback">
-                                    <UserCog className="w-5" />
-                                    <p>Feedback</p>
-                                </TabsTrigger>
-                                <TabsTrigger onClick={() => navigate("terms-and-conditions")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="terms-and-conditions">
-                                    <CircleAlert className="w-5" />
-                                    <p>Terms & Conditions</p>
-                                </TabsTrigger>
-                                <TabsTrigger onClick={() => navigate("settings")} className="px-3 py-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="settings">
-                                    <Settings className="w-5" />
-                                    <p>Settings</p>
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem className="border-none" value="apps">
-                    <AccordionTrigger className="px-2 text-sm text-secondary py-2 hover:no-underline">APPS / INTEGRATION</AccordionTrigger>
-                    <AccordionContent>
-                        <Tabs value={tabValue}>
-                            <TabsList className="flex flex-col h-full rounded-none bg-white">
-                                <TabsTrigger className="px-3 py-2 mt-2 w-full rounded-md flex items-center justify-start space-x-3 bg-white hover:bg-secondary hover:text-white data-[state=active]:bg-secondary data-[state=active]:text-white" value="logout">
-                                    <Icons.googleIcon className="w-5" />
-                                    <p>Google Review</p>
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        </div>
-    )
+        "apps/integrations": [
+            {
+                name: "Google Review",
+                route: "",
+                icon: <Icons.googleIcon className="w-5" />
+            }
+        ]
+
+    }
 
     const signout = () => {
         googleLogout();
@@ -173,12 +153,12 @@ function Layout() {
                 </div>
                 <div className="flex flex-row h-full font-inter bg-white">
                     <Sidebar 
-                        content={content}
+                        content={menus}
                         data={data}
                     />
                     <section className="w-[100%] flex flex-col">
                         <Navbar 
-                            content={content}
+                            content={menus}
                             data={data}
                         />
                         <div className="flex flex-1 overflow-y-scroll pb-14">

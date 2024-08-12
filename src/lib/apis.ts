@@ -4,7 +4,7 @@ import axios, { GenericAbortSignal } from "axios";
 
 const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
-const PAYMENT_BASE_URL = "https://backend-payment-c62gk7tmha-el.a.run.app/api/v1"
+// const PAYMENT_BASE_URL = "https://backend-payment-c62gk7tmha-el.a.run.app/api/v1"
 
 
 export const getReviews = async ({ placeId, reviewPaginationId, sort, token, signal }: { placeId: string, reviewPaginationId: string, sort: string, token: string, signal: GenericAbortSignal }) => {
@@ -196,18 +196,14 @@ export const setActiveBusiness = async ({ place_id, token }: { place_id: string,
     })
 }
 
-export const createSubscription = async ({ email, workspace_id, token }: { email: string, workspace_id: string, token: string }) => {
+export const getDashboard = async ({ placeId, sessionToken, token }: { placeId: string, sessionToken: string, token: string }) => {
     
     return await axios({
-        method: "post",
-        url: `${PAYMENT_BASE_URL}/workspace/business/set-active`,
+        method: "get",
+        url: `${BUSINESS_BASE_URL}/workspace/dashboard?place_id=${placeId}&session_token=${sessionToken}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
-        },
-        data: {
-            email,
-            workspace_id
         }
     })
 }
