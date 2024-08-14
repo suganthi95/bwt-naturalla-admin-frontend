@@ -8,6 +8,7 @@ import { useAppContext } from "./contexts/AuthContext"
 import Business from "./pages/Business"
 import SignUp from "./pages/SignUp"
 import OnBoard from "./pages/OnBoard"
+import ReviewBookmarks from "./pages/ReviewBookmarks"
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
         <Route path="/reviews" element={<Reviews/>}/>
         <Route path="/reviews/generate-response" element={<ReplyReview/>}/>
         <Route path="/business" element={<Business/>}/>
-        <Route path="/bookmark" element={<Home/>}/>
+        <Route path="/bookmark" element={<ReviewBookmarks/>}/>
         <Route path="/billing" element={<Home/>}/>
         <Route path="/feedback" element={<Home/>}/>
         <Route path="/terms-and-conditions" element={<Home/>}/>

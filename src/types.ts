@@ -32,15 +32,18 @@ export type ReviewType = {
 }
 
 export type ReviewSuggestionType = {
-    casual_tone: string,
-    balanced_tone: string,
-    professional_tone: string,
+    casual_tone: {
+        response: string,
+        generation_id: string
+    },
+    professional_tone: {
+        response: string,
+        generation_id: string
+    },
     overall_sentiment: "positive" | "negative",
-    _id: string,
-    review: {
-        _id: string,
-        createdAt: string,
-        updatedAt: string
+    sentiment_score: number,
+    remaining_credit: {
+        credit: number
     }
 }
 

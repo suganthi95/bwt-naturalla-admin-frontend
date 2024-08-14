@@ -10,6 +10,8 @@ import { ASSETS } from "@/assets/assets";
 
 function ResponseCard(props: ReviewSuggestionType) {
 
+    console.log(props)
+
   dayjs.extend(relativeTime);
 
   const copyToClipboard = (text: string) => {    
@@ -48,9 +50,9 @@ function ResponseCard(props: ReviewSuggestionType) {
                         </div>
                     </CardHeader>
                     <CardContent className="pt-1">
-                        <p className="text-sm text-light-grey">{props.casual_tone}</p>
+                        <p className="text-sm text-light-grey">{props?.casual_tone?.response}</p>
                         <div className="pt-1">
-                            <Button onClick={() => copyToClipboard(props.casual_tone)} size="icon" variant="ghost">
+                            <Button onClick={() => copyToClipboard(props?.casual_tone?.response)} size="icon" variant="ghost">
                                 {/* {isPending && tone === "casual" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
@@ -74,9 +76,9 @@ function ResponseCard(props: ReviewSuggestionType) {
                         </div>
                     </CardHeader>
                     <CardContent className="pt-1">
-                        <p className="text-sm text-light-grey">{props.professional_tone}</p>
+                        <p className="text-sm text-light-grey">{props?.professional_tone?.response}</p>
                         <div className="pt-1">
-                            <Button onClick={() => copyToClipboard(props.professional_tone)} size="icon" variant="ghost">
+                            <Button onClick={() => copyToClipboard(props?.professional_tone?.response)} size="icon" variant="ghost">
                             {/* {isPending && tone === "professional" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>

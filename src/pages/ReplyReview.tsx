@@ -20,10 +20,13 @@ function ReplyReview() {
     const queryClient = useQueryClient();
     const { auth } = useAppContext();
 
+    console.log(state)
+
     const { isLoading, isSuccess, isError, data, error } = useQuery({
       queryKey: [ "getSuggestions", generate ],
       queryFn: () => getSuggestions({
           prompt: state.review_text,
+          username: state.author_title,
           token: auth?.token
       }),
       retry: 3,
@@ -46,7 +49,7 @@ function ReplyReview() {
 
     if(isSuccess){
       queryClient.invalidateQueries({ queryKey: [ "validateUser" ] })
-      content = <ResponseCard {...data?.data?.data}/>
+      content = <ResponseCard {...data?.data}/>
     }
 
 
