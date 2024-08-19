@@ -140,7 +140,7 @@ function Layout() {
                             <DropdownMenuContent className="w-40">
                                 <DropdownMenuLabel>{data?.name}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => navigate("/profile")}>
                                         <span>Profile</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => setOpenLogoutDialog(true)}>

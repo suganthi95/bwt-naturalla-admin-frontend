@@ -88,7 +88,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                         <Tabs key={`menu-nav-${index}`} value={tabValue}>
                                             <TabsList className="flex flex-col h-full rounded-none bg-white">
                                                 {content[menu as keyof CollapseType].map((item: MenuType) => (
-                                                    <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => navigate(item.route)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
+                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => navigate(item.route)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
                                                         {item.icon}
                                                         <p>{item.name}</p>
                                                     </TabsTrigger>

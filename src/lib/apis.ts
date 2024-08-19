@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ReviewType } from "@/types";
 import { TokenResponse } from "@react-oauth/google";
 import axios, { GenericAbortSignal } from "axios";
 
@@ -7,11 +8,11 @@ const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v
 // const PAYMENT_BASE_URL = "https://backend-payment-c62gk7tmha-el.a.run.app/api/v1"
 
 
-export const getReviews = async ({ placeId, reviewPaginationId, sort, token, signal }: { placeId: string, reviewPaginationId: string, sort: string, token: string, signal: GenericAbortSignal }) => {
+export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/workspace/google?placeId=${placeId}${reviewPaginationId ? `&lastPaginationId=${reviewPaginationId}` : ""}&sort=${sort}`,
+        url: `${BUSINESS_BASE_URL}/workspace/google?placeId=${placeId}&page=${page}&sort=${sort}`,
         // url: `${BUSINESS_BASE_URL}/workspace/google?placeId=${placeId}&sort=${sort}`,
         headers: {
             "Content-Type": "application/json",
@@ -201,6 +202,34 @@ export const getDashboard = async ({ placeId, sessionToken, token }: { placeId: 
     return await axios({
         method: "get",
         url: `${BUSINESS_BASE_URL}/workspace/dashboard?place_id=${placeId}&session_token=${sessionToken}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const bookmarkReview = async ({ token, place_id, state, status }: { token: string, place_id: string, state: ReviewType, status: boolean }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BUSINESS_BASE_URL}/workspace/bookmark-review/${status}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            place_id,
+            ...state
+        }
+    })
+}
+
+export const getAllBookmarkedReviews = async ({ placeId, token }: { placeId: string, token: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${BUSINESS_BASE_URL}/workspace/bookmark-review/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token

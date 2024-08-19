@@ -17,37 +17,33 @@ function Reviews() {
     const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);
     const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];
     const [ activeBusiness ] = validateUser?.data?.data?.businessList.filter(item => item.place_id === activeWorkspace.active_business) as BusinessList[];
-    
+
     const [ actualData, setActualData ] = useState<ReviewType[]>([]);
-    const [ reviewPaginationId, setReviewPaginationId ] = useState<string>("");
     const [isAtBottom, setIsAtBottom] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+    const [ page, setPage ] = useState(1);
+    
     const { isLoading, isError, isSuccess, data, error, isRefetching, refetch } = useQuery({
         queryKey: [ "getReviews", sortKey, activeBusiness?.place_id ],
         queryFn: ({ signal }) => getReviews({
-            placeId: activeBusiness?.place_id,
-            sort: sortKey,
-            reviewPaginationId,
-            token: auth?.token as string,
-            signal
+          placeId: activeBusiness?.place_id,
+          sort: sortKey,
+          page: page,
+          token: auth?.token as string,
+          signal
         }),
         retry: 3,
         refetchOnWindowFocus: false,
         enabled: Boolean(activeBusiness?.place_id),
-        select: (data) => {
-          return data?.data?.data
-        }
     });
 
     useEffect(() => {
-      if(Array.isArray(data)){
-        setActualData(prev => [ ...prev, ...data ]);
-        setReviewPaginationId(data.at(-1)?.review_pagination_id as string);
+      if(Array.isArray(data?.data?.data)){
+        setActualData(prev => [ ...prev, ...data?.data?.data ]);
+        setPage(prev => prev + 1);
       }
-    }, [data]);
-
-    console.log(isAtBottom)
+    }, [data?.data?.data]);
 
 
     if(!activeBusiness){
@@ -69,15 +65,15 @@ function Reviews() {
         content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
     }
 
-    // if(isSuccess && data.length === 0 && !isRefetching){
-    //     content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
-    // }
+    if(isSuccess && data?.data?.data?.length === 0){
+        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
+    }
 
     if(isSuccess && actualData.length > 0){
         content = actualData?.map((item : ReviewType) => (
-            <Link to="/reviews/generate-response" key={item.review_id} state={item}>
-                <ReviewCard {...item}/>
-            </Link>
+          <Link to="/reviews/generate-response" key={item.review_id} state={item}>
+            <ReviewCard {...item}/>
+          </Link>
         ))
     }
 
@@ -106,7 +102,7 @@ function Reviews() {
     }, []);
 
     useEffect(() => {
-      if(isAtBottom && reviewPaginationId){
+      if(isAtBottom){
         queryClient.cancelQueries({ queryKey: [ "getReviews" ] });
         refetch();
       }
@@ -118,7 +114,7 @@ function Reviews() {
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Reviews</h1>
             <div>
-              <p className="text-center text-sm mt-3 text-secondary">{isAtBottom && reviewPaginationId ? "fetching more reviews..." : isAtBottom && reviewPaginationId === null ? "End of reviews" : ""}</p>
+              <p className="text-center text-sm mt-3 text-secondary">{isAtBottom  ? "fetching more reviews..." : ""}</p>
             </div>
             <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
                 <SelectTrigger className="w-[100px] h-8">

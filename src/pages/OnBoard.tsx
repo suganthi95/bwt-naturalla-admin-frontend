@@ -3,51 +3,19 @@ import { ASSETS } from "@/assets/assets"
 import OnBoardFive from "@/components/onboard/OnBoardFive";
 import OnBoardFour from "@/components/onboard/OnBoardFour";
 import OnBoardOne from "@/components/onboard/OnBoardOne";
+import OnBoardSix from "@/components/onboard/OnBoardSix";
 import OnBoardThree from "@/components/onboard/OnBoardThree";
 import OnBoardTwo from "@/components/onboard/OnBoardTwo";
-import { useAppContext } from "@/contexts/AuthContext";
-import { onBoardUser } from "@/lib/apis";
-import { AuthType, OnBoardType } from "@/types";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { OnBoardType } from "@/types";
 import { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom"
-import { toast } from "sonner";
+import { Link } from "react-router-dom"
 
 function OnBoard() {
 
-    const { setAuth } = useAppContext();
-    const navigate = useNavigate();
     const formState = useForm<OnBoardType>();
-    const { auth } = useAppContext();
 
     const [ page, setPage ] = useState(0);
-
-    const { mutate, isPending } = useMutation({
-        mutationKey: [ "onBoardUser" ],
-        mutationFn: onBoardUser,
-        onSuccess: (data) => {
-            setAuth((prev) => ({ ...prev, data: data.data.data } as AuthType));
-            toast.success("Request Success", { description: "Signed In Successfully" })
-            navigate(`/overview`, { replace: true });
-        },
-        onError: (error: AxiosError<any>) => {
-            console.log(error)
-            toast.error("Request Failed", { description: error?.response?.data?.message })
-        }
-    });
-
-    const submitOnboardForm = formState.handleSubmit(data => {
-        mutate({
-            business_type: data.business,
-            heard_through: data.heardThrough,
-            industry: data.industry,
-            role: data.role,
-            workspace_name: data.workspaceName,
-            token: auth?.token as string
-        })
-    })
 
     const section = [
         {
@@ -67,7 +35,11 @@ function OnBoard() {
             image: ASSETS.ONBOARD_04
         },
         {
-            form: <OnBoardFive submitOnboardForm={submitOnboardForm} isPending={isPending}/>,
+            form: <OnBoardFive setPage={setPage}/>,
+            image: ASSETS.ONBOARD_05
+        },
+        {
+            form: <OnBoardSix/>,
             image: ASSETS.ONBOARD_05
         },
     ]
@@ -92,13 +64,13 @@ function OnBoard() {
             </Link>
 
             <div className="mt-3 flex flex-row gap-2">
-                {[0, 1, 2, 3, 4].map((item: number) => (
+                {[0, 1, 2, 3, 4, 5].map((item: number) => (
                     <div key={`stepper-${item}`} className={`w-10 h-1 rounded-3xl ${page >= item ? "bg-primary" : "bg-slate-400"}`}></div>
                 ))}
             </div>
 
             <div className="mt-1">
-                <p>{page + 1} of 5</p>
+                <p>{page + 1} of 6</p>
             </div>
             <FormProvider {...formState}>
                 {section[page].form}

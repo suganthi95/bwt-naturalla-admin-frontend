@@ -1,53 +1,32 @@
 import ReviewCard from "@/components/reviews/ReviewCard"
 import Loader from "@/components/ui/Loader";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useAppContext } from "@/contexts/AuthContext";
-import { getReviews } from "@/lib/apis"
+import { getAllBookmarkedReviews } from "@/lib/apis"
 import { BusinessList, ReviewType, ValidateUserType, WorkspaceList } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Link } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { AxiosResponse } from "axios";
 
 function ReviewBookmarks() {
 
     const { auth } = useAppContext();
-    const [ sortKey, setSortKey ] = useState<string>("newest");
     const queryClient = useQueryClient();
     const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);
     const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];
     const [ activeBusiness ] = validateUser?.data?.data?.businessList.filter(item => item.place_id === activeWorkspace.active_business) as BusinessList[];
-    
-    const [ actualData, setActualData ] = useState<ReviewType[]>([]);
-    const [ reviewPaginationId, setReviewPaginationId ] = useState<string>("");
-    const [isAtBottom, setIsAtBottom] = useState(false);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const { isLoading, isError, isSuccess, data, error, isRefetching, refetch } = useQuery({
-        queryKey: [ "getReviews", sortKey, activeBusiness?.place_id ],
-        queryFn: ({ signal }) => getReviews({
+    const { isLoading, isError, isSuccess, data, error, isRefetching } = useQuery({
+        queryKey: [ "getAllBookmarkedReviews", activeBusiness?.place_id ],
+        queryFn: () => getAllBookmarkedReviews({
             placeId: activeBusiness?.place_id,
-            sort: sortKey,
-            reviewPaginationId,
             token: auth?.token as string,
-            signal
         }),
         retry: 3,
         refetchOnWindowFocus: false,
         enabled: Boolean(activeBusiness?.place_id),
         select: (data) => {
-          return data?.data?.data
+          return data?.data
         }
     });
-
-    useEffect(() => {
-      if(Array.isArray(data)){
-        setActualData(prev => [ ...prev, ...data ]);
-        setReviewPaginationId(data.at(-1)?.review_pagination_id as string);
-      }
-    }, [data]);
-
-    console.log(isAtBottom)
 
 
     if(!activeBusiness){
@@ -73,54 +52,17 @@ function ReviewBookmarks() {
     //     content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
     // }
 
-    if(isSuccess && actualData.length > 0){
-        content = actualData?.map((item : ReviewType) => (
-            <Link to="/reviews/generate-response" key={item.review_id} state={item}>
-                <ReviewCard {...item}/>
-            </Link>
+    if(isSuccess && data.length > 0){
+        content = data?.map((item : ReviewType) => (
+          <ReviewCard key={item.review_id} {...item} place_id={activeBusiness.place_id}/>
         ))
     }
-
-    const handleScroll = useCallback(() => {
-      const container = scrollContainerRef.current;
-      if (container) {
-        const scrollTop = container.scrollTop;
-        const scrollHeight = container.scrollHeight;
-        const clientHeight = container.clientHeight;
-        setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 5); // Adding a small buffer
-      }
-    }, []);
-
-    useEffect(() => {
-  
-      const container = scrollContainerRef.current;
-      if (container) {
-        container.addEventListener('scroll', handleScroll);
-      }
-  
-      return () => {
-        if (container) {
-          container.removeEventListener('scroll', handleScroll);
-        }
-      };
-    }, []);
-
-    useEffect(() => {
-      if(isAtBottom && reviewPaginationId){
-        queryClient.cancelQueries({ queryKey: [ "getReviews" ] });
-        refetch();
-      }
-    }, [isAtBottom])
-
 
   return (
     <div className="p-2 flex flex-col flex-1 overflow-hidden">
         <div className="flex flex-row items-center justify-between py-1">
-            <h1 className="font-semibold">Reviews</h1>
-            <div>
-              <p className="text-center text-sm mt-3 text-secondary">{isAtBottom && reviewPaginationId ? "fetching more reviews..." : isAtBottom && reviewPaginationId === null ? "End of reviews" : ""}</p>
-            </div>
-            <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
+            <h1 className="font-semibold">Bookmarks</h1>
+            {/* <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
                 <SelectTrigger className="w-[100px] h-8">
                     <SelectValue placeholder="Sort" />
                 </SelectTrigger>
@@ -129,10 +71,10 @@ function ReviewBookmarks() {
                     <SelectItem value="highest_rating">Positive</SelectItem>
                     <SelectItem value="lowest_rating">Negative</SelectItem>
                 </SelectContent>
-            </Select>
+            </Select> */}
         </div>
 
-        <div ref={scrollContainerRef} className="py-3 overflow-y-scroll h-full">
+        <div className="py-3 overflow-y-scroll h-full">
             {content}
         </div>
         
