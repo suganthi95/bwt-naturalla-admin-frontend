@@ -4,7 +4,7 @@ import { Icons } from "@/assets/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { SignUpType } from "@/types"
@@ -19,7 +19,7 @@ import useToggle from "@/hooks/useToggle"
 function SignUp() {
 
     const [ user, setUser ] = useState<Omit<TokenResponse, "error" | "error_description" | "error_uri">>();
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<SignUpType>();
+    const { register, handleSubmit, watch, formState: { errors }, setError } = useForm<SignUpType>();
     const { setAuth } = useAppContext();
     const navigate = useNavigate();
     const [ isPasswordVisible, togglePasswordVisibility ] = useToggle();
@@ -85,7 +85,15 @@ function SignUp() {
         name: data.username,
         email: data.email,
         password: data.password
-    }))
+    }));
+
+    useEffect(() => {
+        if(watch("confirmPassword") !== watch("password") && watch("confirmPassword") !== ""){
+            setError("confirmPassword", { message: "Password does not match", type: "required" });
+        }else{
+            setError("confirmPassword", { message: "", type: "required" });
+        }
+    }, [ watch("confirmPassword") ])
 
 
   return (
@@ -95,7 +103,7 @@ function SignUp() {
                 <img className="w-2/3" src={ASSETS.SIGNUP_BG_IMG} alt="bg-img" />
             </div>
         </div>
-        <div className="flex flex-1 flex-col justify-between rounded-xl bg-white">
+        <div className="flex flex-1 flex-col justify-center rounded-xl bg-white relative">
             <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                 <img src={ASSETS.LOGO} alt="logo" />
                 <div>
@@ -107,7 +115,7 @@ function SignUp() {
             </Link>
             <div className="py-0 px-2 md:px-20 lg:px-32 space-y-2">
                 <h1 className="text-secondary text-2xl font-bold text-center">Sign Up</h1>
-                <p className="text-sm text-slate-500 text-center">Create your review management account here.</p>
+                <p className="text-sm text-slate-500 text-center">Create your review engagement account here.</p>
 
                 <form onSubmit={submit}>
 
@@ -213,7 +221,7 @@ function SignUp() {
                 
             </div>
 
-            <h1 className="text-sm text-center">
+            <h1 className="text-sm text-center absolute bottom-1 w-full mx-auto">
                 © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/">IntelliResponse</Link> All Rights Reserved. Developed by <Link className="font-bold hover:underline" to="https://blackwinstech.com/">Blackwins Tech Solutions</Link>
             </h1>
         </div>

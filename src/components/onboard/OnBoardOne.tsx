@@ -13,7 +13,7 @@ function OnBoardOne({ setPage }: Props) {
 
     const proceedToNext = () => {
         if(!watch("business")){
-            setError('business', { type: 'required', message: 'Select atleast one option' });
+            setError('business', { type: 'required', message: 'Select one option' });
         }else{
             setPage(prev => prev + 1)
         }

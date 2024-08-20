@@ -7,11 +7,14 @@ import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
 import { useAppContext } from '@/contexts/AuthContext';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addBusiness, getBusinessDetails, getBusinessSuggestions } from '@/lib/apis';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness } from '@/lib/apis';
 import { v4 as uuidv4 } from "uuid";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { ASSETS } from '@/assets/assets';
+import Loader from '../ui/Loader';
 
 function OnBoardSix() {
 
@@ -20,7 +23,22 @@ function OnBoardSix() {
     const [open, setOpen] = useState(false);
     const [ input, setInput ] = useState("");
     const [value, setValue] = useState("");
-    const queryClient = useQueryClient();
+    const [ valueError, setValueError ] = useState<string | null>(null);
+
+    // set active business
+
+    const { mutate: setActiveBusinessMutate, isPending: setActiveBusinessPending } = useMutation({
+        mutationKey: [ "setActiveBusiness" ],
+        mutationFn: setActiveBusiness,
+        onSuccess: async () => {
+            toast.success("Request Success", { description: "Business Added Successfully" });
+            navigate("/dashboard");
+            window.location.reload();
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error("Request Failed", { description: error?.response?.data?.message })
+        }
+    });
 
     const { data, isLoading } = useQuery({
         queryKey: [ "getBusinessSuggestions", input ],
@@ -40,8 +58,12 @@ function OnBoardSix() {
         mutationKey: [ "addBusiness" ],
         mutationFn: addBusiness,
         onSuccess: () => {
-            toast.success("Request Success", { description: "Business Added Successfully" });
-            navigate("/dashboard")
+            setActiveBusinessMutate({
+                place_id: value,
+                token: auth?.token as string
+            })
+
+            setValue("");
         },
         onError: () => {
             toast.success("Request Failed", { description: "Please try after sometimes" })
@@ -62,9 +84,6 @@ function OnBoardSix() {
                 email: auth?.data?.email,
                 token: auth?.token
             });
-
-            queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
-            setValue("");
         },
         onError: (error) => {
             toast.success("Request Failed", { description: error.message })
@@ -73,14 +92,37 @@ function OnBoardSix() {
 
 
     const getDetailedBusiness = () => {
+
+        if(value === ""){
+            return setValueError("Select one business");
+        }
+
         mutate({
-        placeId: value,
-        uuid: uuidv4(),
-        token: auth?.token as string
+            placeId: value,
+            uuid: uuidv4(),
+            token: auth?.token as string
         })
     }
 
+    let loader = null;
+
+    if(addBusinessPending || setActiveBusinessPending){
+        loader = (
+            <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 bg-transparent backdrop-brightness-[0.4]">
+                <div className="hidden lg:flex flex-row items-center gap-1">
+                    <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                    <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+                </div>
+                <div>
+                    <Loader/>
+                </div>
+                <p className='text-slate-200'>We are setting up your workspace, please wait for a moment...</p>
+            </div>
+        )
+    }
+
     return (
+        <>
         <div className="mt-10">
             <h1 className="text-2xl lg:text-5xl font-medium">Add your business</h1>
 
@@ -107,10 +149,13 @@ function OnBoardSix() {
                         <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1">
                             <Search className="w-5 stroke-slate-400" />
                             <Input 
-                            placeholder="Search Business..." 
-                            className="border-none outline-none focus-visible:ring-transparent"
-                            value={input}
-                            onChange={(val) => setInput(val.target.value)}
+                                placeholder="Search Business..." 
+                                className="border-none outline-none focus-visible:ring-transparent"
+                                value={input}
+                                onChange={(val) => {
+                                    setValueError(null);
+                                    setInput(val.target.value)
+                                }}
                             />
                         </Card>
                         <CommandList>
@@ -138,16 +183,21 @@ function OnBoardSix() {
                         </CommandList>
                         </Command>
                     </PopoverContent>
-                    </Popover>
+                </Popover>
+
+                <p className="text-xs mt-1 font-medium text-red-500">{valueError}</p>
             </div>
 
-            <Button onClick={getDetailedBusiness} className="mt-5 bg-primary hover:bg-primary/50">
-                {getBusinessDetailsPending || addBusinessPending ? 
-                <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
-                "Add Business"
+            <Button disabled={getBusinessDetailsPending || addBusinessPending || setActiveBusinessPending} 
+                onClick={getDetailedBusiness} className="mt-5 bg-primary hover:bg-primary/50">
+                {getBusinessDetailsPending || addBusinessPending || setActiveBusinessPending ? 
+                    <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
+                    "Add Business"
                 }
             </Button>
         </div>
+        {loader}
+        </>
     )
 }
 

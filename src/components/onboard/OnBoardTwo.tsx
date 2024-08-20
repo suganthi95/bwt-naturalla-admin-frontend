@@ -13,7 +13,7 @@ function OnBoardTwo({ setPage }: Props) {
 
     const proceedToNext = () => {
         if(!watch("role")){
-            setError('role', { type: 'required', message: 'Select atleast one option' });
+            setError('role', { type: 'required', message: 'Select one option' });
         }else{
             setPage(prev => prev + 1)
         }

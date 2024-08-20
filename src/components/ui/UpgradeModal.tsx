@@ -21,11 +21,11 @@ function UpgradeModal() {
 
     const paymentScreenOne = (
         <div className="flex flex-1 flex-col p-5 gap-3">
-            <h1 className="text-secondary text-2xl font-bold">Try <span className="text-primary">IntelliResponse</span> Pro</h1>
+            <h1 className="text-secondary text-2xl font-bold">Try <span className="text-primary">IntelliResponse</span></h1>
             <p className="text-slate-500">Experience the full capabilities of IntelliResponse without any commitment.</p>
 
             <div className="border-t border-b flex flex-col gap-5 py-5">
-                <p className="text-secondary text-md">Here's what you will get in Pro:</p>
+                <p className="text-secondary text-md">Here's what you will get:</p>
 
                 <div className="flex flex-row gap-3 items-center">
                     <div>   

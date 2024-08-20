@@ -34,6 +34,7 @@ function App() {
         <Route path="/settings" element={<Home/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/logout" element={<Home/>}/>
+        <Route path="/google-review" element={<Home/>}/>
       </Route>
       <Route path="sign-in" element={<SignIn/>}/>
       <Route path="sign-up" element={<SignUp/>}/>

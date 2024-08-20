@@ -16,19 +16,19 @@ function Feedback() {
                 <label className="text-sm" htmlFor="">Feedback Type</label>
                 <Select>
                     <SelectTrigger className="w-1/2">
-                        <SelectValue placeholder="Sort" />
+                        <SelectValue placeholder="Please select feedback type" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="newest">Bug</SelectItem>
-                        <SelectItem value="highest_rating">Feature</SelectItem>
-                        <SelectItem value="lowest_rating">Task</SelectItem>
+                        <SelectItem value="newest">Report a Bug</SelectItem>
+                        <SelectItem value="highest_rating">Request a Feature</SelectItem>
+                        <SelectItem value="lowest_rating">Appreciation feedback</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
 
             <div className="space-y-1">
                 <label className="text-sm" htmlFor="">Message</label>
-                <Textarea className="w-1/2" rows={5} placeholder="Type your message here." />
+                <Textarea required className="w-1/2" rows={5} placeholder="Type your message here." />
             </div>
 
             <div className="space-y-1">

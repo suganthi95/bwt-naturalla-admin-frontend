@@ -1,8 +1,22 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+// import { useAppContext } from "@/contexts/AuthContext";
+// import { validateUser } from "@/lib/apis";
+// import { ValidateUserType } from "@/types";
+// import { useQuery } from "@tanstack/react-query"
 
 function Profile() {
+
+    // const { auth } = useAppContext();
+    // const { isLoading, isError, isSuccess, data } = useQuery({
+    //     queryKey: [ "validateUser" ],
+    //     queryFn: () => validateUser(auth?.token as string),
+    //     refetchOnWindowFocus: true,
+    //     retry: 3,
+    //     select: (data): ValidateUserType => data?.data?.data,
+    //     enabled: Boolean(auth?.token) 
+    // });
 
   return (
     <div className="flex flex-col flex-1">
@@ -14,7 +28,7 @@ function Profile() {
 
         <div className="mt-8 px-5">
             <h1 className="text-2xl text-secondary font-medium">Profile</h1>
-            <p className="text-slate-400">Update your photo and personal details here</p>
+            {/* <p className="text-slate-400">Update your photo and personal details here</p> */}
         </div>
 
         <div className="mx-5 space-y-5 py-5 my-5 border-t border-b">

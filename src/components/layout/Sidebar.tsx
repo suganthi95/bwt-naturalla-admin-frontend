@@ -31,7 +31,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                     </div>
                     <div className={`${!resizable && "hidden"} flex flex-col`}>
                         <p className="font-medium">{activeWorkspace.workspace_name}</p>
-                        <span className="text-xs text-slate-500">{data?.credit} credits left</span>
+                        {/* <span className="text-xs text-slate-500">{data?.credit} credits left</span> */}
                     </div>
                 </div>
                 <Button onClick={() => collapseSidebar()} variant="secondary" className={`p-1 cursor-pointer h-6 border z-10 absolute -right-4`}>

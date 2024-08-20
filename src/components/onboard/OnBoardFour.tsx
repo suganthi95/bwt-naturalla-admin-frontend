@@ -13,7 +13,7 @@ function OnBoardFour({ setPage }: Props) {
 
     const proceedToNext = () => {
         if(!watch("heardThrough")){
-            setError('heardThrough', { type: 'required', message: 'Select atleast one option' });
+            setError('heardThrough', { type: 'required', message: 'Select one option' });
         }else{
             setPage(prev => prev + 1)
         }
