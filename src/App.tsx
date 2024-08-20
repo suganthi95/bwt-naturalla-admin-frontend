@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp"
 import OnBoard from "./pages/OnBoard"
 import ReviewBookmarks from "./pages/ReviewBookmarks"
 import Profile from "./pages/Profile"
+import Feedback from "./pages/Feedback"
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
         <Route path="/business" element={<Business/>}/>
         <Route path="/bookmark" element={<ReviewBookmarks/>}/>
         <Route path="/billing" element={<Home/>}/>
-        <Route path="/feedback" element={<Home/>}/>
+        <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/terms-and-conditions" element={<Home/>}/>
         <Route path="/settings" element={<Home/>}/>
         <Route path="/profile" element={<Profile/>}/>
