@@ -42,6 +42,14 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
         setActiveBusinessMutate({ place_id: value, token: auth?.token as string })
     }
 
+    const redirect = (route: MenuType) => {
+        if([ "Privacy Policy", "Terms & Conditions" ].includes(route.name)){
+            window.open( route.route, '_blank');
+        }else{
+            navigate(`/${route.route}`)
+        }
+    }
+
     return(
         <div>
             <div className="px-3 py-3 border-slate-200 border flex items-center flex-row justify-between w-full">
@@ -88,7 +96,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                         <Tabs key={`menu-nav-${index}`} value={tabValue}>
                                             <TabsList className="flex flex-col h-full rounded-none bg-white">
                                                 {content[menu as keyof CollapseType].map((item: MenuType) => (
-                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => navigate(item.route)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
+                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
                                                         {item.icon}
                                                         <p>{item.name}</p>
                                                     </TabsTrigger>

@@ -1,7 +1,7 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom"
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, House, Settings, UserCog } from "lucide-react";
+import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, EarthLock, House, Settings, UserCog } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
@@ -58,8 +58,13 @@ function Layout() {
                 icon: <UserCog className="w-5" />
             },
             {
+                name: "Privacy Policy",
+                route: "https://intelliresponse.ai/en/privacy-policy",
+                icon: <EarthLock className="w-5" />
+            },
+            {
                 name: "Terms & Conditions",
-                route: "terms-and-conditions",
+                route: "https://intelliresponse.ai/en/terms-and-conditions",
                 icon: <CircleAlert className="w-5" />
             },
             {

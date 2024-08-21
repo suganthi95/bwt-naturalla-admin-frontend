@@ -237,4 +237,16 @@ export const getAllBookmarkedReviews = async ({ placeId, token }: { placeId: str
     })
 }
 
+export const setUserOnboardStatus = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${BASE_URL_V2}/auth/update-onboard-status`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
 

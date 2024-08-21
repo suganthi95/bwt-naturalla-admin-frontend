@@ -21,6 +21,14 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
         setCollapse([ "general", "menu", "apps/integrations" ])
     }
 
+    const redirect = (route: MenuType) => {
+        if([ "Privacy Policy", "Terms & Conditions" ].includes(route.name)){
+            window.open( route.route, '_blank');
+        }else{
+            navigate(`/${route.route}`)
+        }
+    }
+
   return (
     <section className={`hidden lg:block transition-all ease-out ${resizable ? "w-[30%] lg:w-[26%]" : "w-16"}`}>
         <div className={`h-full w-full relative border-slate-200 border`}>
@@ -47,7 +55,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                                 <Tabs value={tabValue}>
                                     <TabsList className="flex flex-col h-full rounded-none bg-white">
                                         {content[menu as keyof CollapseType].map((item: MenuType) => (
-                                            <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => navigate(item.route)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white ${resizable ? "w-full" : "w-fit"}`} value={item.route}>
+                                            <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white ${resizable ? "w-full" : "w-fit"}`} value={item.route}>
                                                 {item.icon}
                                                 {resizable && <p>{item.name}</p>}
                                             </TabsTrigger>

@@ -6,9 +6,9 @@ import { Card } from '../ui/card';
 import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
 import { useAppContext } from '@/contexts/AuthContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness } from '@/lib/apis';
+import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness, setUserOnboardStatus, validateUser } from '@/lib/apis';
 import { v4 as uuidv4 } from "uuid";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +24,41 @@ function OnBoardSix() {
     const [ input, setInput ] = useState("");
     const [value, setValue] = useState("");
     const [ valueError, setValueError ] = useState<string | null>(null);
+    const messages = [
+        "Connecting to our servers…",
+        "Retrieving your business details…",
+        "Ensuring everything is up to date…",
+        "Almost there, just a few more moments…",
+        "Finalizing your setup…",
+    ];
+      
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+
+    // validate user
+    const { mutate: validateUserMutation } = useMutation({
+        mutationKey: [ "validateUser" ],
+        mutationFn: validateUser,
+        onSuccess: async () => {
+            toast.success("Request Success", { description: "Business Added Successfully" });
+            navigate("/dashboard");
+            window.location.reload();
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error("Request Failed", { description: error?.response?.data?.message })
+        }
+    });
+
+    // set user as onboarded
+    const { mutate: setUserOnboardMutate, isPending: isOnboardStatusPending } = useMutation({
+        mutationKey: [ "setUserOnboardStatus" ],
+        mutationFn: setUserOnboardStatus,
+        onSuccess: () => {
+            validateUserMutation(auth?.token as string)
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error("Request Failed", { description: error?.response?.data?.message })
+        }
+    })
 
     // set active business
 
@@ -58,6 +93,7 @@ function OnBoardSix() {
         mutationKey: [ "addBusiness" ],
         mutationFn: addBusiness,
         onSuccess: () => {
+            setUserOnboardMutate({ token: auth?.token as string })
             setActiveBusinessMutate({
                 place_id: value,
                 token: auth?.token as string
@@ -104,11 +140,19 @@ function OnBoardSix() {
         })
     }
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+        }, 7000); // Change every 7 seconds
+    
+        return () => clearInterval(interval);
+      }, []);
+
     let loader = null;
 
-    if(addBusinessPending || setActiveBusinessPending){
+    if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending){
         loader = (
-            <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 bg-transparent backdrop-brightness-[0.4]">
+            <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 bg-white">
                 <div className="hidden lg:flex flex-row items-center gap-1">
                     <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
                     <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
@@ -116,7 +160,7 @@ function OnBoardSix() {
                 <div>
                     <Loader/>
                 </div>
-                <p className='text-slate-200'>We are setting up your workspace, please wait for a moment...</p>
+                <p className='text-slate-500'>{messages[currentMessageIndex]}</p>
             </div>
         )
     }
@@ -125,7 +169,7 @@ function OnBoardSix() {
         <>
         <div className="mt-10">
             <h1 className="text-2xl lg:text-5xl font-medium">Add your business</h1>
-
+            <p className='pb-3 text-slate-500'>Please add one business</p>
             <div>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
