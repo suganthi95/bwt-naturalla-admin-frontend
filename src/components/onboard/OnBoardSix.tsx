@@ -66,9 +66,7 @@ function OnBoardSix() {
         mutationKey: [ "setActiveBusiness" ],
         mutationFn: setActiveBusiness,
         onSuccess: async () => {
-            toast.success("Request Success", { description: "Business Added Successfully" });
-            navigate("/dashboard");
-            window.location.reload();
+            setUserOnboardMutate({ token: auth?.token as string })
         },
         onError: (error: AxiosError<any>) => {
             toast.error("Request Failed", { description: error?.response?.data?.message })
@@ -93,7 +91,6 @@ function OnBoardSix() {
         mutationKey: [ "addBusiness" ],
         mutationFn: addBusiness,
         onSuccess: () => {
-            setUserOnboardMutate({ token: auth?.token as string })
             setActiveBusinessMutate({
                 place_id: value,
                 token: auth?.token as string

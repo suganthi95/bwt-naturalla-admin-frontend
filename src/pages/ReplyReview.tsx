@@ -2,12 +2,11 @@ import ResponseCard from "@/components/reviews/ResponseCard";
 import ReviewCard from "@/components/reviews/ReviewCard"
 import Loader from "@/components/ui/Loader";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { useAppContext } from "@/contexts/AuthContext";
 import { getSuggestions } from "@/lib/apis";
 import { ReviewType } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, Send } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -68,13 +67,13 @@ function ReplyReview() {
             <div>
               {content}
             </div>
-            <div className="flex flex-row items-center gap-2 border-2 border-slate-200 rounded-md px-2 py-1">
+            {/* <div className="flex flex-row items-center gap-2 border-2 border-slate-200 rounded-md px-2 py-1">
               <Textarea className="h-14 border-none focus-visible:ring-none focus-visible:ring-transparent focus-visible:ring-offset-none" />
               <div className="h-10 w-[1px] bg-slate-200"></div>
               <Button size="icon" className="bg-secondary hover:bg-secondary/90">
                 <Send />
               </Button>
-            </div>
+            </div> */}
         </div>
           
     </div>

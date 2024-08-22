@@ -51,14 +51,16 @@ function SignUp() {
 
     if(isSuccess && data?.data?.data?.onboarded){
         setAuth(data.data);
-        toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/overview`, { replace: true });
+        toast.success("Request Success", { description: "Signed In Successfully" });
+        navigate(`/`, { replace: true });
+        window.location.reload();
     }
 
     if(isSuccess && !data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/onboard`, { replace: true });
+        navigate(`/`, { replace: true });
+        window.location.reload();
     }
 
     if(isError){
@@ -70,8 +72,9 @@ function SignUp() {
         mutationFn: signupUser,
         onSuccess: (data) => {
             setAuth(data.data);
-            toast.success("Request Success", { description: "Signed Up Successfully" })
-            navigate(`/onboard`, { replace: true });
+            toast.success("Request Success", { description: "Signed Up Successfully" });
+            navigate(`/`, { replace: true });
+            window.location.reload();
         },
         onError: (error: AxiosError<any>) => {
             console.log(error)

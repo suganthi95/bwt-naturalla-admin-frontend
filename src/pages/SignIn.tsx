@@ -56,7 +56,8 @@ function SignIn() {
         onSuccess: (data) => {
             setAuth(data.data);
             toast.success("Request Success", { description: "Signed In Successfully" })
-            navigate(`/dashboard`, { replace: true });
+            navigate(`/`, { replace: true });
+            window.location.reload();
         },
         onError: (error: AxiosError<any>) => {
             console.log(error)
@@ -67,13 +68,15 @@ function SignIn() {
     if(isSuccess && data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/dashboard`, { replace: true });
+        navigate(`/`, { replace: true });
+        window.location.reload();
     }
 
     if(isSuccess && !data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/dashboard`, { replace: true });
+        navigate(`/`, { replace: true });
+        window.location.reload();
     }
 
     if(isError){

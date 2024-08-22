@@ -56,9 +56,9 @@ function ResponseCard(props: ReviewSuggestionType) {
                                 {/* {isPending && tone === "casual" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
-                            <Button size="icon" variant="ghost">
+                            {/* <Button size="icon" variant="ghost">
                                 <Bookmark className="stroke-light-grey h-5" strokeWidth={1} />
-                            </Button>
+                            </Button> */}
                         </div>
                     </CardContent>
                 </Card>
