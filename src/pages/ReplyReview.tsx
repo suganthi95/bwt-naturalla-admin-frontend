@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AuthContext";
 import { getSuggestions } from "@/lib/apis";
 import { ReviewType } from "@/types";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,10 +16,8 @@ function ReplyReview() {
     const { state }: { state: ReviewType } = useLocation();
     const navigate = useNavigate();
     const [ generate, setGenerate ] = useState<number>(0);
-    const queryClient = useQueryClient();
     const { auth } = useAppContext();
 
-    console.log(state)
 
     const { isLoading, isSuccess, isError, data, error } = useQuery({
       queryKey: [ "getSuggestions", generate ],
@@ -47,10 +45,8 @@ function ReplyReview() {
     }
 
     if(isSuccess){
-      queryClient.invalidateQueries({ queryKey: [ "validateUser" ] })
       content = <ResponseCard {...data?.data}/>
     }
-
 
   return (
     <div className="p-2 flex flex-1 flex-col relative">
@@ -62,7 +58,7 @@ function ReplyReview() {
             <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
         </div>
 
-        <div className="pt-1 flex flex-col flex-1 justify-between">
+        <div className="pt-1 flex flex-col flex-1">
             <ReviewCard {...state}/>
             <div>
               {content}

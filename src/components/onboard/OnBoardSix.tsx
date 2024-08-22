@@ -11,10 +11,10 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness, setUserOnboardStatus, validateUser } from '@/lib/apis';
 import { v4 as uuidv4 } from "uuid";
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { ASSETS } from '@/assets/assets';
 import Loader from '../ui/Loader';
+import { useNavigate } from 'react-router-dom';
 
 function OnBoardSix() {
 
@@ -35,7 +35,7 @@ function OnBoardSix() {
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
     // validate user
-    const { mutate: validateUserMutation } = useMutation({
+    const { mutate: validateUserMutation, isPending: isValidateUserPending, isSuccess } = useMutation({
         mutationKey: [ "validateUser" ],
         mutationFn: validateUser,
         onSuccess: async () => {
@@ -147,7 +147,7 @@ function OnBoardSix() {
 
     let loader = null;
 
-    if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending){
+    if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending || isValidateUserPending || isSuccess){
         loader = (
             <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 bg-white">
                 <div className="hidden lg:flex flex-row items-center gap-1">

@@ -49,11 +49,12 @@ function App() {
         <Route path="/" element={<Navigate to="/sign-in"/>}/>
         <Route path="/sign-in" element={<SignIn/>}/>
         <Route path="/sign-up" element={<SignUp/>}/>
+        <Route path="/onboard" element={<OnBoard/>}/>
       </Routes>
     )
   }
 
-  const PrivateRoute = () => data?.onboarded ? <Layout/> : data?.onboarded === false ? <Navigate to="/onboard"/> : <Navigate to="/sign-in"/>
+  const PrivateRoute = () => isSuccess && data?.onboarded ? <Layout/> : isSuccess && data?.onboarded === false ? <Navigate to="/onboard"/> : <Navigate to="/sign-in"/>
 
   return (
     <Routes>

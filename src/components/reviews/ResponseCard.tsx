@@ -1,4 +1,4 @@
-import { Bookmark, Copy } from "lucide-react"
+import { Copy } from "lucide-react"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import dayjs from 'dayjs'
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -37,7 +37,7 @@ function ResponseCard(props: ReviewSuggestionType) {
             <p className="text-sm font-semibold">Tap on the card below to send</p>
 
             <div className="pt-5 grid grid-cols-2 gap-5">
-                <Card>
+                <Card key={`response-1`}>
                     <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
                         <div className="flex flex-row items-center gap-2 pt-2">
                             <div className="rounded-full overflow-hidden">
@@ -56,14 +56,11 @@ function ResponseCard(props: ReviewSuggestionType) {
                                 {/* {isPending && tone === "casual" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
-                            {/* <Button size="icon" variant="ghost">
-                                <Bookmark className="stroke-light-grey h-5" strokeWidth={1} />
-                            </Button> */}
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card key={`response-2`}>
                     <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
                         <div className="flex flex-row items-center gap-2 pt-2">
                             <div className="rounded-full overflow-hidden">
@@ -81,9 +78,6 @@ function ResponseCard(props: ReviewSuggestionType) {
                             <Button onClick={() => copyToClipboard(props?.professional_tone?.response)} size="icon" variant="ghost">
                             {/* {isPending && tone === "professional" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
-                            </Button>
-                            <Button size="icon" variant="ghost">
-                                <Bookmark className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
                         </div>
                     </CardContent>

@@ -68,15 +68,13 @@ function SignIn() {
     if(isSuccess && data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/`, { replace: true });
-        window.location.reload();
+        navigate(`/dashboard`, { replace: true });
     }
 
     if(isSuccess && !data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/`, { replace: true });
-        window.location.reload();
+        navigate(`/onboard`, { replace: true });
     }
 
     if(isError){
