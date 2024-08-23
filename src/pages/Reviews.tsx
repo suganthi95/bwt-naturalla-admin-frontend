@@ -23,6 +23,12 @@ function Reviews() {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const [ page, setPage ] = useState(1);
+
+    useEffect(() => {
+      queryClient.cancelQueries({ queryKey: [ "getReviews" ] });
+      setPage(1);
+      setActualData([]);
+    }, [ sortKey ])
     
     const { isLoading, isError, isSuccess, data, error, isRefetching, refetch } = useQuery({
         queryKey: [ "getReviews", sortKey, activeBusiness?.place_id ],
@@ -41,7 +47,6 @@ function Reviews() {
     useEffect(() => {
       if(Array.isArray(data?.data?.data)){
         setActualData(prev => [ ...prev, ...data?.data?.data ]);
-        setPage(prev => prev + 1);
       }
     }, [data?.data?.data]);
 
@@ -65,7 +70,7 @@ function Reviews() {
         content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
     }
 
-    if(isSuccess && data?.data?.data?.length === 0){
+    if(isSuccess && actualData.length === 0){
         content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
     }
 
@@ -104,6 +109,7 @@ function Reviews() {
     useEffect(() => {
       if(isAtBottom){
         queryClient.cancelQueries({ queryKey: [ "getReviews" ] });
+        setPage(prev => prev + 1);
         refetch();
       }
     }, [isAtBottom])
@@ -114,7 +120,7 @@ function Reviews() {
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Reviews</h1>
             <div>
-              <p className="text-center text-sm mt-3 text-secondary">{isAtBottom  ? "fetching more reviews..." : ""}</p>
+              <p className="text-center text-sm mt-3 text-secondary">{isAtBottom && data?.data?.total > 0 ? "fetching more reviews..." : isAtBottom && data?.data?.total === 0 ? "we've reached the end" : ""}</p>
             </div>
             <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
                 <SelectTrigger className="w-[100px] h-8">
