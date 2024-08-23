@@ -13,7 +13,11 @@ import { Link } from "react-router-dom"
 
 function OnBoard() {
 
-    const formState = useForm<OnBoardType>();
+    const formState = useForm<OnBoardType>({
+        defaultValues: {
+            industry: [],
+        }
+    });
 
     const [ page, setPage ] = useState(0);
 

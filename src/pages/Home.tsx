@@ -67,7 +67,7 @@ function Home() {
 
   if(isSuccess){
 
-    const chartData = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ].map(item => ({ date: item, credits: data.chartData["2024"][item]?.credits_used }));
+    const chartData = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec" ].map(item => ({ date: item, credits: data?.chartData["2024"]?.[item]?.credits_used }));
 
     const chartConfig = {
       credits: {

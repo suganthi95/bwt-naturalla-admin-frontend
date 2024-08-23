@@ -89,7 +89,7 @@ export type SignUpType = {
 export type OnBoardType = {
     business: string,
     role: string,
-    industry: string,
+    industry: string[],
     heardThrough: string,
     workspaceName: string
 }
