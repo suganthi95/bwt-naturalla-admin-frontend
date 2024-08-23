@@ -42,10 +42,20 @@ function Home() {
     }),
     retry: 3,
     refetchOnWindowFocus: true,
-    select: (data): DashboardDataType => data.data.data 
+    select: (data): DashboardDataType => data.data.data,
+    enabled: Boolean(activeBusiness?.place_id) 
   });
 
   let content;
+
+  if(!activeBusiness?.place_id){
+    return (
+        <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
+            <h1 className="text-xl font-semibold">No Business added</h1>
+            <p className="text-slate-300">Search or Add your business account</p>
+        </div>
+    )
+  }
 
   if(isLoading){
     content = <Loader/>

@@ -1,6 +1,7 @@
 import { ReactElement } from "react"
 
 export type ReviewType = {
+    "is_bookmarked": boolean,
     "google_id": string,
     "review_id": string,
     "review_pagination_id": string,

@@ -7,8 +7,9 @@ import dayjs from 'dayjs'
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useMutation } from "@tanstack/react-query"
 import { bookmarkReview } from "@/lib/apis"
-import { MouseEvent } from "react"
+import { MouseEvent, useState } from "react"
 import { useAppContext } from "@/contexts/AuthContext"
+import { toast } from "sonner"
 
 type PlaceIDType = {
     place_id?: string
@@ -17,27 +18,31 @@ type PlaceIDType = {
 function ReviewCard(props: ReviewType & PlaceIDType) {
 
 
-  dayjs.extend(relativeTime);
+    dayjs.extend(relativeTime);
 
-  const { auth } = useAppContext();
-  const { mutate } = useMutation({
-    mutationKey: [ "bookmarkReview" ],
-    mutationFn: bookmarkReview,
-    onSuccess: (data) => console.log(data),
-    onError: (error) => console.log(error) 
-  });
+    const { auth } = useAppContext();
+    const { mutate } = useMutation({
+        mutationKey: [ "bookmarkReview" ],
+        mutationFn: bookmarkReview,
+        onSuccess: (data) => console.log(data),
+        onError: () => {
+            toast.error("Request Failed", { description: "Bookmark Failed" })
+        }
+    });
 
-  const bookmark = (event: MouseEvent<HTMLButtonElement>) => {
+    const [ isBookmarked, setIsBookmarked ] = useState<boolean>(props.is_bookmarked);
 
-    const { place_id, ...state } = props;
-    event.preventDefault();
-    mutate({
-        place_id: place_id as string,
-        state: state,
-        status: true,
-        token: auth?.token as string
-    })
-  }
+    const bookmark = (event: MouseEvent<HTMLButtonElement>, status: boolean) => {
+            const { place_id, review_id } = props;
+            event.preventDefault();
+            mutate({
+                place_id: place_id as string,
+                status: status,
+                token: auth?.token as string,
+                review_id
+            });
+            setIsBookmarked(status)
+    }
 
   return (
     <Card className="border-none shadow-none hover:bg-light-blue">
@@ -68,29 +73,19 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
         </CardHeader>
         <CardContent className="flex flex-col gap-2 py-1 px-3">
             <p className="text-sm">{props?.review_text}</p>
-
-            {/* <div className="flex flex-row gap-2 items-center">
-                <div className="h-14 w-14 rounded-md overflow-hidden">
-                    <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Image" className="h-full w-full object-cover" />
-                </div>
-                <div className="h-14 w-14 rounded-md overflow-hidden">
-                    <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Image" className="h-full w-full object-cover" />
-                </div>
-                <div className="h-14 w-14 rounded-md overflow-hidden">
-                    <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Image" className="h-full w-full object-cover" />
-                </div>
-                <div className="h-14 w-14 rounded-md overflow-hidden">
-                    <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Image" className="h-full w-full object-cover" />
-                </div>
-            </div> */}
         </CardContent>
         <CardFooter className="flex flex-row items-center justify-between py-1 px-3 border-b-2 border-b-slate-200">
             <p className="text-sm text-light-grey font-semibold">{!props.owner_answer && "Yet to Respond"}</p>
             <div>
-
-                <Button onClick={bookmark} size="icon" variant="ghost">
-                    <Bookmark />
-                </Button>
+                {isBookmarked ? 
+                    <Button onClick={(e) => bookmark(e, false)} size="icon" variant="default">
+                        <Bookmark />
+                    </Button> :
+                    <Button onClick={(e) => bookmark(e, true)} size="icon" variant="secondary">
+                        <Bookmark />
+                    </Button> 
+                }
+                
             </div>
         </CardFooter>
     </Card>

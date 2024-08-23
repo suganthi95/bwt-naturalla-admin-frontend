@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReviewType } from "@/types";
 import { TokenResponse } from "@react-oauth/google";
 import axios, { GenericAbortSignal } from "axios";
 
@@ -209,7 +208,7 @@ export const getDashboard = async ({ placeId, sessionToken, token }: { placeId: 
     })
 }
 
-export const bookmarkReview = async ({ token, place_id, state, status }: { token: string, place_id: string, state: ReviewType, status: boolean }) => {
+export const bookmarkReview = async ({ token, place_id, status, review_id }: { token: string, place_id: string, status: boolean, review_id: string }) => {
     
     return await axios({
         method: "post",
@@ -220,7 +219,7 @@ export const bookmarkReview = async ({ token, place_id, state, status }: { token
         },
         data: {
             place_id,
-            ...state
+            review_id
         }
     })
 }
