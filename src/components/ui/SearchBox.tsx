@@ -14,6 +14,7 @@ import { Card } from "./card"
 import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from "@/contexts/AuthContext"
 import { toast } from "sonner"
+import Loader from "./Loader"
  
 export function SearchBox() {
 
@@ -42,6 +43,7 @@ export function SearchBox() {
     mutationFn: addBusiness,
     onSuccess: () => {
       window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       toast.success("Request Success", { description: "Business Added Successfully" });
     },
     onError: (error) => {
@@ -63,8 +65,6 @@ export function SearchBox() {
         email: auth?.data?.email,
         token: auth?.token
       });
-
-      queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       setValue("");
     },
     onError: (error) => {
@@ -80,73 +80,85 @@ export function SearchBox() {
       token: auth?.token as string
     })
   }
+
+
+  if(addBusinessPending || getBusinessDetailsPending){
+      return (
+          <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 z-[50] bg-transparent backdrop-brightness-[0.3]">
+              <div>
+                  <Loader/>
+              </div>
+              <p className='text-white'>Adding business...</p>
+          </div>
+      )
+  }
   
  
   return (
-    <>
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size={"sm"}
-          role="combobox"
-          aria-expanded={open}
-          aria-label="Search Business"
-          className="w-[400px] h-12 dark:text-white justify-start gap-5"
-        >
-            <Search className="w-5 stroke-slate-400" />
-          {value
-            ? <span className="text-ellipsis overflow-hidden">{data?.find((item: any) => item.value === value)?.label}</span>
-            : "Search Business..."}
-          {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" /> */}
+    <div className="flex flex-col md:flex-row items-center justify-center gap-5 w-full">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            size={"sm"}
+            role="combobox"
+            aria-expanded={open}
+            aria-label="Search Business"
+            className="w-[360px] md:w-[400px] h-12 dark:text-white justify-start gap-5"
+          >
+              <Search className="w-5 stroke-slate-400" />
+            {value
+              ? <span className="text-ellipsis overflow-hidden">{data?.find((item: any) => item.value === value)?.label}</span>
+              : "Search Business..."}
+            {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" /> */}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[400px] p-0">
+          <Command>
+            <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1">
+              <Search className="w-5 stroke-slate-400" />
+              <Input 
+                placeholder="Search Business..." 
+                className="border-none outline-none focus-visible:ring-transparent"
+                value={input}
+                onChange={(val) => setInput(val.target.value)}
+              />
+            </Card>
+            <CommandList>
+              <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : "No business found"}</CommandEmpty>
+              <CommandGroup>
+                {data?.map((item: any) => (
+                  <CommandItem
+                    key={item.value}
+                    value={item.value}
+                    onSelect={(currentValue) => {
+                      setValue(currentValue === value ? "" : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === item.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {item.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {value && 
+        <Button 
+          onClick={getDetailedBusiness} 
+            className="h-12"
+          >{getBusinessDetailsPending || addBusinessPending ? 
+            <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
+            "Add Business"}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0">
-        <Command>
-          <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1">
-            <Search className="w-5 stroke-slate-400" />
-            <Input 
-              placeholder="Search Business..." 
-              className="border-none outline-none focus-visible:ring-transparent"
-              value={input}
-              onChange={(val) => setInput(val.target.value)}
-            />
-          </Card>
-          <CommandList>
-            <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : "No business found"}</CommandEmpty>
-            <CommandGroup>
-              {data?.map((item: any) => (
-                <CommandItem
-                  key={item.value}
-                  value={item.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === item.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {item.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-    {value && 
-      <Button 
-        onClick={getDetailedBusiness} 
-          className="h-12"
-        >{getBusinessDetailsPending || addBusinessPending ? 
-          <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
-          "Add Business"}
-      </Button>
-    }
-    </>
+      }
+    </div>
   )
 }

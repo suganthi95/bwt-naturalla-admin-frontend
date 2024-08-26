@@ -13,7 +13,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useQuery } from "@tanstack/react-query";
 import { validateUser } from "@/lib/apis";
 import Loader from "../ui/Loader";
-import { toast } from "sonner";
 import { CollapseType, ValidateUserType } from "@/types";
 import UpgradeModal from "../ui/UpgradeModal";
 
@@ -115,7 +114,6 @@ function Layout() {
     }
 
     if(isError){
-        toast.error("Session Expired", { description: "Please Sign In" })
         main = <Navigate to="/sign-in"/>
     }
 
@@ -130,7 +128,6 @@ function Layout() {
                         </div>
                         <div>
                             <p className="font-medium">{activeWorkspace.workspace_name}</p>
-                            <span className="text-xs text-slate-500">{data?.credit} credits left</span>
                         </div>
                     </div>
                     <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
@@ -142,7 +139,7 @@ function Layout() {
                         
                         <UpgradeModal/>
 
-                        <p>Welcome, {data?.name}</p>
+                        <p className="hidden md:block">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">
                             <DropdownMenu>
                             <DropdownMenuTrigger asChild>

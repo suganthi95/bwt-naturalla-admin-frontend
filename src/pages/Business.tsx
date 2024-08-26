@@ -17,7 +17,6 @@ function Business() {
 
   dayjs.extend(relativeTime);
   const { auth } = useAppContext();
-  // const queryClient = useQueryClient();
 
   const { data, isLoading, isError, isSuccess, error } = useQuery({
     queryKey: [ "getAllBusiness" ],
@@ -58,7 +57,7 @@ function Business() {
   }
 
   if(isSuccess && data?.data?.data?.length > 0){
-    content = (<div className="grid grid-cols-3 gap-5 mt-5">
+    content = (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
       {data?.data?.data?.map((item: GetBusinessType, index: number) => (
         <Card key={item.place_id + index}>
           <CardHeader>
@@ -100,9 +99,7 @@ function Business() {
 
   return (
     <div className="p-3 flex flex-col flex-1">
-        <div className="flex h-fit items-center justify-center w-full gap-3 pt-3">
-          <SearchBox/>
-        </div>
+        <SearchBox/>
         {content}
     </div>
   )

@@ -82,7 +82,7 @@ function Home() {
 
     content = (
       <>
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
           <Card className="p-3 rounded-xl">
               <div className="flex flex-row items-center justify-between">
                 <h1 className="text-sm font-medium text-slate-500">Total Reviews</h1>
@@ -112,7 +112,7 @@ function Home() {
               <p className="text-2xl text-secondary font-bold mt-8">300</p>
           </Card>
         </div>
-        <div className="">
+        <div className="pb-20">
           <Card>
             <CardHeader>
               <CardTitle>Spendings</CardTitle>
@@ -184,7 +184,7 @@ function Home() {
   }
 
   return (
-    <div className="flex flex-col flex-1 gap-3 p-2 border border-slate-200 w-full">
+    <div className="flex flex-col flex-1 gap-3 p-2 border border-slate-200 w-full h-full">
       {content}
     </div>
   )

@@ -165,7 +165,7 @@ function UpgradeModal() {
             <div className="flex flex-row">
                 {proceedToPay ? paymentScreenTwo : paymentScreenOne}
                 
-                <div className="bg-sandal flex flex-1 relative">
+                <div className="hidden md:flex bg-sandal flex-1 relative">
                     <Button onClick={() => setOpenPaymentDialog(false)} className="p-1 absolute top-3 right-3" variant="secondary" size="icon">
                         <X className="h-5 w-5" />
                     </Button>

@@ -36,7 +36,7 @@ function ResponseCard(props: ReviewSuggestionType) {
         <CardContent>
             <p className="text-sm font-semibold">Tap on the card below to send</p>
 
-            <div className="pt-5 grid grid-cols-2 gap-5">
+            <div className="pt-5 grid grid-cols-1 md:grid-cols-2 gap-5 pb-20">
                 <Card key={`response-1`}>
                     <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
                         <div className="flex flex-row items-center gap-2 pt-2">

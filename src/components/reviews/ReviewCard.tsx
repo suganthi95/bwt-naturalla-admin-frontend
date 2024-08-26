@@ -66,7 +66,7 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
             </div>
 
             <div className="flex flex-row gap-1 items-center">
-                {[ 1, 2, 3, 4, 5 ].map(item => (
+                {props?.review_rating && [ 1, 2, 3, 4, 5 ].map(item => (
                     <Star key={`star-${item}`} className={`${item <= props?.review_rating ? "fill-yellow-400" : "fill-slate-300"} stroke-none`} />
                 ))}
             </div>

@@ -60,7 +60,7 @@ export const signupUser = async (data: { name: string, email: string, password: 
     })
 }
 
-export const onBoardUser = async (data: { role: string, industry: string, business_type: string, heard_through: string, workspace_name: string, token: string }) => {
+export const onBoardUser = async (data: { role: string, industry: string[], business_type: string, heard_through: string, workspace_name: string, token: string }) => {
 
     const { token, ...body } = data;
     

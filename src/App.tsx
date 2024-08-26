@@ -14,7 +14,6 @@ import Feedback from "./pages/Feedback"
 import { validateUser } from "./lib/apis"
 import { useQuery } from "@tanstack/react-query"
 import { ValidateUserType } from "./types"
-import { toast } from "sonner"
 import { ASSETS } from "./assets/assets"
 import Loader from "./components/ui/Loader"
 
@@ -43,7 +42,6 @@ function App() {
   }
 
   if(isError){
-    toast.error("Session Expired", { description: "Please Sign In" })
     return (
       <Routes>
         <Route path="/" element={<Navigate to="/sign-in"/>}/>
