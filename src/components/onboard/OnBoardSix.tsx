@@ -110,10 +110,10 @@ function OnBoardSix() {
             addBusinessMutation({
                 placeId: value,
                 businessName: res?.data?.data?.result?.name,
-                streetNumber: res?.data?.data?.result?.address_components[1].long_name,
-                street: res?.data?.data?.result?.address_components[2].long_name,
-                city: res?.data?.data?.result?.address_components[3].long_name,
-                zipCode: res?.data?.data?.result?.address_components.at(-1).long_name,
+                streetNumber: res?.data?.data?.result?.address_components[1].long_name ? res?.data?.data?.result?.address_components[1].long_name : "",
+                street: res?.data?.data?.result?.address_components[2].long_name ? res?.data?.data?.result?.address_components[2].long_name : "",
+                city: res?.data?.data?.result?.address_components[3].long_name ? res?.data?.data?.result?.address_components[3].long_name: "",
+                zipCode: res?.data?.data?.result?.address_components.at(-1).long_name ? res?.data?.data?.result?.address_components.at(-1).long_name : "",
                 email: auth?.data?.email,
                 token: auth?.token
             });
