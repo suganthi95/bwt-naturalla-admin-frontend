@@ -248,4 +248,19 @@ export const setUserOnboardStatus = async ({ token }: { token: string }) => {
     })
 }
 
+export const updateUserProfile = async (data: any) => {
+    
+    const { token, body } = data;
+
+    return await axios({
+        method: "put",
+        url: `${BASE_URL_V2}/auth/update-user`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: { ...body }
+    })
+}
+
 
