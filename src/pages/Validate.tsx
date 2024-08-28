@@ -9,7 +9,7 @@ import { Navigate } from "react-router-dom";
 function Validate() {
 
   const { auth } = useAppContext();
-  const { data } = useQuery({
+  const { isLoading, isSuccess, data } = useQuery({
       queryKey: [ "validateUser" ],
       queryFn: () => validateUser(auth?.token as string),
       retry: 0,
@@ -18,11 +18,25 @@ function Validate() {
       enabled: Boolean(auth?.token)
   });
 
-  if(data?.onboarded){
+  if(isLoading){
+    return (
+      <div className="h-screen flex items-center justify-center flex-col gap-3">
+          <div className="hidden lg:flex flex-row items-center gap-1">
+              <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+              <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+          </div>
+          <div>
+            <Loader/>
+          </div>
+      </div>
+    )
+  }
+
+  if(isSuccess && data?.onboarded){
     return <Navigate to="/dashboard"/>
   }
 
-  if(!data?.onboarded){
+  if(isSuccess && !data?.onboarded){
     return <Navigate to="/onboard"/>
   }
 
