@@ -9,7 +9,7 @@ import { Navigate } from "react-router-dom";
 function Validate() {
 
   const { auth } = useAppContext();
-  const { isSuccess, data } = useQuery({
+  const { data } = useQuery({
       queryKey: [ "validateUser" ],
       queryFn: () => validateUser(auth?.token as string),
       retry: 0,
@@ -18,8 +18,12 @@ function Validate() {
       enabled: Boolean(auth?.token)
   });
 
-  if(isSuccess && data?.onboarded){
+  if(data?.onboarded){
     return <Navigate to="/dashboard"/>
+  }
+
+  if(!data?.onboarded){
+    return <Navigate to="/onboard"/>
   }
 
   return (
