@@ -12,19 +12,13 @@ function Welcome() {
 
     const { auth } = useAppContext();
     const navigate = useNavigate();
-    const { isLoading, isError, data, error } = useQuery({
+    const { isError, data, error } = useQuery({
         queryKey: [ "validateUser" ],
         queryFn: () => validateUser(auth?.token as string),
         retry: 0,
         select: (data): ValidateUserType => data?.data?.data,
         enabled: Boolean(auth?.token)
     });
-
-    let content;
-
-    if(isLoading){
-        content = <Loader/>
-    }
 
     if(isError){
         toast.error("Request Failed", { description: error?.message })
