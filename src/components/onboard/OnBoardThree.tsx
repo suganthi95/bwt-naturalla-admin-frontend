@@ -35,6 +35,7 @@ function OnBoardThree({ setPage }: Props) {
                         type="checkbox"
                         id={industry} 
                         value={industry}
+                        disabled={watch("industry")?.length >= 3 && !watch("industry")?.includes(industry)}
                         {...register("industry", {
                             validate: (industryArray) => {
                                 if(industryArray && !!industryArray.length){

@@ -22,6 +22,8 @@ function Reviews() {
     const [isAtBottom, setIsAtBottom] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+    console.log(actualData)
+
     const [ page, setPage ] = useState(1);
 
     useEffect(() => {
@@ -40,7 +42,11 @@ function Reviews() {
           signal
         }),
         retry: 3,
+        gcTime: 0,
+        staleTime: 0,
         refetchOnWindowFocus: false,
+        refetchInterval: false,
+        refetchOnReconnect: false,
         enabled: Boolean(activeBusiness?.place_id),
     });
 

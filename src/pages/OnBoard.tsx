@@ -50,13 +50,7 @@ function OnBoard() {
 
   return (
     <div className="min-h-screen p-2 flex bg-white">
-        <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">
-            {page === 0 && 
-                <>
-                    <h1 className="text-2xl font-medium">Welcome to IntelliResponse!</h1>
-                    <p className="text-sm mb-3">We're excited to have you on board. Let's get started with a few quick <br /> questions to set up your account and personalize your experience.</p>
-                </>
-            }   
+        <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
             <Link to="/" className="flex flex-row gap-3">
                 <img src={ASSETS.LOGO} alt="logo" />
                 <div>

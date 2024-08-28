@@ -58,7 +58,7 @@ function SignUp() {
     if(isSuccess && !data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/onboard`, { replace: true });
+        navigate(`/welcome`, { replace: true });
     }
 
     if(isError){
@@ -71,7 +71,7 @@ function SignUp() {
         onSuccess: (data) => {
             setAuth(data.data);
             toast.success("Request Success", { description: "Signed Up Successfully" });
-            navigate(`/onboard`, { replace: true });
+            navigate(`/welcome`, { replace: true });
         },
         onError: (error: AxiosError<any>) => {
             console.log(error)

@@ -40,7 +40,7 @@ function OnBoardSix() {
         mutationFn: validateUser,
         onSuccess: async () => {
             toast.success("Request Success", { description: "Business Added Successfully" });
-            navigate("/dashboard");
+            navigate("/");
             window.location.reload();
         },
         onError: (error: AxiosError<any>) => {

@@ -38,6 +38,7 @@ function Profile() {
         mutationFn: updateUserProfile,
         onSuccess: () => {
             toast.success("Request Success", { description: "Profile updated successfully" })
+            queryClient.invalidateQueries({ queryKey: [ "validateUser" ] })
         },
         onError: (error) => {
             toast.error("Request Failed", { description: error?.message })

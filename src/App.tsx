@@ -16,6 +16,8 @@ import { useQuery } from "@tanstack/react-query"
 import { ValidateUserType } from "./types"
 import { ASSETS } from "./assets/assets"
 import Loader from "./components/ui/Loader"
+import Welcome from "./pages/Welcome"
+import Validate from "./pages/Validate"
 
 function App() {
 
@@ -48,11 +50,12 @@ function App() {
         <Route path="/sign-in" element={<SignIn/>}/>
         <Route path="/sign-up" element={<SignUp/>}/>
         <Route path="/onboard" element={<OnBoard/>}/>
+        <Route path="/welcome" element={<Welcome/>}/>
       </Routes>
     )
   }
 
-  const PrivateRoute = () => isSuccess && data?.onboarded ? <Layout/> : isSuccess && data?.onboarded === false ? <Navigate to="/onboard"/> : <Navigate to="/sign-in"/>
+  const PrivateRoute = () => isSuccess && data?.onboarded ? <Layout/> : isSuccess && data?.onboarded === false ? <Navigate to="/validate"/> : <Navigate to="/sign-in"/>
 
   return (
     <Routes>
@@ -74,6 +77,8 @@ function App() {
       <Route path="/sign-in" element={<SignIn/>}/>
       <Route path="/sign-up" element={<SignUp/>}/>
       <Route path="/onboard" element={<OnBoard/>}/>
+      <Route path="/welcome" element={<Welcome/>}/>
+      <Route path="/validate" element={<Validate/>}/>
     </Routes>
   )
 

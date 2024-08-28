@@ -74,7 +74,7 @@ function SignIn() {
     if(isSuccess && !data?.data?.data?.onboarded){
         setAuth(data.data);
         toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/onboard`, { replace: true });
+        navigate(`/welcome`, { replace: true });
     }
 
     if(isError){
