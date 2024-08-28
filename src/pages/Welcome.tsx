@@ -5,7 +5,7 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { validateUser } from "@/lib/apis";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -13,7 +13,7 @@ function Welcome() {
 
     const { auth } = useAppContext();
     const navigate = useNavigate();
-    const [ openEUADialog, setOpenEUADialog ] = useState<boolean>(false);
+    // const [ openEUADialog, setOpenEUADialog ] = useState<boolean>(false);
     const { isError, error } = useQuery({
         queryKey: [ "validateUser" ],
         queryFn: () => validateUser(auth?.token as string),
@@ -28,7 +28,7 @@ function Welcome() {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setOpenEUADialog(true);
+            navigate("/onboard")
         }, 5000);
 
         () => clearTimeout(timeout);
@@ -62,7 +62,7 @@ function Welcome() {
             </div>
         </div>
 
-        <AlertDialog open={openEUADialog}>
+        <AlertDialog open={false}>
             <AlertDialogContent className="max-w-7xl h-[70vh] overflow-hidden">
                 <AlertDialogHeader>
                 <AlertDialogTitle className="text-primary">User Agreement</AlertDialogTitle>
