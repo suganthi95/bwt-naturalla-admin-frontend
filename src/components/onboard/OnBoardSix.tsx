@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { useAppContext } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness, setUserOnboardStatus, validateUser } from '@/lib/apis';
+import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness, setUserOnboardStatus } from '@/lib/apis';
 import { v4 as uuidv4 } from "uuid";
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
@@ -34,26 +34,14 @@ function OnBoardSix() {
       
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
-    // validate user
-    const { mutate: validateUserMutation, isPending: isValidateUserPending, isSuccess } = useMutation({
-        mutationKey: [ "validateUser" ],
-        mutationFn: validateUser,
-        onSuccess: async () => {
-            toast.success("Request Success", { description: "Business Added Successfully" });
-            navigate("/");
-            window.location.reload();
-        },
-        onError: (error: AxiosError<any>) => {
-            toast.error("Request Failed", { description: error?.response?.data?.message })
-        }
-    });
-
     // set user as onboarded
     const { mutate: setUserOnboardMutate, isPending: isOnboardStatusPending } = useMutation({
         mutationKey: [ "setUserOnboardStatus" ],
         mutationFn: setUserOnboardStatus,
         onSuccess: () => {
-            validateUserMutation(auth?.token as string)
+            toast.success("Request Success", { description: "Business Added Successfully" });
+            navigate("/");
+            window.location.reload();
         },
         onError: (error: AxiosError<any>) => {
             toast.error("Request Failed", { description: error?.response?.data?.message })
@@ -147,7 +135,7 @@ function OnBoardSix() {
 
     let loader = null;
 
-    if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending || isValidateUserPending || isSuccess){
+    if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending){
         loader = (
             <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 bg-white">
                 <div className="hidden lg:flex flex-row items-center gap-1">
