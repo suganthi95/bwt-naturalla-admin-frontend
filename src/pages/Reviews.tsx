@@ -22,8 +22,6 @@ function Reviews() {
     const [isAtBottom, setIsAtBottom] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    console.log(actualData)
-
     const [ page, setPage ] = useState(1);
 
     useEffect(() => {
@@ -82,7 +80,7 @@ function Reviews() {
 
     if(isSuccess && actualData.length > 0){
         content = actualData?.map((item : ReviewType) => (
-          <Link to="/reviews/generate-response" key={item.review_id} state={item}>
+          <Link to="/reviews/generate-response" key={item.review_id} state={{ placeId: activeBusiness.place_id, reviewId: item.review_id }}>
             <ReviewCard {...item}/>
           </Link>
         ))

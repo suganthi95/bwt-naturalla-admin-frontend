@@ -3,8 +3,7 @@ import ReviewCard from "@/components/reviews/ReviewCard"
 import Loader from "@/components/ui/Loader";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AuthContext";
-import { getSuggestions } from "@/lib/apis";
-import { ReviewType } from "@/types";
+import { getReviewById, getSuggestions } from "@/lib/apis";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
@@ -13,34 +12,47 @@ import { useLocation, useNavigate } from "react-router-dom";
 function ReplyReview() {
 
 
-    const { state }: { state: ReviewType } = useLocation();
+    const { state }: { state: { placeId: string, reviewId: string } } = useLocation();
+
+    console.log(state)
     const navigate = useNavigate();
     const [ generate, setGenerate ] = useState<number>(0);
     const { auth } = useAppContext();
 
+    const { isLoading: isReviewLoading, isSuccess: isReviewSuccess, isError: isReviewError, data: reviewData } = useQuery({
+      queryKey: [ "getReviewById", state.placeId, state.reviewId ],
+      queryFn: () => getReviewById({
+        token: auth?.token as string,
+        placeId: state.placeId,
+        reviewId: state.reviewId
+      }),
+      select: (data) => data?.data,
+      retry: 3,
+      refetchOnWindowFocus: false,
+    });
 
     const { isLoading, isSuccess, isError, data, error } = useQuery({
       queryKey: [ "getSuggestions", generate ],
       queryFn: () => getSuggestions({
-          prompt: state.review_text,
-          username: state.author_title,
+          prompt: reviewData?.review_text,
+          username: reviewData?.author_title,
           token: auth?.token
       }),
       retry: 3,
       refetchOnWindowFocus: false,
       gcTime: 0,
-      enabled: Boolean(generate)
+      enabled: Boolean(generate) && isReviewSuccess
     });
 
     let content;
 
-    if(isLoading){
+    if(isLoading || isReviewLoading){
       content = <div className="mt-[10%]">
         <Loader/>
       </div>
     }
 
-    if(isError){
+    if(isError || isReviewError){
       content = <p>{error?.message}</p>
     }
 
@@ -59,7 +71,7 @@ function ReplyReview() {
         </div>
 
         <div className="pt-1 flex flex-col flex-1">
-            <ReviewCard {...state}/>
+            {isReviewSuccess && <ReviewCard {...reviewData}/>}
             <div>
               {content}
             </div>

@@ -25,11 +25,14 @@ function OnBoardSix() {
     const [value, setValue] = useState("");
     const [ valueError, setValueError ] = useState<string | null>(null);
     const messages = [
-        "Connecting to our servers…",
-        "Retrieving your business details…",
-        "Ensuring everything is up to date…",
-        "Almost there, just a few more moments…",
-        "Finalizing your setup…",
+        "Tip: Personalize your review responses to show customers you really care.",
+        "Pro Tip: Use our sentiment analysis to pinpoint areas where you can improve your service.",
+        "Quick Tip: Consistency is key—maintain the same tone across all your responses.",
+        "Tip: Leverage positive reviews in your marketing materials to build trust.",
+        "Pro Tip: Use sentiment analysis to identify areas of improvement in your customer service.",
+        "Quick Tip: Make it a habit to respond to all reviews, whether positive or negative. Consistent engagement shows that you value customer feedback.",
+        "Did you know? AI-generated responses can save you up to 70% of the time you’d spend crafting responses.",
+        "Pro Tip: Don’t shy away from negative feedback. Addressing it publicly can show potential customers that you’re committed to improving."
     ];
       
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
@@ -128,7 +131,7 @@ function OnBoardSix() {
     useEffect(() => {
         const interval = setInterval(() => {
           setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-        }, 7000); // Change every 7 seconds
+        }, 15000); // Change every 15 seconds
     
         return () => clearInterval(interval);
       }, []);

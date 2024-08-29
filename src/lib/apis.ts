@@ -21,6 +21,19 @@ export const getReviews = async ({ placeId, page, sort, token, signal }: { place
     })
 }
 
+export const getReviewById = async ({ token, placeId, reviewId }: { token: string, placeId: string, reviewId: string }) => {
+
+    return await axios({
+        method: "get",
+        url: `${BUSINESS_BASE_URL}/workspace/review-by-id?place_id=${placeId}&review_id=${reviewId}`,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": token
+        },
+    })
+}
+
+
 export const getSuggestions = async (body: any) => {
 
     const { token, ...data } = body;
