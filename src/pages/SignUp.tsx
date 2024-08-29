@@ -114,13 +114,13 @@ function SignUp() {
                 </div>
             </Link>
             <div className="py-0 px-2 md:px-20 lg:px-32 space-y-2">
-                <h1 className="text-secondary text-2xl font-bold text-center">Sign Up</h1>
-                <p className="text-sm text-slate-500 text-center">Create your review engagement account here.</p>
+                <h1 className="text-secondary text-xl font-bold text-center">Sign Up</h1>
+                <p className="text-xs text-slate-500 text-center">Create your review engagement account here.</p>
 
                 <form onSubmit={submit}>
 
                     <div className="flex flex-col items-start gap-1">
-                        <label className="font-medium" htmlFor="username">Username <span className="text-red-500">*</span></label>
+                        <label className="font-medium text-xs" htmlFor="username">Username <span className="text-red-500">*</span></label>
                         <Input
                             id="username"
                             type="text"
@@ -136,7 +136,7 @@ function SignUp() {
                     </div>
 
                     <div className="flex flex-col items-start gap-1">
-                        <label className="font-medium" htmlFor="email">Email <span className="text-red-500">*</span></label>
+                        <label className="font-medium text-xs" htmlFor="email">Email <span className="text-red-500">*</span></label>
                         <Input 
                             id="email"
                             type="email"
@@ -156,7 +156,7 @@ function SignUp() {
                     </div>
 
                     <div className="flex flex-col items-start gap-1 relative">
-                        <label className="font-medium" htmlFor="password">Password <span className="text-red-500">*</span></label>
+                        <label className="font-medium text-xs" htmlFor="password">Password <span className="text-red-500">*</span></label>
                         <Input 
                             id="password"
                             type={isPasswordVisible ? "text" : "password"} 
@@ -173,15 +173,15 @@ function SignUp() {
                             required
                         />
                         {isPasswordVisible ? 
-                            <Eye onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-9" />
+                            <Eye onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
                         :
-                            <EyeOff onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-9" />
+                            <EyeOff onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
                         }
                         <p className="text-xs mt-1 font-medium text-red-500">{errors?.password?.message}</p>
                     </div>
 
                     <div className="flex flex-col items-start gap-1 relative">
-                        <label className="font-medium" htmlFor="email">Confirm Password <span className="text-red-500">*</span></label>
+                        <label className="font-medium text-xs" htmlFor="email">Confirm Password <span className="text-red-500">*</span></label>
                         <Input 
                             id="confirmPassword"
                             type={isConfirmPasswordVisible ? "text" : "password"} 
@@ -197,12 +197,14 @@ function SignUp() {
                             required
                         />
                         {isConfirmPasswordVisible ? 
-                            <Eye onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-9" />
+                            <Eye onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
                         :
-                            <EyeOff onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-9" />
+                            <EyeOff onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
                         }
                         <p className="text-xs mt-1 font-medium text-red-500">{errors?.confirmPassword?.message}</p>
                     </div>
+
+                    <p className="text-xs text-center">By Continuing, you agree to our <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/terms-and-conditions" target="_blank">Terms and Conditions</Link>, <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/privacy-policy" target="_blank">Privacy Policy</Link> <br /> and <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/end-user-license-agreement" target="_blank">End User License Agreement</Link></p>
 
                     <div>
                         <Button className="w-full mt-3 bg-primary hover:bg-primary/50">
@@ -217,7 +219,7 @@ function SignUp() {
                     Continue with Google
                 </Button>
 
-                <p className="mt-3 text-center">Already have an account ? <Link to="/sign-in" className="font-bold hover:underline">Sign In</Link></p>
+                <p className="mt-3 text-center text-xs">Already have an account ? <Link to="/sign-in" className="font-bold hover:underline">Sign In</Link></p>
                 
             </div>
 
