@@ -101,7 +101,7 @@ function SignIn() {
                     </Link>
                 </CardHeader>
                 <CardContent className="text-center">
-                    <h1 className="text-secondary text-3xl font-bold">Sign In</h1>
+                    <h1 className="text-secondary text-xl font-bold">Sign In</h1>
 
                     <form onSubmit={submit} className="space-y-3">
 
@@ -129,7 +129,7 @@ function SignIn() {
                                 <EyeOff onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-9" />
                             }
                         </div>
-
+                        <p className="text-xs text-center">By Continuing, you agree to our <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/terms-and-conditions" target="_blank">Terms and Conditions</Link>, <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/privacy-policy" target="_blank">Privacy Policy</Link> <br /> and <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/end-user-license-agreement" target="_blank">End User License Agreement</Link></p>
                         <div>
                             <Button className="w-full mt-3 bg-primary hover:bg-primary/50">
                                 {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Sign In"}
@@ -138,7 +138,7 @@ function SignIn() {
                     </form>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-5">
-                    <p className="text-slate-400">Or use your Google account credentials to log in securely.</p>
+                    <p className="text-slate-400 text-xs">Or use your Google account credentials to log in securely.</p>
                     <Button onClick={submitGoogleLogin} className="mx-auto py-6 px-10 rounded-[50px] flex items-center gap-3" variant="outline">
                         <Icons.googleIcon/>
                         Sign in with Google

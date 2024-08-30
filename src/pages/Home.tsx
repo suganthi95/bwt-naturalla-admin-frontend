@@ -92,10 +92,10 @@ function Home() {
           </Card>
           <Card className="p-3 rounded-xl">
               <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Credits Used</h1>
+                <h1 className="text-sm font-medium text-slate-500">Credits Remaining</h1>
                 <Zap className="stroke-transparent fill-primary h-5 w-5" />
               </div>
-              <p className="text-2xl text-secondary font-bold mt-8">{data.credits}</p>
+              <p className="text-2xl text-secondary font-bold mt-8">{data.credits} / {data.total_credits}</p>
           </Card>
           <Card className="p-3 rounded-xl">
               <div className="flex flex-row items-center justify-between">

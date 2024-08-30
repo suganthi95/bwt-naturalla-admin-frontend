@@ -125,7 +125,8 @@ export interface BusinessList {
 }
 
 export interface DashboardDataType {
-    credits: number
+    credits: number,
+    total_credits: number,
     totalRatings: number
     chartData: any
 }
