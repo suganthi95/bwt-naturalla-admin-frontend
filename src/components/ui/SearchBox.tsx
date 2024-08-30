@@ -2,7 +2,7 @@
 "use client"
  
 import { Check, LoaderCircle, Search } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "./popover"
 import { Button } from "./button"
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "./command"
@@ -11,7 +11,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { addBusiness, getBusinessDetails, getBusinessSuggestions } from "@/lib/apis"
 import { Input } from "./input"
 import { Card } from "./card"
-import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from "@/contexts/AuthContext"
 import { toast } from "sonner"
 import Loader from "./Loader"
@@ -22,11 +21,36 @@ export function SearchBox() {
   const [open, setOpen] = useState(false);
   const [ input, setInput ] = useState("");
   const [value, setValue] = useState("");
+  const [userLocation, setUserLocation] = useState<{ latitude: number | null, longitude: number | null }>({
+    latitude: null,
+    longitude: null
+  });
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              (position) => {
+                  const { latitude, longitude } = position.coords;
+                  setUserLocation({ latitude, longitude });
+              },
+              (error) => {
+                  console.error('Error getting user location:', error);
+              }
+          );
+      }else {
+          console.error('Geolocation is not supported by this browser.');
+      }
+  }, []);
 
   const { data, isLoading } = useQuery({
     queryKey: [ "getBusinessSuggestions", input ],
-    queryFn: () => getBusinessSuggestions({ input, uuid: uuidv4(), token: auth?.token as string }),
+    queryFn: () => getBusinessSuggestions({ 
+      input, 
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+      token: auth?.token as string 
+    }),
     select: (res) => res?.data?.data?.predictions?.map((item: any) => ({
       label: item.description,
       value: item.place_id
@@ -76,7 +100,6 @@ export function SearchBox() {
   const getDetailedBusiness = () => {
     mutate({
       placeId: value,
-      uuid: uuidv4(),
       token: auth?.token as string
     })
   }
