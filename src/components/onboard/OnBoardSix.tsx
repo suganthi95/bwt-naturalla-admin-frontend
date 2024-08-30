@@ -9,7 +9,6 @@ import { useAppContext } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { addBusiness, getBusinessDetails, getBusinessSuggestions, setActiveBusiness, setUserOnboardStatus } from '@/lib/apis';
-import { v4 as uuidv4 } from "uuid";
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
 import { ASSETS } from '@/assets/assets';
@@ -24,6 +23,11 @@ function OnBoardSix() {
     const [ input, setInput ] = useState("");
     const [value, setValue] = useState("");
     const [ valueError, setValueError ] = useState<string | null>(null);
+    const [userLocation, setUserLocation] = useState<{ latitude: number | null, longitude: number | null }>({
+        latitude: null,
+        longitude: null
+    });
+
     const messages = [
         "Tip: Personalize your review responses to show customers you really care.",
         "Pro Tip: Use our sentiment analysis to pinpoint areas where you can improve your service.",
@@ -66,7 +70,12 @@ function OnBoardSix() {
 
     const { data, isLoading } = useQuery({
         queryKey: [ "getBusinessSuggestions", input ],
-        queryFn: () => getBusinessSuggestions({ input, uuid: uuidv4(), token: auth?.token as string }),
+        queryFn: () => getBusinessSuggestions({ 
+            input,
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            token: auth?.token as string 
+        }),
         select: (res) => res?.data?.data?.predictions?.map((item: any) => ({
             label: item.description,
             value: item.place_id
@@ -123,7 +132,6 @@ function OnBoardSix() {
 
         mutate({
             placeId: value,
-            uuid: uuidv4(),
             token: auth?.token as string
         })
     }
@@ -134,7 +142,25 @@ function OnBoardSix() {
         }, 15000); // Change every 15 seconds
     
         return () => clearInterval(interval);
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setUserLocation({ latitude, longitude });
+                },
+                (error) => {
+                    console.error('Error getting user location:', error);
+                }
+            );
+        }else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    }, []);
+
+    console.log(userLocation)
 
     let loader = null;
 

@@ -121,12 +121,11 @@ export const validateUser = async (token: string) => {
     })
 }
 
-export const getBusinessSuggestions = async ({ input, uuid, token }: { input: string, uuid: string, token: string }) => {
-
+export const getBusinessSuggestions = async ({ input, latitude, longitude, token }: { input: string, latitude: number | null, longitude: number | null, token: string }) => {
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/workspace/business/google/suggestions?query=${input}&session_token=${uuid}`,
+        url: `${BUSINESS_BASE_URL}/workspace/business/google/suggestions?query=${input}${latitude ? `&latitude=${latitude}` : ""}${longitude ? `&longitude=${longitude}` : ""}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -134,11 +133,11 @@ export const getBusinessSuggestions = async ({ input, uuid, token }: { input: st
     })
 }
 
-export const getBusinessDetails = async ({ placeId, uuid, token }: { placeId: string, uuid: string, token: string }) => {
+export const getBusinessDetails = async ({ placeId, token }: { placeId: string, token: string }) => {
 
     return await axios({
         method: "get",
-        url: `${BUSINESS_BASE_URL}/workspace/business/google/place-details?place_id=${placeId}&session_token=${uuid}`,
+        url: `${BUSINESS_BASE_URL}/workspace/business/google/place-details?place_id=${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
