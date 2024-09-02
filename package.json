@@ -37,8 +37,6 @@
     "react-router-dom": "^6.23.1",
     "recharts": "^2.12.7",
     "sonner": "^1.5.0",
-    "tableau-api": "^2.2.3",
-    "tableau-react": "^2.2.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0"

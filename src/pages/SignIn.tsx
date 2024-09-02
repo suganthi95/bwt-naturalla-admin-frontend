@@ -12,7 +12,7 @@ import { TokenResponse, useGoogleLogin } from "@react-oauth/google"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { Eye, EyeOff, LoaderCircle } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
@@ -106,8 +106,13 @@ function SignIn() {
         toast.error("Request Failed", { description: error?.message })
     }
 
-    const submit = handleSubmit(data => mutate(data))
+    const submit = handleSubmit(data => mutate(data));
 
+    useEffect(() => {
+        if(window.innerWidth <= 1024){
+            toast.success("Use landscape mode for better user experience", { position: "top-center" });
+        }
+    }, [])
 
   return (
     <div className="min-h-screen p-0 lg:p-2 flex">

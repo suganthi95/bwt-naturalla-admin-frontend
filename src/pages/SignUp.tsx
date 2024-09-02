@@ -117,7 +117,14 @@ function SignUp() {
         }else{
             setError("confirmPassword", { message: "", type: "required" });
         }
-    }, [ watch("confirmPassword") ])
+    }, [ watch("confirmPassword") ]);
+
+
+    useEffect(() => {
+        if(window.innerWidth <= 1024){
+            toast.success("Use landscape mode for better user experience", { position: "top-center" });
+        }
+    }, [])
 
 
   return (
