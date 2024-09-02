@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google"
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { SignUpType } from "@/types"
+import { SignUpType, ValidateUserType } from "@/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { signInUserByGoogle, signupUser, verifyGoogleUser } from "@/lib/apis"
+import { signInUserByGoogle, signupUser, validateUser, verifyGoogleUser } from "@/lib/apis"
 import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
 import { useAppContext } from "@/contexts/AuthContext"
@@ -49,16 +49,40 @@ function SignUp() {
         enabled: Boolean(googleData)
     });
 
-    if(isSuccess && data?.data?.data?.onboarded){
-        setAuth(data.data);
+    const { isSuccess: validateUserSuccess, data: validateUserData } = useQuery({
+        queryKey: [ "validateUser" ],
+        queryFn: () => {
+            setAuth(data?.data);
+            return validateUser(data?.data?.token)
+        },
+        retry: 0,
+        select: (data): ValidateUserType => data?.data?.data,
+        refetchOnWindowFocus: false,
+        enabled: isSuccess
+    });
+  
+    // if(isLoading){
+    //   return (
+    //     <div className="h-screen flex items-center justify-center flex-col gap-3">
+    //         <div className="hidden lg:flex flex-row items-center gap-1">
+    //             <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+    //             <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+    //         </div>
+    //         <div>
+    //           <Loader/>
+    //         </div>
+    //     </div>
+    //   )
+    // }
+  
+    if(validateUserSuccess && validateUserData?.onboarded){
         toast.success("Request Success", { description: "Signed In Successfully" });
-        navigate(`/dashboard`, { replace: true });
+        return <Navigate to="/dashboard"/>
     }
-
-    if(isSuccess && !data?.data?.data?.onboarded){
-        setAuth(data.data);
-        toast.success("Request Success", { description: "Signed In Successfully" })
-        navigate(`/welcome`, { replace: true });
+  
+    if(validateUserSuccess && !validateUserData?.onboarded){
+        toast.success("Request Success", { description: "Signed In Successfully" });
+        return <Navigate to="/onboard"/>
     }
 
     if(isError){
@@ -97,13 +121,13 @@ function SignUp() {
 
 
   return (
-    <div className="min-h-screen p-0 lg:p-2 flex bg-sandal">
+    <div className="p-0 lg:p-2 flex bg-sandal h-screen overflow-y-scroll">
         <div className="hidden lg:flex flex-1">
             <div className="flex items-center justify-center w-full">
                 <img className="w-2/3" src={ASSETS.SIGNUP_BG_IMG} alt="bg-img" />
             </div>
         </div>
-        <div className="flex flex-1 flex-col justify-center rounded-xl bg-white relative">
+        <div className="flex flex-1 flex-col justify-center rounded-xl bg-white relative h-full">
             <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                 <img src={ASSETS.LOGO} alt="logo" />
                 <div>

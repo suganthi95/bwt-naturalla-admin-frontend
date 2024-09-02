@@ -6,14 +6,15 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useAppContext } from "@/contexts/AuthContext"
 import useToggle from "@/hooks/useToggle"
-import { signinUser, signInUserByGoogle, verifyGoogleUser } from "@/lib/apis"
+import { signinUser, signInUserByGoogle, validateUser, verifyGoogleUser } from "@/lib/apis"
+import { ValidateUserType } from "@/types"
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 function SignIn() {
@@ -65,16 +66,40 @@ function SignIn() {
         }
     });
 
-    if(isSuccess && data?.data?.data?.onboarded){
-        setAuth(data.data);
+    const { isSuccess: validateUserSuccess, data: validateUserData } = useQuery({
+        queryKey: [ "validateUser" ],
+        queryFn: () => {
+            setAuth(data?.data);
+            return validateUser(data?.data?.token)
+        },
+        retry: 0,
+        select: (data): ValidateUserType => data?.data?.data,
+        refetchOnWindowFocus: false,
+        enabled: isSuccess
+    });
+  
+    // if(isLoading){
+    //   return (
+    //     <div className="h-screen flex items-center justify-center flex-col gap-3">
+    //         <div className="hidden lg:flex flex-row items-center gap-1">
+    //             <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+    //             <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+    //         </div>
+    //         <div>
+    //           <Loader/>
+    //         </div>
+    //     </div>
+    //   )
+    // }
+  
+    if(validateUserSuccess && validateUserData?.onboarded){
         toast.success("Request Success", { description: "Signed In Successfully" });
-        navigate(`/dashboard`, { replace: true });
+        return <Navigate to="/dashboard"/>
     }
-
-    if(isSuccess && !data?.data?.data?.onboarded){
-        setAuth(data.data);
+  
+    if(validateUserSuccess && !validateUserData?.onboarded){
         toast.success("Request Success", { description: "Signed In Successfully" });
-        navigate(`/welcome`, { replace: true });
+        return <Navigate to="/onboard"/>
     }
 
     if(isError){
@@ -88,7 +113,7 @@ function SignIn() {
     <div className="min-h-screen p-0 lg:p-2 flex">
         <div className="bg-[#F8F7F8] rounded-lg flex-1 flex items-center justify-center relative">
             <img className="hidded lg:block absolute z-0" src={ASSETS.SIGNIN_BG_IMG} alt="img" />
-            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3">
+            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh] overflow-y-scroll">
                 <CardHeader>
                     <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                         <img src={ASSETS.LOGO} alt="logo" />

@@ -88,6 +88,7 @@ function Layout() {
         setAuth(null);
         localStorage.removeItem("auth");
         navigate("/sign-in", { replace: true });
+        window.location.reload();
     };
 
     const { isLoading, isError, isSuccess, data } = useQuery({

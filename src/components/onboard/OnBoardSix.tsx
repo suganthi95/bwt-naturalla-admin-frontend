@@ -160,8 +160,6 @@ function OnBoardSix() {
         }
     }, []);
 
-    console.log(userLocation)
-
     let loader = null;
 
     if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending){
@@ -174,7 +172,7 @@ function OnBoardSix() {
                 <div>
                     <Loader/>
                 </div>
-                <p className='text-slate-500'>{messages[currentMessageIndex]}</p>
+                <p className='text-slate-500 text-center'>{messages[currentMessageIndex]}</p>
             </div>
         )
     }

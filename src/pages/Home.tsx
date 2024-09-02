@@ -15,23 +15,8 @@ function Home() {
   const { auth } = useAppContext();
   const queryClient = useQueryClient();
   const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);
-    const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];
-    const [ activeBusiness ] = validateUser?.data?.data?.businessList.filter(item => item.place_id === activeWorkspace.active_business) as BusinessList[];
-
-  // const chartData = [
-  //   { date: "Jan", credits: 450, creditsLeft: 300 },
-  //   { date: "Feb", credits: 380, creditsLeft: 420 },
-  //   { date: "Mar", credits: 520, creditsLeft: 120 },
-  //   { date: "Apr", credits: 140, creditsLeft: 550 },
-  //   { date: "May", credits: 600, creditsLeft: 350 },
-  //   { date: "Jun", credits: 700, creditsLeft: 421 },
-  //   { date: "Jul", credits: 550, creditsLeft: 563 },
-  //   { date: "Aug", credits: 200, creditsLeft: 123 },
-  //   { date: "Sept", credits: 670, creditsLeft: 852 },
-  //   { date: "Oct", credits: 285, creditsLeft: 896 },
-  //   { date: "Nov", credits: 654, creditsLeft: 236 },
-  //   { date: "Dec", credits: 289, creditsLeft: 789 },
-  // ]
+  const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];
+  const [ activeBusiness ] = validateUser?.data?.data?.businessList.filter(item => item.place_id === activeWorkspace.active_business) as BusinessList[];
 
   const { isLoading, isError, isSuccess, data, error } = useQuery({
     queryKey: [ "getDashboard" ],
@@ -183,9 +168,86 @@ function Home() {
     )
   }
 
+  console.log(content)
+
+  // useEffect(() => {
+  //   var divElement = document.getElementById('viz1725260367225') as HTMLDivElement;                    
+  //   var vizElement = divElement.getElementsByTagName('object')[0] as any;                    
+  //   if ( divElement.offsetWidth > 800 ) { 
+  //     vizElement.style.width='100%';
+  //     vizElement.style.height= "100%";
+  //   } else if ( divElement.offsetWidth > 500 ) { 
+  //     vizElement.style.width='100%';
+  //     vizElement.style.height="100%";
+  //   } else { 
+  //     vizElement.style.width='100%';
+  //     vizElement.style.height='2177px';
+  //   }                     
+    
+  //   var scriptElement = document.createElement('script') as HTMLScriptElement;                    
+  //   scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
+  //   vizElement.parentNode.insertBefore(scriptElement, vizElement); 
+  // }, []);
+
+  // var vizList = ["http://public.tableau.com/views/RegionalSampleWorkbook/Flights",
+  //   "http://public.tableau.com/views/RegionalSampleWorkbook/Obesity",
+  //   "http://public.tableau.com/views/RegionalSampleWorkbook/College",
+  //   "http://public.tableau.com/views/RegionalSampleWorkbook/Stocks",
+  //   "http://public.tableau.com/views/RegionalSampleWorkbook/Storms"];
+
+  // var viz: any,
+  //     vizLen = vizList.length,
+  //     vizCount = 0;
+
+  // function createViz(vizPlusMinus: number) {
+  //     var vizDiv = document.getElementById("vizContainer") as HTMLDivElement,
+  //     options = {
+  //         hideTabs: true
+  //     };
+
+  //     vizCount = vizCount + vizPlusMinus;
+
+  //     if (vizCount >= vizLen) {
+  //     // Keep the vizCount in the bounds of the array index.
+  //         vizCount = 0;
+  //     } else if (vizCount < 0) {
+  //         vizCount = vizLen - 1;
+  //     }
+
+  //     if (viz) { // If a viz object exists, delete it.
+  //         viz.dispose();
+  //     }
+
+  //     var vizURL = vizList[vizCount];
+  //     viz = new window.tableau.Viz(vizDiv, vizURL, options);
+  // } 
+
+  // useEffect(() => {
+  //   createViz(0);
+  // }, [])
+
+
   return (
-    <div className="flex flex-col flex-1 gap-3 p-2 border border-slate-200 w-full h-full">
+    <div className="flex flex-col flex-1 gap-3 p-2 w-full h-full pb-52">
       {content}
+      {/* <div className='relative' id='viz1725260367225'><noscript>
+        <a href='#'>
+          <img 
+            alt='Overall Dashboard ' 
+            src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ho&#47;HolidayInnYanbu_reviewsDashboard_17252603375630&#47;OverallDashboard&#47;1_rss.png' 
+            className="border-none" 
+          />
+        </a>
+        </noscript>
+          <object className='tableauViz hidden'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='HolidayInnYanbu_reviewsDashboard_17252603375630&#47;OverallDashboard' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ho&#47;HolidayInnYanbu_reviewsDashboard_17252603375630&#47;OverallDashboard&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /><param name='filter' value='publish=yes' /></object>
+      </div> */}
+
+      {/* <div id="vizContainer" className="w-[800px] h-[700px]"></div>
+      <div id="controls" className="p-[20px]">
+          <Button className="w-[100px]" onClick={() => createViz(-1)}>Previous</Button>
+          <Button className="w-[100px]" onClick={() => createViz(1)}>Next</Button>
+      </div> */}
+      
     </div>
   )
 }
