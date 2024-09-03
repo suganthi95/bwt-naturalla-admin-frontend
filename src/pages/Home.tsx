@@ -9,6 +9,10 @@ import { AxiosResponse } from "axios"
 import { CircleAlert, CircleCheck, Star, Zap } from "lucide-react"
 import { Bar, BarChart, XAxis } from "recharts"
 import { v4 as uuid } from "uuid";
+// import {
+//   TableauViz,
+//   TableauEventType,
+// } from 'https://my-server/javascripts/api/tableau.embedding.3.latest.min.js';
 
 function Home() {
 
@@ -226,6 +230,17 @@ function Home() {
   //   createViz(0);
   // }, [])
 
+  // useEffect(() => {
+  //   const viz = new TableauViz();
+
+  //   viz.src = 'https://my-server/views/my-workbook/my-view';
+  //   viz.toolbar = 'hidden';
+  //   viz.addEventListener(TableauEventType.MarkSelectionChanged, () => {});
+
+  //   document.getElementById('tableauViz').appendChild(viz);
+  // }, [])
+  
+
 
   return (
     <div className="flex flex-col flex-1 gap-3 p-2 w-full h-full pb-52">
@@ -247,7 +262,19 @@ function Home() {
           <Button className="w-[100px]" onClick={() => createViz(-1)}>Previous</Button>
           <Button className="w-[100px]" onClick={() => createViz(1)}>Next</Button>
       </div> */}
-      
+      {/* <tableau-viz id="tableauViz"       
+        src='https://public.tableau.com/views/Superstore_embedded_800x800/Overview'      
+        toolbar="bottom" hide-tabs>
+      </tableau-viz> */}
+
+        {/* <TableauReport
+          url="https://public.tableau.com/app/profile/lavanya.seetharaman/viz/HolidayInnYanbu_reviewsDashboard_17252603375630/OverallDashboard"
+          filters={filters}
+          options={options} // vizCreate options
+          // Overwrite default query params
+          // defaults to '?:embed=yes&:comments=no&:toolbar=yes&:refresh=yes'
+          query="?:embed=yes&:comments=no&:toolbar=yes&:refresh=yes"
+        /> */}
     </div>
   )
 }

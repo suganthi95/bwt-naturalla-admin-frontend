@@ -18,6 +18,7 @@ import { ASSETS } from "./assets/assets"
 import Loader from "./components/ui/Loader"
 import Welcome from "./pages/Welcome"
 import Validate from "./pages/Validate"
+import Settings from "./pages/Settings"
 
 function App() {
 
@@ -57,7 +58,7 @@ function App() {
         <Route path="/billing" element={<Home/>}/>
         <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/terms-and-conditions" element={<Home/>}/>
-        <Route path="/settings" element={<Home/>}/>
+        <Route path="/settings" element={<Settings/>}/>
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/logout" element={<Home/>}/>
         <Route path="/google-review" element={<Home/>}/>
