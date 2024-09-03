@@ -9,10 +9,19 @@ import { AxiosResponse } from "axios"
 import { CircleAlert, CircleCheck, Star, Zap } from "lucide-react"
 import { Bar, BarChart, XAxis } from "recharts"
 import { v4 as uuid } from "uuid";
-// import {
-//   TableauViz,
-//   TableauEventType,
-// } from 'https://my-server/javascripts/api/tableau.embedding.3.latest.min.js';
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "tableau-viz": {
+        "hide-tabs": boolean,
+        "src": string,
+        "id": string | number,
+        "toolbar": string 
+      };
+    }
+  }
+}
 
 function Home() {
 
@@ -174,107 +183,13 @@ function Home() {
 
   console.log(content)
 
-  // useEffect(() => {
-  //   var divElement = document.getElementById('viz1725260367225') as HTMLDivElement;                    
-  //   var vizElement = divElement.getElementsByTagName('object')[0] as any;                    
-  //   if ( divElement.offsetWidth > 800 ) { 
-  //     vizElement.style.width='100%';
-  //     vizElement.style.height= "100%";
-  //   } else if ( divElement.offsetWidth > 500 ) { 
-  //     vizElement.style.width='100%';
-  //     vizElement.style.height="100%";
-  //   } else { 
-  //     vizElement.style.width='100%';
-  //     vizElement.style.height='2177px';
-  //   }                     
-    
-  //   var scriptElement = document.createElement('script') as HTMLScriptElement;                    
-  //   scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    
-  //   vizElement.parentNode.insertBefore(scriptElement, vizElement); 
-  // }, []);
-
-  // var vizList = ["http://public.tableau.com/views/RegionalSampleWorkbook/Flights",
-  //   "http://public.tableau.com/views/RegionalSampleWorkbook/Obesity",
-  //   "http://public.tableau.com/views/RegionalSampleWorkbook/College",
-  //   "http://public.tableau.com/views/RegionalSampleWorkbook/Stocks",
-  //   "http://public.tableau.com/views/RegionalSampleWorkbook/Storms"];
-
-  // var viz: any,
-  //     vizLen = vizList.length,
-  //     vizCount = 0;
-
-  // function createViz(vizPlusMinus: number) {
-  //     var vizDiv = document.getElementById("vizContainer") as HTMLDivElement,
-  //     options = {
-  //         hideTabs: true
-  //     };
-
-  //     vizCount = vizCount + vizPlusMinus;
-
-  //     if (vizCount >= vizLen) {
-  //     // Keep the vizCount in the bounds of the array index.
-  //         vizCount = 0;
-  //     } else if (vizCount < 0) {
-  //         vizCount = vizLen - 1;
-  //     }
-
-  //     if (viz) { // If a viz object exists, delete it.
-  //         viz.dispose();
-  //     }
-
-  //     var vizURL = vizList[vizCount];
-  //     viz = new window.tableau.Viz(vizDiv, vizURL, options);
-  // } 
-
-  // useEffect(() => {
-  //   createViz(0);
-  // }, [])
-
-  // useEffect(() => {
-  //   const viz = new TableauViz();
-
-  //   viz.src = 'https://my-server/views/my-workbook/my-view';
-  //   viz.toolbar = 'hidden';
-  //   viz.addEventListener(TableauEventType.MarkSelectionChanged, () => {});
-
-  //   document.getElementById('tableauViz').appendChild(viz);
-  // }, [])
-  
-
-
   return (
-    <div className="flex flex-col flex-1 gap-3 p-2 w-full h-full pb-52">
-      {content}
-      {/* <div className='relative' id='viz1725260367225'><noscript>
-        <a href='#'>
-          <img 
-            alt='Overall Dashboard ' 
-            src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ho&#47;HolidayInnYanbu_reviewsDashboard_17252603375630&#47;OverallDashboard&#47;1_rss.png' 
-            className="border-none" 
-          />
-        </a>
-        </noscript>
-          <object className='tableauViz hidden'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='HolidayInnYanbu_reviewsDashboard_17252603375630&#47;OverallDashboard' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ho&#47;HolidayInnYanbu_reviewsDashboard_17252603375630&#47;OverallDashboard&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' /><param name='filter' value='publish=yes' /></object>
-      </div> */}
-
-      {/* <div id="vizContainer" className="w-[800px] h-[700px]"></div>
-      <div id="controls" className="p-[20px]">
-          <Button className="w-[100px]" onClick={() => createViz(-1)}>Previous</Button>
-          <Button className="w-[100px]" onClick={() => createViz(1)}>Next</Button>
-      </div> */}
-      {/* <tableau-viz id="tableauViz"       
-        src='https://public.tableau.com/views/Superstore_embedded_800x800/Overview'      
-        toolbar="bottom" hide-tabs>
-      </tableau-viz> */}
-
-        {/* <TableauReport
-          url="https://public.tableau.com/app/profile/lavanya.seetharaman/viz/HolidayInnYanbu_reviewsDashboard_17252603375630/OverallDashboard"
-          filters={filters}
-          options={options} // vizCreate options
-          // Overwrite default query params
-          // defaults to '?:embed=yes&:comments=no&:toolbar=yes&:refresh=yes'
-          query="?:embed=yes&:comments=no&:toolbar=yes&:refresh=yes"
-        /> */}
+    <div className="flex flex-col flex-1 gap-3 p-2 w-full h-full">
+      {/* {content} */}
+        <tableau-viz id="tableauViz"       
+          src='https://public.tableau.com/views/HolidayInnYanbu_reviewsDashboard_17252603375630/OverallDashboard'      
+          toolbar="bottom" hide-tabs>
+        </tableau-viz>
     </div>
   )
 }

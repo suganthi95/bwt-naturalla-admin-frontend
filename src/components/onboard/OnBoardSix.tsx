@@ -177,6 +177,12 @@ function OnBoardSix() {
         )
     }
 
+    useEffect(() => {
+        if(input === ""){
+            setValue("");
+        }
+    }, [input])
+
     return (
         <>
         <div className="mt-10">

@@ -124,6 +124,12 @@ export function SearchBox() {
     })
   }
 
+  useEffect(() => {
+    if(input === ""){
+      setValue("");
+    }
+  }, [input])
+
 
   if(addBusinessPending || getBusinessDetailsPending){
       return (

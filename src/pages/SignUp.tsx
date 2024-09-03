@@ -144,7 +144,7 @@ function SignUp() {
                     </span>
                 </div>
             </Link>
-            <div className="py-0 px-2 md:px-20 lg:px-32 space-y-2">
+            <div className="py-0 px-2 md:px-20 lg:px-32">
                 <h1 className="text-secondary text-xl font-bold text-center">Sign Up</h1>
                 <p className="text-xs text-slate-500 text-center">Create your review engagement account here.</p>
 
@@ -252,11 +252,10 @@ function SignUp() {
 
                 <p className="mt-3 text-center text-xs">Already have an account ? <Link to="/sign-in" className="font-bold hover:underline">Sign In</Link></p>
                 
+                <p className="text-sm text-center w-full mx-auto mt-10">
+                    © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/">IntelliResponse</Link> All Rights Reserved. Developed by <Link className="font-bold hover:underline" to="https://blackwinstech.com/">Blackwins Tech Solutions</Link>
+                </p>
             </div>
-
-            <h1 className="text-sm text-center absolute bottom-1 w-full mx-auto">
-                © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/">IntelliResponse</Link> All Rights Reserved. Developed by <Link className="font-bold hover:underline" to="https://blackwinstech.com/">Blackwins Tech Solutions</Link>
-            </h1>
         </div>
 
     </div>
