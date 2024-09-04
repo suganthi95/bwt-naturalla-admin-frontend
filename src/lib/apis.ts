@@ -287,5 +287,27 @@ export const deleteAccount = async (token: string) => {
     })
 }
 
+export const sendFeedback = async ({ token, feedbackType, message, file }: { token: string, feedbackType: string, message: string, file: FileList }) => {
+
+    const formdata = new FormData();
+    formdata.append("feedback_type", feedbackType);
+    formdata.append("message", message);
+
+    if(file){
+        const obj = file[0];
+        formdata.append("file", obj);
+    }
+
+    return await axios({
+        method: "post",
+        url: `${BUSINESS_BASE_URL}/workspace/feedback`,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": token
+        },
+        data: formdata
+    })
+}
+
 
 

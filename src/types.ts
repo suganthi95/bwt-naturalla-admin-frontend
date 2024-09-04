@@ -142,3 +142,9 @@ export type MenuType = {
     route: string
     icon: ReactElement
 }
+
+export type FeedbackFormType = {
+    feedbackType: string,
+    message: string,
+    file: FileList
+}
