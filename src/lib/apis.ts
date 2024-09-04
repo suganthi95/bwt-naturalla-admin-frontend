@@ -275,4 +275,17 @@ export const updateUserProfile = async (data: any) => {
     })
 }
 
+export const deleteAccount = async (token: string) => {
+
+    return await axios({
+        method: "delete",
+        url: `${BASE_URL_V2}/auth/delete-account`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+    })
+}
+
+
 

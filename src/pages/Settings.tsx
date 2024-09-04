@@ -1,12 +1,22 @@
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import Loader from "@/components/ui/Loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { useAppContext } from "@/contexts/AuthContext";
+import { deleteAccount } from "@/lib/apis";
+import { googleLogout } from "@react-oauth/google";
+import { useMutation } from "@tanstack/react-query";
 import { Moon, Sun } from "lucide-react";
 import { Controller, useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function Settings() {
 
+  const { auth, setAuth } = useAppContext();
+  const navigate = useNavigate();
   const { register, control, watch } = useForm({
     defaultValues: {
         mode: "light"
@@ -22,7 +32,26 @@ function Settings() {
         name: "dark",
         icon: <Moon className="h-4 w-4" />
     }
-  ]
+  ];
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: [ "deleteAccount" ],
+    mutationFn: deleteAccount,
+    onSuccess: () => {
+        setAuth(null);
+        localStorage.removeItem("auth");
+        googleLogout();
+        window.location.reload();
+        navigate("/", { replace: true })
+    },
+    onError: (error) => {
+        toast.error("Request Failed", { description: error?.message})
+    }
+  });
+
+  if(isPending){
+    return <div className="mx-auto mt-[10%]"><Loader/></div>
+  }
 
   return (
     <div className="p-2 flex flex-col flex-1 overflow-hidden">
@@ -139,7 +168,24 @@ function Settings() {
                 </p> */}
             </div>
             <div>
-                <Button className="bg-red-500 hover:bg-red-500/80">Delete Account</Button>
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button className="bg-red-500 hover:bg-red-500/80">Delete Account</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers.
+                        </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => mutate(auth?.token as string)}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </div>
     </div>
