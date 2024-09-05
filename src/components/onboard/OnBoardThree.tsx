@@ -28,7 +28,7 @@ function OnBoardThree({ setPage }: Props) {
                 <label 
                     key={industry} 
                     htmlFor={industry}
-                    className={watch("industry")?.includes(industry) ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer"}
+                    className={watch("industry")?.includes(industry) ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary dark:bg-primary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer"}
                 >
                     <input
                         className="hidden" 

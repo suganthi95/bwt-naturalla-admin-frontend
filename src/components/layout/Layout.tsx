@@ -122,7 +122,7 @@ function Layout() {
         const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
         main = (
             <main className="flex flex-col h-screen">
-                <div className="flex flex-row items-center justify-between px-5 py-2 border bg-slate-100">
+                <div className="flex flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
                     <div className="flex lg:hidden flex-row items-center gap-3">
                         <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-secondary text-white">
                             {activeWorkspace.workspace_name[0]}
@@ -133,14 +133,14 @@ function Layout() {
                     </div>
                     <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
                         <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
-                        <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+                        <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
                     </Link>
 
                     <div className="flex items-center flex-row gap-10">
                         
                         <UpgradeModal/>
 
-                        <p className="hidden md:block">Welcome, {data?.name}</p>
+                        <p className="hidden md:block text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">
                             <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -162,7 +162,7 @@ function Layout() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row h-full font-inter bg-white">
+                <div className="flex flex-row h-full font-inter bg-white dark:bg-slate-950 dark:text-slate-50">
                     <Sidebar 
                         content={menus}
                         data={data}

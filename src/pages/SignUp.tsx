@@ -134,7 +134,7 @@ function SignUp() {
                 <img className="w-2/3" src={ASSETS.SIGNUP_BG_IMG} alt="bg-img" />
             </div>
         </div>
-        <div className="flex flex-1 flex-col justify-center rounded-xl bg-white relative h-full">
+        <div className="flex flex-1 flex-col justify-center rounded-xl bg-white dark:bg-slate-700 relative h-full">
             <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                 <img src={ASSETS.LOGO} alt="logo" />
                 <div>

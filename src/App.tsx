@@ -19,10 +19,24 @@ import Loader from "./components/ui/Loader"
 import Welcome from "./pages/Welcome"
 import Validate from "./pages/Validate"
 import Settings from "./pages/Settings"
+import { useEffect } from "react"
+import useMode from "./hooks/useMode"
 
 function App() {
 
   const { auth } = useAppContext();
+  const [ mode ] = useMode();
+
+  // darkmode
+
+  useEffect(() => {
+    
+    if(mode === "dark"){
+      document.documentElement.classList.toggle('dark', true);
+    }else{
+      document.documentElement.classList.toggle('dark', false);
+    }
+  }, [ mode ]);
 
   const { isLoading, isSuccess, data } = useQuery({
       queryKey: [ "validateUser" ],

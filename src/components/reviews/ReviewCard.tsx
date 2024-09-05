@@ -55,11 +55,11 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
 
                 <div>
                     <div className="flex flex-row items-start gap-2">
-                        <p className="font-semibold">{props?.author_title}</p>
+                        <p className="font-semibold text-slate-950 dark:text-slate-500">{props?.author_title}</p>
                         {props?.sentiment === "negative" ? <ThumbsDown className="stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />}
                         
                     </div>
-                    <span className="text-xs text-light-grey">{dayjs(props?.review_datetime_utc).fromNow()}</span>
+                    <span className="text-xs text-slate-500">{dayjs(props?.review_datetime_utc).fromNow()}</span>
                 </div>
 
                 
@@ -71,10 +71,10 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
                 ))}
             </div>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2 py-1 px-3">
+        <CardContent className="flex flex-col gap-2 text-slate-950 dark:text-slate-500 py-1 px-3">
             <p className="text-sm">{props?.review_text}</p>
         </CardContent>
-        <CardFooter className="flex flex-row items-center justify-between py-1 px-3 border-b-2 border-b-slate-200">
+        <CardFooter className="flex flex-row items-center justify-between py-1 px-3 border-b-2 border-b-slate-200 dark:border-b-slate-800">
             <p className="text-sm text-light-grey font-semibold">{!props.owner_answer && "Yet to Respond"}</p>
             <div>
                 {isBookmarked ? 

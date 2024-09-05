@@ -191,23 +191,23 @@ function OnBoardSix() {
             <div>
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
-                    <div className="flex flex-col">
-                        <p className="text-orange-400 text-xs my-2 pl-3">E.g. Starbucks, Michigan, USA</p>
-                        <Button
-                            variant="outline"
-                            size={"sm"}
-                            role="combobox"
-                            aria-expanded={open}
-                            aria-label="Search Business"
-                            className="w-[360px] md:w-[400px] h-12 dark:text-white justify-start gap-5"
-                        >
-                            <Search className="w-5 stroke-slate-400" />
-                            {value
-                                ? <span className="text-ellipsis overflow-hidden">{data?.find((item: any) => item.value === value)?.label}</span>
-                                : "Search Business..."}
-                            {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" /> */}
-                        </Button>
-                    </div>
+                        <div className="flex flex-col">
+                            <p className="text-orange-400 text-xs my-2 pl-3">E.g. Starbucks, Michigan, USA</p>
+                            <Button
+                                variant="outline"
+                                size={"sm"}
+                                role="combobox"
+                                aria-expanded={open}
+                                aria-label="Search Business"
+                                className="w-[360px] md:w-[400px] h-12 dark:text-white justify-start gap-5"
+                            >
+                                <Search className="w-5 stroke-slate-400" />
+                                {value
+                                    ? <span className="text-ellipsis overflow-hidden">{data?.find((item: any) => item.value === value)?.label}</span>
+                                    : "Search Business..."}
+                                {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" /> */}
+                            </Button>
+                        </div>
                     </PopoverTrigger>
                     <PopoverContent className="w-[400px] p-0">
                         <Command>

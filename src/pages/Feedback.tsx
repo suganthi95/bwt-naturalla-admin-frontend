@@ -43,7 +43,7 @@ function Feedback() {
 
         <form onSubmit={submit} className="mt-3 font-medium text-secondary space-y-5">
             <div className="space-y-1">
-                <label className="text-sm" htmlFor="feedback_type">Feedback Type</label>
+                <label className="text-sm dark:text-slate-50" htmlFor="feedback_type">Feedback Type</label>
                 <Controller
                     name="feedbackType"
                     control={control}
@@ -63,7 +63,7 @@ function Feedback() {
             </div>
 
             <div className="space-y-1">
-                <label className="text-sm" htmlFor="">Message</label>
+                <label className="text-sm dark:text-slate-50" htmlFor="">Message</label>
                 <Textarea 
                     required 
                     className="w-1/2" 
@@ -74,7 +74,7 @@ function Feedback() {
             </div>
 
             <div className="space-y-1">
-            <label className="text-sm" htmlFor="">Upload Files</label>
+            <label className="text-sm dark:text-slate-50" htmlFor="">Upload Files</label>
                 <label htmlFor="dropzone-file" className="flex flex-col w-1/2 border-2 border-primary border-dashed rounded-lg cursor-pointer bg-primary/5 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-primary/10 dark:border-gray-600 dark:hover:border-gray-500">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">

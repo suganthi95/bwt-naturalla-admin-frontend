@@ -31,14 +31,14 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
 
   return (
     <section className={`hidden lg:block transition-all ease-out ${resizable ? "w-[30%] lg:w-[26%]" : "w-16"}`}>
-        <div className={`h-full w-full relative border-slate-200 border`}>
-            <div className={`px-2 py-[7px] flex flex-row items-center justify-between border-slate-200 border-b-2 space-x-5`}>
+        <div className={`h-full w-full relative border-slate-200 dark:border-slate-800 border`}>
+            <div className={`px-2 py-[7px] flex flex-row items-center justify-between border-slate-200 dark:border-slate-800 border-b-2 space-x-5`}>
                 <div className="flex flex-row items-center gap-3">
-                    <div title={activeWorkspace.workspace_name} className="h-10 w-10 flex items-center justify-center rounded-lg bg-secondary text-white cursor-pointer">
+                    <div title={activeWorkspace.workspace_name} className="h-10 w-10 flex items-center justify-center rounded-lg bg-secondary dark:bg-primary text-white cursor-pointer">
                         {activeWorkspace.workspace_name[0]}
                     </div>
                     <div className={`${!resizable && "hidden"} flex flex-col`}>
-                        <p className="font-medium">{activeWorkspace.workspace_name}</p>
+                        <p className="font-medium text-slate-950 dark:text-slate-500">{activeWorkspace.workspace_name}</p>
                         {/* <span className="text-xs text-slate-500">{data?.credit} credits left</span> */}
                     </div>
                 </div>
@@ -53,9 +53,9 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                             {resizable && <AccordionTrigger className="px-2 text-sm text-secondary py-2 hover:no-underline uppercase">{menu}</AccordionTrigger>}
                             <AccordionContent>
                                 <Tabs value={tabValue}>
-                                    <TabsList className="flex flex-col h-full rounded-none bg-white">
+                                    <TabsList className="flex flex-col h-full rounded-none bg-white dark:bg-slate-950">
                                         {content[menu as keyof CollapseType].map((item: MenuType) => (
-                                            <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white ${resizable ? "w-full" : "w-fit"}`} value={item.route}>
+                                            <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`} value={item.route}>
                                                 {item.icon}
                                                 {resizable && <p>{item.name}</p>}
                                             </TabsTrigger>

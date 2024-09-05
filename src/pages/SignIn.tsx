@@ -118,7 +118,7 @@ function SignIn() {
     <div className="min-h-screen p-0 lg:p-2 flex">
         <div className="bg-[#F8F7F8] rounded-lg flex-1 flex items-center justify-center relative">
             <img className="hidded lg:block absolute z-0" src={ASSETS.SIGNIN_BG_IMG} alt="img" />
-            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh] overflow-y-scroll">
+            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh] overflow-y-scroll dark:bg-slate-700">
                 <CardHeader>
                     <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                         <img src={ASSETS.LOGO} alt="logo" />

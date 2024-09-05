@@ -52,7 +52,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
 
     return(
         <div>
-            <div className="px-3 py-3 border-slate-200 border flex items-center flex-row justify-between w-full">
+            <div className="px-3 py-3 border-slate-200 dark:border-slate-800 border flex items-center flex-row justify-between w-full">
                 <h1 className="hidden lg:block text-xl font-semibold ml-3"><span className="text-primary">Welcome to</span> {activeWorkspace?.workspace_name}</h1>
                 <div className="flex flex-row  items-center justify-center gap-5">
 
