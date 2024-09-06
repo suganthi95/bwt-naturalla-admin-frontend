@@ -118,7 +118,7 @@ function SignIn() {
     <div className="min-h-screen p-0 lg:p-2 flex">
         <div className="bg-[#F8F7F8] rounded-lg flex-1 flex items-center justify-center relative">
             <img className="hidded lg:block absolute z-0" src={ASSETS.SIGNIN_BG_IMG} alt="img" />
-            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh] overflow-y-scroll dark:bg-slate-700">
+            <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh] overflow-y-scroll dark:bg-white dark:border-slate-200 dark:text-slate-950">
                 <CardHeader>
                     <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
                         <img src={ASSETS.LOGO} alt="logo" />
@@ -138,6 +138,7 @@ function SignIn() {
                         <div className="flex flex-col items-start gap-1">
                             <label className="font-medium" htmlFor="email">Email <span className="text-red-500">*</span></label>
                             <Input
+                                className="dark:bg-white dark:border-slate-200"
                                 id="email"
                                 type="email"
                                 required
@@ -148,6 +149,7 @@ function SignIn() {
                         <div className="flex flex-col items-start gap-1 relative">
                             <label className="font-medium" htmlFor="password">Password <span className="text-red-500">*</span></label>
                             <Input
+                                className="dark:bg-white dark:border-slate-200"
                                 id="password"
                                 type={isPasswordVisible ? "text" : "password"} 
                                 required
@@ -161,7 +163,7 @@ function SignIn() {
                         </div>
                         <p className="text-xs text-center">By Continuing, you agree to our <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/terms-and-conditions" target="_blank">Terms and Conditions</Link>, <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/privacy-policy" target="_blank">Privacy Policy</Link> <br /> and <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/end-user-license-agreement" target="_blank">End User License Agreement</Link></p>
                         <div>
-                            <Button className="w-full mt-3 bg-primary hover:bg-primary/50">
+                            <Button className="w-full mt-3 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-white hover:dark:bg-primary/60">
                                 {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Sign In"}
                             </Button>
                         </div>
@@ -169,7 +171,7 @@ function SignIn() {
                 </CardContent>
                 <CardFooter className="flex flex-col gap-5">
                     <p className="text-slate-400 text-xs">Or use your Google account credentials to log in securely.</p>
-                    <Button onClick={submitGoogleLogin} className="mx-auto py-6 px-10 rounded-[50px] flex items-center gap-3" variant="outline">
+                    <Button onClick={submitGoogleLogin} className="mx-auto py-6 px-10 rounded-[50px] flex items-center gap-3 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
                         <Icons.googleIcon/>
                         Sign in with Google
                     </Button>

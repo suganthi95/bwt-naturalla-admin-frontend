@@ -58,7 +58,7 @@ function OnBoardFive({ setPage }: Props) {
 
             <div>
                 <Input
-                    className='mt-5 w-full md:w-1/2'
+                    className='mt-5 w-full md:w-1/2 dark:bg-white dark:border-slate-200'
                     placeholder='Enter Workspace Name'
                     type='text'
                     {...register("workspaceName", {
@@ -74,7 +74,7 @@ function OnBoardFive({ setPage }: Props) {
 
             <p className='text-slate-500 text-xs mt-10'><span className='font-bold'>Note:</span> You can always change the workspace name later in your settings</p>
 
-            <Button onClick={proceedToNext} className="mt-5 bg-primary hover:bg-primary/50">
+            <Button onClick={proceedToNext} className="mt-5 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
                 {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Continue"}
             </Button>
         </div>

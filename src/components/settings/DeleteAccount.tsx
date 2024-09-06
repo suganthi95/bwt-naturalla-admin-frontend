@@ -26,7 +26,7 @@ function DeleteAccount() {
         mutationFn: deleteAccount,
         onSuccess: () => {
             setAuth(null);
-            localStorage.removeItem("auth");
+            localStorage.clear();
             googleLogout();
             window.location.reload();
             navigate("/", { replace: true })

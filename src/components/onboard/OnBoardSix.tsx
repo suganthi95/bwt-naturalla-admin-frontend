@@ -199,7 +199,7 @@ function OnBoardSix() {
                                 role="combobox"
                                 aria-expanded={open}
                                 aria-label="Search Business"
-                                className="w-[360px] md:w-[400px] h-12 dark:text-white justify-start gap-5"
+                                className="w-[360px] md:w-[400px] h-12 dark:bg-white hover:dark:bg-slate-50/90 hover:dark:text-black dark:border-slate-200 justify-start gap-5"
                             >
                                 <Search className="w-5 stroke-slate-400" />
                                 {value
@@ -209,13 +209,13 @@ function OnBoardSix() {
                             </Button>
                         </div>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[400px] p-0">
-                        <Command>
-                        <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1">
+                    <PopoverContent className="w-[400px] p-0 dark:border-none dark:bg-white">
+                        <Command className='dark:border-none dark:bg-white'>
+                        <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1 dark:bg-white">
                             <Search className="w-5 stroke-slate-400" />
                             <Input 
                                 placeholder="Search Business..." 
-                                className="border-none outline-none focus-visible:ring-transparent"
+                                className="border-none outline-none focus-visible:ring-transparent dark:bg-white dark:border-slate-200 dark:text-black dark:ring-offset-none dark:placeholder:text-slate-400 dark:focus-visible:ring-none"
                                 value={input}
                                 onChange={(val) => {
                                     setValueError(null);
@@ -223,11 +223,12 @@ function OnBoardSix() {
                                 }}
                             />
                         </Card>
-                        <CommandList>
+                        <CommandList className='dark:bg-white dark:text-black'>
                             <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : "No business found"}</CommandEmpty>
                             <CommandGroup>
                             {data?.map((item: any) => (
                                 <CommandItem
+                                className='dark:bg-white dark:text-black'
                                 key={item.value}
                                 value={item.value}
                                 onSelect={(currentValue) => {
@@ -254,7 +255,7 @@ function OnBoardSix() {
             </div>
 
             <Button disabled={getBusinessDetailsPending || addBusinessPending || setActiveBusinessPending} 
-                onClick={getDetailedBusiness} className="mt-5 bg-primary hover:bg-primary/50">
+                onClick={getDetailedBusiness} className="mt-5 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
                 {getBusinessDetailsPending || addBusinessPending || setActiveBusinessPending ? 
                     <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
                     "Add Business"

@@ -49,7 +49,7 @@ function OnBoard() {
     ]
 
   return (
-    <div className="min-h-screen p-2 flex bg-white dark:bg-slate-700 text-slate-950 dark:text-slate-200">
+    <div className="min-h-screen p-2 flex bg-white text-slate-950">
         <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
             <Link to="/" className="flex flex-row gap-3">
                 <img src={ASSETS.LOGO} alt="logo" />

@@ -13,13 +13,14 @@ import { toast } from "sonner";
 function Feedback() {
 
     const { auth } = useAppContext();
-    const { register, watch, handleSubmit, control, reset } = useForm<FeedbackFormType>();
+    const { register, watch, handleSubmit, control, reset, setValue } = useForm<FeedbackFormType>();
     const { mutate, isPending } = useMutation({
         mutationKey: [ "sendFeedback" ],
         mutationFn: sendFeedback,
         onSuccess: () => {
             toast.success("Request Success", { description: "Feedback sent successfully" });
             reset();
+            setValue("feedbackType", "");
         },
         onError: (error) => {
             toast.error("Request Failed", { description: error?.message });

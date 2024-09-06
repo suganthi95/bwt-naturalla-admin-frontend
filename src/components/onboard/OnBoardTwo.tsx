@@ -39,7 +39,7 @@ function OnBoardTwo({ setPage }: Props) {
                         <div key={`role-${item}`} className="flex items-center">
                             <RadioGroupItem className="hidden" type="button" value={item} id={item} />
                             <label 
-                                className={watch("role") === item ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary dark:bg-primary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
+                                className={watch("role") === item ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
                                 htmlFor={item}
                             >{item}</label>
                         </div>
@@ -49,7 +49,7 @@ function OnBoardTwo({ setPage }: Props) {
         />
          <p className="text-xs mt-1 font-medium text-red-500">{errors?.role?.message}</p>
 
-        <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50">
+        <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
             Continue
         </Button>
     </div>

@@ -36,14 +36,14 @@ function OnBoardOne({ setPage }: Props) {
                     <div className="flex items-center">
                         <RadioGroupItem className="hidden" type="button" value="own business" id="own business" />
                         <label 
-                            className={watch("business") === "own business" ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary dark:bg-primary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
+                            className={watch("business") === "own business" ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
                             htmlFor="own business"
                         >Own Business</label>
                     </div>
                     <div className="flex items-center">
                         <RadioGroupItem className="hidden" type="button" value="client business" id="client business" />
                         <label 
-                            className={watch("business") === "client business" ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary dark:bg-primary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
+                            className={watch("business") === "client business" ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
                             htmlFor="client business"
                         >Client Business</label>
                     </div>
@@ -52,7 +52,7 @@ function OnBoardOne({ setPage }: Props) {
         />
         <p className="text-xs mt-1 font-medium text-red-500">{errors?.business?.message}</p>
 
-        <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50">
+        <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
             Continue
         </Button>
     </div>
