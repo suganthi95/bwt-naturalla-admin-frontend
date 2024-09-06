@@ -27,7 +27,7 @@ function SignUp() {
 
     const googleLogin = useGoogleLogin({
         onSuccess: (res) => setUser(res),
-        onError: (error) => console.log('Login Failed:', error)
+        onError: (error) => toast.error("Request Failed", { description: error?.error_description })
     });
 
     const { data: googleData } = useQuery({

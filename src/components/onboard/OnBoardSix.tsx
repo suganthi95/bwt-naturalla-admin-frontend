@@ -99,7 +99,7 @@ function OnBoardSix() {
             setValue("");
         },
         onError: () => {
-            toast.success("Request Failed", { description: "Please try after sometimes" })
+            toast.error("Request Failed", { description: "Please try after sometimes" })
         },
     })
 
@@ -119,7 +119,7 @@ function OnBoardSix() {
             });
         },
         onError: (error) => {
-            toast.success("Request Failed", { description: error.message })
+            toast.error("Request Failed", { description: error.message })
         }
     });
 

@@ -91,7 +91,7 @@ export function SearchBox() {
       toast.success("Request Success", { description: "Business Added Successfully" });
     },
     onError: (error) => {
-      toast.success("Request Failed", { description: error.message })
+      toast.error("Request Failed", { description: error.message })
     },
   })
 
@@ -112,7 +112,7 @@ export function SearchBox() {
       setValue("");
     },
     onError: (error) => {
-      toast.success("Request Failed", { description: error.message })
+      toast.error("Request Failed", { description: error.message })
     }
   });
 
