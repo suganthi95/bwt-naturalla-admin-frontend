@@ -32,6 +32,7 @@ function SignIn() {
     });
 
     const submitGoogleLogin = () => googleLogin();
+    console.log(submitGoogleLogin)
 
     const { data: googleData } = useQuery({
         queryKey: [ "verifyGoogleUser", user ],

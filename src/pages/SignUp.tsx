@@ -105,6 +105,7 @@ function SignUp() {
     })
  
     const submitGoogleLogin = () => googleLogin();
+    console.log(submitGoogleLogin)
 
     const submit = handleSubmit(data => {
         mutate({
@@ -113,6 +114,7 @@ function SignUp() {
             password: data.password
         })
     });
+    console.log(submit)
 
     useEffect(() => {
         if(watch("confirmPassword") !== watch("password") && watch("confirmPassword") !== ""){
