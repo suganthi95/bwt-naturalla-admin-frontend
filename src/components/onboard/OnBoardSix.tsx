@@ -29,14 +29,14 @@ function OnBoardSix() {
     });
 
     const messages = [
-        "Tip: Personalize your review responses to show customers you really care.",
-        "Pro Tip: Use our sentiment analysis to pinpoint areas where you can improve your service.",
-        "Quick Tip: Consistency is key—maintain the same tone across all your responses.",
-        "Tip: Leverage positive reviews in your marketing materials to build trust.",
-        "Pro Tip: Use sentiment analysis to identify areas of improvement in your customer service.",
-        "Quick Tip: Make it a habit to respond to all reviews, whether positive or negative. Consistent engagement shows that you value customer feedback.",
-        "Did you know? AI-generated responses can save you up to 70% of the time you’d spend crafting responses.",
-        "Pro Tip: Don’t shy away from negative feedback. Addressing it publicly can show potential customers that you’re committed to improving."
+        <p className='text-slate-500 text-center'><span className='text-primary'>Tip: </span>Personalize your review responses to show customers you really care.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Use our sentiment analysis to pinpoint areas where you can improve your service.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Quick Tip: </span>Consistency is key—maintain the same tone across all your responses.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Tip: </span>Leverage positive reviews in your marketing materials to build trust.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Use sentiment analysis to identify areas of improvement in your customer service.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Quick Tip: </span>Make it a habit to respond to all reviews, whether positive or negative. Consistent engagement shows that you value customer feedback.</p>,
+        <p className='text-slate-500 text-center'>Did you know? AI-generated responses can save you up to 70% of the time you’d spend crafting responses.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Don’t shy away from negative feedback. Addressing it publicly can show potential customers that you’re committed to improving.</p>,
     ];
       
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
@@ -172,7 +172,7 @@ function OnBoardSix() {
                 <div>
                     <Loader/>
                 </div>
-                <p className='text-slate-500 text-center'>{messages[currentMessageIndex]}</p>
+                {messages[currentMessageIndex]}
             </div>
         )
     }
