@@ -197,7 +197,25 @@ function SignIn() {
                         </AlertDialogContent>
                     </AlertDialog>
 
-                    <p className="mt-3">Don't have an account ? <Link to="/sign-up" className="font-bold hover:underline">Sign Up</Link></p>
+                    {/* <p className="mt-3">Don't have an account ? <Link to="/sign-up" className="font-bold hover:underline">Sign Up</Link></p> */}
+                    <AlertDialog>
+                        <p className="mt-3">Don't have an account ? 
+                            <AlertDialogTrigger asChild className="w-full">
+                                <span className="font-bold hover:underline cursor-pointer"> Sign Up</span>
+                            </AlertDialogTrigger>
+                        </p>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                            <AlertDialogTitle>Contact Us</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Please contact IntelliResponse team.
+                            </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogAction>Okay</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </CardFooter>
             </Card>
 
