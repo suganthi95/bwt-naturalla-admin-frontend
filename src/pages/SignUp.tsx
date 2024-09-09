@@ -15,7 +15,7 @@ import { toast } from "sonner"
 import { useAppContext } from "@/contexts/AuthContext"
 import { AxiosError } from "axios"
 import useToggle from "@/hooks/useToggle"
-import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+// import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
 function SignUp() {
 
@@ -105,7 +105,7 @@ function SignUp() {
     })
  
     const submitGoogleLogin = () => googleLogin();
-    console.log(submitGoogleLogin)
+    // console.log(submitGoogleLogin)
 
     const submit = handleSubmit(data => {
         mutate({
@@ -114,7 +114,7 @@ function SignUp() {
             password: data.password
         })
     });
-    console.log(submit)
+    // console.log(submit)
 
     useEffect(() => {
         if(watch("confirmPassword") !== watch("password") && watch("confirmPassword") !== ""){
@@ -154,7 +154,7 @@ function SignUp() {
                 <p className="text-xs text-slate-500 text-center">Create your review engagement account here.</p>
 
                 <form 
-                    // onSubmit={submit}
+                    onSubmit={submit}
                 >
 
                     <div className="flex flex-col items-start gap-1">
@@ -257,7 +257,7 @@ function SignUp() {
 
                 <p className="text-slate-400 text-center">Or</p>
                 <Button 
-                    // onClick={submitGoogleLogin} 
+                    onClick={submitGoogleLogin} 
                     className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
                     <Icons.googleIcon/>
                     Continue with Google
@@ -271,7 +271,7 @@ function SignUp() {
             </div>
         </div>
 
-        <AlertDialog open={true}>
+        {/* <AlertDialog open={true}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                 <AlertDialogTitle>Contact Us</AlertDialogTitle>
@@ -280,7 +280,7 @@ function SignUp() {
                 </AlertDialogDescription>
                 </AlertDialogHeader>
             </AlertDialogContent>
-        </AlertDialog>
+        </AlertDialog> */}
 
     </div>
   )
