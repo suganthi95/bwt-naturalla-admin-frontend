@@ -309,5 +309,17 @@ export const sendFeedback = async ({ token, feedbackType, message, file }: { tok
     })
 }
 
+export const setNotification = async ({ token, status }: { token: string, status: boolean }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${BASE_URL_V2}/auth/set-notification/${status}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
 
 

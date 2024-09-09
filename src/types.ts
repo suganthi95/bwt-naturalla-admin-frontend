@@ -108,7 +108,8 @@ export interface ValidateUserType {
     onboarded: boolean
     active_workspace: string
     onboarded_at: Date | null
-    credit: number
+    credit: number,
+    notification: boolean,
     workspaceList: WorkspaceList[]
     businessList: BusinessList[]
 }

@@ -21,6 +21,13 @@ import Validate from "./pages/Validate"
 import Settings from "./pages/Settings"
 import { useEffect } from "react"
 import useMode from "./hooks/useMode"
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 function App() {
 
