@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ASSETS } from "@/assets/assets"
 import { Icons } from "@/assets/icons"
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -171,10 +172,29 @@ function SignIn() {
                 </CardContent>
                 <CardFooter className="flex flex-col gap-5">
                     <p className="text-slate-400 text-xs">Or use your Google account credentials to log in securely.</p>
-                    <Button onClick={submitGoogleLogin} className="mx-auto py-6 px-10 rounded-[50px] flex items-center gap-3 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
+                    {/* <Button onClick={submitGoogleLogin} className="mx-auto py-6 px-10 rounded-[50px] flex items-center gap-3 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
                         <Icons.googleIcon/>
                         Sign in with Google
-                    </Button>
+                    </Button> */}
+                    <AlertDialog>
+                        <AlertDialogTrigger className="w-full">
+                            <Button className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
+                                <Icons.googleIcon/>
+                                Continue with Google
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                            <AlertDialogTitle>Contact Us</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Please contact IntelliResponse team.
+                            </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                            <AlertDialogAction>Okay</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
 
                     <p className="mt-3">Don't have an account ? <Link to="/sign-up" className="font-bold hover:underline">Sign Up</Link></p>
                 </CardFooter>

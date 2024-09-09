@@ -15,6 +15,7 @@ import { toast } from "sonner"
 import { useAppContext } from "@/contexts/AuthContext"
 import { AxiosError } from "axios"
 import useToggle from "@/hooks/useToggle"
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 
 function SignUp() {
 
@@ -105,11 +106,13 @@ function SignUp() {
  
     const submitGoogleLogin = () => googleLogin();
 
-    const submit = handleSubmit(data => mutate({
-        name: data.username,
-        email: data.email,
-        password: data.password
-    }));
+    const submit = handleSubmit(data => {
+        mutate({
+            name: data.username,
+            email: data.email,
+            password: data.password
+        })
+    });
 
     useEffect(() => {
         if(watch("confirmPassword") !== watch("password") && watch("confirmPassword") !== ""){
@@ -148,7 +151,9 @@ function SignUp() {
                 <h1 className="text-secondary text-xl font-bold text-center">Sign Up</h1>
                 <p className="text-xs text-slate-500 text-center">Create your review engagement account here.</p>
 
-                <form onSubmit={submit}>
+                <form 
+                    // onSubmit={submit}
+                >
 
                     <div className="flex flex-col items-start gap-1">
                         <label className="font-medium text-xs" htmlFor="username">Username <span className="text-red-500">*</span></label>
@@ -241,18 +246,57 @@ function SignUp() {
 
                     <p className="text-xs text-center">By Continuing, you agree to our <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/terms-and-conditions" target="_blank">Terms and Conditions</Link>, <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/privacy-policy" target="_blank">Privacy Policy</Link> <br /> and <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/end-user-license-agreement" target="_blank">End User License Agreement</Link></p>
 
-                    <div>
+                    {/* <div>
                         <Button className="w-full mt-3 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-white hover:dark:bg-primary/60">
                             {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Sign Up"}
                         </Button>
+                    </div> */}
+                    <div>
+                        <AlertDialog>
+                            <AlertDialogTrigger className="w-full">
+                                <Button type="button" className="w-full mt-3 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-white hover:dark:bg-primary/60">
+                                    {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Sign Up"}
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>Contact Us</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Please contact IntelliResponse team.
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogAction>Okay</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </form>
 
                 <p className="text-slate-400 text-center">Or</p>
-                <Button onClick={submitGoogleLogin} className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
+                {/* <Button onClick={submitGoogleLogin} className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
                     <Icons.googleIcon/>
                     Continue with Google
-                </Button>
+                </Button> */}
+                <AlertDialog>
+                    <AlertDialogTrigger className="w-full">
+                        <Button className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
+                            <Icons.googleIcon/>
+                            Continue with Google
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                        <AlertDialogTitle>Contact Us</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Please contact IntelliResponse team.
+                        </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                        <AlertDialogAction>Okay</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
 
                 <p className="mt-3 text-center text-xs">Already have an account ? <Link to="/sign-in" className="font-bold hover:underline">Sign In</Link></p>
                 
