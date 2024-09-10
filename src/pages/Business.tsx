@@ -89,6 +89,7 @@ function Business() {
           </CardHeader>
           <CardContent>
               <span className="text-sm text-slate-400">{item?.street_number}, {item?.street}, {item?.city}, {item?.zip_code}</span>
+              <p className="text-sm text-slate-400">Added {dayjs(item.created_at).fromNow()}</p>
           </CardContent>
         </Card>
       ))}

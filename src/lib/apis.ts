@@ -321,5 +321,20 @@ export const setNotification = async ({ token, status }: { token: string, status
     })
 }
 
+export const setTimezone = async ({ token, timezone }: { token: string, timezone: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/update-timezone`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            timezone
+        }
+    })
+}
+
 
 

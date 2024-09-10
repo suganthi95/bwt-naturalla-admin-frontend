@@ -76,7 +76,8 @@ export interface GetBusinessType {
     city: string
     email: string
     zip_code: string
-    place_id: string
+    place_id: string,
+    created_at: Date
 }
 
 export type SignUpType = {
@@ -110,6 +111,7 @@ export interface ValidateUserType {
     onboarded_at: Date | null
     credit: number,
     notification: boolean,
+    timezone: string | null,
     workspaceList: WorkspaceList[]
     businessList: BusinessList[]
 }

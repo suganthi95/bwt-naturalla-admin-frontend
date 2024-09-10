@@ -5,6 +5,7 @@ import { getAllBookmarkedReviews } from "@/lib/apis"
 import { BusinessList, ReviewType, ValidateUserType, WorkspaceList } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios";
+import { Bookmark } from "lucide-react";
 
 function ReviewBookmarks() {
 
@@ -48,9 +49,12 @@ function ReviewBookmarks() {
         content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
     }
 
-    // if(isSuccess && data.length === 0 && !isRefetching){
-    //     content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
-    // }
+    if(isSuccess && data.length === 0){
+        content = <div className="mt-[10%] mx-auto flex items-center justify-center flex-col gap-3">
+            <p className="text-secondary font-bold">There are no bookmarks at this time.</p>
+            <p className="text-slate-400 text-sm flex flex-row items-center gap-2">Click <Bookmark /> icon to save reviews</p>
+        </div>
+    }
 
     if(isSuccess && data.length > 0){
         content = data?.map((item : ReviewType) => (
