@@ -172,9 +172,7 @@ function Layout() {
                             content={menus}
                             data={data}
                         />
-                        <div className="flex flex-1 overflow-y-scroll pb-14">
-                            <Outlet/>
-                        </div>
+                        <Outlet/>
                     </section>
                     <LogoutDialog 
                         openLogoutDialog={openLogoutDialog} 

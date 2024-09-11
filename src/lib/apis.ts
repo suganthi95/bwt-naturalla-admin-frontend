@@ -336,5 +336,52 @@ export const setTimezone = async ({ token, timezone }: { token: string, timezone
     })
 }
 
+export const getSentimentDistribution = async ({ token, placeId }: { token: string, placeId: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `https://intelliresponse-dashboard.onrender.com/sentiment_distribution/${placeId}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const reviewLenAnalysis = async ({ token, placeId }: { token: string, placeId: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `https://intelliresponse-dashboard.onrender.com/review_len_analysis/${placeId}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const reviewActiveTime = async ({ token, placeId }: { token: string, placeId: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `https://intelliresponse-dashboard.onrender.com/reviews_active_time/${placeId}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const avgSentiment = async ({ token, placeId }: { token: string, placeId: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `https://intelliresponse-dashboard.onrender.com/avg_sentiment/${placeId}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
 
 
