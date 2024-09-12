@@ -161,7 +161,8 @@ export const addBusiness = async (data: any) => {
             street: data.street,
             city: data.city,
             email: data.email,
-            zip_code: data.zipCode
+            zip_code: data.zipCode,
+            total_reviews: data.totalReviews
         }
     })
 }

@@ -57,7 +57,7 @@ function ReviewsActiveTime({ placeId }: Props) {
         content = (
             <Card>
                 <CardHeader>
-                <CardTitle>Average Sentiment Over Time</CardTitle>
+                <CardTitle>Reviews Active Time</CardTitle>
                 <CardDescription>January - June 2024</CardDescription>
                 </CardHeader>
                 <CardContent>
