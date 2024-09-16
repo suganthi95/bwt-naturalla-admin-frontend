@@ -1,7 +1,9 @@
 import AverageSentiment from "@/components/dashboard/AverageSentiment";
+import ResponseRate from "@/components/dashboard/ResponseRate";
 import ReviewLengthAnalysis from "@/components/dashboard/ReviewLengthAnalysis";
 import ReviewsActiveTime from "@/components/dashboard/ReviewsActiveTime";
 import SentimentDistributionGraph from "@/components/dashboard/SentimentDistributionGraph";
+import SentimentDistributionOvertime from "@/components/dashboard/SentimentDistributionOvertime";
 import TotalReviewsCard from "@/components/dashboard/TotalReviewsCard"
 import { BusinessList, ValidateUserType, WorkspaceList } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
@@ -41,13 +43,18 @@ function Home() {
       <TotalReviewsCard placeId={activeBusiness?.place_id}/>
 
       <div className="grid grid-cols-2 gap-5">
-        <SentimentDistributionGraph placeId={activeBusiness.place_id}/>
         <ReviewLengthAnalysis placeId={activeBusiness?.place_id}/>
+        <ReviewsActiveTime placeId={activeBusiness?.place_id}/>
       </div>
 
       <div className="grid grid-cols-2 gap-5">
-        <ReviewsActiveTime placeId={activeBusiness?.place_id}/>
+        <SentimentDistributionGraph placeId={activeBusiness.place_id}/>
         <AverageSentiment placeId={activeBusiness?.place_id}/>
+      </div>
+
+      <div className="grid grid-cols-2 gap-5">
+        <SentimentDistributionOvertime placeId={activeBusiness?.place_id}/>
+        <ResponseRate placeId={activeBusiness?.place_id}/>
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import axios, { GenericAbortSignal } from "axios";
 
 const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
-// const PAYMENT_BASE_URL = "https://backend-payment-c62gk7tmha-el.a.run.app/api/v1"
+const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1"
 
 
 export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
@@ -341,7 +341,7 @@ export const getSentimentDistribution = async ({ token, placeId }: { token: stri
     
     return await axios({
         method: "get",
-        url: `https://intelliresponse-dashboard.onrender.com/sentiment_distribution/${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/sentiment_distribution/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -353,7 +353,7 @@ export const reviewLenAnalysis = async ({ token, placeId }: { token: string, pla
     
     return await axios({
         method: "get",
-        url: `https://intelliresponse-dashboard.onrender.com/review_len_analysis/${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/review_len_analysis/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -365,7 +365,7 @@ export const reviewActiveTime = async ({ token, placeId }: { token: string, plac
     
     return await axios({
         method: "get",
-        url: `https://intelliresponse-dashboard.onrender.com/reviews_active_time/${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/reviews_active_time/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -377,10 +377,61 @@ export const avgSentiment = async ({ token, placeId }: { token: string, placeId:
     
     return await axios({
         method: "get",
-        url: `https://intelliresponse-dashboard.onrender.com/avg_sentiment/${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/avg_sentiment/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
+        }
+    })
+}
+
+export const sentimentDistributionOvertime = async ({ token, placeId }: { token: string, placeId: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `https://bwt-dashboard-api-1.onrender.com/review-data?place_id=${placeId}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const responseRate = async ({ token, placeId }: { token: string, placeId: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `https://bwt-dashboard-api-1.onrender.com/get-pie-chart-data?place_id=${placeId}`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const fetchSubscriptionPlans = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${PAYMENT_BASE_URL}/payment/fetch/plans`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const createSubscription = async ({ token, planId }: { token: string, planId: number | null }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${PAYMENT_BASE_URL}/payment/initiate/subscription`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            plan_id: planId
         }
     })
 }

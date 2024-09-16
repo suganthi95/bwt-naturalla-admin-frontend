@@ -1,10 +1,9 @@
 import { useAppContext } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { reviewActiveTime } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
+import Chart from "react-apexcharts"
 
 interface Props {
     placeId: string
@@ -14,7 +13,7 @@ function ReviewsActiveTime({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isError, isSuccess, data, error } = useQuery({
+    const { isLoading, isSuccess, data } = useQuery({
         queryKey: [ "reviewActiveTime" ],
         queryFn: () => reviewActiveTime({
             token: auth?.token as string,
@@ -28,31 +27,57 @@ function ReviewsActiveTime({ placeId }: Props) {
 
     let content;
 
-    if(!placeId){
-        return (
-            <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-                <h1 className="text-xl font-semibold">No Business added</h1>
-                <p className="text-slate-300">Search or Add your business account</p>
-            </div>
-        )
-    }
-
     if(isLoading){
         content = <Skeleton className="h-[350px] rounded-xl" />
     }
 
-    if(isError){
-        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
-    }
-
     if(isSuccess){
-        
-        const chartConfig = {
-            review_count: {
-                label: "Review Count",
-                color: "bg-primary",
+
+        const dataSeries = (arr: any, weekday: number) => arr.filter((item: any) => item.weekday === weekday).sort((a: any, b: any) => a.hour - b.hour).map((item: any) => item.review_count);
+
+        const state = {
+            options: {
+              chart: {
+                id: "basic-bar",
+                toolbar: {
+                    show: false,
+                }
+              },
+              xaxis: {
+                categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+              }
             },
-        } satisfies ChartConfig
+            series: [
+              {
+                name: "Sun",
+                data: dataSeries(data, 0)
+              },
+              {
+                name: "Mon",
+                data: dataSeries(data, 1)
+              },
+              {
+                name: "Tue",
+                data: dataSeries(data, 2)
+              },
+              {
+                name: "Wed",
+                data: dataSeries(data, 3)
+              },
+              {
+                name: "Thu",
+                data: dataSeries(data, 4)
+              },
+              {
+                name: "Fri",
+                data:  dataSeries(data, 5)
+              },
+              {
+                name: "Sat",
+                data:  dataSeries(data, 6)
+              },
+            ]
+        };
 
         content = (
             <Card>
@@ -61,42 +86,11 @@ function ReviewsActiveTime({ placeId }: Props) {
                 <CardDescription>January - June 2024</CardDescription>
                 </CardHeader>
                 <CardContent>
-                <ChartContainer config={chartConfig}>
-                    <LineChart
-                        accessibilityLayer
-                        data={data}
-                        margin={{
-                            top: 20,
-                        }}
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="hour"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                            // tickFormatter={(value) => value.slice(0, 3)}
-                        />
-                        <YAxis 
-                            dataKey="weekday"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                        />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Line
-                            dataKey="review_count"
-                            type="natural"
-                            stroke="orange"
-                            strokeWidth={2}
-                            dot={false}
-                        >
-                        </Line>
-                    </LineChart>
-                </ChartContainer>
+                    <Chart
+                        options={state.options}
+                        series={state.series}
+                        type="heatmap"
+                    />
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

@@ -15,7 +15,7 @@ function TotalReviewsCard({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isError, isSuccess, data, error } = useQuery({
+    const { isLoading, isSuccess, data } = useQuery({
         queryKey: [ "getDashboard" ],
         queryFn: () => getDashboard({
         token: auth?.token as string,
@@ -30,21 +30,8 @@ function TotalReviewsCard({ placeId }: Props) {
 
     let content;
 
-    if(!placeId){
-        return (
-            <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-                <h1 className="text-xl font-semibold">No Business added</h1>
-                <p className="text-slate-300">Search or Add your business account</p>
-            </div>
-        )
-    }
-
     if(isLoading){
         content = <Skeleton className="h-[125px] rounded-xl" />
-    }
-
-    if(isError){
-        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
     }
 
     if(isSuccess){

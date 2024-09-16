@@ -3,21 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-import { avgSentiment } from "@/lib/apis";
-import dayjs from "dayjs";
+import { sentimentDistributionOvertime } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 
 interface Props {
     placeId: string
 }
 
-function AverageSentiment({ placeId }: Props) {
+function SentimentDistributionOvertime({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
     const { isLoading, isSuccess, data } = useQuery({
-        queryKey: [ "avgSentiment" ],
-        queryFn: () => avgSentiment({
+        queryKey: [ "sentimentDistributionOvertime" ],
+        queryFn: () => sentimentDistributionOvertime({
             token: auth?.token as string,
             placeId: placeId,
         }),
@@ -34,14 +33,10 @@ function AverageSentiment({ placeId }: Props) {
     }
 
     if(isSuccess){
-
-        const chartData = data.map((item: any) => ({ month: dayjs(item.timestamp).format("MMM"), sentiment: item.average_sentiment }));
-
-        console.log(chartData)
         
         const chartConfig = {
-            sentiment: {
-                label: "average sentiment",
+            nameY: {
+                label: "sentiment distribution",
                 color: "bg-primary",
             },
         } satisfies ChartConfig
@@ -49,14 +44,14 @@ function AverageSentiment({ placeId }: Props) {
         content = (
             <Card>
                 <CardHeader>
-                <CardTitle>Average Sentiment</CardTitle>
+                <CardTitle>Sentiment Distribution Over Time</CardTitle>
                 {/* <CardDescription>January - June 2024</CardDescription> */}
                 </CardHeader>
                 <CardContent>
                 <ChartContainer config={chartConfig}>
                     <LineChart
                         accessibilityLayer
-                        data={chartData}
+                        data={data}
                         margin={{
                             top: 20,
                             left: 20,
@@ -65,18 +60,18 @@ function AverageSentiment({ placeId }: Props) {
                     >
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="month"
+                            dataKey="nameX"
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 3)}
+                            // tickFormatter={(value) => value.slice(0, 3)}
                         />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                         />
                         <Line
-                            dataKey="sentiment"
+                            dataKey="nameY"
                             type="natural"
                             stroke="orange"
                             strokeWidth={2}
@@ -102,4 +97,4 @@ function AverageSentiment({ placeId }: Props) {
     return content
 }
 
-export default AverageSentiment
+export default SentimentDistributionOvertime

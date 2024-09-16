@@ -1,4 +1,4 @@
-import { Check, CircleCheck, Gift, X } from "lucide-react"
+import { Check, CircleCheck, Gift, LoaderCircle, X } from "lucide-react"
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "./alert-dialog"
 import { ASSETS } from "@/assets/assets"
 import { Button } from "./button"
@@ -7,23 +7,60 @@ import { Controller, useForm } from "react-hook-form"
 import { RadioGroup, RadioGroupItem } from "./radio-group"
 import dayjs from "dayjs"
 import { Icons } from "@/assets/icons"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { createSubscription, fetchSubscriptionPlans } from "@/lib/apis"
+import { useAppContext } from "@/contexts/AuthContext"
+import { toast } from "sonner"
+import { AxiosError } from "axios"
 
 function UpgradeModal() {
 
+    const { auth } = useAppContext();
     const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
     const [ proceedToPay, setProceedToPay ] = useState(false);
 
     const { register, watch, control } = useForm({
         defaultValues: {
-            plan: "annual"
+            plan: null
         }
     });
+
+    const { isSuccess, data } = useQuery({
+        queryKey: [ "fetchSubscriptionPlans", auth?.token ],
+        queryFn: () => fetchSubscriptionPlans({ token: auth?.token as string }),
+        refetchOnWindowFocus: false,
+        retry: 1,
+        select: (data) => data?.data, 
+        enabled: Boolean(auth?.token)
+    });
+
+    const { mutate, isPending } = useMutation({
+        mutationKey: [ "createSubscription" ],
+        mutationFn: createSubscription,
+        onSuccess: (data) => {
+            window.open(data?.data?.data?.redirect_url)
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error("Request Failed", { description: error?.response?.data?.message })
+        }
+    });
+
+    const initiatePayment = () => {
+
+        if(watch("plan") === null){
+            return
+        }
+
+        mutate({
+            planId: watch("plan"),
+            token: auth?.token as string
+        })
+    }
 
     const paymentScreenOne = (
         <div className="flex flex-1 flex-col p-5 gap-3">
             <h1 className="text-secondary text-2xl font-bold">Try <span className="text-primary">IntelliResponse</span></h1>
             <p className="text-slate-500">Experience the full capabilities of IntelliResponse without any commitment.</p>
-
             <div className="border-t border-b flex flex-col gap-5 py-5">
                 <p className="text-secondary text-md">Here's what you will get:</p>
 
@@ -53,7 +90,7 @@ function UpgradeModal() {
 
             <div className="flex flex-row items-center gap-3">
                 <Button onClick={() => setProceedToPay(true)} className="bg-primary hover:bg-primary/50 font-thin">
-                    Buy Now
+                    {isPending ? <LoaderCircle/> : "Buy Now"}
                 </Button>
                 {/* <Button onClick={() => setOpenPaymentDialog(false)} className="font-thin flex flex-row items-center gap-2 group">
                     Start Free Trial
@@ -61,98 +98,106 @@ function UpgradeModal() {
                 </Button> */}
             </div>
         </div>
-    )
+    );
 
-    const paymentScreenTwo = (
-        <div className="flex flex-1 flex-col p-5 gap-3">
-            <Controller
-                name='plan'
-                control={control}
-                render={({ field }) => (
-                    <RadioGroup 
-                        value={field.value} 
-                        onValueChange={(val) => field.onChange(val)} 
-                        className="flex flex-row flex-wrap items-center mt-3 gap-5 capitalize"
-                        {...register("plan")}
-                    >
-                        <div className="flex items-center w-full">
-                            <RadioGroupItem className="hidden" type="button" value="annual" id="annual" />
-                            <label 
-                                className={watch("plan") === "annual" ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-xl p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-xl font-bold p-3 w-full rounded-lg cursor-pointer" }
-                                htmlFor="annual"
-                            >
-                                <div>
-                                    Annual plan 
-                                    <p className="font-light text-slate-500 text-sm mt-1">Pay $359 per year after 7 days trial</p>
-                                </div>
-                                {watch("plan") === "annual" && <CircleCheck className="fill-primary stroke-white" />}
-                            </label>
-                        </div>
-                        <div className="flex items-center w-full">
-                            <RadioGroupItem className="hidden" type="button" value="monthly" id="monthly" />
-                            <label 
-                                className={watch("plan") === "monthly" ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-xl p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-xl font-bold p-3 w-full rounded-lg cursor-pointer" }
-                                htmlFor="monthly"
-                            >
-                                <div>
-                                    Monthly plan
-                                    <p className="font-light text-slate-500 text-sm mt-1">Pay $29 per month after 7 days trial <span>(at just a dollar day)</span></p>
-                                </div>
-                                {watch("plan") === "monthly" && <CircleCheck className="fill-primary stroke-white" />}
-                            </label>
-                        </div>
-                    </RadioGroup>
-                )}  
-            />
+    let paymentScreenTwo;
 
-            <div className="flex flex-col gap-2 py-5 text-sm">
+    if(isSuccess){
 
-                <div className="flex flex-row gap-3 items-center">
-                    <Check className="stroke-green-400" />
-                    <p><span className="font-bold">AI-Powered Responses:</span> Generate professional replies to reviews with ease.</p>
+        paymentScreenTwo = (
+            <div className="flex flex-1 flex-col p-5 gap-3">
+    
+                <div className="grid grid-cols-2 text-center">
+                    <div>
+                        <p className="text-secondary">Standard</p>
+                    </div>
+                    <div>
+                        <p className="text-primary">Pro</p>
+                    </div>
                 </div>
-                <div className="flex flex-row gap-3 items-center">
-                    <Check className="stroke-green-400" />
-                    <p><span className="font-bold">Sentiment Analysis:</span> Understand customer emotions and feedback.</p>
-                </div>
-                <div className="flex flex-row gap-3 items-center">
-                    <Check className="stroke-green-400" />
-                    <p><span className="font-bold">Analytics Dashboard:</span> Gain insights from detailed data visualizations.</p>
-                </div>
-                <div className="flex flex-row gap-3 items-center">
-                    <Check className="stroke-green-400" />
-                    <p><span className="font-bold">Multilingual Support:</span> Respond to reviews in multiple languages.</p>
-                </div>
-                <div className="flex flex-row gap-3 items-center">
-                    <Check className="stroke-green-400" />
-                    <p>Flexible cancellation policy</p>
-                </div>
-                <div className="flex flex-row gap-3 items-center">
-                    <Check className="stroke-green-400" />
-                    <p>Reminders before each billing cycle</p>
-                </div>
-                
-            </div>
-
-            <div className="flex flex-row items-center justify-between">
                 <div>
-                    <p>Due today</p>
-                    <p className="text-slate-500">{dayjs(new Date()).format("ddd, MMM DD YYYY")}</p>
+                    <Controller
+                        name='plan'
+                        control={control}
+                        render={({ field }) => (
+                            <RadioGroup 
+                                value={field.value ?? ""} 
+                                onValueChange={(val) => field.onChange(val)} 
+                                className="grid grid-cols-2 items-center mt-3 gap-5 capitalize"
+                                {...register("plan")}
+                            >
+                                {data?.map((item: any) => (
+                                    <div className="flex items-center w-full">
+                                        <RadioGroupItem className="hidden" type="button" value={item.plan_id} id={item.plan_id} />
+                                        <label 
+                                            className={watch("plan") === item.plan_id ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-xl p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-xl font-bold p-3 w-full rounded-lg cursor-pointer" }
+                                            htmlFor={item.plan_id}
+                                        >
+                                            <div>
+                                                {item.period} plan
+                                                {/* <p className="font-light text-slate-500 text-sm mt-1">Pay $359 per year after 7 days trial</p> */}
+                                                <p className="font-light text-slate-500 text-sm mt-1">{item.plan_desc}</p>
+                                            </div>
+                                            {watch("plan") === item.plan_id && <CircleCheck className="fill-primary stroke-white" />}
+                                        </label>
+                                    </div>
+                                ))}
+                            </RadioGroup>
+                        )}  
+                    />
                 </div>
-
-                <div>
-                    <p className="text-xl font-bold">{watch("plan") === "monthly" ? "$ 29" : "$ 359"}</p>
+    
+                <div className="flex flex-col gap-2 py-5 text-sm">
+    
+                    <div className="flex flex-row gap-3 items-center">
+                        <Check className="stroke-green-400" />
+                        <p><span className="font-bold">AI-Powered Responses:</span> Generate professional replies to reviews with ease.</p>
+                    </div>
+                    <div className="flex flex-row gap-3 items-center">
+                        <Check className="stroke-green-400" />
+                        <p><span className="font-bold">Sentiment Analysis:</span> Understand customer emotions and feedback.</p>
+                    </div>
+                    <div className="flex flex-row gap-3 items-center">
+                        <Check className="stroke-green-400" />
+                        <p><span className="font-bold">Analytics Dashboard:</span> Gain insights from detailed data visualizations.</p>
+                    </div>
+                    <div className="flex flex-row gap-3 items-center">
+                        <Check className="stroke-green-400" />
+                        <p><span className="font-bold">Multilingual Support:</span> Respond to reviews in multiple languages.</p>
+                    </div>
+                    <div className="flex flex-row gap-3 items-center">
+                        <Check className="stroke-green-400" />
+                        <p>Flexible cancellation policy</p>
+                    </div>
+                    <div className="flex flex-row gap-3 items-center">
+                        <Check className="stroke-green-400" />
+                        <p>Reminders before each billing cycle</p>
+                    </div>
+                    
+                </div>
+    
+                <div className="flex flex-row items-center justify-between">
+                    <div>
+                        <p>Due today</p>
+                        <p className="text-slate-500">{dayjs(new Date()).format("ddd, MMM DD YYYY")}</p>
+                    </div>
+    
+                    <div>
+                        <p className="text-xl font-bold">{data?.filter((item: any) => item.place_id === watch("plan"))[0]?.plan_amount}</p>
+                    </div>
+                </div>
+    
+                <div className="flex flex-row items-center gap-3">
+                    <Button onClick={initiatePayment} className="bg-primary hover:bg-primary/50 font-thin">
+                        Next
+                    </Button>
                 </div>
             </div>
+        )
+    
+    }
 
-            <div className="flex flex-row items-center gap-3">
-                <Button className="bg-primary hover:bg-primary/50 font-thin">
-                    Next
-                </Button>
-            </div>
-        </div>
-    )
-
+    
   return (
     <AlertDialog open={openPaymentDialog} onOpenChange={setOpenPaymentDialog}>
         <AlertDialogTrigger asChild>
