@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import CancelSubscription from "@/components/ui/CancelSubscription"
 import { Card } from "@/components/ui/card"
 import Loader from "@/components/ui/Loader"
 import { Separator } from "@/components/ui/separator"
@@ -55,7 +55,7 @@ function Billing() {
                     </div>
 
                     <div className="space-y-1 mt-4">
-                        <Button variant="destructive">Cancel Subscription</Button>
+                        <CancelSubscription/>
                     </div>
                 </Card>
                 <Card className="p-4">

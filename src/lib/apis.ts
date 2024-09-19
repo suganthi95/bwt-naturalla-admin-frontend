@@ -466,3 +466,14 @@ export const getBillings = async ({ token }: { token: string }) => {
 }
 
 
+export const cancelSubscription = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "put",
+        url: `${PAYMENT_BASE_URL}/payment/cancel/subscription`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
