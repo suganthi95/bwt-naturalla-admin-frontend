@@ -1,7 +1,7 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom"
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, EarthLock, House, Settings, UserCog } from "lucide-react";
+import { BarChartBig, Bookmark, Briefcase, CircleAlert, EarthLock, House, Settings, UserCog } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { validateUser } from "@/lib/apis";
 import Loader from "../ui/Loader";
 import { CollapseType, ValidateUserType } from "@/types";
-import UpgradeModal from "../ui/UpgradeModal";
+// import UpgradeModal from "../ui/UpgradeModal";
 
 function Layout() {
 
@@ -46,11 +46,11 @@ function Layout() {
                 route: "bookmark",
                 icon: <Bookmark className="w-5" />
             },
-            {
-                name: "Billing",
-                route: "billing",
-                icon:  <CreditCard className="w-5" />
-            },
+            // {
+            //     name: "Billing",
+            //     route: "billing",
+            //     icon:  <CreditCard className="w-5" />
+            // },
             {
                 name: "Feedback",
                 route: "feedback",
@@ -138,7 +138,7 @@ function Layout() {
 
                     <div className="flex items-center flex-row gap-10">
                         
-                        <UpgradeModal/>
+                        {/* <UpgradeModal/> */}
 
                         <p className="hidden md:block text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">
