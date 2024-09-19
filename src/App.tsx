@@ -24,6 +24,9 @@ import useMode from "./hooks/useMode"
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import Billing from "./pages/Billing"
+import PaymentSuccess from "./pages/PaymentSuccess"
+import PaymentFailure from "./pages/PaymentFailure"
 
 
 dayjs.extend(utc);
@@ -76,7 +79,7 @@ function App() {
         <Route path="/reviews/generate-response" element={<ReplyReview/>}/>
         <Route path="/business" element={<Business/>}/>
         <Route path="/bookmark" element={<ReviewBookmarks/>}/>
-        <Route path="/billing" element={<Home/>}/>
+        <Route path="/billing" element={<Billing/>}/>
         <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/terms-and-conditions" element={<Home/>}/>
         <Route path="/settings" element={<Settings/>}/>
@@ -89,6 +92,8 @@ function App() {
       <Route path="/onboard" element={<OnBoard/>}/>
       <Route path="/welcome" element={<Welcome/>}/>
       <Route path="/validate" element={<Validate/>}/>
+      <Route path="/payment-success" element={<PaymentSuccess/>}/>
+      <Route path="/payment-failure" element={<PaymentFailure/>}/>
       <Route path="*" element={<SignIn/>}/>
     </Routes>
   )

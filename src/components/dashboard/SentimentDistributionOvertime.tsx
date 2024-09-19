@@ -2,7 +2,7 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { sentimentDistributionOvertime } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 
@@ -33,11 +33,19 @@ function SentimentDistributionOvertime({ placeId }: Props) {
     }
 
     if(isSuccess){
+
+        const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
+
+        const chartData = data.map((item: any) => ({ month: months[item.month - 1], positive: item.positive, negative: item.negative }))
         
         const chartConfig = {
-            nameY: {
-                label: "sentiment distribution",
-                color: "bg-primary",
+            positive: {
+                label: "positive",
+                color: "orange",
+            },
+            negative: {
+                label: "negative",
+                color: "red",
             },
         } satisfies ChartConfig
 
@@ -48,38 +56,68 @@ function SentimentDistributionOvertime({ placeId }: Props) {
                 {/* <CardDescription>January - June 2024</CardDescription> */}
                 </CardHeader>
                 <CardContent>
-                <ChartContainer config={chartConfig}>
-                    <LineChart
-                        accessibilityLayer
-                        data={data}
-                        margin={{
-                            top: 20,
-                            left: 20,
-                            right: 5
-                        }}
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="nameX"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                            // tickFormatter={(value) => value.slice(0, 3)}
-                        />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Line
-                            dataKey="nameY"
-                            type="natural"
-                            stroke="orange"
-                            strokeWidth={2}
-                            dot={false}
+                    <ChartContainer config={chartConfig}>
+                        <AreaChart
+                            accessibilityLayer
+                            data={chartData}
+                            margin={{
+                                left: 12,
+                                right: 12,
+                            }}
                         >
-                        </Line>
-                    </LineChart>
-                </ChartContainer>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="month"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => value.slice(0, 3)}
+                            />
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                            <defs>
+                            <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+                                <stop
+                                offset="5%"
+                                stopColor="red"
+                                stopOpacity={0.8}
+                                />
+                                <stop
+                                offset="95%"
+                                stopColor="red"
+                                stopOpacity={0.1}
+                                />
+                            </linearGradient>
+                            <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+                                <stop
+                                offset="5%"
+                                stopColor="orange"
+                                stopOpacity={0.8}
+                                />
+                                <stop
+                                offset="95%"
+                                stopColor="orange"
+                                stopOpacity={0.1}
+                                />
+                            </linearGradient>
+                            </defs>
+                            <Area
+                                dataKey="positive"
+                                type="natural"
+                                fill="url(#fillMobile)"
+                                fillOpacity={0.4}
+                                stroke="orange"
+                                stackId="a"
+                            />
+                            <Area
+                                dataKey="negative"
+                                type="natural"
+                                fill="url(#fillDesktop)"
+                                fillOpacity={0.4}
+                                stroke="red"
+                                stackId="a"
+                            />
+                        </AreaChart>
+                    </ChartContainer>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

@@ -8,16 +8,21 @@ import { RadioGroup, RadioGroupItem } from "./radio-group"
 import dayjs from "dayjs"
 import { Icons } from "@/assets/icons"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { createSubscription, fetchSubscriptionPlans } from "@/lib/apis"
+import { createSubscription, fetchSubscriptionPlans, verifySubscription } from "@/lib/apis"
 import { useAppContext } from "@/contexts/AuthContext"
 import { toast } from "sonner"
+import useRazorpay, { RazorpayOptions } from "react-razorpay";
 import { AxiosError } from "axios"
+import { useNavigate } from "react-router-dom"
+
 
 function UpgradeModal() {
 
     const { auth } = useAppContext();
+    const navigate = useNavigate()
     const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
     const [ proceedToPay, setProceedToPay ] = useState(false);
+    const [ Razorpay ] = useRazorpay();
 
     const { register, watch, control } = useForm({
         defaultValues: {
@@ -34,11 +39,59 @@ function UpgradeModal() {
         enabled: Boolean(auth?.token)
     });
 
+    const { mutate: verifySubscriptionMutate } = useMutation({
+        mutationKey: [ "verifySubscription" ],
+        mutationFn: verifySubscription,
+        onSuccess: (data) => {
+            console.log(data)
+
+            if(data.data.success){
+                navigate("/payment-success")
+            }else{
+                navigate("/payment-failure")
+            }
+        },
+        onError: (error) => {
+            console.log(error)
+            navigate("/payment-failure")
+        }
+    })
+
     const { mutate, isPending } = useMutation({
         mutationKey: [ "createSubscription" ],
         mutationFn: createSubscription,
         onSuccess: (data) => {
-            window.open(data?.data?.data?.redirect_url)
+            setOpenPaymentDialog(false);
+            const { subscription_id } = data?.data?.data;
+
+
+            const options = {
+                key: 'rzp_test_xSZldxULopihDB',
+                subscription_id: subscription_id,
+                name: 'IntelliResponse',
+                description: 'Subscription Plan',
+                image: 'https://ik.imagekit.io/zshycew5c/intelliresponse/intelli-response-logo.svg?updatedAt=1719985223239', // Your logo
+                handler: function (response: any) {
+                
+                    verifySubscriptionMutate({
+                        token: auth?.token as string,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature, 
+                        razorpay_subscription_id: subscription_id 
+                    })
+                },
+                // prefill: {
+                //     name: 'John Doe',
+                //     email: 'john@example.com',
+                //     contact: '9999999999',
+                // },
+                theme: {
+                    color: '#3399cc',
+                },
+            };
+
+            const rzp = new Razorpay(options as RazorpayOptions);
+            rzp.open();
         },
         onError: (error: AxiosError<any>) => {
             toast.error("Request Failed", { description: error?.response?.data?.message })
@@ -90,7 +143,7 @@ function UpgradeModal() {
 
             <div className="flex flex-row items-center gap-3">
                 <Button onClick={() => setProceedToPay(true)} className="bg-primary hover:bg-primary/50 font-thin">
-                    {isPending ? <LoaderCircle/> : "Buy Now"}
+                    Buy Now
                 </Button>
                 {/* <Button onClick={() => setOpenPaymentDialog(false)} className="font-thin flex flex-row items-center gap-2 group">
                     Start Free Trial
@@ -109,10 +162,10 @@ function UpgradeModal() {
     
                 <div className="grid grid-cols-2 text-center">
                     <div>
-                        <p className="text-secondary">Standard</p>
+                        <p className="text-secondary text-xl font-medium">Standard Plan</p>
                     </div>
                     <div>
-                        <p className="text-primary">Pro</p>
+                        <p className="text-secondary text-xl font-medium">Pro Plan</p>
                     </div>
                 </div>
                 <div>
@@ -123,11 +176,11 @@ function UpgradeModal() {
                             <RadioGroup 
                                 value={field.value ?? ""} 
                                 onValueChange={(val) => field.onChange(val)} 
-                                className="grid grid-cols-2 items-center mt-3 gap-5 capitalize"
+                                className="grid grid-cols-2 items-center mt-1 gap-3 capitalize"
                                 {...register("plan")}
                             >
                                 {data?.map((item: any) => (
-                                    <div className="flex items-center w-full">
+                                    <div className="h-full">
                                         <RadioGroupItem className="hidden" type="button" value={item.plan_id} id={item.plan_id} />
                                         <label 
                                             className={watch("plan") === item.plan_id ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-xl p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-xl font-bold p-3 w-full rounded-lg cursor-pointer" }
@@ -136,7 +189,7 @@ function UpgradeModal() {
                                             <div>
                                                 {item.period} plan
                                                 {/* <p className="font-light text-slate-500 text-sm mt-1">Pay $359 per year after 7 days trial</p> */}
-                                                <p className="font-light text-slate-500 text-sm mt-1">{item.plan_desc}</p>
+                                                {/* <p className="font-light text-slate-500 text-sm mt-1">{item.plan_desc}</p> */}
                                             </div>
                                             {watch("plan") === item.plan_id && <CircleCheck className="fill-primary stroke-white" />}
                                         </label>
@@ -188,8 +241,8 @@ function UpgradeModal() {
                 </div>
     
                 <div className="flex flex-row items-center gap-3">
-                    <Button onClick={initiatePayment} className="bg-primary hover:bg-primary/50 font-thin">
-                        Next
+                    <Button disabled={isPending} onClick={initiatePayment} className="bg-primary hover:bg-primary/50 font-thin">
+                        {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Next"}
                     </Button>
                 </div>
             </div>

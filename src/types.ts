@@ -151,3 +151,13 @@ export type FeedbackFormType = {
     message: string,
     file: FileList
 }
+
+export interface BillingResponse {
+    period: string
+    plan_name: string
+    ends_on: string
+    next_due: string
+    total_credits: number
+    used_credits: number
+    workspace_id: string
+  }

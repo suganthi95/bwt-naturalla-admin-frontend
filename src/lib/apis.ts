@@ -353,7 +353,7 @@ export const reviewLenAnalysis = async ({ token, placeId }: { token: string, pla
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/review_len_analysis/${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/review_length_analysis/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -377,7 +377,7 @@ export const avgSentiment = async ({ token, placeId }: { token: string, placeId:
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/avg_sentiment/${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/average_sentiment_over_time/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -389,7 +389,7 @@ export const sentimentDistributionOvertime = async ({ token, placeId }: { token:
     
     return await axios({
         method: "get",
-        url: `https://bwt-dashboard-api-1.onrender.com/review-data?place_id=${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/sentiment_distribution_over_time/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -401,7 +401,7 @@ export const responseRate = async ({ token, placeId }: { token: string, placeId:
     
     return await axios({
         method: "get",
-        url: `https://bwt-dashboard-api-1.onrender.com/get-pie-chart-data?place_id=${placeId}`,
+        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/response_rate/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -432,6 +432,35 @@ export const createSubscription = async ({ token, planId }: { token: string, pla
         },
         data: {
             plan_id: planId
+        }
+    })
+}
+
+export const verifySubscription = async ({ token, razorpay_payment_id, razorpay_signature, razorpay_subscription_id }: { token: string, razorpay_payment_id: string, razorpay_signature: string, razorpay_subscription_id: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${PAYMENT_BASE_URL}/payment/verify-subscription`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            razorpay_payment_id,
+            razorpay_signature,
+            razorpay_subscription_id
+        }
+    })
+}
+
+export const getBillings = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${PAYMENT_BASE_URL}/payment/get/subscription`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
         }
     })
 }

@@ -5,7 +5,6 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { Label, Pie, PieChart } from "recharts";
 import { responseRate } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
-import { useMemo } from "react";
 
 interface Props {
     placeId: string
@@ -15,7 +14,7 @@ function ResponseRate({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isSuccess } = useQuery({
+    const { isLoading, isSuccess, data } = useQuery({
         queryKey: [ "responseRate" ],
         queryFn: () => responseRate({
             token: auth?.token as string,
@@ -35,43 +34,29 @@ function ResponseRate({ placeId }: Props) {
 
     if(isSuccess){
         
-        const chartData = [
-            { browser: "chrome", visitors: 275, fill: "yellow" },
-            { browser: "safari", visitors: 200, fill: "orange" },
-            { browser: "firefox", visitors: 287, fill: "green" },
-            { browser: "edge", visitors: 173, fill: "red" },
-            { browser: "other", visitors: 190, fill: "blue" },
-        ];
+        const color = [ "green", "orange", "yellow", "red" ];
+        const chartData = data.map((item: any, index: any) => ({ category: item.category, percentage: item.percentage, fill: color[index] }))
 
         const chartConfig = {
-            visitors: {
-              label: "Visitors",
-            },
-            chrome: {
-              label: "Chrome",
+            "Responded Positive": {
+              label: "Responded - Positive",
               color: "yellow",
             },
-            safari: {
-              label: "Safari",
-              color: "orange",
-            },
-            firefox: {
-              label: "Firefox",
+            "Not Responded Positive": {
+              label: "Yet to Response - Positive",
               color: "green",
             },
-            edge: {
-              label: "Edge",
-              color: "red",
+            "Responded Negative": {
+              label: "Responded - Negative",
+              color: "orange",
             },
-            other: {
-              label: "Other",
-              color: "blue",
+            "Not Responded Negative": {
+              label: "Yet to Response - Negative",
+              color: "red",
             },
         } satisfies ChartConfig
 
-        const totalVisitors = useMemo(() => {
-            return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
-        }, [])
+        // const totalVisitors = chartData.reduce((acc, curr) => acc + curr.visitors, 0)
 
         content = (
             <Card>
@@ -86,15 +71,15 @@ function ResponseRate({ placeId }: Props) {
                     >
                         <PieChart>
                             <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
+                                cursor={false}
+                                content={<ChartTooltipContent hideLabel />}
                             />
                             <Pie
-                            data={chartData}
-                            dataKey="visitors"
-                            nameKey="browser"
-                            innerRadius={60}
-                            strokeWidth={5}
+                                data={chartData}
+                                dataKey="percentage"
+                                nameKey="category"
+                                innerRadius={60}
+                                strokeWidth={5}
                             >
                             <Label
                                 content={({ viewBox }) => {
@@ -106,19 +91,19 @@ function ResponseRate({ placeId }: Props) {
                                         textAnchor="middle"
                                         dominantBaseline="middle"
                                     >
-                                        <tspan
+                                        {/* <tspan
                                         x={viewBox.cx}
                                         y={viewBox.cy}
                                         className="fill-foreground text-3xl font-bold"
                                         >
                                         {totalVisitors.toLocaleString()}
-                                        </tspan>
+                                        </tspan> */}
                                         <tspan
                                         x={viewBox.cx}
-                                        y={(viewBox.cy || 0) + 24}
+                                        y={(viewBox.cy || 0)}
                                         className="fill-muted-foreground"
                                         >
-                                        Visitors
+                                            Response Rate
                                         </tspan>
                                     </text>
                                     )

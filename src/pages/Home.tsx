@@ -9,19 +9,6 @@ import { BusinessList, ValidateUserType, WorkspaceList } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios"
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "tableau-viz": {
-        "hide-tabs": boolean,
-        "src": string,
-        "id": string | number,
-        "toolbar": string 
-      };
-    }
-  }
-}
-
 function Home() {
 
   const queryClient = useQueryClient();
