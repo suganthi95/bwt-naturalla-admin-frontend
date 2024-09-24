@@ -35,12 +35,12 @@ function AverageSentiment({ placeId }: Props) {
 
     if(isSuccess){
 
-        const chartData = data.map((item: any) => ({ month: dayjs(item.timestamp).format("MMM"), sentiment: item.average_sentiment }));
+        const chartData = data.filter((item: any) => item.year === 2024).map((item: any) => ({ month: dayjs(item.date).format("MMM"), sentiment: item.average_sentiment_score }));
 
         console.log(chartData)
         
         const chartConfig = {
-            sentiment: {
+            average_sentiment_score: {
                 label: "average sentiment",
                 color: "bg-primary",
             },
@@ -85,6 +85,7 @@ function AverageSentiment({ placeId }: Props) {
                         </Line>
                     </LineChart>
                 </ChartContainer>
+                <p className="text-center text-sm text-slate-500">Month</p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

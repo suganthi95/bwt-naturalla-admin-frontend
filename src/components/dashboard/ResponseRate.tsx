@@ -1,7 +1,7 @@
 import { useAppContext } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { Label, Pie, PieChart } from "recharts";
 import { responseRate } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
@@ -39,19 +39,19 @@ function ResponseRate({ placeId }: Props) {
 
         const chartConfig = {
             "Responded Positive": {
-              label: "Responded - Positive",
+              label: "Responded (Positive)",
               color: "yellow",
             },
             "Not Responded Positive": {
-              label: "Yet to Response - Positive",
+              label: "Yet to Respond (Positive)",
               color: "green",
             },
             "Responded Negative": {
-              label: "Responded - Negative",
+              label: "Responded (Negative)",
               color: "orange",
             },
             "Not Responded Negative": {
-              label: "Yet to Response - Negative",
+              label: "Yet to Respond (Negative)",
               color: "red",
             },
         } satisfies ChartConfig
@@ -67,7 +67,7 @@ function ResponseRate({ placeId }: Props) {
                 <CardContent>
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square max-h-[250px]"
+                        className="mx-auto aspect-square max-h-[350px]"
                     >
                         <PieChart>
                             <ChartTooltip
@@ -111,6 +111,11 @@ function ResponseRate({ placeId }: Props) {
                                 }}
                             />
                             </Pie>
+
+                            <ChartLegend
+                                
+                                content={<ChartLegendContent nameKey="category" />}
+                            />
                         </PieChart>
                         </ChartContainer>
                 </CardContent>

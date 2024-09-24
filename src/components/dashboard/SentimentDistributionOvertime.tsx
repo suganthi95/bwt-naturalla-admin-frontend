@@ -118,6 +118,7 @@ function SentimentDistributionOvertime({ placeId }: Props) {
                             />
                         </AreaChart>
                     </ChartContainer>
+                    <p className="text-center text-sm text-slate-500">Month</p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

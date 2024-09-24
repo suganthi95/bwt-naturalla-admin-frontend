@@ -1,8 +1,8 @@
 import { useAppContext } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Label, LabelList, XAxis, YAxis } from "recharts";
 import { getSentimentDistribution } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 
@@ -45,7 +45,6 @@ function SentimentDistributionGraph({ placeId }: Props) {
             <Card>
                 <CardHeader>
                 <CardTitle>Sentiment Distribution</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
                 </CardHeader>
                 <CardContent>
                 <ChartContainer config={chartConfig}>
@@ -58,23 +57,33 @@ function SentimentDistributionGraph({ placeId }: Props) {
                     >
                     <CartesianGrid vertical={false} />
                     <XAxis
-                        dataKey="nameX"
+                        dataKey="sentiment_score"
                         tickLine={false}
                         tickMargin={10}
                         axisLine={false}
                         // tickFormatter={(value) => value.slice(0, 3)}
                     />
                     <YAxis 
-                        dataKey="nameY"
+                        dataKey="position_y"
                         tickLine={false}
                         tickMargin={10}
                         axisLine={false}
-                    />
+                    >
+                        <Label
+                            value='Review count'
+                            offset={-10}
+                            angle={270}
+                            dx={20}
+                            dy={-100}
+                            position="insideBottomLeft"
+                            fontSize={14}
+                        />
+                    </YAxis>
                     <ChartTooltip
                         cursor={false}
                         content={<ChartTooltipContent hideLabel />}
                     />
-                    <Bar dataKey="pv" fill="orange" radius={8}>
+                    <Bar dataKey="review_count" fill="orange" radius={8}>
                         <LabelList
                             position="top"
                             offset={12}
@@ -84,6 +93,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                     </Bar>
                     </BarChart>
                 </ChartContainer>
+                <p className="text-center text-sm text-slate-500">Sentiment score</p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

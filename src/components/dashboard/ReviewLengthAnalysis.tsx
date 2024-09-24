@@ -1,8 +1,8 @@
 import { useAppContext } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { reviewLenAnalysis } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 
@@ -35,55 +35,63 @@ function ReviewLengthAnalysis({ placeId }: Props) {
     if(isSuccess){
         
         const chartConfig = {
-            pv: {
-                label: "sentiment",
+            positive_reviews: {
+                label: "positive reviews",
                 color: "bg-primary",
             },
+            negative_reviews: {
+                label: "negative reviews",
+                color: "red",
+            },
         } satisfies ChartConfig
-
+        
         content = (
             <Card>
                 <CardHeader>
-                <CardTitle>Review Length Analysis</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                    <CardTitle>Review Length Analysis</CardTitle>
                 </CardHeader>
                 <CardContent>
                 <ChartContainer config={chartConfig}>
                     <BarChart
-                    accessibilityLayer
-                    data={data}
-                    margin={{
-                        top: 20,
-                    }}
+                        accessibilityLayer
+                        data={data}
                     >
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                        dataKey="nameX"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={false}
-                        // tickFormatter={(value) => value.slice(0, 3)}
-                    />
-                    <YAxis 
-                        dataKey="nameY"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={false}
-                    />
-                    <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent hideLabel />}
-                    />
-                    <Bar dataKey="pv" fill="orange" radius={8}>
-                        <LabelList
-                            position="top"
-                            offset={12}
-                            className="fill-foreground"
-                            fontSize={12}
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="review_length_range"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
+                            // tickFormatter={(value) => value.slice(0, 3)}
+                        >
+                            {/* <Label
+                                value='review length range'
+                                offset={-5}
+                                dx={20}
+                                dy={20}
+                                fontSize={14}
+                            /> */}
+                        </XAxis>
+                        
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
                         />
-                    </Bar>
+                         <Bar
+                            dataKey="positive_reviews"
+                            stackId="a"
+                            fill="orange"
+                            radius={[0, 0, 4, 4]}
+                        />
+                        <Bar
+                            dataKey="negative_reviews"
+                            stackId="a"
+                            fill="red"
+                            radius={[4, 4, 0, 0]}
+                        />
                     </BarChart>
                 </ChartContainer>
+                <p className="text-center text-sm text-slate-500">Review length range</p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

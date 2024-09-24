@@ -1,6 +1,6 @@
 import { useAppContext } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { reviewActiveTime } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import Chart from "react-apexcharts"
@@ -33,15 +33,15 @@ function ReviewsActiveTime({ placeId }: Props) {
 
     if(isSuccess){
 
-        const dataSeries = (arr: any, weekday: number) => arr.filter((item: any) => item.weekday === weekday).sort((a: any, b: any) => a.hour - b.hour).map((item: any) => item.review_count);
+        const dataSeries = (arr: any, weekday: number) => arr.filter((item: any) => item.day_of_week === weekday).sort((a: any, b: any) => a.hour_of_day - b.hour_of_day).map((item: any) => item.review_count);
 
         const state = {
             options: {
               chart: {
                 id: "basic-bar",
                 toolbar: {
-                    show: false,
-                }
+                  show: false,
+                },
               },
               xaxis: {
                 categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
@@ -83,7 +83,6 @@ function ReviewsActiveTime({ placeId }: Props) {
             <Card>
                 <CardHeader>
                 <CardTitle>Reviews Active Time</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Chart
@@ -91,6 +90,7 @@ function ReviewsActiveTime({ placeId }: Props) {
                         series={state.series}
                         type="heatmap"
                     />
+                    <p className="text-center text-sm -mt-5 text-slate-500">hours</p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">
