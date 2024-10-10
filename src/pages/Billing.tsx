@@ -58,7 +58,7 @@ function Billing() {
                         <CancelSubscription/>
                     </div>
                 </Card>
-                <Card className="p-4">
+                {/* <Card className="p-4">
                     <h1 className="text-md text-primary capitalize">Credits</h1>
                     <Separator className="my-2" />
 
@@ -71,7 +71,7 @@ function Billing() {
                         <p className="text-sm text-slate-400">Credits used</p>
                         <p className="font-medium">{data.used_credits}</p>
                     </div>
-                </Card>
+                </Card> */}
             </div>
             </>
         )
