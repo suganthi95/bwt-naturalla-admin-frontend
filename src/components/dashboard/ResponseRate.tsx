@@ -32,8 +32,8 @@ function ResponseRate({ placeId }: Props) {
         content = <Skeleton className="h-[350px] rounded-xl" />
     }
 
-    if(isSuccess){
-        
+    if(isSuccess && Array.isArray(data)){
+
         const color = [ "green", "orange", "yellow", "red" ];
         const chartData = data.map((item: any, index: any) => ({ category: item.category, percentage: item.percentage, fill: color[index] }))
 

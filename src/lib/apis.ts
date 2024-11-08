@@ -477,3 +477,49 @@ export const cancelSubscription = async ({ token }: { token: string }) => {
         }
     })
 }
+
+export const getCreditsList = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${PAYMENT_BASE_URL}/payment/credit/items`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const buyCredits = async ({ token, itemId }: { token: string, itemId: number }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${PAYMENT_BASE_URL}/payment/create/order`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            item_id: itemId
+        }
+    })
+}
+
+export const verifyCreditCheckout = async ({ token, razorpay_payment_id, razorpay_signature, razorpay_order_id }: { token: string, razorpay_payment_id: string, razorpay_signature: string, razorpay_order_id: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${PAYMENT_BASE_URL}/payment/verify/checkout/payment`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        },
+        data: {
+            razorpay_payment_id,
+            razorpay_signature,
+            razorpay_order_id
+        }
+    })
+}
+
+
