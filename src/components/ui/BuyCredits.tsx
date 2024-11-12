@@ -22,7 +22,7 @@ function BuyCredits() {
 
     const queryClient = useQueryClient();
     const queryData = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType, message: string }>>([ "validateUser" ]);
-    const { credit } = queryData?.data?.data as ValidateUserType;
+    const { remaining_credits } = queryData?.data?.data as ValidateUserType;
 
     // get credits plan
     const { data } = useQuery({
@@ -106,7 +106,7 @@ function BuyCredits() {
         <PopoverContent className="w-[400px]">
             <div className="flex flex-row items-center gap-5">
                 <div className="text-primary border-[2px] border-primary rounded-full p-2">
-                    {credit}
+                    {remaining_credits}
                 </div>
 
                 <div>
@@ -137,7 +137,7 @@ function BuyCredits() {
         </DialogHeader>
         <div className="flex flex-col gap-3">
             <div className="border-[10px] mt-3 border-primary text-center rounded-full flex flex-col items-center justify-center h-56 w-56 mx-auto">
-                <h1 className="text-7xl font-bold">{credit}</h1>
+                <h1 className="text-7xl font-bold">{remaining_credits}</h1>
                 <h1 className="text-slate-500">REMAINING CREDITS</h1>
             </div>
 
@@ -154,7 +154,7 @@ function BuyCredits() {
                     {data?.map((item: any) => (
                         <div className="flex flex-row items-center justify-between space-y-3" key={item?.item_id}>
                             <Badge onClick={() => setPurchaseCreditCountId(item?.item_id)} className={`bg-white cursor-pointer px-4 py-1 ${item?.item_id === purchaseCreditCountId && "bg-primary text-white"}`} variant="outline">{item.total_credits}</Badge>
-                            <p className="text-sm">{item.currency} {item.credits_amount}</p>
+                            <p className="text-sm">{item.currency} {(item.credits_amount/100).toFixed(2)}</p>
                         </div>
                     ))}
                 </div>

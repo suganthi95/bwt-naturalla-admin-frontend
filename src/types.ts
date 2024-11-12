@@ -112,8 +112,11 @@ export interface ValidateUserType {
     credit: number,
     notification: boolean,
     timezone: string | null,
-    workspaceList: WorkspaceList[]
-    businessList: BusinessList[]
+    workspaceList: WorkspaceList[],
+    businessList: BusinessList[],
+    remaining_credits: number,
+    remaining_instant_Credits: number,
+
 }
   
 export interface WorkspaceList {
@@ -130,6 +133,8 @@ export interface BusinessList {
 export interface DashboardDataType {
     credits: number,
     total_credits: number,
+    instant_credits: number,
+    total_instant_credits: number,
     totalRatings: number
     chartData: any
 }
