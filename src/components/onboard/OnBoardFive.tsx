@@ -54,7 +54,7 @@ function OnBoardFive({ setPage }: Props) {
 
     return (
         <div className="mt-10">
-            <h1 className="text-2xl lg:text-5xl font-medium">Lastly, What would you like to name your workspace ?</h1>
+            <h1 className="text-2xl lg:text-4xl font-medium">Lastly, What would you like to name your workspace ?</h1>
 
             <div>
                 <Input

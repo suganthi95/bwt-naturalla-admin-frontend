@@ -2,7 +2,7 @@ import { Check, CircleCheck, Gift, LoaderCircle, X } from "lucide-react"
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "./alert-dialog"
 import { ASSETS } from "@/assets/assets"
 import { Button } from "./button"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { RadioGroup, RadioGroupItem } from "./radio-group"
 import dayjs from "dayjs"
@@ -15,12 +15,15 @@ import useRazorpay, { RazorpayOptions } from "react-razorpay";
 import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
 
+interface Props {
+    openPaymentDialog: boolean,
+    setOpenPaymentDialog: Dispatch<SetStateAction<boolean>>
+}
 
-function UpgradeModal() {
+function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
 
     const { auth } = useAppContext();
     const navigate = useNavigate()
-    const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
     const [ proceedToPay, setProceedToPay ] = useState(false);
     const [ Razorpay ] = useRazorpay();
 

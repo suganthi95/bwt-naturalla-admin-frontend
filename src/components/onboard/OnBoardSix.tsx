@@ -187,7 +187,7 @@ function OnBoardSix() {
     return (
         <>
         <div className="mt-10">
-            <h1 className="text-2xl lg:text-5xl font-medium">Add your business</h1>
+            <h1 className="text-2xl lg:text-4xl font-medium">Add your business</h1>
             <p className='pb-3 text-slate-500'>Please add one business</p>
             <div>
                 <Popover open={open} onOpenChange={setOpen}>

@@ -116,6 +116,8 @@ export interface ValidateUserType {
     businessList: BusinessList[],
     remaining_credits: number,
     remaining_instant_Credits: number,
+    plan_end_date: Date,
+    plan_name: "pro-plan" | "standard plan" | "free trial"
 
 }
   

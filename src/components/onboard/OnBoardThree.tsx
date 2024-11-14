@@ -22,7 +22,7 @@ function OnBoardThree({ setPage }: Props) {
 
   return (
     <div className="mt-3">
-        <h1 className="text-2xl lg:text-5xl font-medium">Pick Your industry/category</h1>
+        <h1 className="text-2xl lg:text-4xl font-medium">Pick Your industry/category</h1>
         <div className="flex flex-row flex-wrap items-center mt-3 gap-2 capitalize">
             {roles.map(industry => (
                 <label 

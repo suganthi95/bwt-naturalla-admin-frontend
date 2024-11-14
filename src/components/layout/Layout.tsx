@@ -16,12 +16,33 @@ import Loader from "../ui/Loader";
 import { CollapseType, ValidateUserType } from "@/types";
 import UpgradeModal from "../ui/UpgradeModal";
 import BuyCredits from "../ui/BuyCredits";
+import { Badge } from "../ui/badge";
+import UpgradeToProDialog from "./UpgradeToProDialog";
 
 function Layout() {
+
+    const plans = [
+        {
+            name: "Pro",
+            code: "pro-plan",
+            class: "bg-orange-500"
+        },
+        {
+            name: "Standard",
+            code: "standard plan",
+            class: "bg-blue-500"
+        },
+        {
+            name: "Free Trial",
+            code: "free trial",
+            class: "bg-slate-700"
+        },
+    ];
 
     const navigate = useNavigate();
     const { auth, setAuth } = useAppContext();
     const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
+    const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
 
     const menus: CollapseType = {
         "general" : [
@@ -121,6 +142,8 @@ function Layout() {
 
     if(isSuccess){
         const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
+        const plan = plans.filter((item) => item.code === data.plan_name)[0];
+
         main = (
             <main className="flex flex-col h-screen">
                 <div className="flex flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
@@ -132,15 +155,21 @@ function Layout() {
                             <p className="font-medium">{activeWorkspace.workspace_name}</p>
                         </div>
                     </div>
-                    <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
-                        <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
-                        <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
-                    </Link>
+                    <div className="flex flex-row items-center gap-1">
+                        <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
+                            <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                            <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
+                        </Link>
+                        <Badge className={plan.class}>{plan.name}</Badge>
+                    </div>
 
                     <div className="flex items-center flex-row gap-10">
 
                         <BuyCredits/>
-                        <UpgradeModal/>
+                        <UpgradeModal
+                            openPaymentDialog={openPaymentDialog}
+                            setOpenPaymentDialog={setOpenPaymentDialog}
+                        />
 
                         <p className="hidden md:block text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">
@@ -182,6 +211,11 @@ function Layout() {
                         signout={signout}
                     />
                 </div>
+                <UpgradeToProDialog 
+                    planName={data.plan_name} 
+                    planEndDate={data.plan_end_date} 
+                    clickEvent={() => setOpenPaymentDialog(true)}
+                />
             </main>
         )
     }
