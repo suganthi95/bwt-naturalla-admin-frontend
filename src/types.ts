@@ -167,4 +167,15 @@ export interface BillingResponse {
     total_credits: number
     used_credits: number
     workspace_id: string
-  }
+}
+
+export interface PaymentHistoryResponseType {
+    payment_id: string
+    invoice_id: string
+    method: string
+    payment_date: string
+    payment_status: string
+    amount_paid: number
+    validity_from: string
+    validity_to: string
+}

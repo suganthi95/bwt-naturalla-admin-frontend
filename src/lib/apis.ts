@@ -522,4 +522,32 @@ export const verifyCreditCheckout = async ({ token, razorpay_payment_id, razorpa
     })
 }
 
+export const getPaymentHistoryTable = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "get",
+        url: `${PAYMENT_BASE_URL}/payment/details`,
+        headers: {
+            Accept: 'application/json',
+            "Authorization": token
+        }
+    })
+}
+
+export const fetchInvoice = async ({ token, paymentId }: { token: string, paymentId: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${PAYMENT_BASE_URL}/payment/invoice/receipt`,
+        headers: {
+            Accept: "application/pdf",
+            "Authorization": token
+        },
+        responseType: "blob",
+        data: {
+            payment_id: paymentId
+        }
+    })
+}
+
 
