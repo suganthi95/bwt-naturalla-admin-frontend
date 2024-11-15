@@ -165,10 +165,10 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
     
                 <div className="grid grid-cols-2 text-center">
                     <div>
-                        <p className="text-secondary text-xl font-medium">Standard Plan</p>
+                        <p className="text-secondary text-md font-medium">Standard Plan</p>
                     </div>
                     <div>
-                        <p className="text-secondary text-xl font-medium">Pro Plan</p>
+                        <p className="text-secondary text-md font-medium">Pro Plan</p>
                     </div>
                 </div>
                 <div>
@@ -186,11 +186,13 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
                                     <div className="h-full">
                                         <RadioGroupItem className="hidden" type="button" value={item.plan_id} id={item.plan_id} />
                                         <label 
-                                            className={watch("plan") === item.plan_id ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-xl p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-xl font-bold p-3 w-full rounded-lg cursor-pointer" }
+                                            className={watch("plan") === item.plan_id ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-lg p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-lg font-bold p-3 w-full rounded-lg cursor-pointer" }
                                             htmlFor={item.plan_id}
                                         >
                                             <div>
-                                                {item.period} plan
+                                                
+                                                <p>{item.period} plan</p>
+                                                <p className="text-slate-600 text-sm">{item.currency} {(item.plan_amount / 100).toFixed(2)}</p>
                                                 {/* <p className="font-light text-slate-500 text-sm mt-1">Pay $359 per year after 7 days trial</p> */}
                                                 {/* <p className="font-light text-slate-500 text-sm mt-1">{item.plan_desc}</p> */}
                                             </div>
@@ -203,7 +205,7 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
                     />
                 </div>
     
-                <div className="flex flex-col gap-2 py-5 text-sm">
+                <div className="flex flex-col gap-2 py-2 text-xs">
     
                     <div className="flex flex-row gap-3 items-center">
                         <Check className="stroke-green-400" />
@@ -232,7 +234,7 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
                     
                 </div>
     
-                <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center justify-between text-sm">
                     <div>
                         <p>Due today</p>
                         <p className="text-slate-500">{dayjs(new Date()).format("ddd, MMM DD YYYY")}</p>
