@@ -154,7 +154,7 @@ function BuyCredits() {
                     {data?.map((item: any) => (
                         <div className="flex flex-row items-center justify-between space-y-3" key={item?.item_id}>
                             <Badge onClick={() => setPurchaseCreditCountId(item?.item_id)} className={`bg-white cursor-pointer px-4 py-1 ${item?.item_id === purchaseCreditCountId && "bg-primary text-white"}`} variant="outline">{item.total_credits}</Badge>
-                            <p className="text-sm">{item.currency} {(item.credits_amount/100).toFixed(2)}</p>
+                            <p className="text-sm text-slate-600">₹ {(item.credits_amount/100).toFixed(2)} ($ {item.amount_to_usd.toFixed(2)})</p>
                         </div>
                     ))}
                 </div>

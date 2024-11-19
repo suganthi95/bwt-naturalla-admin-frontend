@@ -138,7 +138,8 @@ export interface DashboardDataType {
     instant_credits: number,
     total_instant_credits: number,
     totalRatings: number
-    chartData: any
+    chartData: any,
+    total_business: string
 }
 
 export type CollapseType  = {

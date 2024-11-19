@@ -4,7 +4,7 @@ import { DashboardDataType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 import { Card } from "../ui/card";
-import { CircleAlert, CircleCheck, Star, Zap } from "lucide-react";
+import { CircleCheck, Star, Zap } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 
 interface Props {
@@ -36,7 +36,7 @@ function TotalReviewsCard({ placeId }: Props) {
 
     if(isSuccess){
         content = (
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
             <Card className="p-3 rounded-xl">
                 <div className="flex flex-row items-center justify-between">
                 <h1 className="text-sm font-medium text-slate-500">Total Reviews</h1>
@@ -60,17 +60,10 @@ function TotalReviewsCard({ placeId }: Props) {
             </Card>
             <Card className="p-3 rounded-xl">
                 <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Responded</h1>
+                <h1 className="text-sm font-medium text-slate-500">Total Business</h1>
                 <CircleCheck className="h-5 w-5 stroke-white fill-green-400" />
                 </div>
-                <p className="text-2xl text-secondary font-bold mt-8">576</p>
-            </Card>
-            <Card className="p-3 rounded-xl">
-                <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Yet to Respond</h1>
-                <CircleAlert className="h-5 w-5 stroke-white fill-red-400" />
-                </div>
-                <p className="text-2xl text-secondary font-bold mt-8">300</p>
+                <p className="text-2xl text-secondary font-bold mt-8">{data.total_business}</p>
             </Card>
         </div>
         )

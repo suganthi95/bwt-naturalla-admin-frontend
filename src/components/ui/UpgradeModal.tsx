@@ -1,4 +1,4 @@
-import { Check, CircleCheck, Gift, LoaderCircle, X } from "lucide-react"
+import { Check, Circle, CircleCheck, Crown, Gift, LoaderCircle, X } from "lucide-react"
 import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from "./alert-dialog"
 import { ASSETS } from "@/assets/assets"
 import { Button } from "./button"
@@ -160,17 +160,12 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
 
     if(isSuccess){
 
+        const standardPlan = data.filter((item: any) => item.plan_name === "standard plan");
+        const proPlan = data.filter((item: any) => item.plan_name === "pro-plan");
+
         paymentScreenTwo = (
             <div className="flex flex-1 flex-col p-5 gap-3">
-    
-                <div className="grid grid-cols-2 text-center">
-                    <div>
-                        <p className="text-secondary text-md font-medium">Standard Plan</p>
-                    </div>
-                    <div>
-                        <p className="text-secondary text-md font-medium">Pro Plan</p>
-                    </div>
-                </div>
+
                 <div>
                     <Controller
                         name='plan'
@@ -179,27 +174,49 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
                             <RadioGroup 
                                 value={field.value ?? ""} 
                                 onValueChange={(val) => field.onChange(val)} 
-                                className="grid grid-cols-2 items-center mt-1 gap-3 capitalize"
+                                className="grid grid-cols-1 items-center mt-1 gap-3 capitalize"
                                 {...register("plan")}
                             >
-                                {data?.map((item: any) => (
+                                <button className="flex items-center gap-2 bg-gradient-to-r from-primary/70 to-primary text-white py-1 px-2 rounded-3xl w-fit">
+                                    <span className="text-xs">Standard Plan</span>
+                                </button>
+                                {standardPlan?.map((item: any) => (
                                     <div className="h-full">
                                         <RadioGroupItem className="hidden" type="button" value={item.plan_id} id={item.plan_id} />
                                         <label 
-                                            className={watch("plan") === item.plan_id ? "flex flex-row items-center justify-between border border-primary bg-primary/5 text-lg p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center justify-between border border-black text-lg font-bold p-3 w-full rounded-lg cursor-pointer" }
+                                            className={watch("plan") === item.plan_id ? "flex flex-row items-center gap-2 border border-primary bg-primary/5 text-lg p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center gap-2 border border-black text-lg font-bold p-3 w-full rounded-lg cursor-pointer" }
                                             htmlFor={item.plan_id}
                                         >
-                                            <div>
-                                                
+                                            {watch("plan") === item.plan_id ? <CircleCheck className="fill-primary stroke-white" /> : <Circle className="fill-white stroke-slate-400 h-5 w-5" />}
+                                            <div className="flex flex-row items-center justify-between w-full">
                                                 <p>{item.period} plan</p>
-                                                <p className="text-slate-600 text-sm">{item.currency} {(item.plan_amount / 100).toFixed(2)}</p>
-                                                {/* <p className="font-light text-slate-500 text-sm mt-1">Pay $359 per year after 7 days trial</p> */}
-                                                {/* <p className="font-light text-slate-500 text-sm mt-1">{item.plan_desc}</p> */}
+                                                <p className="text-slate-600 text-sm">₹ {(item.plan_amount / 100).toFixed(2)} ($ {item.amount_to_usd.toFixed(2)})</p>
                                             </div>
-                                            {watch("plan") === item.plan_id && <CircleCheck className="fill-primary stroke-white" />}
                                         </label>
                                     </div>
-                                ))}
+                                ))} 
+                                <button className="flex items-center gap-2 bg-gradient-to-r from-[#7158E2]/70 to-[#7158E2] text-white py-1 px-2 rounded-3xl w-fit">
+                                    <span className="text-xs">Pro Plan</span>
+                                </button>
+                                {proPlan?.map((item: any) => (
+                                    <div className="h-full">
+                                        <RadioGroupItem className="hidden" type="button" value={item.plan_id} id={item.plan_id} />
+                                        <label 
+                                            className={watch("plan") === item.plan_id ? "flex flex-row items-center gap-2 border border-primary bg-primary/5 text-lg p-3 w-full font-bold cursor-pointer rounded-lg" : "flex flex-row items-center gap-2 border border-black text-lg font-bold p-3 w-full rounded-lg cursor-pointer" }
+                                            htmlFor={item.plan_id}
+                                        >
+                                            {watch("plan") === item.plan_id ? <CircleCheck className="fill-primary stroke-white" /> : <Circle className="fill-white stroke-slate-400 h-5 w-5" />}
+                                            <div className="flex flex-row items-center justify-between w-full">
+                                                
+                                                <div className="flex flex-row items-center gap-1">
+                                                    <p>{item.period} plan</p>
+                                                    <Crown className="h-5 w-5 stroke-primary" />
+                                                </div>
+                                                <p className="text-slate-600 text-sm">₹ {(item.plan_amount / 100).toFixed(2)} ($ {item.amount_to_usd.toFixed(2)})</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                ))} 
                             </RadioGroup>
                         )}  
                     />
@@ -234,21 +251,23 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
                     
                 </div>
     
-                <div className="flex flex-row items-center justify-between text-sm">
-                    <div>
-                        <p>Due today</p>
-                        <p className="text-slate-500">{dayjs(new Date()).format("ddd, MMM DD YYYY")}</p>
+                <div className="flex flex-row items-center justify-between">
+                    <div className="flex flex-row items-center justify-between text-sm">
+                        <div>
+                            <p>Due today</p>
+                            <p className="text-slate-500">{dayjs(new Date()).format("ddd, MMM DD YYYY")}</p>
+                        </div>
+        
+                        <div>
+                            <p className="text-xl font-bold">{data?.filter((item: any) => item.place_id === watch("plan"))[0]?.plan_amount}</p>
+                        </div>
                     </div>
-    
-                    <div>
-                        <p className="text-xl font-bold">{data?.filter((item: any) => item.place_id === watch("plan"))[0]?.plan_amount}</p>
+        
+                    <div className="flex flex-row items-center gap-3">
+                        <Button disabled={isPending} onClick={initiatePayment} className="bg-primary hover:bg-primary/50 font-thin">
+                            {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Next"}
+                        </Button>
                     </div>
-                </div>
-    
-                <div className="flex flex-row items-center gap-3">
-                    <Button disabled={isPending} onClick={initiatePayment} className="bg-primary hover:bg-primary/50 font-thin">
-                        {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Next"}
-                    </Button>
                 </div>
             </div>
         )

@@ -6,8 +6,9 @@ import Loader from "@/components/ui/Loader";
 import { SearchBox } from "@/components/ui/SearchBox"
 import { useAppContext } from "@/contexts/AuthContext"
 import { getAllBusiness, removeBusiness } from "@/lib/apis"
-import { GetBusinessType } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { GetBusinessType, ValidateUserType } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
@@ -17,6 +18,8 @@ function Business() {
 
   dayjs.extend(relativeTime);
   const { auth } = useAppContext();
+  const queryClient = useQueryClient();
+  const query = queryClient.getQueryData([ "validateUser" ]) as AxiosResponse<{ data: ValidateUserType }>;
 
   const { data, isLoading, isError, isSuccess, error } = useQuery({
     queryKey: [ "getAllBusiness" ],
@@ -100,7 +103,7 @@ function Business() {
 
   return (
     <div className="p-3 flex flex-col flex-1">
-        <SearchBox/>
+        {query?.data?.data?.plan_name === "pro-plan" && <SearchBox/>}
         {content}
     </div>
   )
