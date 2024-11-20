@@ -54,7 +54,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                             <AccordionContent>
                                 <Tabs value={tabValue}>
                                     <TabsList className="flex flex-col h-full rounded-none bg-white dark:bg-slate-950">
-                                        {content[menu as keyof CollapseType].map((item: MenuType) => (
+                                        {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType) => (
                                             <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`} value={item.route}>
                                                 {item.icon}
                                                 {resizable && <p>{item.name}</p>}

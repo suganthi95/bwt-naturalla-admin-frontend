@@ -44,67 +44,6 @@ function Layout() {
     const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
     const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
 
-    const menus: CollapseType = {
-        "general" : [
-            {
-                name: "Dashboard",
-                route: "dashboard",
-                icon: <House className="w-5" />
-            },
-            {
-                name: "Reviews",
-                route: "reviews",
-                icon: <BarChartBig className="w-5" />
-            },
-            {
-                name: "My Business",
-                route: "business",
-                icon: <Briefcase className="w-5" />
-            },
-        ],
-        "menu" : [
-            {
-                name: "Bookmark",
-                route: "bookmark",
-                icon: <Bookmark className="w-5" />
-            },
-            {
-                name: "Billing",
-                route: "billing",
-                icon:  <CreditCard className="w-5" />
-            },
-            {
-                name: "Feedback",
-                route: "feedback",
-                icon: <UserCog className="w-5" />
-            },
-            {
-                name: "Privacy Policy",
-                route: "https://intelliresponse.ai/en/privacy-policy",
-                icon: <EarthLock className="w-5" />
-            },
-            {
-                name: "Terms & Conditions",
-                route: "https://intelliresponse.ai/en/terms-and-conditions",
-                icon: <CircleAlert className="w-5" />
-            },
-            {
-                name: "Settings",
-                route: "settings",
-                icon: <Settings className="w-5" />
-            },
-        ],
-
-        "apps/integrations": [
-            {
-                name: "Google Review",
-                route: "google-review",
-                icon: <Icons.googleIcon className="w-5" />
-            }
-        ]
-
-    }
-
     const signout = () => {
         googleLogout();
         setAuth(null);
@@ -121,6 +60,77 @@ function Layout() {
         select: (data): ValidateUserType => data?.data?.data,
         enabled: Boolean(auth?.token) 
     });
+
+    const menus: CollapseType = {
+        "general" : [
+            {
+                name: "Dashboard",
+                route: "dashboard",
+                icon: <House className="w-5" />,
+                shouldVisible: true
+            },
+            {
+                name: "Reviews",
+                route: "reviews",
+                icon: <BarChartBig className="w-5" />,
+                shouldVisible: true
+            },
+            {
+                name: "My Business",
+                route: "business",
+                icon: <Briefcase className="w-5" />,
+                shouldVisible: true
+            },
+        ],
+        "menu" : [
+            {
+                name: "Bookmark",
+                route: "bookmark",
+                icon: <Bookmark className="w-5" />,
+                shouldVisible: true
+            },
+            {
+                name: "Billing",
+                route: "billing",
+                icon:  <CreditCard className="w-5" />,
+                shouldVisible: [ "pro-plan", "standard plan" ].includes(data?.plan_name as string)
+            },
+            {
+                name: "Feedback",
+                route: "feedback",
+                icon: <UserCog className="w-5" />,
+                shouldVisible: true
+            },
+            {
+                name: "Privacy Policy",
+                route: "https://intelliresponse.ai/en/privacy-policy",
+                icon: <EarthLock className="w-5" />,
+                shouldVisible: true
+            },
+            {
+                name: "Terms & Conditions",
+                route: "https://intelliresponse.ai/en/terms-and-conditions",
+                icon: <CircleAlert className="w-5" />,
+                shouldVisible: true
+            },
+            {
+                name: "Settings",
+                route: "settings",
+                icon: <Settings className="w-5" />,
+                shouldVisible: true
+            },
+        ],
+
+        "apps/integrations": [
+            {
+                name: "Google Review",
+                route: "google-review",
+                icon: <Icons.googleIcon className="w-5" />,
+                shouldVisible: true
+            }
+        ]
+
+    }
 
     let main;
 
@@ -164,8 +174,7 @@ function Layout() {
                     </div>
 
                     <div className="flex items-center flex-row gap-10">
-
-                        <BuyCredits/>
+                        {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
                         <UpgradeModal
                             openPaymentDialog={openPaymentDialog}
                             setOpenPaymentDialog={setOpenPaymentDialog}

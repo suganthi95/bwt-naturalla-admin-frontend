@@ -79,7 +79,7 @@ function App() {
         <Route path="/reviews/generate-response" element={<ReplyReview/>}/>
         <Route path="/business" element={<Business/>}/>
         <Route path="/bookmark" element={<ReviewBookmarks/>}/>
-        <Route path="/billing" element={<Billing/>}/>
+        {[ "pro-plan", "standard plan" ].includes(data?.plan_name as string) && <Route path="/billing" element={<Billing/>}/>}
         <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/terms-and-conditions" element={<Home/>}/>
         <Route path="/settings" element={<Settings/>}/>

@@ -151,7 +151,8 @@ export type CollapseType  = {
 export type MenuType = {
     name: string
     route: string
-    icon: ReactElement
+    icon: ReactElement,
+    shouldVisible: boolean
 }
 
 export type FeedbackFormType = {
