@@ -102,7 +102,7 @@ function Business() {
   }
 
   return (
-    <div className="p-3 flex flex-col flex-1">
+    <div className="p-3 flex flex-col flex-1 overflow-y-scroll pb-20">
         {query?.data?.data?.plan_name === "pro-plan" && <SearchBox/>}
         {content}
     </div>

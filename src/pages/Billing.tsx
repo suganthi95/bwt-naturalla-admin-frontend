@@ -90,7 +90,7 @@ function Billing() {
     }
 
   return (
-    <div className="p-2 flex flex-col flex-1 overflow-hidden pb-10">
+    <div className="p-2 flex flex-col flex-1 overflow-y-scroll pb-10">
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Billing</h1>
         </div>
