@@ -13,5 +13,6 @@ export const ASSETS = {
     WELCOME_IMG: "https://ik.imagekit.io/zshycew5c/intelliresponse/welcome?updatedAt=1724828575073",
     PAYMENT_BG_PATTERN: "https://ik.imagekit.io/zshycew5c/intelliresponse/payment-bg-pattern?updatedAt=1726729266106",
     PAYMENT_SUCCESS: "https://ik.imagekit.io/zshycew5c/intelliresponse/payment-success?updatedAt=1726732645285",
-    PAYMENT_FAILURE: "https://ik.imagekit.io/zshycew5c/intelliresponse/Payment%20Unsuccessful%201.svg?updatedAt=1726732592373"
+    PAYMENT_FAILURE: "https://ik.imagekit.io/zshycew5c/intelliresponse/Payment%20Unsuccessful%201.svg?updatedAt=1726732592373",
+    FREE_TRIAL_IMG:"https://ik.imagekit.io/zshycew5c/intelliresponse/Frame.png?updatedAt=1732183337613"
 }

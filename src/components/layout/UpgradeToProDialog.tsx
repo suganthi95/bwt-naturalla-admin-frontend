@@ -1,8 +1,8 @@
-import { CircleCheck, Crown } from "lucide-react"
+// import { CircleCheck, Crown } from "lucide-react"
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
-import { Button } from "../ui/button"
+// import { Button } from "../ui/button"
 import { isPastDate } from "@/lib/utils";
-
+import { ASSETS } from "@/assets/assets";
 interface Props {
     planName: string,
     planEndDate: Date,
@@ -11,34 +11,43 @@ interface Props {
 
 function UpgradeToProDialog({planName, planEndDate, clickEvent}: Props) {
 
-    const features = [ "Awesome Features", "Added Benefits", "Better Value", "Let's try it!" ];
+    // const features = [ "Awesome Features", "Added Benefits", "Better Value", "Let's try it!" ];
     console.log(planName)
     const isFreeTrialEnd = isPastDate(planEndDate)
 
   return (
     <AlertDialog open={isFreeTrialEnd}>
-        <AlertDialogContent>
+        <AlertDialogContent >
+            <div className="bg-[#FFF7F0] h-72 ">
+<img src={ASSETS.FREE_TRIAL_IMG} className="h-full w-full object-contain" />
+            </div>
             <AlertDialogHeader>
-            <AlertDialogTitle className="space-y-2">
-                <Button size="icon" className="rounded-full" variant="secondary"><Crown className="h-5 w-5 stroke-primary" /></Button>
-                <h1>Upgrade to Pro</h1>
+            <AlertDialogTitle className="text-center text-2xl text-[#141618]">
+                <h1>Your free trail ended  today!</h1>
             </AlertDialogTitle>
             <AlertDialogDescription>
-                <div className="grid grid-cols-2 gap-3 py-4">
+                {/* <div className="grid grid-cols-2 gap-3 py-4">
                     {features.map(item => (
                         <div className="flex flex-row items-center gap-2 font-bold">
                             <div><CircleCheck className="fill-primary stroke-white"/></div>
                             <p>{item}</p>
                         </div>
                     ))}
+                </div> */}
+                <div className="text-[#141618] space-y-3 text-base text-center">
+                    <p>Your 7-day free trial has now expired. You no longer have access to the Intelliresponse dashboard. </p>
+                    <p>So, upgrade now to continue enjoying the pro plan services.</p>
                 </div>
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-            <AlertDialogAction onClick={clickEvent} className="bg-primary hover:bg-primary/50">Upgrade</AlertDialogAction>
+            <AlertDialogAction onClick={clickEvent} className="bg-primary mx-auto p-2 px-8 hover:bg-primary/50">Upgrade Now</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
+
+
+
   )
 }
 
