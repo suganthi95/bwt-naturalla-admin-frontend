@@ -10,6 +10,13 @@ export const isPastDate = (date: Date) => {
   return dayjs(date).isBefore(dayjs(), 'day');
 };
 
+// calaculate remainig days
+export const RemainingDays=(endate:Date)=>{
+  const today =dayjs();
+  const end =dayjs(endate);
+  return end.diff(today,"day")
+}
+
 export const downloadBlobAsPDF = (blob: string) => {
 
   const pdfBlob = new Blob([blob], { type: "application/pdf" });
