@@ -13,7 +13,7 @@ function ReviewsActiveTime({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isSuccess, data } = useQuery({
+    const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "reviewActiveTime" ],
         queryFn: () => reviewActiveTime({
             token: auth?.token as string,
@@ -29,6 +29,16 @@ function ReviewsActiveTime({ placeId }: Props) {
 
     if(isLoading){
         content = <Skeleton className="h-[350px] rounded-xl" />
+    }
+
+    if(isError || data?.length === 0){
+      content = (
+          <Card>
+              <CardContent className="h-[350px] flex items-center justify-center">
+                  <p className="text-center text-sm text-slate-500">No data found</p>
+              </CardContent>
+          </Card>
+      )
     }
 
     if(isSuccess){

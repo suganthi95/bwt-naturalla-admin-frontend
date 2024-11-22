@@ -1,6 +1,18 @@
+import { useState } from 'react'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
+import { toast } from 'sonner';
 
 function AppLanguage() {
+
+    const [ language, setLanguage ] = useState("en");
+
+    const handleChange = (val: string) => {
+        setLanguage(val);
+
+        if(val === "ar"){
+            toast.warning("Coming Soon", { description: "The Arabic language is coming soon" })
+        }
+    }
 
     // const navigate = useNavigate();
     // const { i18n } = useTranslation();
@@ -52,7 +64,7 @@ function AppLanguage() {
             </p>
         </div>
         <div>
-            <Select>
+            <Select value={language} onValueChange={handleChange}>
                 <SelectTrigger className="w-[150px]">
                     <SelectValue placeholder="Select Language" />
                 </SelectTrigger>

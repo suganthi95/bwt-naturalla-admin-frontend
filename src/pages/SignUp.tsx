@@ -149,124 +149,125 @@ function SignUp() {
                     </span>
                 </div>
             </Link>
-            <div className="py-0 px-2 md:px-20 lg:px-32">
-                <h1 className="text-secondary text-xl font-bold text-center">Sign Up</h1>
-                <p className="text-xs text-slate-500 text-center">Create your review engagement account here.</p>
+            <div>
+                <div className="py-0 px-2 md:px-20 lg:px-32">
+                    <h1 className="text-secondary text-xl font-bold text-center">Sign Up</h1>
+                    <p className="text-xs text-slate-500 text-center">Create your review engagement account here.</p>
 
-                <form 
-                    onSubmit={submit}
-                >
+                    <form 
+                        onSubmit={submit}
+                    >
 
-                    <div className="flex flex-col items-start gap-1">
-                        <label className="font-medium text-xs" htmlFor="username">Username <span className="text-red-500">*</span></label>
-                        <Input
-                            className="dark:bg-white dark:border-slate-200"
-                            id="username"
-                            type="text"
-                            {...register("username", {
-                                required: {
-                                    value: true,
-                                    message: "Username is required"
-                                }
-                            })}
-                            required
-                        />
-                        <p className="text-xs mt-1 font-medium text-red-500">{errors?.username?.message}</p>
-                    </div>
-
-                    <div className="flex flex-col items-start gap-1">
-                        <label className="font-medium text-xs" htmlFor="email">Email <span className="text-red-500">*</span></label>
-                        <Input 
-                            className="dark:bg-white dark:border-slate-200"
-                            id="email"
-                            type="email"
-                            {...register("email", {
-                                required: {
-                                    value: true,
-                                    message: "Email is required"
-                                },
-                                pattern: {
-                                    value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                                    message: "email format is not valid"
-                                }
-                            })}
-                            required
-                        />
-                        <p className="text-xs mt-1 font-medium text-red-500">{errors?.email?.message}</p>
-                    </div>
-
-                    <div className="flex flex-col items-start gap-1 relative">
-                        <label className="font-medium text-xs" htmlFor="password">Password <span className="text-red-500">*</span></label>
-                        <Input 
-                            className="dark:bg-white dark:border-slate-200"
-                            id="password"
-                            type={isPasswordVisible ? "text" : "password"} 
-                            {...register("password", {
-                                required: {
-                                    value: true,
-                                    message: "Password is required"
-                                },
-                                minLength: {
-                                    value: 6,
-                                    message: "Password must be atleast 6 characters"
-                                }
-                            })}
-                            required
-                        />
-                        {isPasswordVisible ? 
-                            <Eye onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
-                        :
-                            <EyeOff onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
-                        }
-                        <p className="text-xs mt-1 font-medium text-red-500">{errors?.password?.message}</p>
-                    </div>
-
-                    <div className="flex flex-col items-start gap-1 relative">
-                        <label className="font-medium text-xs" htmlFor="email">Confirm Password <span className="text-red-500">*</span></label>
-                        <Input 
-                            className="dark:bg-white dark:border-slate-200"
-                            id="confirmPassword"
-                            type={isConfirmPasswordVisible ? "text" : "password"} 
-                            {...register("confirmPassword", {
-                                validate: (value) => {
-                                    if(!value){
-                                        return "Confirm Password is required"
-                                    }else if(watch("password") !== value){
-                                        return "Passwords does not match"
+                        <div className="flex flex-col items-start gap-1">
+                            <label className="font-medium text-xs" htmlFor="username">Username <span className="text-red-500">*</span></label>
+                            <Input
+                                className="dark:bg-white dark:border-slate-200"
+                                id="username"
+                                type="text"
+                                {...register("username", {
+                                    required: {
+                                        value: true,
+                                        message: "Username is required"
                                     }
-                                }
-                            })}
-                            required
-                        />
-                        {isConfirmPasswordVisible ? 
-                            <Eye onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
-                        :
-                            <EyeOff onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
-                        }
-                        <p className="text-xs mt-1 font-medium text-red-500">{errors?.confirmPassword?.message}</p>
-                    </div>
+                                })}
+                                required
+                            />
+                            <p className="text-xs mt-1 font-medium text-red-500">{errors?.username?.message}</p>
+                        </div>
 
-                    <p className="text-xs text-center">By Continuing, you agree to our <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/terms-and-conditions" target="_blank">Terms and Conditions</Link>, <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/privacy-policy" target="_blank">Privacy Policy</Link> <br /> and <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/end-user-license-agreement" target="_blank">End User License Agreement</Link></p>
+                        <div className="flex flex-col items-start gap-1">
+                            <label className="font-medium text-xs" htmlFor="email">Email <span className="text-red-500">*</span></label>
+                            <Input 
+                                className="dark:bg-white dark:border-slate-200"
+                                id="email"
+                                type="email"
+                                {...register("email", {
+                                    required: {
+                                        value: true,
+                                        message: "Email is required"
+                                    },
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                        message: "email format is not valid"
+                                    }
+                                })}
+                                required
+                            />
+                            <p className="text-xs mt-1 font-medium text-red-500">{errors?.email?.message}</p>
+                        </div>
 
-                    <div>
-                        <Button className="w-full mt-3 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-white hover:dark:bg-primary/60">
-                            {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Sign Up"}
-                        </Button>
-                    </div>
-                </form>
+                        <div className="flex flex-col items-start gap-1 relative">
+                            <label className="font-medium text-xs" htmlFor="password">Password <span className="text-red-500">*</span></label>
+                            <Input 
+                                className="dark:bg-white dark:border-slate-200"
+                                id="password"
+                                type={isPasswordVisible ? "text" : "password"} 
+                                {...register("password", {
+                                    required: {
+                                        value: true,
+                                        message: "Password is required"
+                                    },
+                                    minLength: {
+                                        value: 6,
+                                        message: "Password must be atleast 6 characters"
+                                    }
+                                })}
+                                required
+                            />
+                            {isPasswordVisible ? 
+                                <Eye onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
+                            :
+                                <EyeOff onClick={() => togglePasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
+                            }
+                            <p className="text-xs mt-1 font-medium text-red-500">{errors?.password?.message}</p>
+                        </div>
 
-                <p className="text-slate-400 text-center">Or</p>
-                <Button 
-                    onClick={submitGoogleLogin} 
-                    className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
-                    <Icons.googleIcon/>
-                    Continue with Google
-                </Button>
+                        <div className="flex flex-col items-start gap-1 relative">
+                            <label className="font-medium text-xs" htmlFor="email">Confirm Password <span className="text-red-500">*</span></label>
+                            <Input 
+                                className="dark:bg-white dark:border-slate-200"
+                                id="confirmPassword"
+                                type={isConfirmPasswordVisible ? "text" : "password"} 
+                                {...register("confirmPassword", {
+                                    validate: (value) => {
+                                        if(!value){
+                                            return "Confirm Password is required"
+                                        }else if(watch("password") !== value){
+                                            return "Passwords does not match"
+                                        }
+                                    }
+                                })}
+                                required
+                            />
+                            {isConfirmPasswordVisible ? 
+                                <Eye onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
+                            :
+                                <EyeOff onClick={() => toggleConfirmPasswordVisibility()} className="text-slate-300 absolute cursor-pointer right-3 top-7" />
+                            }
+                            <p className="text-xs mt-1 font-medium text-red-500">{errors?.confirmPassword?.message}</p>
+                        </div>
 
-                <p className="mt-3 text-center text-xs">Already have an account ? <Link to="/sign-in" className="font-bold hover:underline">Sign In</Link></p>
-                
+                        <p className="text-xs text-center">By Continuing, you agree to our <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/terms-and-conditions" target="_blank">Terms and Conditions</Link>, <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/privacy-policy" target="_blank">Privacy Policy</Link> <br /> and <Link className="text-blue-500 hover:underline" to="https://intelliresponse.ai/en/end-user-license-agreement" target="_blank">End User License Agreement</Link></p>
+
+                        <div>
+                            <Button className="w-full mt-3 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-white hover:dark:bg-primary/60">
+                                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Sign Up"}
+                            </Button>
+                        </div>
+                    </form>
+
+                    <p className="text-slate-400 text-center">Or</p>
+                    <Button 
+                        onClick={submitGoogleLogin} 
+                        className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
+                        <Icons.googleIcon/>
+                        Continue with Google
+                    </Button>
+
+                    <p className="mt-3 text-center text-xs">Already have an account ? <Link to="/sign-in" className="font-bold hover:underline">Sign In</Link></p>
+                </div>
                 <p className="text-sm text-center w-full mx-auto mt-10">
-                    © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/">IntelliResponse</Link> All Rights Reserved. Developed by <Link className="font-bold hover:underline" to="https://blackwinstech.com/">Blackwins Tech Solutions</Link>
+                    © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link> All Rights Reserved. Powered by <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
                 </p>
             </div>
         </div>

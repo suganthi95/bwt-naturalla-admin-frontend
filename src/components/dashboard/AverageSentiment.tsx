@@ -15,7 +15,7 @@ function AverageSentiment({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isSuccess, data } = useQuery({
+    const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "avgSentiment" ],
         queryFn: () => avgSentiment({
             token: auth?.token as string,
@@ -33,7 +33,17 @@ function AverageSentiment({ placeId }: Props) {
         content = <Skeleton className="h-[350px] rounded-xl" />
     }
 
-    if(isSuccess){
+    if(isError || data?.length === 0){
+        content = (
+            <Card>
+                <CardContent className="h-[350px] flex items-center justify-center">
+                    <p className="text-center text-sm text-slate-500">No data found</p>
+                </CardContent>
+            </Card>
+        )
+    }
+
+    if(isSuccess && data?.length > 0){
 
         const chartData = data.filter((item: any) => item.year === 2024).map((item: any) => ({ month: dayjs(item.date).format("MMM"), sentiment: item.average_sentiment_score }));
 
