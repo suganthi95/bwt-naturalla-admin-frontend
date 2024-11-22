@@ -60,6 +60,9 @@ function Layout() {
         select: (data): ValidateUserType => data?.data?.data,
         enabled: Boolean(auth?.token) 
     });
+    
+    console.log(data);
+    
 
     const menus: CollapseType = {
         "general" : [
