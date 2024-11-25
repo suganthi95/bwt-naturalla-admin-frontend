@@ -14,7 +14,7 @@ function ResponseRate({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isSuccess, data } = useQuery({
+    const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "responseRate" ],
         queryFn: () => responseRate({
             token: auth?.token as string,
@@ -30,6 +30,16 @@ function ResponseRate({ placeId }: Props) {
 
     if(isLoading){
         content = <Skeleton className="h-[350px] rounded-xl" />
+    }
+
+    if(isError || !Array.isArray(data)){
+        content = (
+            <Card>
+                <CardContent className="h-[350px] flex items-center justify-center">
+                    <p className="text-center text-sm text-slate-500">No data found</p>
+                </CardContent>
+            </Card>
+        )
     }
 
     if(isSuccess && Array.isArray(data)){

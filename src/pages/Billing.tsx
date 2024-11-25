@@ -60,27 +60,22 @@ function Billing() {
 
                     <div className="space-y-1 mt-2">
                         <p className="text-sm text-slate-400">what you’ll be charged</p>
-                        <p className="font-medium">USD $ 29.00</p>
+                        <p className="font-medium">₹ {(data?.amount / 100).toFixed(2)}</p>
                     </div>
 
                     <div className="space-y-1 mt-4">
                         <CancelSubscription/>
                     </div>
                 </Card>
-                {/* <Card className="p-4">
-                    <h1 className="text-md text-primary capitalize">Credits</h1>
+                <Card className="p-4">
+                    <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits} / {data.instant_credits.total_credits}</h1>
                     <Separator className="my-2" />
 
                     <div className="space-y-1 mt-2">
-                        <p className="text-sm text-slate-400">Total credits bought this month</p>
-                        <p className="font-medium">{data.total_credits}</p>
+                        <p className="text-sm text-slate-400">what you’ll be charged</p>
+                        <p className="font-medium">₹ {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
                     </div>
-
-                    <div className="space-y-1 mt-2">
-                        <p className="text-sm text-slate-400">Credits used</p>
-                        <p className="font-medium">{data.used_credits}</p>
-                    </div>
-                </Card> */}
+                </Card>
             </div>
             <div>
                 <PaymentTable data={paymentHistoryData as PaymentHistoryResponseType[]}/>

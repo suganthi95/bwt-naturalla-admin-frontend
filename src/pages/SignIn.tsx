@@ -297,18 +297,9 @@ function SignIn() {
         </Card>
 
         <h1 className="text-sm absolute bottom-0 hidden md:block">
-          © 2024 Copyrights by
-          <Link
-            className="font-bold hover:underline"
-            to="https://intelliresponse.ai/"
-          >
-            IntelliResponse
-          </Link>
-          All Rights Reserved.
-          {/* Developed by <Link className="font-bold hover:underline" to="https://blackwinstech.com/">
-                Blackwins Tech Solutions</Link> */}
+            © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link> All Rights Reserved. Powered by <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
         </h1>
-      </div>
+        </div>
     </div>
   );
 }

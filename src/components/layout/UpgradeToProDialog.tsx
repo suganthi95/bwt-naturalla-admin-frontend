@@ -22,27 +22,21 @@ interface Props {
 function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
   const [modal, setModal] = useState<boolean>(false);
 
-  // const features = [ "Awesome Features", "Added Benefits", "Better Value", "Let's try it!" ];
-  console.log(planName);
   const isFreeTrialEnd = isPastDate(planEndDate);
 
   const balanceDays = RemainingDays(planEndDate);
-  //   useEffect(() => {
-  //     if (balanceDays > 0 && planName == "free trial") {
-  //       setModal(true);
-  //     }
-  //   }, [balanceDays, planEndDate]);
 
-  const showPopup = async () => {
+  const showPopup = () => {
     if (balanceDays > 0 && planName == "free trial") {
       const lastShown = localStorage.getItem("lastDialogShown");
 
       if (!lastShown || dayjs().isAfter(dayjs(lastShown), "day")) {
-        await setModal(true);
+        setModal(true);
         localStorage.setItem("lastDialogShown", dayjs().format("YYYY-MM-DD"));
       }
     }
   };
+  
   useEffect(() => {
     showPopup();
   }, [balanceDays, planEndDate]);
@@ -65,14 +59,6 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             )}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {/* <div className="grid grid-cols-2 gap-3 py-4">
-                    {features.map(item => (
-                        <div className="flex flex-row items-center gap-2 font-bold">
-                            <div><CircleCheck className="fill-primary stroke-white"/></div>
-                            <p>{item}</p>
-                        </div>
-                    ))}
-                </div> */}
             <div className="text-[#141618] space-y-3 text-base text-center">
               <p>
                 Your 7-day free trial has now expired. You no longer have access

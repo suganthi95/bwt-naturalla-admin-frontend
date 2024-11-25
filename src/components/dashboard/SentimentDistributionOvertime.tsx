@@ -14,7 +14,7 @@ function SentimentDistributionOvertime({ placeId }: Props) {
 
     const { auth } = useAppContext();
 
-    const { isLoading, isSuccess, data } = useQuery({
+    const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "sentimentDistributionOvertime" ],
         queryFn: () => sentimentDistributionOvertime({
             token: auth?.token as string,
@@ -32,7 +32,17 @@ function SentimentDistributionOvertime({ placeId }: Props) {
         content = <Skeleton className="h-[350px] rounded-xl" />
     }
 
-    if(isSuccess){
+    if(isError || data?.length === 0 || data?.filter((item: any) => item.positive === 0 && item.negative === 0).length === 12){
+        content = (
+            <Card>
+                <CardContent className="h-[350px] flex items-center justify-center">
+                    <p className="text-center text-sm text-slate-500">No data found</p>
+                </CardContent>
+            </Card>
+        )
+    }
+
+    if(isSuccess && !(data?.filter((item: any) => item.positive === 0 && item.negative === 0).length === 12)){
 
         const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
 

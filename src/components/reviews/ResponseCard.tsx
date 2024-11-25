@@ -1,4 +1,4 @@
-import { Copy } from "lucide-react"
+import { Copy, Forward } from "lucide-react"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import dayjs from 'dayjs'
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -56,6 +56,9 @@ function ResponseCard(props: ReviewSuggestionType) {
                                 {/* {isPending && tone === "casual" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
+                            <Button onClick={() => window.open(props.reviewData.review_link)} size="icon" variant="ghost">
+                                <Forward className="stroke-light-grey h-5" strokeWidth={1} />
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>
@@ -78,6 +81,9 @@ function ResponseCard(props: ReviewSuggestionType) {
                             <Button onClick={() => copyToClipboard(props?.professional_tone?.response)} size="icon" variant="ghost">
                             {/* {isPending && tone === "professional" ? <LoaderCircle className="stroke-light-grey h-5 animate-spin" strokeWidth={1} /> : <Copy className="stroke-light-grey h-5" strokeWidth={1} />} */}
                                 <Copy className="stroke-light-grey h-5" strokeWidth={1} />
+                            </Button>
+                            <Button onClick={() => window.open(props.reviewData.review_link)} size="icon" variant="ghost">
+                                <Forward className="stroke-light-grey h-5" strokeWidth={1} />
                             </Button>
                         </div>
                     </CardContent>

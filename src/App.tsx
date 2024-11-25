@@ -48,7 +48,7 @@ function App() {
     }
   }, [ mode ]);
 
-  const { isLoading, isSuccess, data } = useQuery({
+  const { isLoading, isSuccess, data, isError } = useQuery({
       queryKey: [ "validateUser" ],
       queryFn: () => validateUser(auth?.token as string),
       retry: 0,
@@ -68,11 +68,23 @@ function App() {
       </div>
   }
 
-  const PrivateRoute = () => isSuccess && data?.onboarded ? <Layout/> : isSuccess && data?.onboarded === false ? <Navigate to="/validate"/> : <Navigate to="/sign-in"/>
+  let privateRoute;
+
+  if(isError){
+    privateRoute = <Navigate to="/sign-in"/>
+  }
+
+  if(isSuccess && data?.onboarded){
+    privateRoute = <Layout/>
+  }
+
+  if(isSuccess && data?.onboarded === false){
+    privateRoute = <Navigate to="/validate"/>
+  }
 
   return (
     <Routes>
-      <Route path="/" element={<PrivateRoute/>}>
+      <Route path="/" element={privateRoute}>
         <Route index element={<Home/>}/>
         <Route path="/dashboard" element={<Home/>}/>
         <Route path="/reviews" element={<Reviews/>}/>
