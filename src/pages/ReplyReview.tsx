@@ -57,7 +57,7 @@ function ReplyReview() {
     }
 
     if(isSuccess){
-      content = <ResponseCard {...data?.data}/>
+      content = <ResponseCard {...data?.data} reviewData={reviewData}/>
     }
 
   return (

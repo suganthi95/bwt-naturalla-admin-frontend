@@ -45,7 +45,8 @@ export type ReviewSuggestionType = {
     sentiment_score: number,
     remaining_credit: {
         credit: number
-    }
+    },
+    reviewData: ReviewType
 }
 
 export interface AuthType {
@@ -168,8 +169,24 @@ export interface BillingResponse {
     next_due: string
     total_credits: number
     used_credits: number
+    remaining_credits: number
     workspace_id: string
-}
+    cancel_subscription: boolean
+    cancel_initiated: string
+    cancel_at: string
+    instant_credits: InstantCredits
+    amount: number
+    currencey: string
+  }
+  
+  export interface InstantCredits {
+    total_credits: string
+    used_credits: string
+    remaining_instant_credits: string
+    order_amount: number
+    started_at: string
+    currency: string
+  }
 
 export interface PaymentHistoryResponseType {
     payment_id: string

@@ -131,7 +131,7 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
   const paymentScreenOne = (
     <div className="flex flex-1 flex-col p-5 gap-3">
       <h1 className="text-secondary text-2xl font-bold">
-        Try <span className="text-primary">IntelliResponse</span>
+        Subscribe to <span className="text-primary">IntelliResponse</span>
       </h1>
       <p className="text-slate-500">
         Experience the full capabilities of IntelliResponse without any

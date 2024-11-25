@@ -99,7 +99,13 @@ function OnBoardSix() {
             setValue("");
         },
         onError: () => {
-            toast.error("Request Failed", { description: "Please try after sometimes" })
+            // toast.error("Request Failed", { description: "Please try after sometimes" })
+            setActiveBusinessMutate({
+                place_id: value,
+                token: auth?.token as string
+            })
+
+            setValue("");
         },
     })
 

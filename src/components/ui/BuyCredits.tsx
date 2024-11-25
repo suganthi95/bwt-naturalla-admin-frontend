@@ -111,7 +111,7 @@ function BuyCredits() {
 
                 <div>
                     <h1 className="text-md font-bold">Remaining Credits</h1>
-                    <p className="text-sm text-slate-400">Used to find best response for your customer’s</p>
+                    <p className="text-sm text-slate-400">Used to find best response for your customer’s reviews</p>
                 </div>
 
                 <div>
