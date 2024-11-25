@@ -68,7 +68,7 @@ function Reviews() {
 
     if(isLoading && !isRefetching){
         content = (
-          <div className="flex flex-col items-center justify-center gap-2 mt-[10%]">
+          <div className="flex flex-col items-center justify-center fixed bottom-0 gap-2 ">
             <Loader/>
             <h1 className="font-semibold text-secondary text-xl">Loading more reviews</h1>
             <p className="text-sm text-slate-400">We're fetching more reviews for you</p>
@@ -129,9 +129,7 @@ function Reviews() {
     <div className="p-2 flex flex-col flex-1 overflow-hidden">
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Reviews</h1>
-            <div>
-              <p className="text-center text-sm mt-3 text-secondary">{isAtBottom && data?.data?.total > 0 ? "fetching more reviews..." : isAtBottom && data?.data?.total === 0 ? "we've reached the end" : ""}</p>
-            </div>
+          
             <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
                 <SelectTrigger className="w-[100px] h-8">
                     <SelectValue placeholder="Sort" />
@@ -147,7 +145,9 @@ function Reviews() {
         <div ref={scrollContainerRef} className="py-3 overflow-y-scroll h-full">
             {content}
         </div>
-        
+        <div className="fixed bottom-2 left-36 right-0">
+              <p className="text-center text-sm  text-secondary">{isAtBottom && data?.data?.total > 0 ? "fetching more reviews..." : isAtBottom && data?.data?.total === 0 ? "we've reached the end" : ""}</p>
+            </div>
     </div>
   )
 }

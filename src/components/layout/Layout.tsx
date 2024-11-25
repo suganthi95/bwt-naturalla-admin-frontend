@@ -179,6 +179,7 @@ function Layout() {
                     <div className="flex items-center flex-row gap-10">
                         {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
                         <UpgradeModal
+                            plan={data?.plan_name}
                             openPaymentDialog={openPaymentDialog}
                             setOpenPaymentDialog={setOpenPaymentDialog}
                         />

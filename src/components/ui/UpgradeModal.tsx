@@ -32,11 +32,12 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
+  plan:string,
   openPaymentDialog: boolean;
   setOpenPaymentDialog: Dispatch<SetStateAction<boolean>>;
 }
 
-function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
+function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) {
   const { auth } = useAppContext();
   const navigate = useNavigate();
   const [proceedToPay, setProceedToPay] = useState(false);
@@ -130,9 +131,14 @@ function UpgradeModal({ openPaymentDialog, setOpenPaymentDialog }: Props) {
 
   const paymentScreenOne = (
     <div className="flex flex-1 flex-col p-5 gap-3">
-      <h1 className="text-secondary text-2xl font-bold">
+      {plan === 'pro-plan'? <h1 className="text-secondary text-2xl font-bold">
         Try <span className="text-primary">IntelliResponse</span>
-      </h1>
+        </h1>:
+        <h1 className="text-secondary text-2xl font-bold">
+        Subscribe to <span className="text-primary">IntelliResponse</span>
+        </h1>
+      }
+    
       <p className="text-slate-500">
         Experience the full capabilities of IntelliResponse without any
         commitment.

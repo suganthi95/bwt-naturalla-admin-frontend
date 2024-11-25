@@ -100,7 +100,7 @@ function BuyCredits() {
         <PopoverTrigger asChild>
             <button className="flex items-center gap-2 bg-gradient-to-r from-primary/50 to-primary text-white py-1 px-2 rounded-lg">
                 <Zap className="h-5 w-5 fill-white stroke-none" />
-                <span className="text-xs">Buy Credits</span>
+                <span className="text-xs"> Buy Instant Credits</span>
             </button>
         </PopoverTrigger>
         <PopoverContent className="w-[400px]">
@@ -110,8 +110,8 @@ function BuyCredits() {
                 </div>
 
                 <div>
-                    <h1 className="text-md font-bold">Remaining Credits</h1>
-                    <p className="text-sm text-slate-400">Used to find best response for your customer’s</p>
+                    <h1 className="text-md font-bold">Remaining Instant Credits</h1>
+                    <p className="text-sm text-slate-400">Used to find best response for your customer's reviews</p>
                 </div>
 
                 <div>
