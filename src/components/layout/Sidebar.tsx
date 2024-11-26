@@ -1,4 +1,3 @@
-import { Tooltip,TooltipProvider, TooltipTrigger, TooltipContent } from '@radix-ui/react-tooltip';
 import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -6,6 +5,7 @@ import { CollapseType, MenuType, ValidateUserType } from "@/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 export default function Sidebar({ content, data }: { content: CollapseType, data: ValidateUserType }) {
 
@@ -29,7 +29,6 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
             navigate(`/${route.route}`)
         }
     }
-    const TooltipView=Object.keys(content).map((item)=>console.log(item=='apps/integrations'))
 
 
 
@@ -58,37 +57,26 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                            
                             <AccordionContent>
                                 <Tabs value={tabValue}>
-                                    {/* <TabsList className="flex flex-col  h-full rounded-none bg-white dark:bg-slate-950">
+                                    <TabsList className="flex flex-col  h-full rounded-none bg-white dark:bg-slate-950">
                                         {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType)=> (
-                                            <TabsTrigger key={`menu-${item}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`}  value={item.route}>
+                                            <TabsTrigger key={`menu-${item}`} onClick={() => menu !== "apps/integrations" && redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`}  value={item.route}>
                                                 {item.icon}
-                                                {resizable && <p>{item.name}</p>}
+                                                {menu === "apps/integrations" ? (
+                                                    <TooltipProvider>
+                                                        <Tooltip>
+                                                            {resizable && <TooltipTrigger>{item.name}</TooltipTrigger>}
+                                                            <TooltipContent>
+                                                                <p>Coming Soon</p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    </TooltipProvider>
+                                                ) : resizable && <p>{item.name}</p>}
+                                                
                                             </TabsTrigger>
                                         ))}
-                                    </TabsList> */}
-                                     <TabsList className="flex flex-col h-full rounded-none bg-white dark:bg-slate-950">
-                                        {content[ menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType) => (
-                                           <TooltipProvider key={`tooltip-${item.name}`}>
-                                              <Tooltip>
-                                                <TooltipTrigger asChild>
-                                                  <TabsTrigger  title={menu === "apps/integrations"?'':item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`}value={item.route}>
-                                                     {item.icon}
-                                                     {resizable && <p>{item.name}</p>}
-                                                   </TabsTrigger>
-                                                 </TooltipTrigger>
-                                                         {menu === "apps/integrations" && (
-                                                            <TooltipContent   side="top" align="center" className="bg-gray-800 text-white text-sm py-2 px-4 rounded-lg shadow-lg border border-gray-700">
-                                                               <p>Comming Soon...</p>
-                                                            </TooltipContent>
-                                                        )}
-                                                 </Tooltip>
-                                             </TooltipProvider>
-                        )
-                      )}
-                    </TabsList>
+                                    </TabsList>
                                 </Tabs>
                             </AccordionContent>
-                    
                         </AccordionItem>
                     </Accordion>
                 ))}

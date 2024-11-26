@@ -1,7 +1,6 @@
 // import { CircleCheck, Crown } from "lucide-react"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -13,6 +12,7 @@ import { isPastDate, RemainingDays } from "@/lib/utils";
 import { ASSETS } from "@/assets/assets";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 interface Props {
   planName: string;
   planEndDate: Date;
@@ -41,6 +41,65 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
     showPopup();
   }, [balanceDays, planEndDate]);
 
+  let dialogContent;
+
+  if(planName == "free trial" && balanceDays < 2){
+    dialogContent = (
+      <AlertDialogHeader>
+        <AlertDialogTitle className="text-center text-2xl text-[#141618]">
+            <h1>Your free trial ends in {balanceDays} Days</h1>
+        </AlertDialogTitle>
+        <AlertDialogDescription>
+          <div className="text-[#141618] space-y-3 text-base text-center">
+            <p>
+              Your 7-day free trial has now expired. You no longer have access
+              to the Intelliresponse dashboard.{" "}
+            </p>
+            <p>So, upgrade now to continue enjoying the pro plan services.</p>
+          </div>
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+    )
+  }
+
+  if(planName == "free trial" && balanceDays > 2){
+    dialogContent = (
+      <AlertDialogHeader>
+        <AlertDialogTitle className="text-center text-2xl text-[#141618]">
+          <h1>Subscribe to Intelliresponse Pro!</h1>
+        </AlertDialogTitle>
+        <AlertDialogDescription>
+          {/* <div className="text-[#141618] space-y-3 text-base text-center">
+            <p>
+              Your 7-day free trial has now expired. You no longer have access
+              to the Intelliresponse dashboard.{" "}
+            </p>
+            <p>So, upgrade now to continue enjoying the pro plan services.</p>
+          </div> */}
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+    )
+  }
+
+  if(planName == "free trial" && balanceDays === 0){
+    dialogContent = (
+      <AlertDialogHeader>
+        <AlertDialogTitle className="text-center text-2xl text-[#141618]">
+          <h1>Your free trial ends today!</h1>
+        </AlertDialogTitle>
+        <AlertDialogDescription>
+          <div className="text-[#141618] space-y-3 text-base text-center">
+            <p>
+              Your 7-day free trial has now expired. You no longer have access
+              to the Intelliresponse dashboard.{" "}
+            </p>
+            <p>So, upgrade now to continue enjoying the pro plan services.</p>
+          </div>
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+    )
+  }
+
   return (
     <AlertDialog open={planName == "standard plan" ? isFreeTrialEnd : modal}>
       <AlertDialogContent>
@@ -50,42 +109,25 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             className="h-full w-full object-contain"
           />
         </div>
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-center text-2xl text-[#141618]">
-            {planName == "free trial" ? (
-              <h1>Your free trial ends in {balanceDays} Days</h1>
-            ) : (
-              <h1>Your free trial ends today!</h1>
-            )}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            <div className="text-[#141618] space-y-3 text-base text-center">
-              <p>
-                Your 7-day free trial has now expired. You no longer have access
-                to the Intelliresponse dashboard.{" "}
-              </p>
-              <p>So, upgrade now to continue enjoying the pro plan services.</p>
-            </div>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+        {dialogContent}
 
-        <AlertDialogFooter className="flex flex-col md:flex-row justify-center items-center gap-y-4 gap-x-16">
-          <AlertDialogAction
-            onClick={clickEvent}
-            className={`${
-              !modal ? "mx-auto" : ""
-            } bg-primary   p-2 px-8 hover:bg-primary/50`}
-          >
-            Upgrade Now
-          </AlertDialogAction>
-          {planName == "free trial" && (
-            <AlertDialogAction
-              onClick={() => setModal(false)}
-              className="mx-auto"
+        <AlertDialogFooter>
+          <div className="w-full flex flex-row items-center justify-center gap-5">
+            <Button
+              onClick={clickEvent}
+              className={`bg-primary p-2 px-8 hover:bg-primary/50`}
             >
-              Cancel
-            </AlertDialogAction>
-          )}
+              Upgrade Now
+            </Button>
+            {planName == "free trial" && (
+              <Button
+                onClick={() => setModal(false)}
+                className="p-2 px-8"
+              >
+                Maybe Later
+              </Button>
+            )}
+          </div>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

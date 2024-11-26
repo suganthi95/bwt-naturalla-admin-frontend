@@ -127,22 +127,25 @@ function Layout() {
         "apps/integrations": [
             {
                 name: "Google Review",
-                // route: "google-review",
+                route: "/",
                 icon: <Icons.googleIcon className="w-5 h-6" />,
                 shouldVisible: true
             },
             {
                 name: "TrustPiolot",
+                route: "/",
                 icon: <Icons.trustpilotIcon className="w-5 h-6" />,
                 shouldVisible: true
             },
             {
                 name: "Youtube comments",
+                route: "/",
                 icon: <Icons.youtubeIcon className="w-5 h-6" />,
                 shouldVisible: true
             },
             {
                 name: "Trip Advisor",
+                route: "/",
                 icon: <Icons.tripadvisorIcon className="w-5 h-6" />,
                 shouldVisible: true
             }
