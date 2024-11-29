@@ -151,7 +151,7 @@ export type CollapseType  = {
 
 export type MenuType = {
     name: string
-    route ?: string
+    route: string
     icon: ReactElement,
     shouldVisible: boolean
 }

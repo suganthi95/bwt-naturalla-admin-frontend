@@ -72,7 +72,7 @@ function Billing() {
                     <Separator className="my-2" />
 
                     <div className="space-y-1 mt-2">
-                        <p className="text-sm text-slate-400">what you’ll be charged</p>
+                        <p className="text-sm text-slate-400">Last Payment made {dayjs(data?.instant_credits.started_at).fromNow()}</p>
                         <p className="font-medium">₹ {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
                     </div>
                 </Card>
