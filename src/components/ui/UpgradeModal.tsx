@@ -42,8 +42,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
   const navigate = useNavigate();
   const [proceedToPay, setProceedToPay] = useState(false);
   const [Razorpay] = useRazorpay();
-
-  const { register, watch, control } = useForm({
+  const { register, watch, control, } = useForm({
     defaultValues: {
       plan: null,
     },
@@ -127,14 +126,15 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
       planId: watch("plan"),
       token: auth?.token as string,
     });
+  
   };
 
   const paymentScreenOne = (
-    <div className="flex flex-1 flex-col p-5 gap-3">
+    <div className="flex flex-1 md:w-6/12 flex-col p-2 md:p-5 gap-3">
       {plan === 'pro-plan'? <h1 className="text-secondary text-2xl font-bold">
         Try <span className="text-primary">IntelliResponse</span>
         </h1>:
-        <h1 className="text-secondary text-2xl font-bold">
+        <h1 className="text-secondary  md:text-2xl font-bold">
         Subscribe to <span className="text-primary">IntelliResponse</span>
         </h1>
       }
@@ -184,7 +184,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
       <div className="flex flex-row items-center gap-3">
         <Button
           onClick={() => setProceedToPay(true)}
-          className="bg-primary hover:bg-primary/50 font-thin"
+          className="bg-primary hover:bg-primary/50 font-semibold text-white"
         >
           Buy Now
         </Button>
@@ -198,6 +198,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
 
   let paymentScreenTwo;
 
+
   if (isSuccess) {
     const standardPlan = data.filter(
       (item: any) => item.plan_name === "standard plan"
@@ -207,16 +208,23 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
     const proPlan = data.filter((item: any) => item.plan_name === "pro-plan");
 
     paymentScreenTwo = (
-      <div className="flex flex-1 flex-col p-5 gap-3">
+      <div className="flex flex-1 flex-col p-2 md:p-5 gap-3">
         <div>
           <Controller
             name="plan"
             control={control}
+            rules={{
+              required: "Please select a subscription plan.", // Custom error message
+            }}
             render={({ field }) => (
               <RadioGroup
                 value={field.value ?? ""}
-                onValueChange={(val) => field.onChange(val)}
+                onValueChange={(val) =>{
+                   field.onChange(val)
+                  }
+                }
                 className="grid grid-cols-1 items-center mt-1 gap-3 capitalize"
+              
                 {...register("plan")}
               >
                 <button className="flex items-center gap-2 bg-gradient-to-r from-primary/70 to-primary text-white py-1 px-2 rounded-3xl w-fit">
@@ -263,7 +271,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
                           <Circle className="fill-white stroke-slate-400 h-5 w-5" />
                         )}
                         <div className="flex flex-row items-center justify-between w-full">
-                          <p>{item.period} plan</p>
+                          <p className="text-sm md:text-base">{item.period} plan</p>
                           <p className="text-slate-600 text-sm">
                             ₹ {(item.plan_amount / 100).toFixed(2)} (${" "}
                             {item.amount_to_usd.toFixed(2)})
@@ -298,7 +306,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
                         <Circle className="fill-white stroke-slate-400 h-5 w-5" />
                       )}
                       <div className="flex flex-row items-center justify-between w-full">
-                        <div className="flex flex-row items-center gap-1">
+                        <div className="flex flex-row text-sm md:text-base items-center gap-1">
                           <p>{item.period} plan</p>
                           <Crown className="h-5 w-5 stroke-primary" />
                         </div>
@@ -403,8 +411,16 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
           <span className="text-xs">Upgrade</span>
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="p-0 overflow-hidden max-w-5xl">
-        <div className="flex flex-row">
+      <AlertDialogContent className="p-0  overflow-scroll md:overflow-hidden max-w-5xl">
+        <div className=" h-screen  p-2 flex flex-row">
+        <Button
+              onClick={() => setOpenPaymentDialog(false)}
+              className=" md:hidden p-1 absolute top-3 right-3"
+              variant="secondary"
+              size="icon"
+            >
+              <X className="h-5 w-5" />
+            </Button>
           {proceedToPay ? paymentScreenTwo : paymentScreenOne}
 
           <div className="hidden md:flex bg-sandal flex-1 relative">

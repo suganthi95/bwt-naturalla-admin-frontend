@@ -61,7 +61,7 @@ function ReplyReview() {
     }
 
   return (
-    <div className="p-2 flex flex-1 flex-col relative">
+    <div className="p-2 flex flex-1 h-full overflow-y-scroll flex-col  relative">
         <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center gap-2">
               <Button onClick={() => navigate(-1)} title="Go Back" className="h-6 w-6" variant="secondary" size="icon"><ChevronLeft className="h-4 w-4" /></Button>
@@ -70,7 +70,7 @@ function ReplyReview() {
             <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
         </div>
 
-        <div className="pt-1 flex flex-col flex-1">
+        <div className="pt-1  overflow-y-auto flex flex-col flex-1">
             {isReviewSuccess && <ReviewCard {...reviewData}/>}
             <div>
               {content}

@@ -142,7 +142,7 @@ function Reviews() {
             </Select>
         </div>
 
-        <div ref={scrollContainerRef} className="py-3 overflow-y-scroll h-full">
+        <div ref={scrollContainerRef} className="py-3  overflow-y-auto h-full">
             {content}
         </div>
         <div className="fixed bottom-2 left-36 right-0">

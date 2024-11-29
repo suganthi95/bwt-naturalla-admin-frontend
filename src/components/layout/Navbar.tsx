@@ -83,7 +83,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                             <Menu />
                         </SheetTrigger>
                         <SheetContent className="bg-white w-fit">
-                            <div className={`h-full w-full relative overflow-hidden`}>
+                            <div className={`h-full w-full relative overflow-y-auto`}>
                                 <div className={`p-5 flex flex-row items-center space-x-5`}>
                                     <Link to="/" className="flex flex-row items-center gap-1">
                                         <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
@@ -94,11 +94,21 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                 <div onClickCapture={() => setOpenSheet(!openSheet)}>
                                     {Object.keys(content).map((menu: string, index: number) => (
                                         <Tabs key={`menu-nav-${index}`} value={tabValue}>
-                                            <TabsList className="flex flex-col h-full rounded-none bg-white">
+                                            <TabsList className="flex -ml-4 flex-col h-full rounded-none bg-white">
                                                 {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType) => (
-                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
-                                                        {item.icon}
-                                                        <p>{item.name}</p>
+                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`p-2 px-8 rounded-md flex items-center justify-start text-center space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
+                                                        <div className='flex-col '>
+                                                     <div className='flex items-center gap-x-3'>
+                                                    {item.icon}
+                                                   <p>{item.name}</p>
+                                                     </div>
+                                                     <div>
+                                                    {item.name === "Google Review" && (
+                                                    <p className="mt-4">Coming Soon...</p>
+                                                    )}
+                                                     </div>
+                                                     </div>
+                                                  
                                                     </TabsTrigger>
                                                 ))}
                                             </TabsList>

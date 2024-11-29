@@ -6,6 +6,10 @@ const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
 const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1"
 
+// const BASE_URL_V2="https://backend-auth-staging-91592131102.asia-south1.run.app"
+// const BUSINESS_BASE_URL ="https://backend-payment-staging-91592131102.asia-south1.run.app"
+// const PAYMENT_BASE_URL ="https://backend-reviews-staging-91592131102.asia-south1.run.app"
+
 
 export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
 

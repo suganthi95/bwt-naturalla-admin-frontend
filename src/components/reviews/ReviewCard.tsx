@@ -45,7 +45,7 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
     }
 
   return (
-    <Card className="border-none shadow-none hover:bg-light-blue">
+    <Card className="border-none  shadow-none hover:bg-light-blue">
         <CardHeader className="flex flex-row items-center justify-between py-1 px-3">
             <div className="flex flex-row items-center gap-2 pt-2">
                 <Avatar>

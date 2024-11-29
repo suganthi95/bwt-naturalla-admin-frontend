@@ -23,13 +23,12 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
     }
 
     const redirect = (route: MenuType) => {
-        if([ "Privacy Policy", "Terms & Conditions" ].includes(route.name)){
+        if([ "Privacy Policy", "Terms & Conditions","FAQ" ].includes(route.name)){
             window.open( route.route, '_blank');
         }else{
             navigate(`/${route.route}`)
         }
     }
-    const TooltipView=Object.keys(content).map((item)=>console.log(item=='apps/integrations'))
 
 
 
@@ -71,14 +70,28 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                                            <TooltipProvider key={`tooltip-${item.name}`}>
                                               <Tooltip>
                                                 <TooltipTrigger asChild>
-                                                  <TabsTrigger  title={menu === "apps/integrations"?'':item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`}value={item.route}>
+                                                  <TabsTrigger  title={menu === "apps/integrations"?'':item.name} onClick={() => redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`} value={item.route}>
+                                                     {/* {item.name==''}
+
                                                      {item.icon}
-                                                     {resizable && <p>{item.name}</p>}
+                                                     {resizable &&<p>{item.name}</p>} */}
+                                                     <div className='flex-col'>
+                                                     <div className='flex items-center gap-x-3'>
+                                                    {item.icon}
+                                                    {resizable && <p>{item.name}</p>}
+                                                     </div>
+                                                     <div>
+                                                    {item.name === "Google Review" && resizable && (
+                                                    <p className="text-sm mt-4 text-right text-gray-500 ">Coming Soon</p>
+                                                    )}
+                                                     </div>
+                                                     </div>
+                                                  
                                                    </TabsTrigger>
                                                  </TooltipTrigger>
                                                          {menu === "apps/integrations" && (
-                                                            <TooltipContent   side="top" align="center" className="bg-gray-800 text-white text-sm py-2 px-4 rounded-lg shadow-lg border border-gray-700">
-                                                               <p>Comming Soon...</p>
+                                                            <TooltipContent  className='bg-white shadow-md p-2 rounded'  side="top" align="center" >
+                                                               <p >Comming Soon...</p>
                                                             </TooltipContent>
                                                         )}
                                                  </Tooltip>
