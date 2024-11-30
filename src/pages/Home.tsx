@@ -8,9 +8,7 @@ import TotalReviewsCard from "@/components/dashboard/TotalReviewsCard"
 import { BusinessList, ValidateUserType, WorkspaceList } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios"
-
 function Home() {
-
   const queryClient = useQueryClient();
   const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);
   const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];
@@ -23,23 +21,24 @@ function Home() {
             <p className="text-slate-300">Search or Add your business account</p>
         </div>
     )
+   
   }
 
   return (
     <div className="flex flex-col gap-3 p-2 w-full overflow-y-scroll pb-20">
       <TotalReviewsCard placeId={activeBusiness?.place_id}/>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <ReviewLengthAnalysis placeId={activeBusiness?.place_id}/>
         <ReviewsActiveTime placeId={activeBusiness?.place_id}/>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <SentimentDistributionGraph placeId={activeBusiness.place_id}/>
         <AverageSentiment placeId={activeBusiness?.place_id}/>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <SentimentDistributionOvertime placeId={activeBusiness?.place_id}/>
         <ResponseRate placeId={activeBusiness?.place_id}/>
       </div>

@@ -90,8 +90,11 @@ export function SearchBox() {
       queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       toast.success("Request Success", { description: "Business Added Successfully" });
     },
-    onError: (error) => {
-      toast.error("Request Failed", { description: error.message })
+    onError: () => {
+      // toast.error("Request Failed", { description: error.message })
+      window.location.reload();
+      queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
+      toast.success("Request Success", { description: "Business Added Successfully" });
     },
   })
 

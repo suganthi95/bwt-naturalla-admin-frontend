@@ -6,12 +6,15 @@ import OnBoardOne from "@/components/onboard/OnBoardOne";
 import OnBoardSix from "@/components/onboard/OnBoardSix";
 import OnBoardThree from "@/components/onboard/OnBoardThree";
 import OnBoardTwo from "@/components/onboard/OnBoardTwo";
+import { Button } from "@/components/ui/button";
 import { OnBoardType } from "@/types";
 import { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 function OnBoard() {
+
+    const navigate = useNavigate();
 
     const formState = useForm<OnBoardType>({
         defaultValues: {
@@ -46,11 +49,20 @@ function OnBoard() {
             form: <OnBoardSix/>,
             image: ASSETS.ONBOARD_05
         },
-    ]
+    ];
+
+    const goBackClick = () => {
+        localStorage.clear();
+        navigate("/sign-in", { replace: true });
+        window.location.reload();
+    }
 
   return (
     <div className="min-h-screen p-2 flex bg-white text-slate-950">
         <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
+            <div>
+                <Button onClick={goBackClick} size="sm" variant="secondary">Go back</Button>
+            </div>
             <Link to="/" className="flex flex-row gap-3">
                 <img src={ASSETS.LOGO} alt="logo" />
                 <div>

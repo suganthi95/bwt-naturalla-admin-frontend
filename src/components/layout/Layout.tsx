@@ -1,7 +1,7 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom"
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, EarthLock, House, Settings, UserCog } from "lucide-react";
+import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, EarthLock, House, Settings, UserCog, MessageCircleQuestion } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
@@ -117,6 +117,13 @@ function Layout() {
                 shouldVisible: true
             },
             {
+                name:"FAQ",
+                // route:"https://intelliresponse.ai/en/",
+                route:"http://localhost:5174/en/#faq",
+                icon:<MessageCircleQuestion/>,
+                shouldVisible:true
+            },
+            {
                 name: "Settings",
                 route: "settings",
                 icon: <Settings className="w-5" />,
@@ -127,8 +134,26 @@ function Layout() {
         "apps/integrations": [
             {
                 name: "Google Review",
-                route: "google-review",
-                icon: <Icons.googleIcon className="w-5" />,
+                route: "/",
+                icon: <Icons.googleIcon className="w-5 h-6" />,
+                shouldVisible: true
+            },
+            {
+                name: "TrustPilot",
+                route: "/",
+                icon: <Icons.trustpilotIcon className="w-5 h-6" />,
+                shouldVisible: true
+            },
+            {
+                name: "Youtube comments",
+                route: "/",
+                icon: <Icons.youtubeIcon className="w-5 h-6" />,
+                shouldVisible: true
+            },
+            {
+                name: "Trip Advisor",
+                route: "/",
+                icon: <Icons.tripadvisorIcon className="w-5 h-6" />,
                 shouldVisible: true
             }
         ]
@@ -156,34 +181,37 @@ function Layout() {
     if(isSuccess){
         const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
         const plan = plans.filter((item) => item.code === data.plan_name)[0];
+        console.log(plan);
+        
 
         main = (
             <main className="flex flex-col h-screen">
-                <div className="flex flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
-                    <div className="flex lg:hidden flex-row items-center gap-3">
-                        <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-secondary text-white">
+                <div className="flex flex-col gap-y-4 md:flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
+                    <div className="flex  flex-row gap-1 items-center xl:gap-3">
+                        <p className="h-10 w-10 flex items-center justify-center lg:hidden rounded-lg bg-secondary text-white">
                             {activeWorkspace.workspace_name[0]}
-                        </div>
-                        <div>
-                            <p className="font-medium">{activeWorkspace.workspace_name}</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-row items-center gap-1">
+                        </p>
+                        
+                            <p className="font-medium lg:hidden">{activeWorkspace.workspace_name}</p>
+                            <div className="flex flex-row items-center gap-1">
                         <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
                             <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
                             <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
                         </Link>
                         <Badge className={plan.class}>{plan.name}</Badge>
                     </div>
+                    </div>
+                   
 
-                    <div className="flex items-center flex-row gap-10">
+                    <div className="flex items-center flex-row  gap-5 xl:gap-10">
                         {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
                         <UpgradeModal
+                            plan={data?.plan_name}
                             openPaymentDialog={openPaymentDialog}
                             setOpenPaymentDialog={setOpenPaymentDialog}
                         />
 
-                        <p className="hidden md:block text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
+                        <p className="hidden md:block  text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">
                             <DropdownMenu>
                             <DropdownMenuTrigger asChild>

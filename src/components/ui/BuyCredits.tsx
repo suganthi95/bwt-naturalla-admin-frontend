@@ -98,9 +98,9 @@ function BuyCredits() {
     <>
     <Popover open={openCreditPopover} onOpenChange={setOpenCreditPopover}>
         <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 bg-gradient-to-r from-primary/50 to-primary text-white py-1 px-2 rounded-lg">
+            <button className="flex text-xs p-2  md:text-base items-center gap-2 bg-gradient-to-r from-primary/50 to-primary text-white py-1 md:px-2 rounded-lg">
                 <Zap className="h-5 w-5 fill-white stroke-none" />
-                <span className="text-xs">Buy Credits</span>
+                <span className="text-xs"> Buy Instant Credits</span>
             </button>
         </PopoverTrigger>
         <PopoverContent className="w-[400px]">
@@ -110,8 +110,8 @@ function BuyCredits() {
                 </div>
 
                 <div>
-                    <h1 className="text-md font-bold">Remaining Credits</h1>
-                    <p className="text-sm text-slate-400">Used to find best response for your customer’s</p>
+                    <h1 className="text-md font-bold">Remaining Instant Credits</h1>
+                    <p className="text-sm text-slate-400">Used to find best response for your customer's reviews</p>
                 </div>
 
                 <div>
@@ -154,7 +154,7 @@ function BuyCredits() {
                     {data?.map((item: any) => (
                         <div className="flex flex-row items-center justify-between space-y-3" key={item?.item_id}>
                             <Badge onClick={() => setPurchaseCreditCountId(item?.item_id)} className={`bg-white cursor-pointer px-4 py-1 ${item?.item_id === purchaseCreditCountId && "bg-primary text-white"}`} variant="outline">{item.total_credits}</Badge>
-                            <p className="text-sm text-slate-600">₹ {(item.credits_amount/100).toFixed(2)} ($ {item.amount_to_usd.toFixed(2)})</p>
+                            <p className="text-sm text-slate-600">₹ {item.credits_amount.toFixed(0)} ($ {item.amount_to_usd.toFixed(2)})</p>
                         </div>
                     ))}
                 </div>

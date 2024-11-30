@@ -35,7 +35,7 @@ function OnBoardSix() {
         <p className='text-slate-500 text-center'><span className='text-primary'>Tip: </span>Leverage positive reviews in your marketing materials to build trust.</p>,
         <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Use sentiment analysis to identify areas of improvement in your customer service.</p>,
         <p className='text-slate-500 text-center'><span className='text-primary'>Quick Tip: </span>Make it a habit to respond to all reviews, whether positive or negative. Consistent engagement shows that you value customer feedback.</p>,
-        <p className='text-slate-500 text-center'>Did you know? AI-generated responses can save you up to 70% of the time you’d spend crafting responses.</p>,
+        <p className='text-slate-500 text-center'><span className='text-primary'>Did you know? </span>AI-generated responses can save you up to 70% of the time you’d spend crafting responses.</p>,
         <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Don’t shy away from negative feedback. Addressing it publicly can show potential customers that you’re committed to improving.</p>,
     ];
       
@@ -99,7 +99,13 @@ function OnBoardSix() {
             setValue("");
         },
         onError: () => {
-            toast.error("Request Failed", { description: "Please try after sometimes" })
+            // toast.error("Request Failed", { description: "Please try after sometimes" })
+            setActiveBusinessMutate({
+                place_id: value,
+                token: auth?.token as string
+            })
+
+            setValue("");
         },
     })
 
@@ -166,6 +172,10 @@ function OnBoardSix() {
     if(addBusinessPending || setActiveBusinessPending || isOnboardStatusPending){
         loader = (
             <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 bg-white">
+                <div className='text-center text-secondary mb-2 text-sm'>
+                    <p>It might take some time to fetch the reviews....</p>
+                    <p>Please <b>DO NOT </b>refresh the page or press BACK button</p>
+                </div>
                 <div className="hidden lg:flex flex-row items-center gap-1">
                     <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
                     <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
