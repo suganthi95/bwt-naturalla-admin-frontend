@@ -60,7 +60,7 @@ function AppMode() {
                             <div key={`industry-${item}`} className="flex items-center">
                                 <RadioGroupItem className="hidden" type="button" value={item.name} id={item.name} />
                                 <label 
-                                    className={watch("mode") === item.name ? "border border-primary py-2 px-4 rounded-lg cursor-pointer bg-primary/5 text-primary flex flex-row gap-1 items-center" : "border border-slate-300 text-slate-400 py-2 px-4 rounded-lg cursor-pointer flex flex-row gap-1 items-center" }
+                                    className={watch("mode") === item.name ? "border border-primary p-2 text-xs md:text-base md:py-2 md:px-4 rounded-lg cursor-pointer bg-primary/5 text-primary flex flex-row gap-1 items-center" : "border border-slate-300 text-slate-400 p-2 text-xs md:text-base md:py-2 md:px-4 rounded-lg cursor-pointer flex flex-row gap-1 items-center" }
                                     htmlFor={item.name}
                                 >{item.icon}{item.name}</label>
                             </div>

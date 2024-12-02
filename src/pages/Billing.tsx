@@ -48,7 +48,7 @@ function Billing() {
                 <p>Current Plan</p>
             </div>
 
-            <div className="grid grid-cols-4 gap-5">
+            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
                 <Card className="p-4">
                     <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>
                     <Separator className="my-2" />

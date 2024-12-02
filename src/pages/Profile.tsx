@@ -97,7 +97,7 @@ function Profile() {
     
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="flex flex-col mb-10 sm:mb-0  overflow-y-scroll  ">
         <div className="bg-primary/5 pt-32 relative">
             <Avatar className="cursor-pointer absolute -bottom-5 left-5 h-28 w-28 border-[5px] border-white">
                 <AvatarFallback className="bg-primary text-white text-5xl">{username[0]}</AvatarFallback>
@@ -110,7 +110,7 @@ function Profile() {
         </div>
 
         <div className="mx-5 space-y-5 py-5 my-5 border-t border-b">
-            <div className="grid grid-cols-3 gap-20">
+            <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
                 <p>Email</p>
                 
                 <div className="flex flex-row items-center gap-2">
@@ -126,7 +126,7 @@ function Profile() {
                     </Button>
                 </div>
             </div>
-            <div className="grid grid-cols-3 gap-20">
+            <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
                 <p>Username</p>
                 <div className="flex flex-row items-center gap-2">
                     <div className="w-full">
@@ -147,7 +147,7 @@ function Profile() {
                     }
                 </div>
             </div>
-            <div className="grid grid-cols-3 gap-20">
+            <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
                 <p>Workspace Name</p>
                 
                 <div className="flex flex-row items-center gap-2">
@@ -172,7 +172,7 @@ function Profile() {
         </div>
 
         <div className="mx-5">
-            <div className="grid grid-cols-3 gap-20">
+            <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
                 <p>Password</p>
                 <div>
                     <Input
@@ -180,7 +180,7 @@ function Profile() {
                         value="********"
                         disabled
                     />
-                    <p className="text-sm text-green-500 font-medium float-right">Change Password</p>
+                    <p className="text-sm text-green-500 font-medium mt-2 md:float-right">Change Password</p>
                 </div>
             </div>
         </div>
