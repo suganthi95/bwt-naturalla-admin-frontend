@@ -139,22 +139,22 @@ function SignIn() {
   }, []);
 
   return (
-    <div className="min-h-screen p-0 lg:p-2 flex">
+    <div className="min-h-screen p-0 lg:p-2 flex overflow-hidden">
       <div className="bg-[#F8F7F8] rounded-lg flex-1 flex items-center justify-center relative">
         <img
-          className="hidded lg:block absolute z-0"
+          className="hidden lg:block absolute z-0"
           src={ASSETS.SIGNIN_BG_IMG}
           alt="img"
         />
-        <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh] overflow-y-scroll dark:bg-white dark:border-slate-200 dark:text-slate-950">
+        <Card className="relative z-10 px-0 lg:px-6 py-0 lg:py-3 h-[90vh]  dark:bg-white dark:border-slate-200 dark:text-slate-950">
           <CardHeader>
             <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
               <img src={ASSETS.LOGO} alt="logo" />
               <div>
-                <p className="font-bold text-4xl text-primary">
+                <p className="font-bold text-2xl md:text-4xl text-primary">
                   Intelli<span className="text-secondary">Response</span>
                 </p>
-                <span className="text-slate-500">
+                <span className="text-slate-500 text-sm">
                   Turning Reviews Into Insights
                 </span>
               </div>
@@ -269,7 +269,7 @@ function SignIn() {
                         </AlertDialogContent>
                     </AlertDialog> */}
 
-            <p className="mt-3">
+            <p className="md:mt-3">
               Don't have an account ?{" "}
               <Link to="/sign-up" className="font-bold hover:underline">
                 Sign Up

@@ -159,7 +159,7 @@ function SignUp() {
   }, []);
 
   return (
-    <div className="p-0 lg:p-2 flex bg-sandal h-screen overflow-y-scroll">
+    <div className="p-0 lg:p-2 flex bg-sandal h-screen ">
       <div className="hidden lg:flex flex-1">
         <div className="flex items-center justify-center w-full">
           <img className="w-2/3" src={ASSETS.SIGNUP_BG_IMG} alt="bg-img" />
@@ -169,16 +169,16 @@ function SignUp() {
         <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
           <img src={ASSETS.LOGO} alt="logo" />
           <div>
-            <p className="font-bold text-3xl text-primary">
+            <p className="font-bold text-xl md:text-3xl text-primary">
               Intelli<span className="text-secondary">Response</span>
             </p>
-            <span className="text-slate-500">
+            <span className="text-slate-500 text-sm md:text-balance">
               Turning Reviews Into Insights
             </span>
           </div>
         </Link>
         <div className="py-0 px-2 md:px-20 lg:px-32">
-          <h1 className="text-secondary text-xl font-bold text-center">
+          <h1 className="text-secondary text-lg md:text-xl font-bold text-center">
             Sign Up
           </h1>
           <p className="text-xs text-slate-500 text-center">
@@ -358,7 +358,7 @@ function SignUp() {
             </Link>
           </p>
 
-          <p className="text-sm text-center w-full mx-auto mt-10">
+          <p className="text-xs md:text-sm text-center w-full mx-auto mt-3 md:mt-10">
                 © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link> All Rights Reserved. Powered by <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
             </p>
         </div>
