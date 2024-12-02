@@ -98,7 +98,7 @@ function BuyCredits() {
     <>
     <Popover open={openCreditPopover} onOpenChange={setOpenCreditPopover}>
         <PopoverTrigger asChild>
-            <button className="flex text-xs p-2  md:text-base items-center gap-2 bg-gradient-to-r from-primary/50 to-primary text-white py-1 md:px-2 rounded-lg">
+            <button className="flex w-40 md:w-auto text-xs p-2  md:text-base items-center gap-2 bg-gradient-to-r from-primary/50 to-primary text-white py-1 md:px-2 rounded-lg">
                 <Zap className="h-5 w-5 fill-white stroke-none" />
                 <span className="text-xs"> Buy Instant Credits</span>
             </button>

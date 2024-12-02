@@ -141,11 +141,10 @@ function Reviews() {
                 </SelectContent>
             </Select>
         </div>
-
-        <div ref={scrollContainerRef} className="py-3  overflow-y-auto h-full">
+       <div ref={scrollContainerRef} className="py-3  overflow-x-hidden overflow-y-auto h-full">
             {content}
         </div>
-        <div className="fixed bottom-2 left-36 right-0">
+        <div className="fixed bottom-2 right-28   md:left-36 lg:right-0">
               <p className="text-center text-sm  text-secondary">{isAtBottom && data?.data?.total > 0 ? "fetching more reviews..." : isAtBottom && data?.data?.total === 0 ? "we've reached the end" : ""}</p>
             </div>
     </div>

@@ -118,8 +118,7 @@ function Layout() {
             },
             {
                 name:"FAQ",
-                // route:"https://intelliresponse.ai/en/",
-                route:"http://localhost:5174/en/#faq",
+                route:"https://intelliresponse.ai/en/#faq",
                 icon:<MessageCircleQuestion/>,
                 shouldVisible:true
             },
@@ -185,7 +184,7 @@ function Layout() {
         
 
         main = (
-            <main className="flex flex-col h-screen">
+            <main className="flex flex-col h-screen overflow-y-scroll">
                 <div className="flex flex-col gap-y-4 md:flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
                     <div className="flex  flex-row gap-1 items-center xl:gap-3">
                         <p className="h-10 w-10 flex items-center justify-center lg:hidden rounded-lg bg-secondary text-white">
@@ -203,7 +202,7 @@ function Layout() {
                     </div>
                    
 
-                    <div className="flex items-center flex-row  gap-5 xl:gap-10">
+                    <div className="flex items-center flex-row  gap-2 md:gap-5 xl:gap-10">
                         {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
                         <UpgradeModal
                             plan={data?.plan_name}

@@ -94,7 +94,8 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                 <div onClickCapture={() => setOpenSheet(!openSheet)}>
                                     {Object.keys(content).map((menu: string, index: number) => (
                                         <Tabs key={`menu-nav-${index}`} value={tabValue}>
-                                            <TabsList className="flex -ml-4 flex-col h-full rounded-none bg-white">
+                                        <p className="px-2 text-sm text-secondary py-2 hover:no-underline border-b-2 uppercase">{menu}</p>
+                                            <TabsList className="flex -ml-5 flex-col h-full rounded-none bg-white">
                                                 {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType) => (
                                                     <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`p-2 px-8 rounded-md flex items-center justify-start text-center space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
                                                         <div className='flex-col '>
@@ -104,7 +105,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                                      </div>
                                                      <div>
                                                     {item.name === "Google Review" && (
-                                                    <p className="mt-4">Coming Soon...</p>
+                                                    <p className="mt-4 bg-primary text-white rounded-md py-1">Coming Soon...</p>
                                                     )}
                                                      </div>
                                                      </div>
