@@ -23,6 +23,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createSubscription,
   fetchSubscriptionPlans,
+  PAYMENT_KEY,
   verifySubscription,
 } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
@@ -83,7 +84,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
       const { subscription_id } = data?.data?.data;
 
       const options = {
-        key: "rzp_test_xSZldxULopihDB",
+        key: PAYMENT_KEY,
         subscription_id: subscription_id,
         name: "IntelliResponse",
         description: "Subscription Plan",
