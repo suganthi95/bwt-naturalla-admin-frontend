@@ -100,6 +100,7 @@ function ResponseRate({ placeId }: Props) {
                                         y={viewBox.cy}
                                         textAnchor="middle"
                                         dominantBaseline="middle"
+                                        className=""
                                     >
                                         {/* <tspan
                                         x={viewBox.cx}

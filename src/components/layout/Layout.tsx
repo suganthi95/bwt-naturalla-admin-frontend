@@ -118,7 +118,7 @@ function Layout() {
             },
             {
                 name:"FAQ",
-                route:"https://intelliresponse.ai/en/#faq",
+                route:"https://intelliresponse.ai/en/#pricing",
                 icon:<MessageCircleQuestion/>,
                 shouldVisible:true
             },
@@ -202,7 +202,7 @@ function Layout() {
                     </div>
                    
 
-                    <div className="flex items-center flex-row  gap-2 md:gap-5 xl:gap-10">
+                    <div className="flex items-center overflow-y-scroll flex-row  gap-2 md:gap-5 xl:gap-10">
                         {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
                         <UpgradeModal
                             plan={data?.plan_name}

@@ -37,7 +37,7 @@ function Feedback() {
     })
 
   return (
-    <div className="flex flex-col  overflow-hidden   mb-5 sm:mb-0   flex-1 px-3">
+    <div className="flex flex-col  overflow-y-scroll overflow-x-hidden  mb-5 sm:mb-0   flex-1 px-3">
             <h1 className="font-semibold mt-4 hidden md:block ">Feedback</h1>
         
 

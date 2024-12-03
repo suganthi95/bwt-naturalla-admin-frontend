@@ -54,9 +54,9 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
                 </Avatar>
 
                 <div>
-                    <div className="flex flex-row items-start gap-2">
-                        <p className="font-semibold text-slate-950 dark:text-slate-500">{props?.author_title}</p>
-                        {props?.sentiment === "negative" ? <ThumbsDown className="stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />}
+                    <div className="flex  items-center gap-2">
+                        <p className="text-xs md:text-base font-semibold text-slate-950 dark:text-slate-500">{props?.author_title}</p>
+                        {props?.sentiment === "negative" ? <ThumbsDown className="size-4 md:size-auto stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="size-4 md:size-auto stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />}
                         
                     </div>
                     <span className="text-xs text-slate-500">{dayjs(props?.review_datetime_utc).fromNow()}</span>
@@ -67,7 +67,7 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
 
             <div className="flex flex-row gap-1 items-center">
                 {props?.review_rating && [ 1, 2, 3, 4, 5 ].map(item => (
-                    <Star key={`star-${item}`} className={`${item <= props?.review_rating ? "fill-yellow-400" : "fill-slate-300"} stroke-none`} />
+                    <Star key={`star-${item}`} className={`${item <= props?.review_rating ? "fill-yellow-400" : "fill-slate-300"} size-4 md:size-auto stroke-none`} />
                 ))}
             </div>
         </CardHeader>

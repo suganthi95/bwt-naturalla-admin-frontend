@@ -130,7 +130,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
   };
 
   const paymentScreenOne = (
-    <div className="flex flex-1 md:w-6/12 flex-col p-2 md:p-5 gap-3">
+    <div className="flex flex-1 overflow-y-scroll    md:w-6/12 flex-col p-2 md:p-5 gap-3">
       {plan === 'pro-plan'? <h1 className="text-secondary text-2xl font-bold">
         Try <span className="text-primary">IntelliResponse</span>
         </h1>:
@@ -139,7 +139,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
         </h1>
       }
     
-      <p className="text-slate-500">
+      <p className="text-sm md:text-base text-slate-500">
         Experience the full capabilities of IntelliResponse without any
         commitment.
       </p>
@@ -150,8 +150,8 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
           <div>
             <Icons.aiIcon />
           </div>
-          <p>
-            <span className="font-bold">AI-Generated Responses:</span> Generate
+          <p className="text-xs md:text-base">
+            <span className="text-xs md:text-base font-bold">AI-Generated Responses:</span> Generate
             context aware responses to your customer reviews.
           </p>
         </div>
@@ -159,8 +159,8 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
           <div>
             <Icons.analyticsIcon />
           </div>
-          <p>
-            <span className="font-bold">Analytics Dashboard:</span> Gain
+          <p className="text-sm md:text-base">
+            <span className="text-xs md:text-base font-bold">Analytics Dashboard:</span> Gain
             insights into customer sentiment and review trends.
           </p>
         </div>
@@ -168,15 +168,15 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
           <div>
             <Icons.languageIcon />
           </div>
-          <p>
-            <span className="font-bold">Multilingual Support:</span> Respond to
+          <p className="text-sm md:text-base">
+            <span className="text-xs md:text-base font-bold">Multilingual Support:</span> Respond to
             reviews in multiple languages seamlessly.
           </p>
         </div>
       </div>
 
       <div>
-        <p className="text-slate-500">
+        <p className="text-sm md:text-base text-slate-500">
           Cancel anytime. We'll remind you 2 days before your trial ends.
         </p>
       </div>
@@ -324,49 +324,49 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
         </div>
 
         <div className="flex flex-col gap-2 py-2 text-xs">
-          <div className="flex flex-row gap-3 items-center">
+          <div className="flex  gap-3 items-start md:items-start">
             <Check className="stroke-green-400" />
             <p>
               <span className="font-bold">AI-Powered Responses:</span> Generate
               professional replies to reviews with ease.
             </p>
           </div>
-          <div className="flex flex-row gap-3 items-center">
+          <div className="flex gap-3 items-start md:items-start">
             <Check className="stroke-green-400" />
             <p>
               <span className="font-bold">Sentiment Analysis:</span> Understand
               customer emotions and feedback.
             </p>
           </div>
-          <div className="flex flex-row gap-3 items-center">
+          <div className="flex flex-row gap-3 items-start md:items-start">
             <Check className="stroke-green-400" />
             <p>
               <span className="font-bold">Analytics Dashboard:</span> Gain
               insights from detailed data visualizations.
             </p>
           </div>
-          <div className="flex flex-row gap-3 items-center">
+          <div className="flex flex-row gap-3 items-start md:items-start">
             <Check className="stroke-green-400" />
             <p>
               <span className="font-bold">Multilingual Support:</span> Respond
               to reviews in multiple languages.
             </p>
           </div>
-          <div className="flex flex-row gap-3 items-center">
+          <div className="flex flex-row gap-3 items-start md:items-start">
             <Check className="stroke-green-400" />
             <p>Flexible cancellation policy</p>
           </div>
-          <div className="flex flex-row gap-3 items-center">
-            <Check className="stroke-green-400" />
+          <div className="flex flex-row gap-3 items-start md:items-start">
+            <Check className="stroke-green-400 " />
             <p>Reminders before each billing cycle</p>
           </div>
           
-          <p className="text-sm">By upgrading your plan, your current active plan will be deactivated, and the new plan will be activated immediately. You'll gain access to all the features of the new plan.</p>
+          <p className="text-xs">By upgrading your plan, your current active plan will be deactivated, and the new plan will be activated immediately. You'll gain access to all the features of the new plan.</p>
 
         
         </div>
 
-        <div className="flex flex-row items-center justify-between">
+        <div className="pb-2 md:p-0 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center justify-between text-sm">
             <div>
               <p className="font-semibold text-lg">Due today</p>
@@ -385,7 +385,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
             </div>
           </div>
 
-          <div className="flex flex-row items-center gap-3">
+          <div className="flex pb-2 md:pb-0   flex-row items-center gap-3">
             <Button
               disabled={isPending}
               onClick={initiatePayment}
@@ -404,22 +404,22 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
   }
 
   return (
-    <AlertDialog open={openPaymentDialog} onOpenChange={setOpenPaymentDialog}>
+    <AlertDialog open={openPaymentDialog} onOpenChange={setOpenPaymentDialog} >
       <AlertDialogTrigger asChild>
         <button className="flex items-center gap-2 bg-gradient-to-r from-[#CD84F1] to-[#7158E2] text-white py-1 px-2 rounded-lg">
           <Gift className="h-5 w-5" />
           <span className="text-xs">Upgrade</span>
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="p-0  overflow-scroll md:overflow-hidden max-w-5xl">
-        <div className=" h-screen  p-2 flex flex-row">
+      <AlertDialogContent className="p-0 overflow-y-scroll  w-11/12 h-4/5 md:h-auto   md:max-w-5xl">
+        <div className="  h-screen   p-2 flex flex-row">
         <Button
               onClick={() => setOpenPaymentDialog(false)}
-              className=" md:hidden p-1 absolute top-3 right-3"
+              className=" md:hidden   absolute top-3 right-3"
               variant="secondary"
               size="icon"
             >
-              <X className="h-5 w-5" />
+              <X className="h-3 w-3" />
             </Button>
           {proceedToPay ? paymentScreenTwo : paymentScreenOne}
 

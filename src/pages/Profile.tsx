@@ -97,7 +97,7 @@ function Profile() {
     
 
   return (
-    <div className="flex flex-col mb-10 sm:mb-0  overflow-y-scroll  ">
+    <div className="flex flex-col mb-10 sm:mb-0  overflow-scroll  ">
         <div className="bg-primary/5 pt-32 relative">
             <Avatar className="cursor-pointer absolute -bottom-5 left-5 h-28 w-28 border-[5px] border-white">
                 <AvatarFallback className="bg-primary text-white text-5xl">{username[0]}</AvatarFallback>

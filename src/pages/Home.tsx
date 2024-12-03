@@ -25,10 +25,10 @@ function Home() {
   }
 
   return (
-    <div className="flex flex-col gap-3 p-2 w-full overflow-y-scroll pb-20">
+    <div className="flex flex-col p-4  gap-3 md:p-2 w-full overflow-y-scroll md:pb-20">
       <TotalReviewsCard placeId={activeBusiness?.place_id}/>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className=" grid grid-cols-1 md:grid-cols-2 gap-5">
         <ReviewLengthAnalysis placeId={activeBusiness?.place_id}/>
         <ReviewsActiveTime placeId={activeBusiness?.place_id}/>
       </div>
