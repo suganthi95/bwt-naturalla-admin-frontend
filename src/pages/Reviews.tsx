@@ -126,7 +126,7 @@ function Reviews() {
 
 
   return (
-    <div className="p-2 flex flex-col flex-1 overflow-hidden">
+    <div className="p-2 pb-20 flex flex-col flex-1 overflow-hidden">
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Reviews</h1>
           
