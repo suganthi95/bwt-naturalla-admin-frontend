@@ -37,19 +37,19 @@ function Feedback() {
     })
 
   return (
-    <div className="flex flex-col flex-1 px-3">
-        <div className="flex flex-row items-center justify-between py-1">
-            <h1 className="font-semibold">Feedback</h1>
-        </div>
+    <div className="flex flex-col  overflow-hidden   mb-5 sm:mb-0   flex-1 px-3">
+            <h1 className="font-semibold mt-4 hidden md:block ">Feedback</h1>
+        
 
-        <form onSubmit={submit} className="mt-3 font-medium text-secondary space-y-5">
-            <div className="space-y-1">
+        <form onSubmit={submit} className="mt-3     font-medium text-secondary space-y-5">
+            
+            <div className="space-y-1 w-[38rem] md:w-full">
                 <label className="text-sm dark:text-slate-50" htmlFor="feedback_type">Feedback Type</label>
                 <Controller
                     name="feedbackType"
                     control={control}
                     render={({ field }) => (
-                        <Select required value={field.value} onValueChange={(val) => field.onChange(val)}>
+                        <Select  required value={field.value} onValueChange={(val) => field.onChange(val)} >
                             <SelectTrigger id="feedback_type" className="w-1/2">
                                 <SelectValue placeholder="Please select feedback type" />
                             </SelectTrigger>
@@ -63,7 +63,7 @@ function Feedback() {
                 />
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 w-[38rem] md:w-full">
                 <label className="text-sm dark:text-slate-50" htmlFor="">Message</label>
                 <Textarea 
                     required 
@@ -74,7 +74,7 @@ function Feedback() {
                 />
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1 w-[38rem] md:w-full">
             <label className="text-sm dark:text-slate-50" htmlFor="">Upload Files</label>
                 <label htmlFor="dropzone-file" className="flex flex-col w-1/2 border-2 border-primary border-dashed rounded-lg cursor-pointer bg-primary/5 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-primary/10 dark:border-gray-600 dark:hover:border-gray-500">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -88,9 +88,8 @@ function Feedback() {
                 </label>
             </div>
 
-            <div className="py-2">
                 <Button className="bg-primary hover:bg-primary/50">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Send"}</Button>
-            </div>
+           
         </form>
     </div>
   )

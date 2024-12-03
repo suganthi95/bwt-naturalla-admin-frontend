@@ -23,7 +23,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
     }
 
     const redirect = (route: MenuType) => {
-        if([ "Privacy Policy", "Terms & Conditions" ].includes(route.name)){
+        if([ "Privacy Policy", "Terms & Conditions","FAQ" ].includes(route.name)){
             window.open( route.route, '_blank');
         }else{
             navigate(`/${route.route}`)
@@ -60,20 +60,34 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                                     <TabsList className="flex flex-col  h-full rounded-none bg-white dark:bg-slate-950">
                                         {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType)=> (
                                             <TabsTrigger key={`menu-${item}`} onClick={() => menu !== "apps/integrations" && redirect(item)} className={`px-3 py-2 rounded-md flex items-center justify-start space-x-3 bg-white data-[state=active]:bg-secondary dark:data-[state=active]:bg-primary data-[state=active]:text-white dark:bg-slate-950 ${resizable ? "w-full" : "w-fit"}`}  value={item.route}>
+                                               <div  className='flex-col '>
+                                                <div className="flex items-center gap-x-3">
                                                 {item.icon}
                                                 {menu === "apps/integrations" ? (
                                                     <TooltipProvider>
                                                         <Tooltip>
                                                             {resizable && <TooltipTrigger>{item.name}</TooltipTrigger>}
                                                             <TooltipContent>
-                                                                <p>Coming Soon</p>
+                                                                <p>Coming Soon...</p>
                                                             </TooltipContent>
                                                         </Tooltip>
                                                     </TooltipProvider>
-                                                ) : resizable && <p>{item.name}</p>}
-                                                
+                                                ) : resizable && 
+                                                <p>
+                                                    {item.name}
+                                                </p>}
+                                                </div>
+                                                {item.name === "Google Review" && (
+                                                    <p className="mt-4 bg-primary text-white rounded-md py-1    ">Coming Soon...</p>
+                                                    )}
+                                               </div>
+                                              
+                                               
                                             </TabsTrigger>
                                         ))}
+
+                                
+
                                     </TabsList>
                                 </Tabs>
                             </AccordionContent>
