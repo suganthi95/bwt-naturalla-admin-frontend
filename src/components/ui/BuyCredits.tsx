@@ -7,7 +7,7 @@ import { Badge } from "./badge";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { ValidateUserType } from "@/types";
-import { buyCredits, getCreditsList, verifyCreditCheckout } from "@/lib/apis";
+import { buyCredits, getCreditsList, PAYMENT_KEY, verifyCreditCheckout } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";
@@ -56,7 +56,7 @@ function BuyCredits() {
             const { order_id, order_amount, currency } = data?.data;
 
             const options = {
-                key: 'rzp_test_xSZldxULopihDB',
+                key: PAYMENT_KEY,
                 order_id: order_id,
                 amount: order_amount,
                 currency: currency,
