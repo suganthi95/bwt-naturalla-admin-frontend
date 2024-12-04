@@ -7,7 +7,7 @@ import Notification from "@/components/settings/Notification";
 function Settings() {
 
   return (
-    <div className="p-2 flex flex-col flex-1 overflow-hidden ">
+    <div className="p-2 flex flex-col flex-1 overflow-y-scroll overflow-hidden ">
         <div className="flex flex-row items-center justify-between py-1">
             <h1 className="font-semibold">Settings</h1>
         </div>
