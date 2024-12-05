@@ -188,17 +188,17 @@ function SignIn() {
                   required
                   {...register("password")}
                 />
-                {isPasswordVisible ? (
-                  <Eye
-                    onClick={() => togglePasswordVisibility()}
-                    className="text-slate-300 absolute cursor-pointer right-3 top-9"
-                  />
-                ) : (
-                  <EyeOff
-                    onClick={() => togglePasswordVisibility()}
-                    className="text-slate-300 absolute cursor-pointer right-3 top-9"
-                  />
-                )}
+                  {isPasswordVisible ? (
+                    <Eye
+                      onClick={() => togglePasswordVisibility()}
+                      className="text-slate-300 absolute cursor-pointer right-3 top-9"
+                    />
+                  ) : (
+                    <EyeOff
+                      onClick={() => togglePasswordVisibility()}
+                      className="text-slate-300 absolute cursor-pointer right-3 top-9"
+                    />
+                  )}
               </div>
               <p className="text-xs text-center">
                 By Continuing, you agree to our{" "}

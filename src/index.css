@@ -38,7 +38,9 @@ body,
     border-radius: 5px;
     border: 3px solid #ffffff;
   }
-
+  .safari:focus{
+    position: relative;
+  }
   /* loader css */
 
   .dot-spinner {
