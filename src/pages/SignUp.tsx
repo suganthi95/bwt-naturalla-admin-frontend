@@ -161,7 +161,7 @@ function SignUp() {
                 Username <span className="text-red-500">*</span>
               </label>
               <Input
-                className="dark:bg-white dark:border-slate-200"
+                className="dark:bg-white dark:border-slate-200 focus-"
                 id="username"
                 type="text"
                 {...register("username", {
@@ -182,7 +182,7 @@ function SignUp() {
                 Email <span className="text-red-500">*</span>
               </label>
               <Input
-                className="dark:bg-white dark:border-slate-200"
+                className="dark:bg-white dark:border-slate-200  safari"
                 id="email"
                 type="email"
                 {...register("email", {
@@ -207,7 +207,7 @@ function SignUp() {
                 Password <span className="text-red-500">*</span>
               </label>
               <Input
-                className="dark:bg-white dark:border-slate-200"
+                className="dark:bg-white dark:border-slate-200 focus:bg-none"
                 id="password"
                 type={isPasswordVisible ? "text" : "password"}
                 {...register("password", {
@@ -243,7 +243,7 @@ function SignUp() {
                 Confirm Password <span className="text-red-500">*</span>
               </label>
               <Input
-                className="dark:bg-white dark:border-slate-200"
+                className="dark:bg-white dark:border-slate-200 focus:bg-none"
                 id="confirmPassword"
                 type={isConfirmPasswordVisible ? "text" : "password"}
                 {...register("confirmPassword", {

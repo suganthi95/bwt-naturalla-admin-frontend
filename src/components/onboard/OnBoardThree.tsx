@@ -21,9 +21,9 @@ function OnBoardThree({ setPage }: Props) {
     const roles = [ "Healthcare", "Education", "Technology", "Finance", "Retail", "Manufacturing", "Hospitality", "Real Estate", "Transportation", "Media & Entertainment", "Legal Services", "Agriculture", "Non-Profit", "Government", "Automotive", "Telecommunications", "Energy", "Fashion", "Consulting", "Construction" ]
 
   return (
-    <div className="mt-3">
+    <div className="md:mt-3 h-96">
         <h1 className="text-2xl lg:text-4xl font-medium">Pick Your industry/category</h1>
-        <div className="flex flex-row flex-wrap items-center mt-3 gap-2 capitalize">
+        <div className="flex flex-row flex-wrap  items-center mt-3 gap-2 capitalize">
             {roles.map(industry => (
                 <label 
                     key={industry} 
@@ -53,7 +53,7 @@ function OnBoardThree({ setPage }: Props) {
         
         <p className="text-xs mt-1 font-medium text-red-500">{errors?.industry?.message}</p>
 
-        <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
+        <Button onClick={proceedToNext} className="mt-4 md:mt-10  bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
             Continue
         </Button>
     </div>

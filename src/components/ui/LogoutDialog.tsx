@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './alert-dialog'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from './alert-dialog'
 import { Button } from './button'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 function LogoutDialog(props : Props) {
   return (
     <AlertDialog open={props.openLogoutDialog} onOpenChange={() => props.setOpenLogoutDialog(false)}>
-        <AlertDialogContent>
+        <AlertDialogContent className='bg-white'>
             <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to Sign out?</AlertDialogTitle>
             </AlertDialogHeader>
