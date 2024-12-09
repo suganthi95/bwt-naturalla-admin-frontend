@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ASSETS } from "@/assets/assets";
 import { Icons } from "@/assets/icons";
-// import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,59 +14,75 @@ import useToggle from "@/hooks/useToggle";
 import {
   signinUser,
   signInUserByGoogle,
-  validateUser,
   verifyGoogleUser,
 } from "@/lib/apis";
-import { ValidateUserType } from "@/types";
-import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { AuthType } from "@/types";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError, AxiosResponse } from "axios";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function SignIn() {
-  const [user, setUser] =
-    useState<
-      Omit<TokenResponse, "error" | "error_description" | "error_uri">
-    >();
+
   const { register, handleSubmit } = useForm<{
     email: string;
     password: string;
   }>();
+
   const { setAuth } = useAppContext();
   const navigate = useNavigate();
   const [isPasswordVisible, togglePasswordVisibility] = useToggle();
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: (res) => setUser(res),
-    onError: (error) => console.log("Login Failed:", error),
+  /***************************************** Google signup **********************************************/
+
+  const { mutate: signInUserByGoogleMutate } = useMutation({
+    mutationKey: ["signInUserByGoogle"],
+    mutationFn: signInUserByGoogle,
+    onSuccess: (res: AxiosResponse<AuthType>) => {
+
+      setAuth(res?.data);
+
+      if (res?.data?.data?.onboarded === true) {
+        toast.success("Request Success", { description: "Signed In Successfully" });
+        navigate("/dashboard", { replace: true });
+        window.location.reload();
+      }
+
+      if (res?.data?.data?.onboarded === false) {
+        toast.success("Request Success", { description: "Signed In Successfully" });
+        navigate("/onboard", { replace: true });
+        window.location.reload();
+      }
+    },
+    onError: (error) => toast.error("Request Failed", { description: error?.message })
+  })
+
+  const { mutate: verifyGoogleUserMutate } = useMutation({
+    mutationKey: ["verifyGoogleUser"],
+    mutationFn: verifyGoogleUser,
+    onSuccess: (res) => {
+      signInUserByGoogleMutate({
+        email: res?.data?.email,
+        name: `${res?.data?.given_name} ${res?.data?.family_name}`,
+      });
+    },
+    onError: (error) => toast.error("Request Failed", { description: error?.message })
   });
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (res) => verifyGoogleUserMutate(res),
+    onError: (error) => toast.error("Request Failed", { description: error.error_description }),
+  });
+
 
   const submitGoogleLogin = () => googleLogin();
-  console.log(submitGoogleLogin);
 
-  const { data: googleData } = useQuery({
-    queryKey: ["verifyGoogleUser", user],
-    queryFn: () => verifyGoogleUser(user),
-    retry: 3,
-    refetchOnWindowFocus: false,
-    enabled: Boolean(user),
-  });
 
-  const { data, isSuccess, isError, error } = useQuery({
-    queryKey: ["signInUserByGoogle", googleData],
-    queryFn: () =>
-      signInUserByGoogle({
-        email: googleData?.data?.email,
-        name: `${googleData?.data?.given_name} ${googleData?.data?.family_name}`,
-      }),
-    retry: 3,
-    refetchOnWindowFocus: false,
-    enabled: Boolean(googleData),
-  });
+  /*************************************** Normal Sign in ***********************************************/
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["signinUser"],
@@ -87,46 +102,6 @@ function SignIn() {
       });
     },
   });
-
-  const { isSuccess: validateUserSuccess, data: validateUserData } = useQuery({
-    queryKey: ["validateUser"],
-    queryFn: () => {
-      setAuth(data?.data);
-      return validateUser(data?.data?.token);
-    },
-    retry: 0,
-    select: (data): ValidateUserType => data?.data?.data,
-    refetchOnWindowFocus: false,
-    enabled: isSuccess,
-  });
-
-  // if(isLoading){
-  //   return (
-  //     <div className="h-screen flex items-center justify-center flex-col gap-3">
-  //         <div className="hidden lg:flex flex-row items-center gap-1">
-  //             <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
-  //             <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
-  //         </div>
-  //         <div>
-  //           <Loader/>
-  //         </div>
-  //     </div>
-  //   )
-  // }
-
-  if (validateUserSuccess && validateUserData?.onboarded) {
-    toast.success("Request Success", { description: "Signed In Successfully" });
-    return <Navigate to="/dashboard" />;
-  }
-
-  if (validateUserSuccess && !validateUserData?.onboarded) {
-    toast.success("Request Success", { description: "Signed In Successfully" });
-    return <Navigate to="/onboard" />;
-  }
-
-  if (isError) {
-    toast.error("Request Failed", { description: error?.message });
-  }
 
   const submit = handleSubmit((data) => mutate(data));
 
@@ -249,25 +224,6 @@ function SignIn() {
               <Icons.googleIcon />
               Sign in with Google
             </Button>
-            {/* <AlertDialog>
-                        <AlertDialogTrigger className="w-full">
-                            <Button className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black" variant="outline">
-                                <Icons.googleIcon/>
-                                Continue with Google
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                            <AlertDialogTitle>Contact Us</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Please contact IntelliResponse team.
-                            </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                            <AlertDialogAction>Okay</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog> */}
 
             <p className="md:mt-3">
               Don't have an account ?{" "}
@@ -275,24 +231,6 @@ function SignIn() {
                 Sign Up
               </Link>
             </p>
-            {/* <AlertDialog>
-                        <p className="mt-3">Don't have an account ? 
-                            <AlertDialogTrigger asChild className="w-full">
-                                <span className="font-bold hover:underline cursor-pointer"> Sign Up</span>
-                            </AlertDialogTrigger>
-                        </p>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                            <AlertDialogTitle>Contact Us</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Please contact IntelliResponse team.
-                            </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                            <AlertDialogAction>Okay</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog> */}
           </CardFooter>
         </Card>
 

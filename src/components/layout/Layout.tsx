@@ -47,7 +47,8 @@ function Layout() {
     const signout = () => {
         googleLogout();
         setAuth(null);
-        localStorage.removeItem("auth");
+        localStorage.clear();
+        sessionStorage.clear();
         navigate("/sign-in", { replace: true });
         window.location.reload();
     };

@@ -3,30 +3,25 @@ import { ASSETS } from "@/assets/assets";
 import { Icons } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
-import { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { SignUpType, ValidateUserType } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { AuthType, SignUpType } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 import {
   signInUserByGoogle,
   signupUser,
-  validateUser,
   verifyGoogleUser,
 } from "@/lib/apis";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useAppContext } from "@/contexts/AuthContext";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import useToggle from "@/hooks/useToggle";
-// import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
 function SignUp() {
-  const [user, setUser] =
-    useState<
-      Omit<TokenResponse, "error" | "error_description" | "error_uri">
-    >();
+  
   const {
     register,
     handleSubmit,
@@ -37,74 +32,53 @@ function SignUp() {
   const { setAuth } = useAppContext();
   const navigate = useNavigate();
   const [isPasswordVisible, togglePasswordVisibility] = useToggle();
-  const [isConfirmPasswordVisible, toggleConfirmPasswordVisibility] =
-    useToggle();
+  const [isConfirmPasswordVisible, toggleConfirmPasswordVisibility] = useToggle();
+
+  /***************************************** Google signup **********************************************/
+
+  const { mutate: signInUserByGoogleMutate } = useMutation({
+    mutationKey: ["signInUserByGoogle"],
+    mutationFn: signInUserByGoogle,
+    onSuccess: (res: AxiosResponse<AuthType>) => {
+
+      setAuth(res?.data);
+
+      if (res?.data?.data?.onboarded === true) {
+        toast.success("Request Success", { description: "Signed In Successfully" });
+        navigate("/dashboard", { replace: true });
+        window.location.reload();
+      }
+
+      if (res?.data?.data?.onboarded === false) {
+        toast.success("Request Success", { description: "Signed In Successfully" });
+        navigate("/onboard", { replace: true });
+        window.location.reload();
+      }
+    },
+    onError: (error) => toast.error("Request Failed", { description: error?.message })
+  })
+
+  const { mutate: verifyGoogleUserMutate } = useMutation({
+    mutationKey: ["verifyGoogleUser"],
+    mutationFn: verifyGoogleUser,
+    onSuccess: (res) => {
+      signInUserByGoogleMutate({
+        email: res?.data?.email,
+        name: `${res?.data?.given_name} ${res?.data?.family_name}`,
+      });
+    },
+    onError: (error) => toast.error("Request Failed", { description: error?.message })
+  });
 
   const googleLogin = useGoogleLogin({
-    onSuccess: (res) => setUser(res),
-    onError: (error) =>
-      toast.error("Request Failed", { description: error?.error_description }),
+    onSuccess: (res) => verifyGoogleUserMutate(res),
+    onError: (error) => toast.error("Request Failed", { description: error.error_description }),
   });
 
-  const { data: googleData } = useQuery({
-    queryKey: ["verifyGoogleUser", user],
-    queryFn: () => verifyGoogleUser(user),
-    retry: 3,
-    refetchOnWindowFocus: false,
-    enabled: Boolean(user),
-  });
 
-  const { data, isSuccess, isError, error } = useQuery({
-    queryKey: ["signInUserByGoogle", googleData],
-    queryFn: () =>
-      signInUserByGoogle({
-        email: googleData?.data?.email,
-        name: `${googleData?.data?.given_name} ${googleData?.data?.family_name}`,
-      }),
-    retry: 3,
-    refetchOnWindowFocus: false,
-    enabled: Boolean(googleData),
-  });
+  const submitGoogleLogin = () => googleLogin();
 
-  const { isSuccess: validateUserSuccess, data: validateUserData } = useQuery({
-    queryKey: ["validateUser"],
-    queryFn: () => {
-      setAuth(data?.data);
-      return validateUser(data?.data?.token);
-    },
-    retry: 0,
-    select: (data): ValidateUserType => data?.data?.data,
-    refetchOnWindowFocus: false,
-    enabled: isSuccess,
-  });
-
-  // if(isLoading){
-  //   return (
-  //     <div className="h-screen flex items-center justify-center flex-col gap-3">
-  //         <div className="hidden lg:flex flex-row items-center gap-1">
-  //             <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
-  //             <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
-  //         </div>
-  //         <div>
-  //           <Loader/>
-  //         </div>
-  //     </div>
-  //   )
-  // }
-
-  if (validateUserSuccess && validateUserData?.onboarded) {
-    toast.success("Request Success", { description: "Signed In Successfully" });
-    return <Navigate to="/dashboard" />;
-  }
-
-  if (validateUserSuccess && !validateUserData?.onboarded) {
-    toast.success("Request Success", { description: "Signed In Successfully" });
-    return <Navigate to="/onboard" />;
-  }
-
-  if (isError) {
-    toast.error("Request Failed", { description: error?.message });
-  }
+  /*********************************** Normal sign up *******************************************/
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["signupUser"],
@@ -124,9 +98,6 @@ function SignUp() {
     },
   });
 
-  const submitGoogleLogin = () => googleLogin();
-  // console.log(submitGoogleLogin)
-
   const submit = handleSubmit((data) => {
     mutate({
       name: data.username,
@@ -134,7 +105,6 @@ function SignUp() {
       password: data.password,
     });
   });
-  // console.log(submit)
 
   useEffect(() => {
     if (

@@ -15,9 +15,6 @@ const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.ap
 const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
 const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
 
-// const BASE_URL_V2="https://backend-auth-staging-91592131102.asia-south1.run.app"
-// const BUSINESS_BASE_URL ="https://backend-payment-staging-91592131102.asia-south1.run.app"
-// const PAYMENT_BASE_URL ="https://backend-reviews-staging-91592131102.asia-south1.run.app"
 
 
 export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
@@ -66,11 +63,10 @@ export const getSuggestions = async (body: any) => {
 export const verifyGoogleUser = async (user: Omit<TokenResponse, "error" | "error_description" | "error_uri"> | undefined) => {
 
     return await axios({
-        method: "get",
-        url: `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user?.access_token}`,
-        headers: {
-            Authorization: `Bearer ${user?.access_token}`,
-            Accept: 'application/json'
+        method: "post",
+        url: `${BASE_URL_V2}/auth/verify/google-user`,
+        data: {
+            access_token: user?.access_token
         }
     })
 }

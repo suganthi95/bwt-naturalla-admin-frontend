@@ -58,7 +58,7 @@ function OnBoard() {
     }
 
   return (
-    <div className="min-h-screen p-2 flex bg-white text-slate-950">
+    <div className="h-screen overflow-y-scroll flex bg-white text-slate-950 pt-20">
         <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
             <div>
                 <Button onClick={goBackClick} size="sm" variant="secondary">Go back</Button>
