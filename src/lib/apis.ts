@@ -559,4 +559,29 @@ export const fetchInvoice = async ({ token, paymentId }: { token: string, paymen
     })
 }
 
+export const verifyOtp = async ({ token, otp }: { token: string, otp: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/verify/otp`,
+        headers: {
+            "Authorization": token
+        },
+        data: {
+            otp
+        }
+    })
+}
+
+export const resendOtp = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/resend/otp`,
+        headers: {
+            "Authorization": token
+        }
+    })
+}
+
 
