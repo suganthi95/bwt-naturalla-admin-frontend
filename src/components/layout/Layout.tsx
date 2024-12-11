@@ -14,10 +14,11 @@ import { useQuery } from "@tanstack/react-query";
 import { validateUser } from "@/lib/apis";
 import Loader from "../ui/Loader";
 import { CollapseType, ValidateUserType } from "@/types";
-import UpgradeModal from "../ui/UpgradeModal";
+// import UpgradeModal from "../ui/UpgradeModal";
 import BuyCredits from "../ui/BuyCredits";
 import { Badge } from "../ui/badge";
 import UpgradeToProDialog from "./UpgradeToProDialog";
+import SubscriptionModal from "./SubscriptionModal";
 
 function Layout() {
 
@@ -42,7 +43,7 @@ function Layout() {
     const navigate = useNavigate();
     const { auth, setAuth } = useAppContext();
     const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
-    const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
+    const [ _openPaymentDialog, setOpenPaymentDialog ] = useState(false);
 
     const signout = () => {
         googleLogout();
@@ -204,12 +205,16 @@ function Layout() {
                    
 
                     <div className="flex items-center flex-row  gap-2 md:gap-5 xl:gap-10">
+
                         {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
-                        <UpgradeModal
+
+                        {/* <UpgradeModal
                             plan={data?.plan_name}
                             openPaymentDialog={openPaymentDialog}
                             setOpenPaymentDialog={setOpenPaymentDialog}
-                        />
+                        /> */}
+
+                        <SubscriptionModal/>
 
                         <p className="hidden md:block  text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">

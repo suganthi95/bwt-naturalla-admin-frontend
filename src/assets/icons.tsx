@@ -250,5 +250,69 @@ export const Icons = {
         d="M4.166 20c0-7.463 0-11.197 2.318-13.515C8.803 4.167 12.534 4.167 20 4.167c7.464 0 11.197 0 13.515 2.318 2.319 2.318 2.319 6.05 2.319 13.515 0 7.463 0 11.197-2.319 13.515-2.318 2.318-6.05 2.318-13.515 2.318-7.463 0-11.196 0-13.515-2.318C4.166 31.197 4.166 27.465 4.166 20z"
       ></path>
     </svg>
-  )
+  ),
+
+  standardIcon: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      fill="none"
+      viewBox="0 0 72 72"
+    >
+      <rect width="72" height="72" fill="#E1EFF9" rx="16"></rect>
+      <path fill="#0F344E" d="M36 17a19 19 0 0 0 0 38V17"></path>
+      <path fill="#127ECB" d="M36 55a19 19 0 0 0 0-38v38"></path>
+    </svg>
+  ),
+
+  proIcon: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      fill="none"
+      viewBox="0 0 72 72"
+    >
+      <rect width="72" height="72" fill="#FFE6CC" rx="16"></rect>
+      <g clipPath="url(#clip0_7446_4297)">
+        <path fill="#FF7C00" d="M17 17h18.486v38H17z"></path>
+        <path fill="#FFB166" d="M35.486 17H55v38H35.486z"></path>
+        <path fill="#FFCB99" d="M35.486 35.486H55V55H35.486z"></path>
+      </g>
+      <defs>
+        <clipPath id="clip0_7446_4297">
+          <path fill="#fff" d="M17 17h38v38H17z"></path>
+        </clipPath>
+      </defs>
+    </svg>
+  ),
+
+  enterpriseIcon: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      fill="none"
+      viewBox="0 0 72 72"
+    >
+      <rect width="72" height="72" fill="#E1EFF9" rx="16"></rect>
+      <path
+        fill="#93C7EB"
+        d="m54.989 45.3.008-.003h-.016l-9.483-4.844-9.5-4.851-9.499 4.851-9.483 4.843H17l.008.005-.008.004h.016l9.483 4.843L36 55l9.499-4.852 9.483-4.843h.016z"
+      ></path>
+      <path
+        fill="#0F344E"
+        d="m54.989 26.7.008-.005h-.016l-9.483-4.843-9.5-4.852-9.499 4.852-9.483 4.843H17l.008.004-.008.004h.016l9.483 4.844 9.5 4.852 9.499-4.852 9.483-4.844h.016z"
+      ></path>
+      <path
+        fill="#127ECB"
+        d="M17.016 26.305v19.39L35.998 36zM54.981 26.305v19.39L36 36z"
+      ></path>
+    </svg>
+  ),
+  
 }

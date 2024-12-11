@@ -88,7 +88,8 @@ function SignUp() {
       toast.success("Request Success", {
         description: "Signed Up Successfully",
       });
-      navigate(`/welcome`, { replace: true });
+      // navigate(`/welcome`, { replace: true });
+      navigate(`/verify-email`, { replace: true });
     },
     onError: (error: AxiosError<any>) => {
       console.log(error);
