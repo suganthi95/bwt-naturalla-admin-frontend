@@ -15,20 +15,20 @@ function SubscriptionModal() {
                 <span className="text-xs">Upgrade</span>
             </button>
         </DialogTrigger>
-        <DialogContent className="max-w-7xl">
+        <DialogContent className="h-full mt-10   w-10/12 md:max-w-7xl">
             <Link to="/" className="flex flex-row items-center gap-3 mx-auto">
               <img src={ASSETS.LOGO} alt="logo" />
               <div>
-                <p className="font-bold text-2xl md:text-2xl text-primary">
+                <p className="font-bold text-lg md:text-2xl text-primary">
                   Intelli<span className="text-secondary">Response</span>
                 </p>
-                <span className="text-slate-500 text-sm">
+                <span className="text-slate-500 text-xs md:text-sm">
                   Turning Reviews Into Insights
                 </span>
               </div>
             </Link>
 
-            <p className="text-center text-sm text-slate-500">Experience the full capabilities of IntelliResponse without any commitment.</p>
+            <p className="text-center text-xs md:text-sm text-slate-500">Experience the full capabilities of IntelliResponse without any commitment.</p>
 
             <div className="text-center flex flex-row items-center gap-2 font-medium mx-auto">
                 <p>Monthly</p>
@@ -36,8 +36,8 @@ function SubscriptionModal() {
                 <p>Yearly</p>
             </div>
 
-            <div className="grid grid-cols-3 gap-5">
-                <div className="rounded-xl p-5 w-full group">
+            <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 place-items-center gap-5 h-full overflow-y-scroll ">
+                <div className="rounded-xl p-1  md:p-2 xl:p-5  w-full group">
                     <div className="flex flex-row items-center gap-3">
                         <Icons.standardIcon className="h-10 w-10"/>
 
@@ -48,10 +48,10 @@ function SubscriptionModal() {
                     </div>
 
                     <div className="mt-3">
-                        <h1 className="text-2xl text-secondary font-bold">Rs 1499 <span className="text-lg text-slate-500 font-normal">/ Per Month</span></h1>
+                        <h1 className="text-lg md:text-2xl text-secondary font-bold">Rs 1499 <span className="text-sm md:text-lg text-slate-500 font-normal">/ Per Month</span></h1>
                     </div>
 
-                    <div className="flex flex-col gap-2 py-2 text-sm mt-5">
+                    <div className="flex flex-col gap-2 py-2 text-xs xl:text-sm mt-5">
                         <div className="flex  gap-3 items-start md:items-center">
                             <div className="h-5 w-5">
                                 <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
@@ -121,27 +121,27 @@ function SubscriptionModal() {
                     </div>
                 </div>
 
-                <div className="rounded-xl p-5 w-full bg-[#FFFAF5] group">
+                <div className="rounded-xl p-1  md:p-2 xl:p-5 w-full bg-[#FFFAF5] group">
                     <div className="flex flex-row items-center gap-3">
                         <Icons.proIcon className="h-12 w-12"/>
 
-                        <div className="flex flex-row items-center justify-between w-full">
+                        <div className="flex flex-col gap-y-2 md:flex-row items-center justify-between w-full">
                             <div className="text-md">
                                 <p className="text-slate-500">For Professionals</p>
                                 <h2 className="text-secondary font-bold text-lg flex flex-row items-center gap-2">Pro Plan <Icons.diamondIcon className="h-5 w-5"/></h2>
                             </div>
                             <div>
-                                <Button size="sm" className="bg-[#59C204] hover:bg-[#59C204] rounded-xl">Recommended</Button>
+                                <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl">Recommended</Button>
                             </div>
                         </div>
 
                     </div>
 
                     <div className="mt-3">
-                        <h1 className="text-2xl text-primary font-bold">Rs 3999 <span className="text-lg text-slate-500 font-normal">/ Per Month</span></h1>
+                        <h1 className="text-lg md:text-2xl text-primary font-bold">Rs 3999 <span className="text-sm md:text-lg text-slate-500 font-normal">/ Per Month</span></h1>
                     </div>
 
-                    <div className="flex flex-col gap-2 py-2 text-sm mt-5">
+                    <div className="flex flex-col gap-2 py-2 text-xs md:text-sm mt-5">
                         <div className="flex  gap-3 items-start md:items-center">
                             <div className="h-5 w-5">
                                 <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
@@ -191,7 +191,7 @@ function SubscriptionModal() {
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-row gap-3 items-start md:items-center">
+                        <div className="flex flex-row gap-3 text-xs md:text-sm items-start md:items-center">
                             <div className="h-5 w-5">
                                 <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
                             </div>
@@ -211,7 +211,7 @@ function SubscriptionModal() {
                     </div>
                 </div>
 
-                <div className="rounded-xl p-5 w-full group">
+                <div className="rounded-xl p-1 md:p-2 xl:p-5 w-full group xl:mb-7">
                     <div className="flex flex-row items-center gap-3">
                         <Icons.enterpriseIcon className="h-10 w-10"/>
 
@@ -222,7 +222,7 @@ function SubscriptionModal() {
                     </div>
 
                     <div className="mt-3">
-                        <h1 className="text-2xl text-secondary font-bold">Contact Sales</h1>
+                        <h1 className="text-lg md:text-2xl text-secondary font-bold">Contact Sales</h1>
                     </div>
 
                     <div className="flex flex-col gap-2 py-2 text-sm mt-5">
