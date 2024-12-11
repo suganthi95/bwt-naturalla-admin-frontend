@@ -77,9 +77,11 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                                                     {item.name}
                                                 </p>}
                                                 </div>
-                                                {item.name === "Google Review" && (
-                                                    <p className="mt-4 bg-primary text-white rounded-md py-1    ">Coming Soon...</p>
-                                                    )}
+                                                {!resizable ? '': item.name === "Google Review" &&
+                                                                 (<p className="mt-4 bg-primary text-white rounded-md py-1    ">Coming Soon...</p>
+                                                                  )
+                                                } 
+                                               
                                                </div>
                                               
                                                

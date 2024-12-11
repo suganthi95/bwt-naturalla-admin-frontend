@@ -412,8 +412,8 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
           <span className="text-xs">Upgrade</span>
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="p-0 overflow-y-scroll  w-11/12 h-4/5  md:h-auto   md:max-w-5xl">
-        <div className="  h-screen   p-2 flex flex-row">
+      <AlertDialogContent className="p-0 overflow-y-scroll h-5/6 w-11/12  xl:overflow-hidden xl:h-5/6  md:h-auto   md:max-w-5xl">
+        <div className="     p-2 flex flex-row">
         <Button
               onClick={() => setOpenPaymentDialog(false)}
               className=" md:hidden   absolute top-3 right-3"
