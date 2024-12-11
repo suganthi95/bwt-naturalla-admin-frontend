@@ -27,6 +27,7 @@ import utc from 'dayjs/plugin/utc';
 import Billing from "./pages/Billing"
 import PaymentSuccess from "./pages/PaymentSuccess"
 import PaymentFailure from "./pages/PaymentFailure"
+import VerifyOTP from "./pages/VerifyOTP"
 
 
 dayjs.extend(utc);
@@ -101,6 +102,7 @@ function App() {
       </Route>
       <Route path="/sign-in" element={<SignIn/>}/>
       <Route path="/sign-up" element={<SignUp/>}/>
+      <Route path="/verify-email" element={<VerifyOTP/>}/>
       <Route path="/onboard" element={<OnBoard/>}/>
       <Route path="/welcome" element={<Welcome/>}/>
       <Route path="/validate" element={<Validate/>}/>
