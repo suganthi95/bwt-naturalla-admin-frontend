@@ -127,6 +127,7 @@ function SignUp() {
         position: "top-center",
       });
     }
+    
   }, []);
 
   return (
