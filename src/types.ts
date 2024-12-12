@@ -176,7 +176,8 @@ export interface BillingResponse {
     cancel_at: string
     instant_credits: InstantCredits
     amount: number
-    currencey: string
+    currencey: string,
+    started_subscription: boolean
   }
   
   export interface InstantCredits {
@@ -196,5 +197,24 @@ export interface PaymentHistoryResponseType {
     payment_status: string
     amount_paid: number
     validity_from: string
-    validity_to: string
+    validity_to: string,
+}
+
+export interface SubscriptionPlanType {
+    plan_id: number
+    razorpay_planid: string
+    plan_name: string
+    period: string
+    interval: number
+    plan_desc: string
+    plan_amount: number
+    unit_amount: number
+    currency: string
+    created_at: any
+    updated_at: any
+    country: string
+    strike_through_price: number
+    price_per_month: number
+    discount_pecentage: number,
+    currency_symbol: string
 }

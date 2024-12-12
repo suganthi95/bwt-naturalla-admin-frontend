@@ -418,14 +418,18 @@ export const responseRate = async ({ token, placeId }: { token: string, placeId:
     })
 }
 
-export const fetchSubscriptionPlans = async ({ token }: { token: string }) => {
-    
+export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { token: string, latitude: number | null, longitude: number | null }) => {
+
     return await axios({
-        method: "get",
+        method: "post",
         url: `${PAYMENT_BASE_URL}/payment/fetch/plans`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
+        },
+        data: {
+            latitude: latitude,
+            longitude: longitude
         }
     })
 }

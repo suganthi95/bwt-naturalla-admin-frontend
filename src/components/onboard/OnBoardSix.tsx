@@ -23,10 +23,11 @@ function OnBoardSix() {
     const [ input, setInput ] = useState("");
     const [value, setValue] = useState("");
     const [ valueError, setValueError ] = useState<string | null>(null);
-    const [userLocation, setUserLocation] = useState<{ latitude: number | null, longitude: number | null }>({
-        latitude: null,
-        longitude: null
-    });
+    const geoLocation = (): { latitude: number | null, longitude: number | null } => {
+        const location = localStorage.getItem("geoloc");
+        if(location === null) return { latitude: null, longitude: null }
+        return JSON.parse(location)
+    }
 
     const messages = [
         <p className='text-slate-500 text-center'><span className='text-primary'>Tip: </span>Personalize your review responses to show customers you really care.</p>,
@@ -72,8 +73,8 @@ function OnBoardSix() {
         queryKey: [ "getBusinessSuggestions", input ],
         queryFn: () => getBusinessSuggestions({ 
             input,
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude,
+            latitude: geoLocation().latitude,
+            longitude: geoLocation().longitude,
             token: auth?.token as string 
         }),
         select: (res) => res?.data?.data?.predictions?.map((item: any) => ({
@@ -149,22 +150,6 @@ function OnBoardSix() {
         }, 15000); // Change every 15 seconds
     
         return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setUserLocation({ latitude, longitude });
-                },
-                (error) => {
-                    console.error('Error getting user location:', error);
-                }
-            );
-        }else {
-            console.error('Geolocation is not supported by this browser.');
-        }
     }, []);
 
     let loader = null;

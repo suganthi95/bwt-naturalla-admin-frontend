@@ -51,7 +51,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
 
   const { isSuccess, data } = useQuery({
     queryKey: ["fetchSubscriptionPlans", auth?.token],
-    queryFn: () => fetchSubscriptionPlans({ token: auth?.token as string }),
+    queryFn: () => fetchSubscriptionPlans({ token: auth?.token as string, latitude: null, longitude: null }),
     refetchOnWindowFocus: false,
     retry: 1,
     select: (data) => data?.data,
