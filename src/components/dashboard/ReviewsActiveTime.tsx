@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { reviewActiveTime } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import Chart from "react-apexcharts"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Info } from "lucide-react";
 
 interface Props {
     placeId: string
@@ -92,7 +94,36 @@ function ReviewsActiveTime({ placeId }: Props) {
         content = (
             <Card>
                 <CardHeader>
-                <CardTitle>Reviews Active Time</CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg md:text-balance">Reviews Active Time</CardTitle>
+                    <Popover>
+                            <PopoverTrigger>
+                            <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
+                            </PopoverTrigger>
+                            <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20">
+                            
+                                            <div  className="bg-white rounded-lg  text-justify  " >
+                                              <h3 className="text-md font-semibold mb-2 text-gray-800">Reviews Active Time</h3>
+                                              <div className="space-y-2">
+                                                  <div>
+                                                  <strong className="text-sm">What it shows:</strong>
+                                                  <p className="text-xs text-gray-500">This heatmap tracks the times of day and days of the week when most reviews are submitted, helping you understand your audience’s activity patterns.</p>
+                                                  </div>
+                                                  <div>
+                                                  <strong className="text-sm">What it shows:</strong>
+                                                  <p className="text-xs text-gray-500">The chart tracks review activity by hour and day, with colors indicating the number of reviews submitted at each time.</p>
+                                                  </div>
+                                                  
+                                                  <div>
+                                                  <strong  className="text-sm">How to read it:</strong>
+                                                  <p className="text-xs text-gray-500"> Each cell shows the number of reviews submitted during a specific hour on a specific day, with color intensity indicating the frequency. It can help you identify peak times for feedback and plan when to engage with customers for better responses.</p>
+                                                  </div>
+                                              </div>
+                                            </div>
+                            </PopoverContent>
+                    </Popover>
+                  </div>
+                  <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong> The chart tracks review activity by hour and day, with colors indicating the number of reviews submitted at each time.</p>
                 </CardHeader>
                 <CardContent>
                     <Chart

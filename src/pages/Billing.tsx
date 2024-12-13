@@ -23,6 +23,8 @@ function Billing() {
         retry: 1
     });
 
+    
+
     const { isLoading: isPaymentHistoryLoading, isError: isPaymentHistoryError, isSuccess: isPaymentHistorySuccess, data: paymentHistoryData } = useQuery({
         queryKey: [ "getPaymentHistoryTable" ],
         queryFn: () => getPaymentHistoryTable({ token: auth?.token as string }),
@@ -43,12 +45,15 @@ function Billing() {
 
     if(isSuccess && isPaymentHistorySuccess && Array.isArray(paymentHistoryData)){
         content = (
+            
             <>
+           
             <div className="py-2 text-md font-medium">
                 <p>Current Plan</p>
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+                {data.amount == undefined || null ? '':
                 <Card className="p-4">
                     <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>
                     <Separator className="my-2" />
@@ -67,6 +72,8 @@ function Billing() {
                         <CancelSubscription/>
                     </div>
                 </Card>
+                }
+                {data.instant_credits.order_amount == undefined || null ?'':
                 <Card className="p-4">
                     <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits} / {data.instant_credits.total_credits}</h1>
                     <Separator className="my-2" />
@@ -76,6 +83,7 @@ function Billing() {
                         <p className="font-medium">₹ {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
                     </div>
                 </Card>
+                }
             </div>
             <div>
                 <PaymentTable data={paymentHistoryData as PaymentHistoryResponseType[]}/>
