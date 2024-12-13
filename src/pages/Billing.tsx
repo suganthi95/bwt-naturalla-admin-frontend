@@ -47,47 +47,54 @@ function Billing() {
         content = (
             
             <>
-           
-            <div className="py-2 text-md font-medium">
-                <p>Current Plan</p>
-            </div>
+                <div className="py-2 text-md font-medium">
+                    <p>Current Plan</p>
+                </div>
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
-                {data.amount == undefined || null ? '':
-                <Card className="p-4">
-                    <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>
-                    <Separator className="my-2" />
+                <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+                    <Card className="p-4">
+                        {data.started_subscription ? 
+                            <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>  :
+                            <h1 className="text-md text-primary capitalize">Subscription on hold</h1> 
+                        }
+                        <Separator className="my-2" />
 
-                    <div className="space-y-1 mt-2">
-                        <p className="text-sm text-slate-400">Subscription renewal date</p>
-                        <p className="font-medium">{dayjs(data?.next_due).format("MMMM DD, YYYY")} ({dayjs(data?.next_due).fromNow()})</p>
-                    </div>
+                        {data.started_subscription && <div className="space-y-1 mt-2">
+                            <p className="text-sm text-slate-400">Subscription renewal date</p>
+                            <p className="font-medium">{dayjs(data?.next_due).format("MMMM DD, YYYY")} ({dayjs(data?.next_due).fromNow()})</p>
+                        </div>}
 
-                    <div className="space-y-1 mt-2">
-                        <p className="text-sm text-slate-400">what you’ll be charged</p>
-                        <p className="font-medium">₹ {(data?.amount / 100).toFixed(2)}</p>
-                    </div>
+                        {data.started_subscription ?
+                            <>
+                                <div className="space-y-1 mt-2">
+                                    <p className="text-sm text-slate-400">what you’ll be charged</p>
+                                    <p className="font-medium">₹ {(data?.amount / 100).toFixed(2)}</p>
+                                </div>
 
-                    <div className="space-y-1 mt-4">
-                        <CancelSubscription/>
-                    </div>
-                </Card>
-                }
-                {data.instant_credits.order_amount == undefined || null ?'':
-                <Card className="p-4">
-                    <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits} / {data.instant_credits.total_credits}</h1>
-                    <Separator className="my-2" />
+                                <div className="space-y-1 mt-4">
+                                    <CancelSubscription/>
+                                </div>
+                            </> :
+                            <div className="space-y-1 mt-2">
+                                <p className="text-sm text-slate-900 font-bold">Your subscription will be activated in few minutes</p>
+                            </div>
+                        }
 
-                    <div className="space-y-1 mt-2">
-                        <p className="text-sm text-slate-400">Last Payment made {dayjs(data?.instant_credits.started_at).fromNow()}</p>
-                        <p className="font-medium">₹ {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
-                    </div>
-                </Card>
-                }
-            </div>
-            <div>
-                <PaymentTable data={paymentHistoryData as PaymentHistoryResponseType[]}/>
-            </div>
+                        
+                    </Card>
+                    <Card className="p-4">
+                        <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits} / {data.instant_credits.total_credits}</h1>
+                        <Separator className="my-2" />
+
+                        <div className="space-y-1 mt-2">
+                            <p className="text-sm text-slate-400">Last Payment made {dayjs(data?.instant_credits.started_at).fromNow()}</p>
+                            <p className="font-medium">₹ {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
+                        </div>
+                    </Card>
+                </div>
+                <div>
+                    <PaymentTable data={paymentHistoryData as PaymentHistoryResponseType[]}/>
+                </div>
             </>
         )
     }

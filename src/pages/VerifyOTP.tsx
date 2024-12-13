@@ -1,13 +1,19 @@
 import { ASSETS } from "@/assets/assets"
 import { Button } from "@/components/ui/button"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { useAppContext } from "@/contexts/AuthContext";
+import { resendOtp, verifyOtp } from "@/lib/apis";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner";
 
 function VerifyOTP() {
 
     const [ otp, setOtp ] = useState("");
-
+    const { auth } = useAppContext();
     const navigate = useNavigate();
 
     const goBackClick = () => {
@@ -15,6 +21,57 @@ function VerifyOTP() {
         navigate("/sign-up", { replace: true });
         window.location.reload();
     }
+
+    /******************************* Verify OTP **********************************/
+
+    const { mutate, isPending } = useMutation({
+        mutationKey: [ "verifyOtp" ],
+        mutationFn: verifyOtp,
+        onSuccess: () => {
+            toast.success("Request Success", {
+                description: "Email Verified Successfully",
+            });
+            navigate(`/welcome`, { replace: true });
+        }, 
+        onError: (error: AxiosError<any>) => {
+            console.log(error)
+            toast.error("Request Failed", {
+                description: error?.response?.data?.message || error.message,
+            });
+        }
+    });
+
+    const submitOtp = () => {
+        mutate({
+            token: auth?.token as string,
+            otp: otp
+        })
+    }
+
+    /**************************************** Resend OTP ***************************************/
+
+    const { mutate: resendOtpMutate, isPending: resendOtpPending } = useMutation({
+        mutationKey: [ "resendOtp" ],
+        mutationFn: resendOtp,
+        onSuccess: () => {
+            toast.success("Request Success", {
+                description: "OTP Resent Successfully",
+            });
+        }, 
+        onError: (error: AxiosError<any>) => {
+            console.log(error)
+            toast.error("Request Failed", {
+                description: error?.response?.data?.message || error.message,
+            });
+        }
+    });
+
+    const resendOtpSubmit = () => {
+        resendOtpMutate({
+            token: auth?.token as string
+        })
+    }
+
 
   return (
     <div className="h-screen flex bg-white text-slate-950 pt-2 pr-2">
@@ -36,7 +93,7 @@ function VerifyOTP() {
                 <p>Enter the <span className="font-bold">OTP</span> which we sent to your email id <br /> “example@gmail.com”</p>
 
                 <div className="pt-3">
-                    <InputOTP maxLength={6} value={otp} onChange={(val) => setOtp(val)}>
+                    <InputOTP type="number" maxLength={6} value={otp} onChange={(val) => setOtp(val)}>
                         <InputOTPGroup className="flex flex-row gap-3">
                             <InputOTPSlot className="border-none bg-slate-100 rounded-md h-12 w-12" index={0} />
                             <InputOTPSlot className="border-none bg-slate-100 rounded-md h-12 w-12" index={1} />
@@ -49,10 +106,14 @@ function VerifyOTP() {
                 </div>
 
                 <div>
-                    <Button className="text-primary hover:text-primary" variant="ghost">Resend</Button>
+                    <Button onClick={resendOtpSubmit} disabled={isPending || resendOtpPending} className="text-primary hover:text-primary" variant="ghost">
+                        {resendOtpPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Resend"}
+                    </Button>
                 </div>
 
-                <Button disabled={otp.length !== 6} className="bg-primary hover:bg-primary/80">Verify</Button>
+                <Button onClick={submitOtp} disabled={otp.length !== 6 || isPending} className="bg-primary hover:bg-primary/80">
+                    {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Verify"}
+                </Button>
             </div>
         </div>
         <div className="hidden lg:flex flex-1 bg-sandal rounded-lg">

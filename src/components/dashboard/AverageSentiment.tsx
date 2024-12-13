@@ -48,8 +48,6 @@ function AverageSentiment({ placeId }: Props) {
     if(isSuccess && data?.length > 0){
 
         const chartData = data.filter((item: any) => item.year === 2024).map((item: any) => ({ month: dayjs(item.date).format("MMM"), sentiment: item.average_sentiment_score }));
-
-        console.log(chartData)
         
         const chartConfig = {
             average_sentiment_score: {

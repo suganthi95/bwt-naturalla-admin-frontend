@@ -78,7 +78,6 @@ function SentimentDistributionOvertime({ placeId }: Props) {
                             <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20">
-                            
                                  <div className="bg-white rounded-lg text-justify ">
                                             <h3 className="text-md font-semibold mb-2 text-gray-800">Sentiment Distribution Over Time</h3>
                                             <div className="space-y-2">

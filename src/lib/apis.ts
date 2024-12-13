@@ -418,14 +418,18 @@ export const responseRate = async ({ token, placeId }: { token: string, placeId:
     })
 }
 
-export const fetchSubscriptionPlans = async ({ token }: { token: string }) => {
-    
+export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { token: string, latitude: number | null, longitude: number | null }) => {
+
     return await axios({
-        method: "get",
+        method: "post",
         url: `${PAYMENT_BASE_URL}/payment/fetch/plans`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
+        },
+        data: {
+            latitude: latitude,
+            longitude: longitude
         }
     })
 }
@@ -555,6 +559,31 @@ export const fetchInvoice = async ({ token, paymentId }: { token: string, paymen
         responseType: "blob",
         data: {
             payment_id: paymentId
+        }
+    })
+}
+
+export const verifyOtp = async ({ token, otp }: { token: string, otp: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/verify/otp`,
+        headers: {
+            "Authorization": token
+        },
+        data: {
+            otp
+        }
+    })
+}
+
+export const resendOtp = async ({ token }: { token: string }) => {
+    
+    return await axios({
+        method: "post",
+        url: `${BASE_URL_V2}/auth/resend/otp`,
+        headers: {
+            "Authorization": token
         }
     })
 }

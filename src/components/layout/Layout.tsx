@@ -62,9 +62,7 @@ function Layout() {
         select: (data): ValidateUserType => data?.data?.data,
         enabled: Boolean(auth?.token) 
     });
-    
-    console.log(data);
-    
+        
 
     const menus: CollapseType = {
         "general" : [
@@ -181,9 +179,7 @@ function Layout() {
 
     if(isSuccess){
         const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
-        const plan = plans.filter((item) => item.code === data.plan_name)[0];
-        console.log(plan);
-        
+        const plan = plans.filter((item) => item.code === data.plan_name)[0];        
 
         main = (
             <main className="flex flex-col h-screen overflow-y-scroll md:overflow-hidden">
