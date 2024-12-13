@@ -51,21 +51,21 @@ function App() {
 
   // geolocation
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              localStorage.setItem("geoloc", JSON.stringify({ latitude, longitude }))
-            },
-            (error) => {
-              console.error('Error getting user location:', error);
-            }
-        );
-    }else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //       navigator.geolocation.getCurrentPosition(
+  //           (position) => {
+  //             const { latitude, longitude } = position.coords;
+  //             localStorage.setItem("geoloc", JSON.stringify({ latitude, longitude }))
+  //           },
+  //           (error) => {
+  //             console.error('Error getting user location:', error);
+  //           }
+  //       );
+  //   }else {
+  //     console.error('Geolocation is not supported by this browser.');
+  //   }
+  // }, []);
 
   const { isLoading, isSuccess, data, isError } = useQuery({
       queryKey: [ "validateUser" ],

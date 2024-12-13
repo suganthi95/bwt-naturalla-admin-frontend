@@ -55,7 +55,7 @@ function Billing() {
                     <Card className="p-4">
                         {data.started_subscription ? 
                             <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>  :
-                            <h1 className="text-md text-primary capitalize">Subscription on hold</h1> 
+                            <h1 className="text-md text-primary capitalize">Subscription In Progress...</h1> 
                         }
                         <Separator className="my-2" />
 
