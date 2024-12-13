@@ -126,6 +126,7 @@ function UpgradeModal({ plan, openPaymentDialog, setOpenPaymentDialog }: Props) 
     mutate({
       planId: watch("plan"),
       token: auth?.token as string,
+      country: ""
     });
   
   };

@@ -434,7 +434,7 @@ export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { t
     })
 }
 
-export const createSubscription = async ({ token, planId }: { token: string, planId: number | null }) => {
+export const createSubscription = async ({ token, planId, country }: { token: string, planId: number | null, country: string }) => {
     
     return await axios({
         method: "post",
@@ -444,7 +444,8 @@ export const createSubscription = async ({ token, planId }: { token: string, pla
             "Authorization": token
         },
         data: {
-            plan_id: planId
+            plan_id: planId,
+            country: country
         }
     })
 }
@@ -491,19 +492,23 @@ export const cancelSubscription = async ({ token }: { token: string }) => {
     })
 }
 
-export const getCreditsList = async ({ token }: { token: string }) => {
+export const getCreditsList = async ({ token, latitude, longitude }: { token: string, latitude: null | number, longitude: null | number }) => {
     
     return await axios({
-        method: "get",
+        method: "post",
         url: `${PAYMENT_BASE_URL}/payment/credit/items`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
+        },
+        data: {
+            latitude: latitude,
+            longitude: longitude
         }
     })
 }
 
-export const buyCredits = async ({ token, itemId }: { token: string, itemId: number }) => {
+export const buyCredits = async ({ token, itemId, country }: { token: string, itemId: number, country: string }) => {
     
     return await axios({
         method: "post",
@@ -513,7 +518,8 @@ export const buyCredits = async ({ token, itemId }: { token: string, itemId: num
             "Authorization": token
         },
         data: {
-            item_id: itemId
+            item_id: itemId,
+            country
         }
     })
 }

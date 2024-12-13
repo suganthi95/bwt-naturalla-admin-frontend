@@ -121,10 +121,10 @@ function SubscriptionModal() {
         },
     });
 
-    const buyNowOnclick = (planId: number) => {
+    const buyNowOnclick = (planId: number, country: string) => {
         mutate({
             token: auth?.token as string,
-
+            country,
             planId
         })
     }
@@ -249,7 +249,7 @@ function SubscriptionModal() {
                         </div>
 
                         <div className="mt-2">
-                            <Button disabled={isPending} onClick={() => buyNowOnclick(standardPlanData.plan_id)} size="lg" className="w-full">Buy Now</Button>
+                            <Button disabled={isPending} onClick={() => buyNowOnclick(standardPlanData.plan_id, standardPlanData.country)} size="lg" className="w-full">Buy Now</Button>
                         </div>
                     </div>
 
@@ -339,7 +339,7 @@ function SubscriptionModal() {
                         </div>
 
                         <div className="mt-2">
-                            <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id)} size="lg" className="w-full bg-primary hover:bg-primary/80">Buy Now</Button>
+                            <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80">Buy Now</Button>
                         </div>
                     </div>
 

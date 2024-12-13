@@ -1,5 +1,5 @@
 import { Button } from "./button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "./popover"
 import { LoaderCircle, Zap } from "lucide-react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./dialog";
@@ -11,6 +11,7 @@ import { buyCredits, getCreditsList, PAYMENT_KEY, verifyCreditCheckout } from "@
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./alert-dialog";
 
 
 function BuyCredits() {
@@ -19,21 +20,60 @@ function BuyCredits() {
     const [ Razorpay ] = useRazorpay();
     const [ openCreditPopover, setOpenCreditPopover ] = useState(false);
     const [ openRefillDialog, setOpenRefillDialog ] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [ geoLocation, setGeoLocation ] = useState<{ latitude: null | number, longitude: null | number }>({ latitude: null, longitude: null });
 
     const queryClient = useQueryClient();
     const queryData = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType, message: string }>>([ "validateUser" ]);
     const { remaining_credits } = queryData?.data?.data as ValidateUserType;
 
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setGeoLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
+            },
+            (error) => {
+                console.error('Error enabling geolocation:', error);
+            }
+        );
+    }, [])
+
+    const handleModal = () => {
+        if ('permissions' in navigator) {
+            navigator.permissions.query({ name: 'geolocation' as PermissionName }).then((result) => {
+                if (result.state === 'denied' || result.state === 'prompt') {
+                    setIsModalOpen(true);
+                }else{
+                    setOpenRefillDialog(true)
+                }
+            });
+        } else {
+            // Default to showing modal if permissions API isn't available
+            setIsModalOpen(true);
+        }
+    }
+
     // get credits plan
     const { data } = useQuery({
         queryKey: [ "getCreditsList" ],
-        queryFn: () => getCreditsList({ token: auth?.token as string }),
+        queryFn: () => getCreditsList({ 
+            token: auth?.token as string,
+            latitude: geoLocation.latitude,
+            longitude: geoLocation.longitude
+        }),
         retry: 1,
         refetchOnWindowFocus: false,
-        select: (data) => data?.data
+        select: (data) => data?.data,
+        enabled: openRefillDialog
     })
 
-    const [ purchaseCreditCountId, setPurchaseCreditCountId ] = useState<number>(1);
+    const [ purchaseCreditCountId, setPurchaseCreditCountId ] = useState<number | null>(null);
+
+    useEffect(() => {
+        if(data){
+            setPurchaseCreditCountId(data[0].item_id)
+        }
+    }, [ data ])
 
     // buy credits mutation
 
@@ -88,9 +128,12 @@ function BuyCredits() {
 
     const initiatePayment = () => {
 
+        const country = data[0].country;
+
         mutate({
-            itemId: purchaseCreditCountId,
-            token: auth?.token as string
+            itemId: purchaseCreditCountId as number,
+            token: auth?.token as string,
+            country
         })
     }
     
@@ -115,7 +158,7 @@ function BuyCredits() {
                 </div>
 
                 <div>
-                    <Button onClick={() => setOpenRefillDialog(prev => !prev)} variant="secondary">Refill Now</Button>
+                    <Button onClick={handleModal} variant="secondary">Refill Now</Button>
                 </div>
             </div>
         </PopoverContent>
@@ -154,7 +197,7 @@ function BuyCredits() {
                     {data?.map((item: any) => (
                         <div className="flex flex-row items-center justify-between space-y-3" key={item?.item_id}>
                             <Badge onClick={() => setPurchaseCreditCountId(item?.item_id)} className={`bg-white cursor-pointer px-4 py-1 ${item?.item_id === purchaseCreditCountId && "bg-primary text-white"}`} variant="outline">{item.total_credits}</Badge>
-                            <p className="text-sm text-slate-600">₹ {item.credits_amount.toFixed(0)} ($ {item.amount_to_usd.toFixed(2)})</p>
+                            <p className="text-sm text-slate-600 font-medium">{item.currency_symbol} {item.credits_amount.toFixed(0)}</p>
                         </div>
                     ))}
                 </div>
@@ -171,11 +214,24 @@ function BuyCredits() {
         </div>
         <DialogFooter className="p-3">
             <Button onClick={initiatePayment} className="bg-primary hover:bg-primary/50 w-[200px]" type="submit">
-                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : `Buy ${data?.filter((item: any) => item.item_id === purchaseCreditCountId)[0].total_credits} Credits Now`}
+                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : `Buy ${data?.filter((item: any) => item.item_id === purchaseCreditCountId)[0]?.total_credits } Credits Now`}
             </Button>
         </DialogFooter>
         </DialogContent>
     </Dialog>
+    <AlertDialog open={isModalOpen}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+            <AlertDialogTitle>Enable Geolocation</AlertDialogTitle>
+            <AlertDialogDescription>
+                Your location is required for a better experience. Please enable it in your browser settings.
+            </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsModalOpen(false)}>Cancel</AlertDialogCancel>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
     </>
   )
 }
