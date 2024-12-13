@@ -181,6 +181,7 @@ export interface BillingResponse {
   }
   
   export interface InstantCredits {
+    currency_symbol: string
     total_credits: string
     used_credits: string
     remaining_instant_credits: string
