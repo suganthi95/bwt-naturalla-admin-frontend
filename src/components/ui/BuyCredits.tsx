@@ -7,7 +7,7 @@ import { Badge } from "./badge";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { ValidateUserType } from "@/types";
-import { buyCredits, getAllBusiness, getCreditsList, PAYMENT_KEY, verifyCreditCheckout } from "@/lib/apis";
+import { buyCredits, getCreditsList, PAYMENT_KEY, verifyCreditCheckout } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";

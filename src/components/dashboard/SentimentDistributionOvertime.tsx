@@ -11,14 +11,7 @@ import { Info } from "lucide-react";
 interface Props {
     placeId: string
 }
-type ChartData = {
-    title: string;
-    purpose: string;
-    whatItShows: string;
-    howToReadIt: string;
-  };
   
-
 function SentimentDistributionOvertime({ placeId }: Props) {
 
     const { auth } = useAppContext();
