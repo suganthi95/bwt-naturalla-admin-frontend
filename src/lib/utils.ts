@@ -40,3 +40,122 @@ export const downloadBlobAsPDF = (blob: string) => {
   document.body.removeChild(tempLink);
   window.URL.revokeObjectURL(url);
 };
+
+export const planFeatures = {
+  standard: [
+    {
+      icon: "success",
+      text: "Upto One Business Location"
+    },
+    {
+      icon: "success",
+      text: "Suitable For Single Business Owners",
+    },
+    {
+      icon: "success",
+      text: "Upto 60 Free Credits"
+    },
+    {
+      icon: "success",
+      text: "AI-Powered Responses"
+    },
+    {
+      icon: "success",
+      text: "Sentiment Analysis"
+    },
+    {
+      icon: "success",
+      text: "Analytics Dashboard"
+    },
+    {
+      icon: "error",
+      text: "Multilingual Support"
+    },
+    {
+      icon: "error",
+      text: "Workspace Integration"
+    },
+    {
+      icon: "error",
+      text: "Insights and Recommendations"
+    },
+  ],
+
+  pro: [
+    {
+      icon: "success",
+      text: "Upto Three Business Location"
+    },
+    {
+      icon: "success",
+      text: "Suitable For Franchisors Business Owners",
+    },
+    {
+      icon: "success",
+      text: "Upto 200 Free Credits"
+    },
+    {
+      icon: "success",
+      text: "AI-Powered Responses"
+    },
+    {
+      icon: "success",
+      text: "Sentiment Analysis"
+    },
+    {
+      icon: "success",
+      text: "Analytics Dashboard"
+    },
+    {
+      icon: "coming soon",
+      text: "Multilingual Support (Coming Soon)"
+    },
+    {
+      icon: "coming soon",
+      text: "Workspace Integration (Coming Soon)"
+    },
+    {
+      icon: "coming soon",
+      text: "Insights and Recommendations (Coming Soon)"
+    },
+  ],
+
+  enterprise: [
+    {
+      icon: "success",
+      text: "More Than Three Business Location"
+    },
+    {
+      icon: "success",
+      text: "Suitable For Multi-Business Owners",
+    },
+    {
+      icon: "success",
+      text: "Unlimited Free Credits"
+    },
+    {
+      icon: "success",
+      text: "AI-Powered Responses"
+    },
+    {
+      icon: "success",
+      text: "Sentiment Analysis"
+    },
+    {
+      icon: "success",
+      text: "Analytics Dashboard"
+    },
+    {
+      icon: "coming soon",
+      text: "Multilingual Support (Coming Soon)"
+    },
+    {
+      icon: "coming soon",
+      text: "Workspace Integration (Coming Soon)"
+    },
+    {
+      icon: "coming soon",
+      text: "Insights and Recommendations (Coming Soon)"
+    },
+  ],
+}

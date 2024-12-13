@@ -55,7 +55,7 @@ function Billing() {
                     <Card className="p-4">
                         {data.started_subscription ? 
                             <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>  :
-                            <h1 className="text-md text-primary capitalize">Subscription on hold</h1> 
+                            <h1 className="text-md text-primary capitalize">Subscription In Progress...</h1> 
                         }
                         <Separator className="my-2" />
 
@@ -88,7 +88,7 @@ function Billing() {
 
                         <div className="space-y-1 mt-2">
                             <p className="text-sm text-slate-400">Last Payment made {dayjs(data?.instant_credits.started_at).fromNow()}</p>
-                            <p className="font-medium">₹ {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
+                            <p className="font-medium">{data.instant_credits.currency_symbol} {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
                         </div>
                     </Card>
                 </div>

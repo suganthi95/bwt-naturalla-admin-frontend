@@ -1,4 +1,4 @@
-import { CircleCheck, Gift } from "lucide-react"
+import { CircleAlert, CircleCheck, CircleX, Clock, Gift } from "lucide-react"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { useNavigate } from "react-router-dom"
 import { ASSETS } from "@/assets/assets"
@@ -15,6 +15,7 @@ import useRazorpay, { RazorpayOptions } from "react-razorpay"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
 import Loader from "../ui/Loader"
+import { planFeatures } from "@/lib/utils"
 
 function SubscriptionModal() {
 
@@ -166,7 +167,12 @@ function SubscriptionModal() {
                         checked={planType === "yearly"}
                         onCheckedChange={() => setPlanType(prev => prev === "monthly" ? "yearly" : "monthly")}
                     />
-                    <p>Yearly</p>
+                    <div className="flex flex-row items-center gap-2">
+                        <p>Yearly</p>
+                        <div className="px-3 py-1 bg-[#59C204] rounded-3xl text-white">
+                            <p>Save 40%</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 place-items-center gap-5 h-full overflow-y-scroll ">
@@ -180,73 +186,22 @@ function SubscriptionModal() {
                             </div>
                         </div>
 
-                        <div className="mt-3">
-                            <h1 className="text-lg md:text-2xl text-secondary font-bold">{standardPlanData.currency_symbol} {standardPlanData.plan_amount}  <span className="text-sm md:text-lg text-slate-500 font-normal">/ Per {standardPlanData.period === "monthly" ? "Month" : "Year"}</span></h1>
+                        <div className="mt-2">
+                            <h1 className="text-lg md:text-2xl text-secondary font-bold">{standardPlanData.currency_symbol} {standardPlanData.period === "monthly" ? standardPlanData.plan_amount : standardPlanData.price_per_month} <span className="text-slate-500 font-normal line-through text-lg">{standardPlanData.strike_through_price}</span> <span className="text-sm text-slate-500 font-normal">/ {standardPlanData.period === "monthly" ? "Monthly" : "Monthly, Billed Anually"}</span></h1>
                         </div>
 
-                        <div className="flex flex-col gap-2 py-2 text-xs xl:text-sm mt-5">
-                            <div className="flex  gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
+                        <div className="flex flex-col gap-2 text-xs xl:text-sm mt-3">
+                            {planFeatures.standard.map(item => (
+                                <div key={`standard-${item.text}`} className="flex flex-row gap-3 items-start md:items-center">
+                                    <div className="h-5 w-5">
+                                        {/* <CircleCheck className="fill-green-400 stroke-white h-5 w-5" /> */}
+                                        {item.icon === "success" && <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "error" && <CircleX className="fill-red-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "coming soon" && <Clock className="fill-blue-400 stroke-white h-5 w-5" />}
+                                    </div>
+                                    <p className="text-slate-600 font-bold">{item.text}</p>
                                 </div>
-                                <div>
-                                    <p className="font-bold">AI-Powered Responses</p>
-                                    <p className="text-slate-600">
-                                        Generate professional replies to reviews with ease.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Sentiment Analysis</p>
-                                    <p className="text-slate-600">
-                                        Understand customer emotions and feedback.
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Analytics Dashboard</p>
-                                    <p className="text-slate-600">
-                                        Gain insights from detailed data visualizations.
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Multilingual Support</p>
-                                    <p className="text-slate-600">
-                                        Respond to reviews in multiple languages.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-                                <p className="text-slate-600">Flexible cancellation policy</p>
-                            </div>
-                            <div className="flex flex-row gap-3 items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-                                <p className="text-slate-600">Reminders before each billing cycle</p>
-                            </div>
-                            
+                            ))}
                         </div>
 
                         <div className="mt-2">
@@ -254,7 +209,7 @@ function SubscriptionModal() {
                         </div>
                     </div>
 
-                    <div className="rounded-xl p-1  md:p-2 xl:p-5 w-full bg-[#FFFAF5] group">
+                    <div className="rounded-xl p-1  md:p-2 xl:p-5 w-full bg-[#FFFAF5] border border-primary group">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.proIcon className="h-12 w-12"/>
 
@@ -264,79 +219,28 @@ function SubscriptionModal() {
                                     <h2 className="text-secondary font-bold text-lg flex flex-row items-center gap-2">Pro Plan <Icons.diamondIcon className="h-5 w-5"/></h2>
                                 </div>
                                 <div>
-                                    <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl">Recommended</Button>
+                                    <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl">Best Value</Button>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div className="mt-3">
-                            <h1 className="text-lg md:text-2xl text-primary font-bold">{proPlanData.currency_symbol} {proPlanData.plan_amount} <span className="text-sm md:text-lg text-slate-500 font-normal">/ Per {proPlanData.period === "monthly" ? "Month" : "Year"}</span></h1>
+                        <div className="mt-2">
+                            <h1 className="text-lg md:text-2xl text-primary font-bold">{proPlanData.currency_symbol} { proPlanData.period === "monthly" ? proPlanData.plan_amount : proPlanData.price_per_month} <span className="text-slate-500 font-normal line-through text-lg">{proPlanData.strike_through_price}</span> <span className="text-sm text-slate-500 font-normal">/ {proPlanData.period === "monthly" ? "Monthly" : "Monthly, Billed Anually"}</span></h1>
                         </div>
 
-                        <div className="flex flex-col gap-2 py-2 text-xs md:text-sm mt-5">
-                            <div className="flex  gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
+                        <div className="flex flex-col gap-2 text-xs xl:text-sm mt-3">
+                            {planFeatures.pro.map(item => (
+                                <div key={`pro-${item.text}`} className="flex flex-row gap-3 items-start md:items-center">
+                                    <div className="h-5 w-5">
+                                        {/* <CircleCheck className="fill-green-400 stroke-white h-5 w-5" /> */}
+                                        {item.icon === "success" && <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "error" && <CircleX className="fill-red-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "coming soon" && <Clock className="fill-blue-400 stroke-white h-5 w-5" />}
+                                    </div>
+                                    <p className="text-slate-600 font-bold">{item.text}</p>
                                 </div>
-                                <div>
-                                    <p className="font-bold">AI-Powered Responses</p>
-                                    <p className="text-slate-600">
-                                        Generate professional replies to reviews with ease.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Sentiment Analysis</p>
-                                    <p className="text-slate-600">
-                                        Understand customer emotions and feedback.
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Analytics Dashboard</p>
-                                    <p className="text-slate-600">
-                                        Gain insights from detailed data visualizations.
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Multilingual Support</p>
-                                    <p className="text-slate-600">
-                                        Respond to reviews in multiple languages.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex flex-row gap-3 text-xs md:text-sm items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-                                <p className="text-slate-600">Flexible cancellation policy</p>
-                            </div>
-                            <div className="flex flex-row gap-3 items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-                                <p className="text-slate-600">Reminders before each billing cycle</p>
-                            </div>
-                            
+                            ))}
                         </div>
 
                         <div className="mt-2">
@@ -354,77 +258,27 @@ function SubscriptionModal() {
                             </div>
                         </div>
 
-                        <div className="mt-3">
+                        <div className="mt-6">
                             <h1 className="text-lg md:text-2xl text-secondary font-bold">Contact Sales</h1>
                         </div>
 
-                        <div className="flex flex-col gap-2 py-2 text-sm mt-5">
-                            <div className="flex  gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
+                        <div className="flex flex-col gap-2 text-xs xl:text-sm mt-3">
+                            {planFeatures.enterprise.map(item => (
+                                <div key={`enterprise-${item.text}`} className="flex flex-row gap-3 items-start md:items-center">
+                                    <div className="h-5 w-5">
+                                        {/* <CircleCheck className="fill-green-400 stroke-white h-5 w-5" /> */}
+                                        {item.icon === "success" && <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "warning" && <CircleAlert className="fill-orange-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "error" && <CircleX className="fill-red-400 stroke-white h-5 w-5" />}
+                                        {item.icon === "coming soon" && <Clock className="fill-blue-400 stroke-white h-5 w-5" />}
+                                    </div>
+                                    <p className="text-slate-600 font-bold">{item.text}</p>
                                 </div>
-                                <div>
-                                    <p className="font-bold">AI-Powered Responses</p>
-                                    <p className="text-slate-600">
-                                        Generate professional replies to reviews with ease.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Sentiment Analysis</p>
-                                    <p className="text-slate-600">
-                                        Understand customer emotions and feedback.
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Analytics Dashboard</p>
-                                    <p className="text-slate-600">
-                                        Gain insights from detailed data visualizations.
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-
-                                <div>
-                                    <p className="font-bold">Multilingual Support</p>
-                                    <p className="text-slate-600">
-                                        Respond to reviews in multiple languages.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex flex-row gap-3 items-start md:items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-                                <p className="text-slate-600">Flexible cancellation policy</p>
-                            </div>
-                            <div className="flex flex-row gap-3 items-center">
-                                <div className="h-5 w-5">
-                                    <CircleCheck className="fill-green-400 stroke-white h-5 w-5" />
-                                </div>
-                                <p className="text-slate-600">Reminders before each billing cycle</p>
-                            </div>
-                            
+                            ))}
                         </div>
 
                         <div className="mt-2">
-                            <Button disabled={isPending} size="lg" className="w-full">Contact Us</Button>
+                            <Button onClick={() => window.open("https://intelliresponse.ai/en/#contact-us")} disabled={isPending} size="lg" className="w-full">Contact Us</Button>
                         </div>
                     </div>
 
@@ -441,8 +295,7 @@ function SubscriptionModal() {
         <span className="text-xs">Upgrade</span>
     </button>
     <Dialog open={openSubscriptionModal} onOpenChange={() => setOpenSubscriptionModal(prev => !prev)}>
-        <DialogContent className="h-full mt-10   w-10/12 md:max-w-7xl">
-
+        <DialogContent className="h-full w-10/12 md:max-w-7xl">
             {plans}
         </DialogContent>
     </Dialog>
