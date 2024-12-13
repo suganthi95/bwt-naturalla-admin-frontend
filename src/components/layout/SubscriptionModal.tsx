@@ -67,6 +67,7 @@ function SubscriptionModal() {
         enabled: openSubscriptionModal,
     });
 
+   
     const { mutate: verifySubscriptionMutate } = useMutation({
         mutationKey: ["verifySubscription"],
         mutationFn: verifySubscription,
@@ -180,7 +181,7 @@ function SubscriptionModal() {
                         </div>
 
                         <div className="mt-3">
-                            <h1 className="text-lg md:text-2xl text-secondary font-bold">{standardPlanData.currency_symbol} {standardPlanData.plan_amount} <span className="text-sm md:text-lg text-slate-500 font-normal">/ Per {standardPlanData.period === "monthly" ? "Month" : "Year"}</span></h1>
+                            <h1 className="text-lg md:text-2xl text-secondary font-bold">{standardPlanData.currency_symbol} {standardPlanData.plan_amount}  <span className="text-sm md:text-lg text-slate-500 font-normal">/ Per {standardPlanData.period === "monthly" ? "Month" : "Year"}</span></h1>
                         </div>
 
                         <div className="flex flex-col gap-2 py-2 text-xs xl:text-sm mt-5">
