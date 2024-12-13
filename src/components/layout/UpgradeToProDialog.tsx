@@ -114,14 +114,14 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             >
               Upgrade Now
             </Button>
-            {planName == "free trial" &&
+            {planName == "free trial" && !balanceDays &&(
               <Button
                 onClick={() => setModal(false)}
                 className="p-2 px-8"
               >
                 Maybe Later
               </Button>
-            }
+            )}
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>
