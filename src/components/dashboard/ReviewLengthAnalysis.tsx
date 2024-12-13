@@ -5,6 +5,8 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { reviewLenAnalysis } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Info } from "lucide-react";
 
 interface Props {
     placeId: string
@@ -58,7 +60,34 @@ function ReviewLengthAnalysis({ placeId }: Props) {
         content = (
             <Card>
                 <CardHeader>
-                    <CardTitle>Review Length Analysis</CardTitle>
+                    <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg md:text-balance">Review Length Analysis</CardTitle>
+                        <Popover >
+                            <PopoverTrigger>
+                            <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
+                            </PopoverTrigger>
+                            <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20"> 
+                                 <div className="bg-white rounded-lg  text-justify">
+                                      <h3 className="text-md font-semibold mb-2 text-gray-800">Review Length Analysis</h3>
+                                      <div className="space-y-2">
+                                          <div>
+                                              <strong className="text-sm">Purpose:</strong>
+                                               <p className="text-xs text-gray-500">This chart shows the distribution of review lengths, giving you insight into how detailed your customers are when leaving feedback.</p>
+                                           </div>
+                                            <div>
+                                                <strong className="text-sm">What it shows:</strong>
+                                                <p className="text-xs text-gray-500">The x-axis shows the review length, while the y-axis indicates the frequency of each review length.</p>
+                                            </div>
+                                             <div>
+                                                 <strong  className="text-sm">How to read it:</strong>
+                                                  <p className="text-xs text-gray-500">The x-axis represents the length of the reviews, and the y-axis shows how frequently each review length occurs. If most reviews are short, it might suggest customers are leaving quick feedback, while longer reviews may indicate deeper engagement or issues.</p>
+                                            </div>
+                                                </div>
+                                 </div>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
+                    <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong>What it shows:</strong> The x-axis shows the review length, while the y-axis indicates the frequency of each review length.</p>
                 </CardHeader>
                 <CardContent>
                 <ChartContainer config={chartConfig}>

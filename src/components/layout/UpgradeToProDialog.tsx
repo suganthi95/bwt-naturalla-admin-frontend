@@ -25,11 +25,12 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
   const isFreeTrialEnd = isPastDate(planEndDate);
 
   const balanceDays = RemainingDays(planEndDate);
+  console.log(balanceDays);
+  
 
   const showPopup = () => {
     if (balanceDays > 0 && planName == "free trial") {
       const lastShown = localStorage.getItem("lastDialogShown");
-
       if (!lastShown || dayjs().isAfter(dayjs(lastShown), "day")) {
         setModal(true);
         localStorage.setItem("lastDialogShown", dayjs().format("YYYY-MM-DD"));
@@ -66,16 +67,16 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
     dialogContent = (
       <AlertDialogHeader>
         <AlertDialogTitle className="text-center text-2xl text-[#141618]">
-          <h1>Subscribe to Intelliresponse Pro!</h1>
+        <h1>Your free trial ended</h1>
         </AlertDialogTitle>
         <AlertDialogDescription>
-          {/* <div className="text-[#141618] space-y-3 text-base text-center">
+        <div className="text-[#141618] space-y-3  text-base text-center">
             <p>
               Your 7-day free trial has now expired. You no longer have access
               to the Intelliresponse dashboard.{" "}
             </p>
             <p>So, upgrade now to continue enjoying the pro plan services.</p>
-          </div> */}
+          </div>
         </AlertDialogDescription>
       </AlertDialogHeader>
     )
@@ -119,7 +120,7 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             >
               Upgrade Now
             </Button>
-            {planName == "free trial" && (
+            {planName == "free trial" && !balanceDays &&(
               <Button
                 onClick={() => setModal(false)}
                 className="p-2 px-8"

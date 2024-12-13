@@ -23,6 +23,8 @@ function Billing() {
         retry: 1
     });
 
+    
+
     const { isLoading: isPaymentHistoryLoading, isError: isPaymentHistoryError, isSuccess: isPaymentHistorySuccess, data: paymentHistoryData } = useQuery({
         queryKey: [ "getPaymentHistoryTable" ],
         queryFn: () => getPaymentHistoryTable({ token: auth?.token as string }),
@@ -43,6 +45,7 @@ function Billing() {
 
     if(isSuccess && isPaymentHistorySuccess && Array.isArray(paymentHistoryData)){
         content = (
+            
             <>
                 <div className="py-2 text-md font-medium">
                     <p>Current Plan</p>

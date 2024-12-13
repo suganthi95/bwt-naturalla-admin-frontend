@@ -5,6 +5,8 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTool
 import { Label, Pie, PieChart } from "recharts";
 import { responseRate } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Info } from "lucide-react";
 
 interface Props {
     placeId: string
@@ -71,8 +73,36 @@ function ResponseRate({ placeId }: Props) {
         content = (
             <Card>
                 <CardHeader>
-                <CardTitle>Response Rate</CardTitle>
+                <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg md:text-balance">Response Rate</CardTitle>
+                    <Popover>
+                            <PopoverTrigger>
+                            <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
+                            </PopoverTrigger>
+                            <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20"> 
+                                  <div className="bg-white rounded-lg  text-justify">
+                                       <h3 className="text-md font-semibold mb-2 text-gray-800">Response Rate</h3>
+                                       <div className="space-y-2">
+                                            <div>
+                                                <strong className="text-sm">Purpose:</strong>
+                                                <p className="text-xs text-gray-500">This pie chart breaks down the percentage of reviews that have been responded to, categorized by sentiment.</p>
+                                             </div>
+                                             <div>
+                                                 <strong className="text-sm">What it shows:</strong>
+                                                 <p className="text-xs text-gray-500">The donut chart divides reviews into categories: positive, negative, and not yet responded to, based on whether responses have been made to the reviews.</p>
+                                             </div>
+                                             <div>
+                                                 <strong  className="text-sm">How to read it:</strong>
+                                                 <p className="text-xs text-gray-500"> The chart shows how many reviews have been responded to (positive, negative, or neutral) and how many are still awaiting a response. This helps you evaluate the effectiveness of your engagement efforts and identify areas where follow-up may be needed.</p>
+                                             </div>
+                                        </div>
+                                  </div>
+                            </PopoverContent>
+                    </Popover>
+
+                </div>
                 {/* <CardDescription>January - June 2024</CardDescription> */}
+                <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong>The donut chart divides reviews into categories: positive, negative, and not yet responded to, based on whether responses have been made to the reviews.</p>
                 </CardHeader>
                 <CardContent>
                     <ChartContainer

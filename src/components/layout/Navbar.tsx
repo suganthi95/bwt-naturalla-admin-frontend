@@ -82,7 +82,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                         <SheetTrigger>
                             <Menu />
                         </SheetTrigger>
-                        <SheetContent className="bg-white w-fit">
+                        <SheetContent className="bg-white dark:bg-slate-950 w-fit">
                             <div className={`h-full w-full relative overflow-y-auto`}>
                                 <div className={`p-5 flex flex-row items-center space-x-5`}>
                                     <Link to="/" className="flex flex-row items-center gap-1">
@@ -95,9 +95,9 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                     {Object.keys(content).map((menu: string, index: number) => (
                                         <Tabs key={`menu-nav-${index}`} value={tabValue}>
                                         <p className="px-2 text-sm text-secondary py-2 hover:no-underline border-b-2 uppercase">{menu}</p>
-                                            <TabsList className="flex -ml-5 flex-col h-full rounded-none bg-white">
+                                            <TabsList className="flex -ml-5 flex-col h-full rounded-none bg-white dark:bg-slate-950">
                                                 {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType) => (
-                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`p-2 px-8 rounded-md flex items-center justify-start text-center space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white w-full`} value={item.route}>
+                                                    <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`p-2 px-8 rounded-md flex items-center justify-start text-center space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white dark:bg-slate-950 w-full`} value={item.route}>
                                                         <div className='flex-col '>
                                                      <div className='flex items-center gap-x-3'>
                                                     {item.icon}
