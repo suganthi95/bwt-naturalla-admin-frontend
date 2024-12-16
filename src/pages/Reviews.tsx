@@ -77,19 +77,27 @@ function Reviews() {
     }
 
     if(isError){
-        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
+      content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">{error?.message}</p>
     }
 
-    if(isSuccess && actualData.length === 0){
-        content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no reviews at this time.</p>
+    if(isSuccess && actualData.length === 0 && sortKey === "newest"){
+      content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no new reviews found.</p>
+    }
+
+    if(isSuccess && actualData.length === 0 && sortKey === "highest_rating"){
+      content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no positive reviews found.</p>
+    }
+
+    if(isSuccess && actualData.length === 0 && sortKey === "lowest_rating"){
+      content = <p className="mt-[10%] mx-auto text-center text-secondary font-bold">There are no negative reviews found.</p>
     }
 
     if(isSuccess && actualData.length > 0){
-        content = actualData?.map((item : ReviewType) => (
-          <Link to="/reviews/generate-response" key={item.review_id} state={{ placeId: activeBusiness.place_id, reviewId: item.review_id }}>
-            <ReviewCard {...item}/>
-          </Link>
-        ))
+      content = actualData?.map((item : ReviewType) => (
+        <Link to="/reviews/generate-response" key={item.review_id} state={{ placeId: activeBusiness.place_id, reviewId: item.review_id }}>
+          <ReviewCard {...item}/>
+        </Link>
+      ))
     }
 
     const handleScroll = useCallback(() => {

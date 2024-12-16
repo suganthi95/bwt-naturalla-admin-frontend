@@ -43,7 +43,7 @@ function Layout() {
     const navigate = useNavigate();
     const { auth, setAuth } = useAppContext();
     const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
-    const [ _openPaymentDialog, setOpenPaymentDialog ] = useState(false);
+    const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
 
     const signout = () => {
         googleLogout();
@@ -204,13 +204,7 @@ function Layout() {
 
                         {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
 
-                        {/* <UpgradeModal
-                            plan={data?.plan_name}
-                            openPaymentDialog={openPaymentDialog}
-                            setOpenPaymentDialog={setOpenPaymentDialog}
-                        /> */}
-
-                        <SubscriptionModal/>
+                        <SubscriptionModal triggerPaymentDialog={openPaymentDialog} setTriggerPaymentDialog={setOpenPaymentDialog} />
 
                         <p className="hidden md:block  text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">

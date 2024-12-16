@@ -44,7 +44,7 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
 
   let dialogContent;
 
-  if(planName == "free trial" && balanceDays < 2){
+  if(planName == "free trial" && balanceDays > 0){
     dialogContent = (
       <AlertDialogHeader>
         <AlertDialogTitle className="text-center text-2xl text-[#141618]">
@@ -57,24 +57,24 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
     )
   }
 
-  if(planName == "free trial" && balanceDays > 2){
-    dialogContent = (
-      <AlertDialogHeader>
-        <AlertDialogTitle className="text-center text-2xl text-[#141618]">
-        <h1>Your free trial ended</h1>
-        </AlertDialogTitle>
-        <AlertDialogDescription>
-        <div className="text-[#141618] space-y-3  text-base text-center">
-            <p>
-              Your 7-day free trial has now expired. You no longer have access
-              to the Intelliresponse dashboard.{" "}
-            </p>
-            <p>So, upgrade now to continue enjoying the pro plan services.</p>
-          </div>
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-    )
-  }
+  // if(planName == "free trial" && balanceDays > 2){
+  //   dialogContent = (
+  //     <AlertDialogHeader>
+  //       <AlertDialogTitle className="text-center text-2xl text-[#141618]">
+  //       <h1>Your free trial ended</h1>
+  //       </AlertDialogTitle>
+  //       <AlertDialogDescription>
+  //       <div className="text-[#141618] space-y-3  text-base text-center">
+  //           <p>
+  //             Your 7-day free trial has now expired. You no longer have access
+  //             to the Intelliresponse dashboard.{" "}
+  //           </p>
+  //           <p>So, upgrade now to continue enjoying the pro plan services.</p>
+  //         </div>
+  //       </AlertDialogDescription>
+  //     </AlertDialogHeader>
+  //   )
+  // }
 
   if(planName == "free trial" && balanceDays === 0){
     dialogContent = (

@@ -68,7 +68,7 @@ function Business() {
               <div className="border p-2 rounded-full">
                 <Icons.googleIcon/>
               </div>
-              <DropdownMenu>
+              {query?.data?.data?.plan_name === "pro-plan" && <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" variant="ghost" className="rounded-full">
                     <EllipsisVertical/>
@@ -84,7 +84,7 @@ function Business() {
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu>}
             </CardTitle>
             <CardDescription className="flex items-center text-secondary justify-between gap-2">
               <span className="text-xl font-bold mt-3">{item.business_name}</span>
