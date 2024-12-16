@@ -180,7 +180,7 @@ function Profile() {
                         value="********"
                         disabled
                     />
-                    <p className="text-sm text-green-500 font-medium mt-2 md:float-right">Change Password</p>
+                    {/* <p className="text-sm text-green-500 font-medium mt-2 md:float-right">Change Password</p> */}
                 </div>
             </div>
         </div>

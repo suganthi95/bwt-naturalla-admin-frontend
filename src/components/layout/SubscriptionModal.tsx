@@ -5,7 +5,7 @@ import { ASSETS } from "@/assets/assets"
 import { Switch } from "../ui/switch"
 import { Button } from "../ui/button"
 import { Icons } from "@/assets/icons"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { createSubscription, fetchSubscriptionPlans, PAYMENT_KEY, verifySubscription } from "@/lib/apis"
@@ -17,7 +17,7 @@ import { toast } from "sonner"
 import Loader from "../ui/Loader"
 import { planFeatures } from "@/lib/utils"
 
-function SubscriptionModal() {
+function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { triggerPaymentDialog: boolean, setTriggerPaymentDialog: Dispatch<SetStateAction<boolean>> }) {
 
 
     const { auth } = useAppContext();
@@ -43,6 +43,12 @@ function SubscriptionModal() {
             setIsModalOpen(true);
         }
     }
+
+    useEffect(() => {
+        if(triggerPaymentDialog){
+            handleModal();
+        }
+    }, [triggerPaymentDialog])
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
@@ -293,7 +299,12 @@ function SubscriptionModal() {
         <Gift className="h-5 w-5" />
         <span className="text-xs">Upgrade</span>
     </button>
-    <Dialog open={openSubscriptionModal} onOpenChange={() => setOpenSubscriptionModal(prev => !prev)}>
+    <Dialog 
+        open={openSubscriptionModal} 
+        onOpenChange={() => {
+            setOpenSubscriptionModal(prev => !prev);
+            setTriggerPaymentDialog(false)
+        }}>
         <DialogContent className="h-full w-10/12 md:max-w-7xl">
             {plans}
         </DialogContent>
