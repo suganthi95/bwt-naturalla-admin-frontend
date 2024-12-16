@@ -101,8 +101,14 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
     )
   }
 
+  useEffect(() => {
+    if(planName === "standard plan" && isFreeTrialEnd){
+      setModal(true)
+    }
+  }, [])
+
   return (
-    <AlertDialog open={planName == "standard plan" ? isFreeTrialEnd : modal}>
+    <AlertDialog open={modal}>
       <AlertDialogContent>
         <div className="bg-[#FFF7F0] h-72 ">
           <img
@@ -110,12 +116,16 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             className="h-full w-full object-contain"
           />
         </div>
+        
         {dialogContent}
 
         <AlertDialogFooter>
           <div className="w-full flex flex-row items-center justify-center gap-5">
             <Button
-              onClick={clickEvent}
+              onClick={() => {
+                setModal(false)
+                clickEvent()
+              }}
               className={`bg-primary p-2 px-8 hover:bg-primary/50`}
             >
               Upgrade Now
