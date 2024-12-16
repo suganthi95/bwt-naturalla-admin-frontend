@@ -41,6 +41,13 @@ body,
   .safari:focus{
     position: relative;
   }
+
+  .sidebar-scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
   /* loader css */
 
   .dot-spinner {
@@ -145,4 +152,7 @@ body,
       transform: scale(1);
       opacity: 1;
     }
+  }
+  .test{
+    @apply border-none bg-slate-100 rounded-md h-12 w-12
   }

@@ -74,6 +74,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
         enabled: openSubscriptionModal,
     });
 
+   
     const { mutate: verifySubscriptionMutate } = useMutation({
         mutationKey: ["verifySubscription"],
         mutationFn: verifySubscription,
@@ -166,7 +167,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                 </div>
 
                 <p className="text-center text-xs md:text-sm text-slate-500">Experience the full capabilities of IntelliResponse without any commitment.</p>
-                <div className="text-center flex flex-row items-center gap-2 font-medium mx-auto">
+                <div className="text-center flex flex-row items-center gap-2 font-medium mx-auto dark:text-white">
                     <p>Monthly</p>
                     <Switch
                         checked={planType === "yearly"}
@@ -180,7 +181,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 place-items-center gap-5 h-full overflow-y-scroll ">
+                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3  gap-5 h-full overflow-y-scroll ">
                     <div className="rounded-xl p-1  md:p-2 xl:p-5  w-full group">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.standardIcon className="h-10 w-10"/>
@@ -249,7 +250,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80">Buy Now</Button>
+                            <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80 dark:bg-slate-950 dark:text-white">Buy Now</Button>
                         </div>
                     </div>
 
@@ -305,7 +306,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
             setOpenSubscriptionModal(prev => !prev);
             setTriggerPaymentDialog(false)
         }}>
-        <DialogContent className="h-full w-10/12 md:max-w-7xl">
+        <DialogContent className="h-full w-10/12 md:max-w-7xl dark:text-white">
             {plans}
         </DialogContent>
     </Dialog>

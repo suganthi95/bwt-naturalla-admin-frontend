@@ -23,7 +23,6 @@ function Billing() {
         retry: 1
     });
 
-    
 
     const { isLoading: isPaymentHistoryLoading, isError: isPaymentHistoryError, isSuccess: isPaymentHistorySuccess, data: paymentHistoryData } = useQuery({
         queryKey: [ "getPaymentHistoryTable" ],
@@ -70,9 +69,9 @@ function Billing() {
                                     <p className="text-sm text-slate-400">what you’ll be charged</p>
                                     <p className="font-medium">₹ {(data?.amount / 100).toFixed(2)}</p>
                                 </div>
-
+                                {data.cancel_subscription && <p className="text-sm text-slate-400">Your subscription has been cancelled but you can continue to use the platform until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
                                 <div className="space-y-1 mt-4">
-                                    <CancelSubscription/>
+                                    <CancelSubscription Canceled = {data.cancel_subscription}/>
                                 </div>
                             </> :
                             <div className="space-y-1 mt-2">

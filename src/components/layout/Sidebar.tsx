@@ -49,7 +49,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                     {resizable ? <ArrowLeftToLine className="h-4 w-4" /> : <ArrowRightToLine className="h-4 w-4" />}
                 </Button>
             </div>
-            <div className={`${resizable && "overflow-y-scroll"} h-[82vh]`}>
+            <div className={`${resizable && "sidebar-scrollable"} h-[82vh]`}>
                 {Object.keys(content).map((menu: string, index: number) => (
                     <Accordion key={`${menu}-${index}`} value={collapse} onValueChange={setCollapse} type="multiple" className="w-full">
                         <AccordionItem value={menu}>
