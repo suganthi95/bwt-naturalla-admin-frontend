@@ -68,7 +68,7 @@ function Reviews() {
 
     if(isLoading && !isRefetching){
         content = (
-          <div className="flex flex-col items-center justify-center fixed bottom-0 gap-2 ">
+          <div className="flex flex-col items-center justify-center  gap-2 ">
             <Loader/>
             <h1 className="font-semibold text-secondary text-xl">Loading more reviews</h1>
             <p className="text-sm text-slate-400">We're fetching more reviews for you</p>

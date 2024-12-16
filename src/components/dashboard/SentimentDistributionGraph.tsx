@@ -60,23 +60,23 @@ function SentimentDistributionGraph({ placeId }: Props) {
                         <CardTitle className="text-lg md:text-balance">Sentiment Distribution</CardTitle>
                     <Popover>
                             <PopoverTrigger>
-                            <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
+                            <Info className="h-4 w-4 text-primary " />
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20">
-                                <div className="bg-white rounded-lg  text-justify  ">
-                                     <h3 className="text-md font-semibold mb-2 text-gray-800">Sentiment Distribution</h3>
+                                <div className="bg-white rounded-lg dark:bg-slate-700  text-justify  ">
+                                     <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Sentiment Distribution</h3>
                                      <div className="space-y-2">
                                          <div>
                                             <strong className="text-sm">What it shows:</strong>
-                                            <p className="text-xs text-gray-500">This histogram displays the spread of sentiment scores for your reviews, showing how many reviews fall into each sentiment category</p>
+                                            <p className="text-xs text-gray-500 dark:text-slate-300">This histogram displays the spread of sentiment scores for your reviews, showing how many reviews fall into each sentiment category</p>
                                          </div>
                                          <div>
                                             <strong className="text-sm">What it shows:</strong>
-                                            <p className="text-xs text-gray-500"> The x-axis represents the sentiment scores (ranging from negative to positive), while the y-axis indicates the count of reviews within each sentiment category.</p>
+                                            <p className="text-xs text-gray-500 dark:text-slate-300"> The x-axis represents the sentiment scores (ranging from negative to positive), while the y-axis indicates the count of reviews within each sentiment category.</p>
                                          </div>
                                          <div>
                                             <strong  className="text-sm">How to read it:</strong>
-                                            <p className="text-xs text-gray-500">The x-axis shows sentiment scores (from negative to positive), and the y-axis shows the number of reviews for each score. A higher number of positive reviews suggests customer satisfaction, while a concentration of negative reviews can highlight areas for improvement.</p>
+                                            <p className="text-xs text-gray-500 dark:text-slate-300">The x-axis shows sentiment scores (from negative to positive), and the y-axis shows the number of reviews for each score. A higher number of positive reviews suggests customer satisfaction, while a concentration of negative reviews can highlight areas for improvement.</p>
                                          </div>
                                      </div>
                                 </div>

@@ -115,7 +115,7 @@ function PaymentTable({ data }: { data: PaymentHistoryResponseType[] }) {
   return (
     <div className="w-full">
         <div className="rounded-md border overflow-hidden mt-5">
-        <Table className="bg-white">
+        <Table className="bg-white dark:bg-slate-950">
             <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

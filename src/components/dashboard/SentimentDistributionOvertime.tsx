@@ -68,23 +68,23 @@ function SentimentDistributionOvertime({ placeId }: Props) {
                     <CardTitle className="text-lg md:text-balance">Sentiment Distribution Over Time</CardTitle>
                     <Popover>
                             <PopoverTrigger>
-                            <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
+                            <Info className="h-4 w-4 text-primary " />
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20">
-                                 <div className="bg-white rounded-lg text-justify ">
-                                            <h3 className="text-md font-semibold mb-2 text-gray-800">Sentiment Distribution Over Time</h3>
+                                 <div className="bg-white dark:bg-slate-700 rounded-lg text-justify  ">
+                                            <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Sentiment Distribution Over Time</h3>
                                             <div className="space-y-2">
                                                <div>
                                                     <strong className="text-sm">What it shows:</strong>
-                                                    <p className="text-xs text-gray-500">This chart displays how the sentiment of reviews changes over time, helping you track shifts in customer sentiment throughout the year.</p>
+                                                    <p className="text-xs text-gray-500 dark:text-slate-300">This chart displays how the sentiment of reviews changes over time, helping you track shifts in customer sentiment throughout the year.</p>
                                                 </div>
                                                 <div>
                                                     <strong className="text-sm">What it shows:</strong>
-                                                    <p className="text-xs text-gray-500">The graph uses color coding to represent different sentiment levels (positive, neutral, negative) over the months. Red and orange shades indicate negative sentiments, while green shows positive sentiments.</p>
+                                                    <p className="text-xs text-gray-500 dark:text-slate-300">The graph uses color coding to represent different sentiment levels (positive, neutral, negative) over the months. Red and orange shades indicate negative sentiments, while green shows positive sentiments.</p>
                                                 </div>
                                                 <div>
                                                     <strong  className="text-sm">How to read it:</strong>
-                                                    <p className="text-xs text-gray-500">Each bar represents a month, with the height showing the volume of reviews and the color indicating the sentiment (red for negative, yellow for neutral, green for positive). This can help you identify trends or patterns in customer feedback and spot months with stronger positive or negative sentiment.</p>
+                                                    <p className="text-xs text-gray-500 dark:text-slate-300">Each bar represents a month, with the height showing the volume of reviews and the color indicating the sentiment (red for negative, yellow for neutral, green for positive). This can help you identify trends or patterns in customer feedback and spot months with stronger positive or negative sentiment.</p>
                                                 </div>
                                             </div>
                                  </div>

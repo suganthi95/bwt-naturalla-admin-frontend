@@ -90,7 +90,7 @@ function VerifyOTP() {
             </div>
 
             <div className="text-slate-700 mt-5 space-y-3">
-                <p>Enter the <span className="font-bold">OTP</span> which we sent to your email id <br /> “example@gmail.com”</p>
+                <p>Enter the <span className="font-bold">OTP</span> which we sent to your email id <br /></p>
 
                 <div className="pt-3">
                     <InputOTP type="number" maxLength={6} value={otp} onChange={(val) => setOtp(val)}>

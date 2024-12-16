@@ -77,23 +77,23 @@ function ResponseRate({ placeId }: Props) {
                     <CardTitle className="text-lg md:text-balance">Response Rate</CardTitle>
                     <Popover>
                             <PopoverTrigger>
-                            <Info className="h-4 w-4 text-gray-500 hover:text-gray-800" />
+                            <Info className="h-4 w-4 text-primary " />
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20"> 
-                                  <div className="bg-white rounded-lg  text-justify">
-                                       <h3 className="text-md font-semibold mb-2 text-gray-800">Response Rate</h3>
+                                  <div className="bg-white dark:bg-slate-700 rounded-lg  text-justify">
+                                       <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Response Rate</h3>
                                        <div className="space-y-2">
                                             <div>
                                                 <strong className="text-sm">Purpose:</strong>
-                                                <p className="text-xs text-gray-500">This pie chart breaks down the percentage of reviews that have been responded to, categorized by sentiment.</p>
+                                                <p className="text-xs text-gray-500 dark:text-slate-300">This pie chart breaks down the percentage of reviews that have been responded to, categorized by sentiment.</p>
                                              </div>
                                              <div>
                                                  <strong className="text-sm">What it shows:</strong>
-                                                 <p className="text-xs text-gray-500">The donut chart divides reviews into categories: positive, negative, and not yet responded to, based on whether responses have been made to the reviews.</p>
+                                                 <p className="text-xs text-gray-500 dark:text-slate-300">The donut chart divides reviews into categories: positive, negative, and not yet responded to, based on whether responses have been made to the reviews.</p>
                                              </div>
                                              <div>
                                                  <strong  className="text-sm">How to read it:</strong>
-                                                 <p className="text-xs text-gray-500"> The chart shows how many reviews have been responded to (positive, negative, or neutral) and how many are still awaiting a response. This helps you evaluate the effectiveness of your engagement efforts and identify areas where follow-up may be needed.</p>
+                                                 <p className="text-xs text-gray-500 dark:text-slate-300"> The chart shows how many reviews have been responded to (positive, negative, or neutral) and how many are still awaiting a response. This helps you evaluate the effectiveness of your engagement efforts and identify areas where follow-up may be needed.</p>
                                              </div>
                                         </div>
                                   </div>

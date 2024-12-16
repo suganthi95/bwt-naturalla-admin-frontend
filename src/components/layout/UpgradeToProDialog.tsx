@@ -51,13 +51,7 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             <h1>Your free trial ends in {balanceDays} Days</h1>
         </AlertDialogTitle>
         <AlertDialogDescription>
-          <div className="text-[#141618] space-y-3 text-base text-center">
-            <p>
-              Your 7-day free trial has now expired. You no longer have access
-              to the Intelliresponse dashboard.{" "}
-            </p>
-            <p>So, upgrade now to continue enjoying the pro plan services.</p>
-          </div>
+         
         </AlertDialogDescription>
       </AlertDialogHeader>
     )
@@ -130,14 +124,14 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             >
               Upgrade Now
             </Button>
-            {planName == "free trial" && balanceDays !== 0 &&(
+            {planName == "free trial" && 
               <Button
                 onClick={() => setModal(false)}
                 className="p-2 px-8"
               >
                 Maybe Later
               </Button>
-            )}
+            }
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

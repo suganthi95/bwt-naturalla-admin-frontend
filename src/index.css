@@ -41,6 +41,13 @@ body,
   .safari:focus{
     position: relative;
   }
+
+  .sidebar-scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
   /* loader css */
 
   .dot-spinner {
