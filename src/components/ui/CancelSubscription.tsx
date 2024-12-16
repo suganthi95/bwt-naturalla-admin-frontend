@@ -6,13 +6,16 @@ import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { useAppContext } from "@/contexts/AuthContext"
 
-function CancelSubscription() {
+function CancelSubscription({Canceled}:{Canceled:Boolean}) {
+ 
 
     const { auth } = useAppContext();
     const { mutate } = useMutation({
         mutationKey: [ "cancelSubscription" ],
         mutationFn: cancelSubscription,
         onSuccess: (data) => {
+            console.log('data: ', data);
+            window.location.reload()
             toast.success("Request Success", { description: data?.data?.message });
         },
         onError: (error: AxiosError<any>) => {
@@ -21,10 +24,11 @@ function CancelSubscription() {
     });
 
 
+
   return (
     <AlertDialog>
         <AlertDialogTrigger>
-            <Button className="bg-red-500 hover:bg-red-500/80">Cancel Subscription</Button>
+            <Button className="bg-red-500 hover:bg-red-500/80">{Canceled ? 'Canceled' : 'Cancel Subscription'} </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
             <AlertDialogHeader>

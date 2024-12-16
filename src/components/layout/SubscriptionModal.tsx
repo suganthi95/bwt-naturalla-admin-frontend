@@ -175,7 +175,7 @@ function SubscriptionModal() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 place-items-center gap-5 h-full overflow-y-scroll ">
+                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3  gap-5 h-full overflow-y-scroll ">
                     <div className="rounded-xl p-1  md:p-2 xl:p-5  w-full group">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.standardIcon className="h-10 w-10"/>
@@ -295,7 +295,7 @@ function SubscriptionModal() {
         <span className="text-xs">Upgrade</span>
     </button>
     <Dialog open={openSubscriptionModal} onOpenChange={() => setOpenSubscriptionModal(prev => !prev)}>
-        <DialogContent className="h-full w-10/12 md:max-w-7xl">
+        <DialogContent className="h-full xl:h-fit w-10/12 md:max-w-7xl">
             {plans}
         </DialogContent>
     </Dialog>
