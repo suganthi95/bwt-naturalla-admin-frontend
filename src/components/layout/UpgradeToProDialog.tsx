@@ -102,7 +102,7 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
   }
 
   useEffect(() => {
-    if(planName === "standard plan" && isFreeTrialEnd){
+    if(planName === "free trial" && isFreeTrialEnd){
       setModal(true)
     }
   }, [])

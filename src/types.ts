@@ -177,6 +177,7 @@ export interface BillingResponse {
     instant_credits: InstantCredits
     amount: number
     currencey: string,
+    currency_symbol: string,
     started_subscription: boolean
   }
   
