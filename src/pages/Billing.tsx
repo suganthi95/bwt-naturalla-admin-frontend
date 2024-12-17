@@ -69,7 +69,7 @@ function Billing() {
                                     <p className="text-sm text-slate-400">what you’ll be charged</p>
                                     <p className="font-medium">{data.currency_symbol} {data?.amount}</p>
                                 </div>
-                                {data.cancel_subscription && <p className="text-sm text-slate-400">Your subscription has been cancelled but you can continue to use the platform until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
+                                {data.cancel_subscription && <p className="text-sm text-slate-400">Your subscription has been cancelled but you can continue to use  until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
                                 <div className="space-y-1 mt-4">
                                     <CancelSubscription Canceled = {data.cancel_subscription}/>
                                 </div>

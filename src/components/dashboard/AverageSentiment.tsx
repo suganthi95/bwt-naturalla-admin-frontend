@@ -7,13 +7,15 @@ import { avgSentiment } from "@/lib/apis";
 import dayjs from "dayjs";
 import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Info } from "lucide-react";
+import { Info, X } from "lucide-react";
+import useToggle from "@/hooks/useToggle";
 
 interface Props {
     placeId: string
 }
 
 function AverageSentiment({ placeId }: Props) {
+    const[Isopen,setIsopen]=useToggle()
 
     const { auth } = useAppContext();
 
@@ -59,15 +61,16 @@ function AverageSentiment({ placeId }: Props) {
         content = (
             <Card>
                 <CardHeader>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center  relative justify-between">
                         <CardTitle className="text-lg md:text-balance">Average Sentiment</CardTitle>
-                         <Popover>
+                          <Popover>
                             <PopoverTrigger>
-                            <Info className="h-4 w-4 text-primary " />
+                               <Info className="h-4 w-4 text-primary cursor-pointer "  onClick={setIsopen}/>
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20"> 
-                                <div className="bg-white dark:bg-slate-700 grid place-items-center rounded-lg  text-justify">
-                                      <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Average Sentiment</h3>
+                               
+                               <div className={ `${Isopen ? 'opacity-100' :'opacity-0'} transition-opacity duration-300 bg-white absolute right-10 top-10 z-50 w-full lg:w-8/12 p-2 px-4 dark:bg-slate-700 grid place-items-center rounded-lg  text-justify`}>
+                                      <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white flex items-center justify-between w-full">Average Sentiment <X className="w-4 cursor-pointer" onClick={setIsopen}/></h3>
                                        <div className="space-y-2">
                                            <div>
                                               <strong className="text-sm">Purpose:</strong>
@@ -84,7 +87,9 @@ function AverageSentiment({ placeId }: Props) {
                                                 </div>
                                 </div>
                             </PopoverContent>
-                    </Popover>
+                    </Popover> 
+
+    
                     </div>
                 {/* <CardDescription>January - June 2024</CardDescription> */}
                     <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong>The graph tracks the average sentiment for all reviews each month </p>
