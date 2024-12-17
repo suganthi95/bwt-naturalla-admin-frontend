@@ -134,13 +134,13 @@ function Layout() {
             {
                 name: "Google Review",
                 route: "/",
-                icon: <Icons.googleIcon className="w-5 h-6" />,
+                icon: <Icons.googleIcon className="w-5 h-6 " />,
                 shouldVisible: true
             },
             {
                 name: "TrustPilot",
                 route: "/",
-                icon: <Icons.trustpilotIcon className="w-5 h-6" />,
+                icon: <Icons.trustpilotIcon className="w-7 h-7 dark:text-white" />,
                 shouldVisible: true
             },
             {
@@ -182,14 +182,14 @@ function Layout() {
         const plan = plans.filter((item) => item.code === data.plan_name)[0];        
 
         main = (
-            <main className="flex flex-col h-screen overflow-y-scroll md:overflow-hidden">
+            <main className="flex flex-col relative  h-screen overflow-y-scroll md:overflow-hidden">
                 <div className="flex flex-col gap-y-4 md:flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
                     <div className="flex  flex-row gap-1 items-center xl:gap-3">
                         <p className="h-10 w-10 flex items-center justify-center lg:hidden rounded-lg bg-secondary text-white">
                             {activeWorkspace.workspace_name[0]}
                         </p>
                         
-                            <p className="font-medium lg:hidden">{activeWorkspace.workspace_name}</p>
+                            <p className="font-medium dark:text-white lg:hidden">{activeWorkspace.workspace_name}</p>
                             <div className="flex flex-row items-center gap-1">
                         <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
                             <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
@@ -206,7 +206,7 @@ function Layout() {
 
                         <SubscriptionModal triggerPaymentDialog={openPaymentDialog} setTriggerPaymentDialog={setOpenPaymentDialog} />
 
-                        <p className="hidden md:block  text-slate-950 dark:text-slate-500">Welcome, {data?.name}</p>
+                        <p className="hidden md:block  text-slate-950 dark:text-white">Welcome, {data?.name}</p>
                         <div className="flex flex-row items-center gap-2">
                             <DropdownMenu>
                             <DropdownMenuTrigger asChild>

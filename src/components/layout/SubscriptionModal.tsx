@@ -181,7 +181,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3  gap-5 h-full overflow-y-scroll ">
+                <div className=" grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3  gap-5 h-full overflow-y-scroll ">
                     <div className="rounded-xl p-1  md:p-2 xl:p-5  w-full group">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.standardIcon className="h-10 w-10"/>
@@ -225,7 +225,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                                     <h2 className="text-secondary font-bold text-lg flex flex-row items-center gap-2">Pro Plan <Icons.diamondIcon className="h-5 w-5"/></h2>
                                 </div>
                                 <div>
-                                    <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl">Best Value</Button>
+                                    <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">Best Value</Button>
                                 </div>
                             </div>
 
@@ -265,6 +265,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-6">
+
                             <h1 className="text-lg md:text-2xl text-secondary font-bold">Contact Sales</h1>
                         </div>
 
@@ -306,7 +307,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
             setOpenSubscriptionModal(prev => !prev);
             setTriggerPaymentDialog(false)
         }}>
-        <DialogContent className="h-full w-10/12 md:max-w-7xl dark:text-white">
+        <DialogContent className="h-full xl:h-auto w-10/12 md:max-w-7xl dark:text-white">
             {plans}
         </DialogContent>
     </Dialog>

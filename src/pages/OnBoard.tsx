@@ -58,15 +58,15 @@ function OnBoard() {
     }
 
   return (
-    <div className="h-screen overflow-y-scroll flex bg-white text-slate-950 pt-20">
+    <div className="h-svh overflow-y-scroll  flex bg-white text-slate-950 pt-20">
         <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
             <div>
                 <Button onClick={goBackClick} size="sm" variant="secondary">Go back</Button>
             </div>
             <Link to="/" className="flex flex-row gap-3">
-                <img src={ASSETS.LOGO} alt="logo" />
+                <img src={ASSETS.LOGO} alt="logo" className="w-8 md:w-auto" />
                 <div>
-                    <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
+                    <p className="font-bold text-xl md:text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                     <span className="text-slate-500">
                         Turning Reviews Into Insights
                     </span>

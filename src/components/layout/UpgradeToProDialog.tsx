@@ -51,7 +51,12 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             <h1>Your free trial ends in {balanceDays} Days</h1>
         </AlertDialogTitle>
         <AlertDialogDescription>
-         
+        <div className="text-[#141618] space-y-3 text-base text-center">
+            <p>
+              Your 7-day free trial has expiry soon 
+            </p>
+            <p>So, upgrade now to continue enjoying the pro plan services.</p>
+          </div>
         </AlertDialogDescription>
       </AlertDialogHeader>
     )
