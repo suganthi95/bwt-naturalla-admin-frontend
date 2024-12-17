@@ -67,7 +67,7 @@ function Billing() {
                             <>
                                 <div className="space-y-1 mt-2">
                                     <p className="text-sm text-slate-400">what you’ll be charged</p>
-                                    <p className="font-medium">₹ {(data?.amount / 100).toFixed(2)}</p>
+                                    <p className="font-medium">{data.currency_symbol} {data?.amount}</p>
                                 </div>
                                 {data.cancel_subscription && <p className="text-sm text-slate-400">Your subscription has been cancelled but you can continue to use  until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
                                 <div className="space-y-1 mt-4">
@@ -82,12 +82,12 @@ function Billing() {
                         
                     </Card>
                     <Card className="p-4">
-                        <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits} / {data.instant_credits.total_credits}</h1>
+                        <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits ?? 0} / {data.instant_credits.total_credits ?? 0}</h1>
                         <Separator className="my-2" />
 
                         <div className="space-y-1 mt-2">
                             <p className="text-sm text-slate-400">Last Payment made {dayjs(data?.instant_credits.started_at).fromNow()}</p>
-                            <p className="font-medium">{data.instant_credits.currency_symbol} {(data?.instant_credits.order_amount / 100).toFixed(2)}</p>
+                            <p className="font-medium">{data.instant_credits.currency_symbol} {data?.instant_credits.order_amount ?? 0}</p>
                         </div>
                     </Card>
                 </div>

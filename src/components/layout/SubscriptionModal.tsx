@@ -114,6 +114,12 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                     razorpay_subscription_id: subscription_id,
                 });
                 },
+                modal: {
+                    backdropclose: false, // Prevent closing modal on backdrop click
+                    ondismiss: function () {
+                        window.location.reload();
+                    },
+                },
                 theme: {
                     color: "#3399cc",
                 },
@@ -211,7 +217,9 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            <Button disabled={isPending} onClick={() => buyNowOnclick(standardPlanData.plan_id, standardPlanData.country)} size="lg" className="w-full">Buy Now</Button>
+                            {auth?.data?.email !== "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(standardPlanData.plan_id, standardPlanData.country)} size="lg" className="w-full">Buy Now</Button>}
+                            {auth?.data?.email === "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(15, standardPlanData.country)} size="lg" className="w-full">Buy Now</Button>}
+                            
                         </div>
                     </div>
 
@@ -250,7 +258,8 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80 dark:bg-slate-950 dark:text-white">Buy Now</Button>
+                            {auth?.data?.email !== "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80">Buy Now</Button>}
+                            {auth?.data?.email === "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(17, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80">Buy Now</Button>}
                         </div>
                     </div>
 
@@ -305,7 +314,8 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
         open={openSubscriptionModal} 
         onOpenChange={() => {
             setOpenSubscriptionModal(prev => !prev);
-            setTriggerPaymentDialog(false)
+            setTriggerPaymentDialog(false);
+            window.location.reload();
         }}>
         <DialogContent className="h-full xl:h-auto w-10/12 md:max-w-7xl dark:text-white">
             {plans}

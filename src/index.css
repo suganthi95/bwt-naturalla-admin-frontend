@@ -153,6 +153,13 @@ body,
       opacity: 1;
     }
   }
-  .test{
-    @apply border-none bg-slate-100 rounded-md h-12 w-12
-  }
+
+/* Razorpay modal */
+
+.razorpay-container {
+  z-index: 9999 !important; /* Ensure it's on top */
+}
+
+#razorpay-iframe-container {
+  z-index: 9999 !important; /* Ensure it's on top */
+}
