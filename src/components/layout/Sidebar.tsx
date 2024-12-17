@@ -53,7 +53,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
                 {Object.keys(content).map((menu: string, index: number) => (
                     <Accordion key={`${menu}-${index}`} value={collapse} onValueChange={setCollapse} type="multiple" className="w-full">
                         <AccordionItem value={menu}>
-                            {resizable && <AccordionTrigger className="px-2 text-sm text-secondary py-2 hover:no-underline uppercase">{menu}</AccordionTrigger>}
+                            {resizable && <AccordionTrigger className="px-2 text-sm text-secondary py-2 hover:no-underline uppercase dark:text-white">{menu}</AccordionTrigger>}
                            
                             <AccordionContent>
                                 <Tabs value={tabValue}>
