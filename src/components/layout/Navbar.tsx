@@ -82,7 +82,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                         <SheetTrigger>
                             <Menu />
                         </SheetTrigger>
-                        <SheetContent className="bg-white dark:bg-slate-950 w-fit">
+                        <SheetContent className="bg-white dark:bg-slate-950 dark:text-white w-fit">
                             <div className={`h-full w-full relative overflow-y-auto`}>
                                 <div className={`p-5 flex flex-row items-center space-x-5`}>
                                     <Link to="/" className="flex flex-row items-center gap-1">
