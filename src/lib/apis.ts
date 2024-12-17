@@ -303,9 +303,8 @@ export const sendFeedback = async ({ token, feedbackType, message, file }: { tok
     formdata.append("feedback_type", feedbackType);
     formdata.append("message", message);
 
-    if(file){
-        const obj = file[0];
-        formdata.append("file", obj);
+    if(file[0] !== undefined){
+        formdata.append("file", file[0]);
     }
 
     return await axios({

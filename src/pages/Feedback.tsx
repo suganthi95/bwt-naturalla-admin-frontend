@@ -84,11 +84,11 @@ function Feedback() {
                         
                         {watch("file")?.[0]?.name ? <p className="mb-2 text-sm text-primary dark:text-gray-400">{watch("file")?.[0]?.name} added</p> : <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>}
                     </div>
-                    <input required id="dropzone-file" type="file" className="hidden" {...register("file")} />
+                    <input id="dropzone-file" type="file" className="hidden" {...register("file")} />
                 </label>
             </div>
 
-                <Button className="bg-primary hover:bg-primary/50">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Send"}</Button>
+            <Button className="bg-primary hover:bg-primary/50">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Send"}</Button>
            
         </form>
     </div>
