@@ -55,17 +55,10 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       ),
     },
     {
-      accessorKey: "currency_symbol",
-      header: "Currency",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("currency_symbol") ? row.getValue("currency_symbol") : "NA"}</div>
-      ),
-    },
-    {
       accessorKey: "amount_paid",
       header: "Amount Paid",
       cell: ({ row }) => (
-        <div className="capitalize">{((row.getValue("amount_paid") as number) / 100).toFixed(2)}</div>
+        <div className="capitalize">{row.getValue("currency_symbol")} {row.getValue("amount_paid") as number}</div>
       ),
     },
     {

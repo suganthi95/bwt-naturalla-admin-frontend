@@ -9,7 +9,7 @@ import { ValidateUserType } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function ReplyReview() {
@@ -49,6 +49,12 @@ function ReplyReview() {
       enabled: Boolean(generate) && isReviewSuccess
     });
 
+    useEffect(() => {
+      if(isSuccess){
+        queryClient.invalidateQueries({ queryKey: [ "validateUser" ] });
+      }
+    }, [isSuccess])
+
     let content;
 
     if(isLoading || isReviewLoading){
@@ -65,12 +71,6 @@ function ReplyReview() {
       content = <ResponseCard {...data?.data} reviewData={reviewData}/>
     }
 
-    const generateResponse = () => {
-      if(query.data.data.remaining_credits === 0){
-        setGenerate(prev => prev + 1)
-      }
-    }
-
   return (
     <div className="p-2 flex flex-1 h-full overflow-y-scroll flex-col  relative">
         <div className="flex flex-row items-center justify-between">
@@ -85,7 +85,7 @@ function ReplyReview() {
                 </PopoverTrigger>
                 <PopoverContent className="text-sm bg-red-400 text-white">You have run out of credits. Please purchase additional credits to continue generating responses.</PopoverContent>
               </Popover> :
-              <Button disabled={isLoading} onClick={generateResponse} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
+              <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
             }
             
         </div>

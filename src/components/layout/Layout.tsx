@@ -118,7 +118,7 @@ function Layout() {
             },
             {
                 name:"FAQ",
-                route:"https://intelliresponse.ai/en/#pricing",
+                route:"https://intelliresponse.ai/en/#faq",
                 icon:<MessageCircleQuestion/>,
                 shouldVisible:true
             },

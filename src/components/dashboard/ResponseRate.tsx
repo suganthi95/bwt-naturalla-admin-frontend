@@ -34,7 +34,7 @@ function ResponseRate({ placeId }: Props) {
         content = <Skeleton className="h-[350px] rounded-xl" />
     }
 
-    if(isError || !Array.isArray(data)){
+    if(isError || !Array.isArray(data) && data?.length === 0){
         content = (
             <Card>
                 <CardContent className="h-[350px] flex items-center justify-center">

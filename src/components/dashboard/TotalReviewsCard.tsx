@@ -56,7 +56,7 @@ function TotalReviewsCard({ placeId }: Props) {
                 <h1 className="text-sm font-medium text-slate-500">Instant Credits Remaining</h1>
                 <Zap className="stroke-transparent fill-primary h-5 w-5" />
                 </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.instant_credits} / {data.total_instant_credits}</p>
+                <p className="text-2xl text-secondary font-bold mt-8">{data.instant_credits ?? 0} / {data.total_instant_credits ?? 0}</p>
             </Card>
             <Card className="p-3 rounded-xl">
                 <div className="flex flex-row items-center justify-between">

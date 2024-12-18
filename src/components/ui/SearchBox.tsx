@@ -86,13 +86,13 @@ export function SearchBox() {
     mutationKey: [ "addBusiness" ],
     mutationFn: addBusiness,
     onSuccess: () => {
-      window.location.reload();
+      // window.location.reload();
       queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       toast.success("Request Success", { description: "Business Added Successfully" });
     },
     onError: () => {
       // toast.error("Request Failed", { description: error.message })
-      window.location.reload();
+      // window.location.reload();
       queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       toast.success("Request Success", { description: "Business Added Successfully" });
     },
