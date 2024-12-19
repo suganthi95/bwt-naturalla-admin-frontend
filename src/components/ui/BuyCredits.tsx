@@ -123,7 +123,7 @@ function BuyCredits() {
         </PopoverTrigger>
         <PopoverContent className="w-[400px]">
             <div className="flex flex-row items-center gap-5">
-                <div className="text-primary border-[2px] border-primary rounded-full p-2">
+                <div className="text-primary border-[2px] border-primary rounded-full p-2 dark:text-white">
                     {remaining_credits}
                 </div>
 
@@ -139,59 +139,59 @@ function BuyCredits() {
         </PopoverContent>
     </Popover>
     <Dialog open={openRefillDialog} onOpenChange={setOpenRefillDialog}>
-        <DialogContent className="sm:max-w-[525px] p-0">
-        <DialogHeader className="p-3">
-            <DialogTitle>
-                <div className="flex flex-row items-center gap-2">
-                    <div className="bg-primary/15 p-1 rounded-lg">
-                        <Zap className="h-5 w-5 fill-primary stroke-none" />
+        <DialogContent className="sm:max-w-[525px] p-0 [&>button]:dark:text-slate-100">
+            <DialogHeader className="p-3">
+                <DialogTitle>
+                    <div className="flex flex-row items-center gap-2">
+                        <div className="bg-primary/15 p-1 rounded-lg">
+                            <Zap className="h-5 w-5 fill-primary stroke-none" />
+                        </div>
+
+                        <div className="dark:text-slate-400">
+                            <h1>Refill Your Credits</h1>
+                        </div>
                     </div>
+                </DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-3">
+                <div className="border-[10px] mt-3 border-primary text-center rounded-full flex flex-col items-center justify-center h-56 w-56 mx-auto">
+                    <h1 className="text-7xl font-bold dark:text-slate-300">{remaining_credits}</h1>
+                    <h1 className="text-slate-500">REMAINING CREDITS</h1>
+                </div>
+
+                <div className="bg-[#FBFBFB] dark:bg-slate-900 dark:text-slate-400 p-4 space-y-2 border dark:border-none">
+                    <h1 className="font-bold">Refill Your Credits Balance</h1>
+                    <p className="text-sm text-slate-500">If you don't use all them, your extra credits will roll over to the next month to let you enrich more credits.</p>
+                    {/* <div className="flex flex-row items-center justify-between mt-2">
+                        <Badge onClick={() => setPurchaseCreditCount([99])} className="bg-white cursor-pointer" variant="outline">99</Badge>
+                        <Badge onClick={() => setPurchaseCreditCount([199])} className="bg-white cursor-pointer" variant="outline">199</Badge>
+                        <Badge onClick={() => setPurchaseCreditCount([299])} className="bg-white cursor-pointer" variant="outline">299</Badge>
+                    </div> */}
 
                     <div>
-                        <h1>Refill Your Credits</h1>
+                        {data?.map((item: any) => (
+                            <div className="flex flex-row items-center justify-between space-y-3" key={item?.item_id}>
+                                <Badge onClick={() => setPurchaseCreditCountId(item?.item_id)} className={`bg-white cursor-pointer px-4 py-1 dark:text-slate-900 ${item?.item_id === purchaseCreditCountId && "bg-primary text-white dark:text-white"}`} variant="outline">{item.total_credits}</Badge>
+                                <p className="text-sm text-slate-600 dark:text-slate-200 font-medium">{item.currency_symbol} {item.credits_amount.toFixed(0)}</p>
+                            </div>
+                        ))}
                     </div>
+                    {/* <div>
+                        <Slider className="mt-5 cursor-pointer" value={purchaseCreditCount} onValueChange={(val) => setPurchaseCreditCount(val)} min={1} max={299} step={1} />
+                    </div> */}
+
+                    {/* <div className="flex flex-row items-center justify-between text-md text-slate-500 text-sm">
+                        <p>1</p>
+                        <p>299</p>
+                    </div> */}
                 </div>
-            </DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col gap-3">
-            <div className="border-[10px] mt-3 border-primary text-center rounded-full flex flex-col items-center justify-center h-56 w-56 mx-auto">
-                <h1 className="text-7xl font-bold">{remaining_credits}</h1>
-                <h1 className="text-slate-500">REMAINING CREDITS</h1>
+
             </div>
-
-            <div className="bg-[#FBFBFB] p-4 space-y-2 border">
-                <h1 className="font-bold">Refill Your Credits Balance</h1>
-                <p className="text-sm text-slate-500">If you don't use all them, your extra credits will roll over to the next month to let you enrich more credits.</p>
-                {/* <div className="flex flex-row items-center justify-between mt-2">
-                    <Badge onClick={() => setPurchaseCreditCount([99])} className="bg-white cursor-pointer" variant="outline">99</Badge>
-                    <Badge onClick={() => setPurchaseCreditCount([199])} className="bg-white cursor-pointer" variant="outline">199</Badge>
-                    <Badge onClick={() => setPurchaseCreditCount([299])} className="bg-white cursor-pointer" variant="outline">299</Badge>
-                </div> */}
-
-                <div>
-                    {data?.map((item: any) => (
-                        <div className="flex flex-row items-center justify-between space-y-3" key={item?.item_id}>
-                            <Badge onClick={() => setPurchaseCreditCountId(item?.item_id)} className={`bg-white cursor-pointer px-4 py-1 ${item?.item_id === purchaseCreditCountId && "bg-primary text-white"}`} variant="outline">{item.total_credits}</Badge>
-                            <p className="text-sm text-slate-600 font-medium">{item.currency_symbol} {item.credits_amount.toFixed(0)}</p>
-                        </div>
-                    ))}
-                </div>
-                {/* <div>
-                    <Slider className="mt-5 cursor-pointer" value={purchaseCreditCount} onValueChange={(val) => setPurchaseCreditCount(val)} min={1} max={299} step={1} />
-                </div> */}
-
-                {/* <div className="flex flex-row items-center justify-between text-md text-slate-500 text-sm">
-                    <p>1</p>
-                    <p>299</p>
-                </div> */}
-            </div>
-
-        </div>
-        <DialogFooter className="p-3">
-            <Button onClick={initiatePayment} className="bg-primary hover:bg-primary/50 w-[200px]" type="submit">
-                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : `Buy ${data?.filter((item: any) => item.item_id === purchaseCreditCountId)[0]?.total_credits } Credits Now`}
-            </Button>
-        </DialogFooter>
+            <DialogFooter className="p-3">
+                <Button onClick={initiatePayment} className="bg-primary hover:bg-primary/50 w-[200px]" type="submit">
+                    {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : `Buy ${data?.filter((item: any) => item.item_id === purchaseCreditCountId)[0]?.total_credits } Credits Now`}
+                </Button>
+            </DialogFooter>
         </DialogContent>
     </Dialog>
     </>
