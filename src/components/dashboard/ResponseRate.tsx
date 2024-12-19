@@ -104,7 +104,7 @@ function ResponseRate({ placeId }: Props) {
                 {/* <CardDescription>January - June 2024</CardDescription> */}
                 <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong>The donut chart divides reviews into categories: positive, negative, and not yet responded to, based on whether responses have been made to the reviews.</p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0 lg:p-3">
                     <ChartContainer
                         config={chartConfig}
                         className="mx-auto aspect-square max-h-[350px]"
