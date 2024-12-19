@@ -6,7 +6,6 @@ import { Switch } from "../ui/switch"
 import { Button } from "../ui/button"
 import { Icons } from "@/assets/icons"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { createSubscription, fetchSubscriptionPlans, PAYMENT_KEY, verifySubscription } from "@/lib/apis"
 import { useAppContext } from "@/contexts/AuthContext"
@@ -23,25 +22,12 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
     const { auth } = useAppContext();
     const [Razorpay] = useRazorpay();
     const navigate = useNavigate();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [ openSubscriptionModal, setOpenSubscriptionModal ] = useState<boolean>(false);
-    const [ geoLocation, setGeoLocation ] = useState<{ latitude: null | number, longitude: null | number }>({ latitude: null, longitude: null });
 
     const [ planType, setPlanType ] = useState("monthly");
 
     const handleModal = () => {
-        if ('permissions' in navigator) {
-            navigator.permissions.query({ name: 'geolocation' as PermissionName }).then((result) => {
-                if (result.state === 'denied' || result.state === 'prompt') {
-                    setIsModalOpen(true);
-                }else{
-                    setOpenSubscriptionModal(true)
-                }
-            });
-        } else {
-            // Default to showing modal if permissions API isn't available
-            setIsModalOpen(true);
-        }
+        setOpenSubscriptionModal(true)
     }
 
     useEffect(() => {
@@ -50,23 +36,11 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
         }
     }, [triggerPaymentDialog])
 
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setGeoLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
-            },
-            (error) => {
-                console.error('Error enabling geolocation:', error);
-            }
-        );
-    }, [])
-
     const { isSuccess, isLoading, data } = useQuery({
         queryKey: [ "fetchSubscriptionPlans" ],
         queryFn: () => fetchSubscriptionPlans({ 
             token: auth?.token as string,
-            latitude: geoLocation.latitude,
-            longitude: geoLocation.longitude
+            country: localStorage.getItem("loc") as string
         }),
         refetchOnWindowFocus: false,
         select: (data): SubscriptionPlanType[] => data.data,
@@ -321,19 +295,6 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
             {plans}
         </DialogContent>
     </Dialog>
-    <AlertDialog open={isModalOpen}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-            <AlertDialogTitle>Enable Geolocation</AlertDialogTitle>
-            <AlertDialogDescription>
-                Your location is required for a better experience. Please enable it in your browser settings.
-            </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsModalOpen(false)}>Cancel</AlertDialogCancel>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
     </>
   )
 }

@@ -419,7 +419,7 @@ export const responseRate = async ({ token, placeId }: { token: string, placeId:
     })
 }
 
-export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { token: string, latitude: number | null, longitude: number | null }) => {
+export const fetchSubscriptionPlans = async ({ token, country }: { token: string, country: string }) => {
 
     return await axios({
         method: "post",
@@ -429,8 +429,7 @@ export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { t
             "Authorization": token
         },
         data: {
-            latitude: latitude,
-            longitude: longitude
+            country
         }
     })
 }
@@ -493,7 +492,7 @@ export const cancelSubscription = async ({ token }: { token: string }) => {
     })
 }
 
-export const getCreditsList = async ({ token, latitude, longitude }: { token: string, latitude: null | number, longitude: null | number }) => {
+export const getCreditsList = async ({ token, country }: { token: string, country: string }) => {
     
     return await axios({
         method: "post",
@@ -503,8 +502,7 @@ export const getCreditsList = async ({ token, latitude, longitude }: { token: st
             "Authorization": token
         },
         data: {
-            latitude: latitude,
-            longitude: longitude
+            country
         }
     })
 }

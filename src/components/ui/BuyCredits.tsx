@@ -11,7 +11,6 @@ import { buyCredits, getCreditsList, PAYMENT_KEY, verifyCreditCheckout } from "@
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./alert-dialog";
 
 
 function BuyCredits() {
@@ -20,37 +19,14 @@ function BuyCredits() {
     const [ Razorpay ] = useRazorpay();
     const [ openCreditPopover, setOpenCreditPopover ] = useState(false);
     const [ openRefillDialog, setOpenRefillDialog ] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [ geoLocation, setGeoLocation ] = useState<{ latitude: null | number, longitude: null | number }>({ latitude: null, longitude: null });
 
     const queryClient = useQueryClient();
     const queryData = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType, message: string }>>([ "validateUser" ]);
     const { remaining_credits } = queryData?.data?.data as ValidateUserType;
 
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setGeoLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
-            },
-            (error) => {
-                console.error('Error enabling geolocation:', error);
-            }
-        );
-    }, [])
 
     const handleModal = () => {
-        if ('permissions' in navigator) {
-            navigator.permissions.query({ name: 'geolocation' as PermissionName }).then((result) => {
-                if (result.state === 'denied' || result.state === 'prompt') {
-                    setIsModalOpen(true);
-                }else{
-                    setOpenRefillDialog(true)
-                }
-            });
-        } else {
-            // Default to showing modal if permissions API isn't available
-            setIsModalOpen(true);
-        }
+        setOpenRefillDialog(true)
     }
 
     // get credits plan
@@ -58,8 +34,7 @@ function BuyCredits() {
         queryKey: [ "getCreditsList" ],
         queryFn: () => getCreditsList({ 
             token: auth?.token as string,
-            latitude: geoLocation.latitude,
-            longitude: geoLocation.longitude
+            country: localStorage.getItem("loc") as string
         }),
         retry: 1,
         refetchOnWindowFocus: false,
@@ -219,19 +194,6 @@ function BuyCredits() {
         </DialogFooter>
         </DialogContent>
     </Dialog>
-    <AlertDialog open={isModalOpen}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-            <AlertDialogTitle>Enable Geolocation</AlertDialogTitle>
-            <AlertDialogDescription>
-                Your location is required for a better experience. Please enable it in your browser settings.
-            </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsModalOpen(false)}>Cancel</AlertDialogCancel>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
     </>
   )
 }

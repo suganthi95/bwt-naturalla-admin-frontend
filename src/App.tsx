@@ -28,6 +28,7 @@ import Billing from "./pages/Billing"
 import PaymentSuccess from "./pages/PaymentSuccess"
 import PaymentFailure from "./pages/PaymentFailure"
 import VerifyOTP from "./pages/VerifyOTP"
+import axios from "axios"
 
 
 dayjs.extend(utc);
@@ -49,23 +50,28 @@ function App() {
     }
   }, [ mode ]);
 
-  // geolocation
+  // get location
 
-  // useEffect(() => {
-  //   if (navigator.geolocation) {
-  //       navigator.geolocation.getCurrentPosition(
-  //           (position) => {
-  //             const { latitude, longitude } = position.coords;
-  //             localStorage.setItem("geoloc", JSON.stringify({ latitude, longitude }))
-  //           },
-  //           (error) => {
-  //             console.error('Error getting user location:', error);
-  //           }
-  //       );
-  //   }else {
-  //     console.error('Geolocation is not supported by this browser.');
-  //   }
-  // }, []);
+  useEffect(() => {
+
+    const location = localStorage.getItem("loc");
+
+    if(!location){
+      (async () => {
+        try{
+  
+          const response = await axios.get("http://ip-api.com/json");
+  
+          if((response).status === 200){
+            localStorage.setItem("loc", response.data.country)
+          }
+  
+        }catch(error){
+          console.log("error fetching location: ", error);
+        }
+      })()
+    }
+  }, []);
 
   const { isLoading, isSuccess, data, isError } = useQuery({
       queryKey: [ "validateUser" ],
