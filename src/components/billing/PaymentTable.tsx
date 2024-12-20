@@ -27,6 +27,13 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       ),
     },
     {
+      accessorKey: "payment_on",
+      header: "Payment On",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("payment_on")}</div>
+      ),
+    },
+    {
       accessorKey: "method",
       header: "Payment Mode",
       cell: ({ row }) => (
@@ -74,7 +81,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       accessorKey: "payment_id",
       header: "Download Invoice",
       cell: ({ row }) => (
-        <DownloadInvoice paymentId={row.getValue("payment_id")}/>
+        <DownloadInvoice paymentId={row.getValue("payment_id")} paymentOn={row.getValue("payment_on")}/>
       ),
     }
 ];
@@ -83,7 +90,9 @@ function PaymentTable({ data }: { data: PaymentHistoryResponseType[] }) {
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+      payment_on: false
+    });
     const [rowSelection, setRowSelection] = useState({});
     
     const table = useReactTable({

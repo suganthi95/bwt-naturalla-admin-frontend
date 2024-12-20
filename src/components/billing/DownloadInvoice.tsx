@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { downloadBlobAsPDF } from "@/lib/utils"
 
-function DownloadInvoice({ paymentId }: { paymentId: string }) {
+function DownloadInvoice({ paymentId, paymentOn }: { paymentId: string, paymentOn: string }) {
 
     const { auth } = useAppContext();
     const { mutate, isPending } = useMutation({
@@ -25,6 +25,7 @@ function DownloadInvoice({ paymentId }: { paymentId: string }) {
     const onclick = () => {
         mutate({
             paymentId,
+            paymentOn,
             token: auth?.token as string
         })
     }

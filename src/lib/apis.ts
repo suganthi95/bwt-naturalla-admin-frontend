@@ -552,7 +552,7 @@ export const getPaymentHistoryTable = async ({ token }: { token: string }) => {
     })
 }
 
-export const fetchInvoice = async ({ token, paymentId }: { token: string, paymentId: string }) => {
+export const fetchInvoice = async ({ token, paymentId, paymentOn }: { token: string, paymentId: string, paymentOn: string }) => {
     
     return await axios({
         method: "post",
@@ -563,7 +563,8 @@ export const fetchInvoice = async ({ token, paymentId }: { token: string, paymen
         },
         responseType: "blob",
         data: {
-            payment_id: paymentId
+            payment_id: paymentId,
+            payment_on: paymentOn
         }
     })
 }
