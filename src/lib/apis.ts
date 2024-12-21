@@ -2,20 +2,20 @@
 import { TokenResponse } from "@react-oauth/google";
 import axios, { GenericAbortSignal } from "axios";
 
-export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
-// export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"       // live
+// export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
+export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"       // live
 
 // production
-// const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
-// const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
-// const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1";
-// const DASHBOARD_URL = "https://intelliresponsedashboard01-91592131102.asia-south1.run.app";
+const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
+const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
+const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1";
+const DASHBOARD_URL = "https://intelliresponsedashboard01-91592131102.asia-south1.run.app";
 
 //staging
-const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.app/api/v1";
-const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
-const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
-const DASHBOARD_URL = "https://intelliresponse-dashboard-staging-91592131102.asia-south1.run.app";
+// const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.app/api/v1";
+// const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
+// const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
+// const DASHBOARD_URL = "https://intelliresponse-dashboard-staging-91592131102.asia-south1.run.app";
 
 
 
