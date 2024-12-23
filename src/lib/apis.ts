@@ -8,12 +8,14 @@ export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
 // production
 // const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 // const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
-// const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1"
+// const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1";
+// const DASHBOARD_URL = "https://intelliresponsedashboard01-91592131102.asia-south1.run.app";
 
 //staging
 const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
 const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
+const DASHBOARD_URL = "https://intelliresponse-dashboard-staging-91592131102.asia-south1.run.app";
 
 
 
@@ -303,9 +305,8 @@ export const sendFeedback = async ({ token, feedbackType, message, file }: { tok
     formdata.append("feedback_type", feedbackType);
     formdata.append("message", message);
 
-    if(file){
-        const obj = file[0];
-        formdata.append("file", obj);
+    if(file[0] !== undefined){
+        formdata.append("file", file[0]);
     }
 
     return await axios({
@@ -350,7 +351,7 @@ export const getSentimentDistribution = async ({ token, placeId }: { token: stri
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/sentiment_distribution/${placeId}`,
+        url: `${DASHBOARD_URL}/sentiment_distribution/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -362,7 +363,7 @@ export const reviewLenAnalysis = async ({ token, placeId }: { token: string, pla
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/review_length_analysis/${placeId}`,
+        url: `${DASHBOARD_URL}/review_length_analysis/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -374,7 +375,7 @@ export const reviewActiveTime = async ({ token, placeId }: { token: string, plac
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/reviews_active_time/${placeId}`,
+        url: `${DASHBOARD_URL}/reviews_active_time/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -386,7 +387,7 @@ export const avgSentiment = async ({ token, placeId }: { token: string, placeId:
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/average_sentiment_over_time/${placeId}`,
+        url: `${DASHBOARD_URL}/average_sentiment_over_time/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -398,7 +399,7 @@ export const sentimentDistributionOvertime = async ({ token, placeId }: { token:
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/sentiment_distribution_over_time/${placeId}`,
+        url: `${DASHBOARD_URL}/sentiment_distribution_over_time/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -410,7 +411,7 @@ export const responseRate = async ({ token, placeId }: { token: string, placeId:
     
     return await axios({
         method: "get",
-        url: `https://intelliresponsedashboard01-91592131102.asia-south1.run.app/response_rate/${placeId}`,
+        url: `${DASHBOARD_URL}/response_rate/${placeId}`,
         headers: {
             Accept: 'application/json',
             "Authorization": token
@@ -418,7 +419,7 @@ export const responseRate = async ({ token, placeId }: { token: string, placeId:
     })
 }
 
-export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { token: string, latitude: number | null, longitude: number | null }) => {
+export const fetchSubscriptionPlans = async ({ token, country }: { token: string, country: string }) => {
 
     return await axios({
         method: "post",
@@ -428,8 +429,7 @@ export const fetchSubscriptionPlans = async ({ token, latitude, longitude }: { t
             "Authorization": token
         },
         data: {
-            latitude: latitude,
-            longitude: longitude
+            country
         }
     })
 }
@@ -492,7 +492,7 @@ export const cancelSubscription = async ({ token }: { token: string }) => {
     })
 }
 
-export const getCreditsList = async ({ token, latitude, longitude }: { token: string, latitude: null | number, longitude: null | number }) => {
+export const getCreditsList = async ({ token, country }: { token: string, country: string }) => {
     
     return await axios({
         method: "post",
@@ -502,8 +502,7 @@ export const getCreditsList = async ({ token, latitude, longitude }: { token: st
             "Authorization": token
         },
         data: {
-            latitude: latitude,
-            longitude: longitude
+            country
         }
     })
 }
@@ -553,7 +552,7 @@ export const getPaymentHistoryTable = async ({ token }: { token: string }) => {
     })
 }
 
-export const fetchInvoice = async ({ token, paymentId }: { token: string, paymentId: string }) => {
+export const fetchInvoice = async ({ token, paymentId, paymentOn }: { token: string, paymentId: string, paymentOn: string }) => {
     
     return await axios({
         method: "post",
@@ -564,7 +563,8 @@ export const fetchInvoice = async ({ token, paymentId }: { token: string, paymen
         },
         responseType: "blob",
         data: {
-            payment_id: paymentId
+            payment_id: paymentId,
+            payment_on: paymentOn
         }
     })
 }

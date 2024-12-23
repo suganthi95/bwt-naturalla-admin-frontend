@@ -23,49 +23,64 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       accessorKey: "payment_id",
       header: "Payment ID",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("payment_id")}</div>
+        <div className="capitalize">{(row.getValue("payment_id")? row.getValue("payment_id"):'-') }</div>
+      ),
+      
+    },
+    {
+      accessorKey: "plan_name",
+      header: "Plan Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{(row.getValue("plan_name")? row.getValue("plan_name"):'-') }</div>
+      ),
+      
+    },
+
+   
+    {
+      accessorKey: "payment_on",
+      header: "Payment On",
+      cell: ({ row }) => (
+        <div className="capitalize">{(row.getValue("payment_on")? row.getValue("payment_on"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "method",
       header: "Payment Mode",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("method")}</div>
+        <div className="capitalize">{(row.getValue("method")? row.getValue("method"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "payment_date",
       header: "Date of Payment",
       cell: ({ row }) => (
-        <div className="capitalize">{dayjs(row.getValue("payment_date")).format("DD-MM-YYYY")}</div>
+        <div className="capitalize">{(dayjs(row.getValue("payment_date")).format("DD-MM-YYYY"))?(dayjs(row.getValue("payment_date")).format("DD-MM-YYYY")):'-'}</div>
       ),
     },
     {
       accessorKey: "validity_from",
       header: "Valid From",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("validity_from")}</div>
+        <div className="capitalize">{(row.getValue("validity_from")? row.getValue("validity_from"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "validity_to",
       header: "Valid Till",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("validity_to")}</div>
-      ),
-    },
-    {
-      accessorKey: "currency_symbol",
-      header: "Currency",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("currency_symbol") ? row.getValue("currency_symbol") : "NA"}</div>
+        <div className="capitalize">{(row.getValue("validity_to")? row.getValue("validity_to"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "amount_paid",
       header: "Amount Paid",
       cell: ({ row }) => (
-        <div className="capitalize">{((row.getValue("amount_paid") as number) / 100).toFixed(2)}</div>
+        <div className="capitalize">{row.getValue("currency_symbol")} {row.getValue("amount_paid") as number}</div>
       ),
     },
     {
@@ -81,16 +96,20 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       accessorKey: "payment_id",
       header: "Download Invoice",
       cell: ({ row }) => (
-        <DownloadInvoice paymentId={row.getValue("payment_id")}/>
+        <DownloadInvoice paymentId={row.getValue("payment_id")} paymentOn={row.getValue("payment_on")}/>
       ),
     }
 ];
 
 function PaymentTable({ data }: { data: PaymentHistoryResponseType[] }) {
+  console.log(data);
+  
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+      payment_on: false
+    });
     const [rowSelection, setRowSelection] = useState({});
     
     const table = useReactTable({

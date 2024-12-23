@@ -22,21 +22,21 @@ function ResponseCard(props: ReviewSuggestionType) {
   return (
     <Card className="border-none shadow-none">
         <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
-            <div className="flex flex-row items-center gap-2 pt-2">
+            <div className="flex flex-row items-center gap-4 pt-2">
                 <div>
                     <img src={ASSETS.LOGO} alt="logo" />
                 </div>
 
                 <div>
                     <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
-                    <span className="text-xs text-light-grey">{dayjs(new Date()).fromNow()}</span>
+                    {/* <span className="text-xs text-light-grey">{dayjs(new Date()).fromNow()}</span> */}
+                    <span className="text-xs text-light-grey">This is an AI Generated response</span>
                 </div>
             </div>
         </CardHeader>
         <CardContent>
-            <p className="text-sm font-semibold">Tap on the card below to send</p>
 
-            <div className="pt-5 grid grid-cols-1 md:grid-cols-2 gap-5 pb-20">
+            <div className="pt-5 grid grid-cols-1 md:grid-cols-2 gap-5 pb-5 ">
                 <Card key={`response-1`}>
                     <CardHeader className="flex flex-row items-center justify-between py-0 px-3">
                         <div className="flex flex-row items-center gap-2 pt-2">
@@ -89,6 +89,9 @@ function ResponseCard(props: ReviewSuggestionType) {
                     </CardContent>
                 </Card>
             </div>
+
+            <p className="text-sm font-semibold">Copy the response and respond</p>
+
         </CardContent>
         
     </Card>

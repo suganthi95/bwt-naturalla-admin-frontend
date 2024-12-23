@@ -32,6 +32,7 @@ function Billing() {
         retry: 1
     });
 
+
     let content;
 
     if(isLoading || isPaymentHistoryLoading){

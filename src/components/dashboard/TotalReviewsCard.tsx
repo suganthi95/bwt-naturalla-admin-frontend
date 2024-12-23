@@ -42,28 +42,28 @@ function TotalReviewsCard({ placeId }: Props) {
                 <h1 className="text-sm font-medium text-slate-500">Total Reviews</h1>
                 <Star strokeWidth={0.5} className="h-5 w-5 stroke-none fill-yellow-400"/>
                 </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.totalRatings}</p>
+                <p className="text-2xl text-secondary font-bold mt-8">{data.totalRatings ?? 0}</p>
             </Card>
             <Card className="p-3 rounded-xl">
                 <div className="flex flex-row items-center justify-between">
                 <h1 className="text-sm font-medium text-slate-500">Free Credits Remaining</h1>
                 <Zap className="stroke-transparent fill-primary h-5 w-5" />
                 </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.credits} / {data.total_credits}</p>
+                <p className="text-2xl text-secondary font-bold mt-8">{data.credits ?? 0} / {data.total_credits ?? 0}</p>
             </Card>
             <Card className="p-3 rounded-xl">
                 <div className="flex flex-row items-center justify-between">
                 <h1 className="text-sm font-medium text-slate-500">Instant Credits Remaining</h1>
                 <Zap className="stroke-transparent fill-primary h-5 w-5" />
                 </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.instant_credits} / {data.total_instant_credits}</p>
+                <p className="text-2xl text-secondary font-bold mt-8">{data.instant_credits ?? 0} / {data.total_instant_credits ?? 0}</p>
             </Card>
             <Card className="p-3 rounded-xl">
                 <div className="flex flex-row items-center justify-between">
                 <h1 className="text-sm font-medium text-slate-500">Total Business</h1>
                 <CircleCheck className="h-5 w-5 stroke-white fill-green-400" />
                 </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.total_business}</p>
+                <p className="text-2xl text-secondary font-bold mt-8">{data.total_business ?? 0}</p>
             </Card>
         </div>
         )

@@ -86,7 +86,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                     </div>
                     <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong>What it shows:</strong>The x-axis represents the sentiment scores (ranging from negative to positive), while the y-axis indicates the count of reviews within each sentiment category.</p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0 lg:p-3">
                 <ChartContainer config={chartConfig}>
                     <BarChart
                     accessibilityLayer

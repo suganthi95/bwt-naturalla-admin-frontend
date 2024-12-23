@@ -89,7 +89,7 @@ function ReviewLengthAnalysis({ placeId }: Props) {
                     </div>
                     <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong>What it shows:</strong> The x-axis shows the review length, while the y-axis indicates the frequency of each review length.</p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0 lg:p-3">
                 <ChartContainer config={chartConfig}>
                     <BarChart
                         accessibilityLayer

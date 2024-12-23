@@ -94,7 +94,7 @@ function AverageSentiment({ placeId }: Props) {
                 {/* <CardDescription>January - June 2024</CardDescription> */}
                     <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong>The graph tracks the average sentiment for all reviews each month </p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0 lg:p-3">
                 <ChartContainer config={chartConfig}>
                     <LineChart
                         accessibilityLayer

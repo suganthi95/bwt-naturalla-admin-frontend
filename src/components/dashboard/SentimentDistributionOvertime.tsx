@@ -96,7 +96,7 @@ function SentimentDistributionOvertime({ placeId }: Props) {
 
                 {/* <CardDescription>January - June 2024</CardDescription> */}
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0 lg:p-3">
                     <ChartContainer config={chartConfig}>
                         <AreaChart
                             accessibilityLayer

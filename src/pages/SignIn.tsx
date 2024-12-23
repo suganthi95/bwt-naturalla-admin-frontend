@@ -58,7 +58,7 @@ function SignIn() {
         window.location.reload();
       }
     },
-    onError: (error) => toast.error("Request Failed", { description: error?.message })
+    onError: (error: AxiosError<any>) => toast.error("Request Failed", { description: error?.response?.data.message || error?.message })
   })
 
   const { mutate: verifyGoogleUserMutate } = useMutation({
@@ -70,7 +70,7 @@ function SignIn() {
         name: `${res?.data?.given_name} ${res?.data?.family_name}`,
       });
     },
-    onError: (error) => toast.error("Request Failed", { description: error?.message })
+    onError: (error: AxiosError<any>) => toast.error("Request Failed", { description: error?.response?.data.message || error?.message })
   });
 
   const googleLogin = useGoogleLogin({

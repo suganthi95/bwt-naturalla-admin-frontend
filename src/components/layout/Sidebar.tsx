@@ -23,7 +23,7 @@ export default function Sidebar({ content, data }: { content: CollapseType, data
     }
 
     const redirect = (route: MenuType) => {
-        if([ "Privacy Policy", "Terms & Conditions","FAQ" ].includes(route.name)){
+        if([ "Privacy Policy", "Terms & Conditions", "FAQ" ].includes(route.name)){
             window.open( route.route, '_blank');
         }else{
             navigate(`/${route.route}`)
