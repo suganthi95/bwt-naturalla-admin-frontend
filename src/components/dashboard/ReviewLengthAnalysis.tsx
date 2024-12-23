@@ -58,7 +58,7 @@ function ReviewLengthAnalysis({ placeId }: Props) {
         } satisfies ChartConfig
         
         content = (
-            <Card>
+            <Card className="relative">
                 <CardHeader>
                     <div className="flex items-center  justify-between">
                         <CardTitle className="text-lg md:text-balance">Review Length Analysis</CardTitle>
@@ -66,7 +66,7 @@ function ReviewLengthAnalysis({ placeId }: Props) {
                             <PopoverTrigger>
                             <Info className="h-4 w-4 text-primary " />
                             </PopoverTrigger>
-                            <PopoverContent className="md:w-[400px]   -translate-x-7 md:-translate-x-20 "> 
+                            <PopoverContent className="md:w-[400px] absolute   -translate-x-7 md:-translate-x-20 "> 
                                  <div className="bg-white rounded-lg dark:bg-slate-700   text-justify">
                                       <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Review Length Analysis</h3>
                                       <div className="space-y-2">
