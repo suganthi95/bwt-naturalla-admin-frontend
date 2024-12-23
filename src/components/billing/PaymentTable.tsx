@@ -23,42 +23,57 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       accessorKey: "payment_id",
       header: "Payment ID",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("payment_id")}</div>
+        <div className="capitalize">{(row.getValue("payment_id")? row.getValue("payment_id"):'-') }</div>
       ),
+      
     },
+    {
+      accessorKey: "plan_name",
+      header: "Plan Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{(row.getValue("plan_name")? row.getValue("plan_name"):'-') }</div>
+      ),
+      
+    },
+
+   
     {
       accessorKey: "payment_on",
       header: "Payment On",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("payment_on")}</div>
+        <div className="capitalize">{(row.getValue("payment_on")? row.getValue("payment_on"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "method",
       header: "Payment Mode",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("method")}</div>
+        <div className="capitalize">{(row.getValue("method")? row.getValue("method"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "payment_date",
       header: "Date of Payment",
       cell: ({ row }) => (
-        <div className="capitalize">{dayjs(row.getValue("payment_date")).format("DD-MM-YYYY")}</div>
+        <div className="capitalize">{(dayjs(row.getValue("payment_date")).format("DD-MM-YYYY"))?(dayjs(row.getValue("payment_date")).format("DD-MM-YYYY")):'-'}</div>
       ),
     },
     {
       accessorKey: "validity_from",
       header: "Valid From",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("validity_from")}</div>
+        <div className="capitalize">{(row.getValue("validity_from")? row.getValue("validity_from"):'-') }</div>
+
       ),
     },
     {
       accessorKey: "validity_to",
       header: "Valid Till",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("validity_to")}</div>
+        <div className="capitalize">{(row.getValue("validity_to")? row.getValue("validity_to"):'-') }</div>
+
       ),
     },
     {
@@ -87,6 +102,8 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
 ];
 
 function PaymentTable({ data }: { data: PaymentHistoryResponseType[] }) {
+  console.log(data);
+  
 
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

@@ -47,13 +47,57 @@ function ReviewsActiveTime({ placeId }: Props) {
 
         const dataSeries = (arr: any, weekday: number) => arr.filter((item: any) => item.day_of_week === weekday).sort((a: any, b: any) => a.hour_of_day - b.hour_of_day).map((item: any) => item.review_count);
 
+        // const state = {
+        //     options: {
+        //       chart: {
+        //         id: "basic-bar",
+        //         toolbar: {
+        //           show: false,
+        //         },
+        //       },
+        //       xaxis: {
+        //         categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+        //       },
+        //     },
+        //     series: [
+        //       {
+        //         name: "Sun",
+        //         data: dataSeries(data, 0)
+        //       },
+        //       {
+        //         name: "Mon",
+        //         data: dataSeries(data, 1)
+        //       },
+        //       {
+        //         name: "Tue",
+        //         data: dataSeries(data, 2)
+        //       },
+        //       {
+        //         name: "Wed",
+        //         data: dataSeries(data, 3)
+        //       },
+        //       {
+        //         name: "Thu",
+        //         data: dataSeries(data, 4)
+        //       },
+        //       {
+        //         name: "Fri",
+        //         data:  dataSeries(data, 5)
+        //       },
+        //       {
+        //         name: "Sat",
+        //         data:  dataSeries(data, 6)
+        //       },
+        //     ]
+        // };
+
         const state = {
-            options: {
+          options: {
               chart: {
-                id: "basic-bar",
-                toolbar: {
-                  show: false,
-                },
+                  id: "basic-bar",
+                  toolbar: {
+                      show: false,
+                  },
               },
               xaxis: {
                 categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
@@ -61,35 +105,39 @@ function ReviewsActiveTime({ placeId }: Props) {
             },
             series: [
               {
-                name: "Sun",
-                data: dataSeries(data, 0)
+                  name: "Sun",
+                  data: dataSeries(data, 0),
               },
               {
-                name: "Mon",
-                data: dataSeries(data, 1)
+                  name: "Mon",
+                  data: dataSeries(data, 1),
               },
               {
-                name: "Tue",
-                data: dataSeries(data, 2)
+                  name: "Tue",
+                  data: dataSeries(data, 2),
               },
               {
-                name: "Wed",
-                data: dataSeries(data, 3)
+                  name: "Wed",
+                  data: dataSeries(data, 3),
               },
               {
-                name: "Thu",
-                data: dataSeries(data, 4)
+                  name: "Thu",
+                  data: dataSeries(data, 4),
               },
               {
-                name: "Fri",
-                data:  dataSeries(data, 5)
+                  name: "Fri",
+                  data: dataSeries(data, 5),
               },
               {
-                name: "Sat",
-                data:  dataSeries(data, 6)
+                  name: "Sat",
+                  data: dataSeries(data, 6),
               },
-            ]
-        };
+          ],
+      };
+      
+
+
+
 
         content = (
             <Card>
