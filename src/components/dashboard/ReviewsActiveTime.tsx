@@ -47,49 +47,151 @@ function ReviewsActiveTime({ placeId }: Props) {
 
         const dataSeries = (arr: any, weekday: number) => arr.filter((item: any) => item.day_of_week === weekday).sort((a: any, b: any) => a.hour_of_day - b.hour_of_day).map((item: any) => item.review_count);
 
+        // const state = {
+        //     options: {
+        //       chart: {
+        //         id: "basic-bar",
+        //         toolbar: {
+        //           show: false,
+        //         },
+        //       },
+        //       xaxis: {
+        //         categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+        //       },
+        //     },
+        //     series: [
+        //       {
+        //         name: "Sun",
+        //         data: dataSeries(data, 0)
+        //       },
+        //       {
+        //         name: "Mon",
+        //         data: dataSeries(data, 1)
+        //       },
+        //       {
+        //         name: "Tue",
+        //         data: dataSeries(data, 2)
+        //       },
+        //       {
+        //         name: "Wed",
+        //         data: dataSeries(data, 3)
+        //       },
+        //       {
+        //         name: "Thu",
+        //         data: dataSeries(data, 4)
+        //       },
+        //       {
+        //         name: "Fri",
+        //         data:  dataSeries(data, 5)
+        //       },
+        //       {
+        //         name: "Sat",
+        //         data:  dataSeries(data, 6)
+        //       },
+        //     ]
+        // };
+
         const state = {
-            options: {
+          options: {
               chart: {
-                id: "basic-bar",
-                toolbar: {
-                  show: false,
-                },
+                  id: "basic-bar",
+                  toolbar: {
+                      show: false,
+                  },
               },
               xaxis: {
-                categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-              }
-            },
-            series: [
+                  categories: [
+                      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 
+                      15, 16, 17, 18, 19, 20, 21, 22, 23, 24
+                  ],
+              },
+              responsive: [
+                  {
+                      breakpoint: 1024,
+                      options: {
+                          chart: {
+                              height: 300,
+                              width: "100%", 
+                          },
+                          xaxis: {
+                            labels: {
+                                show: true,
+                                
+                            },
+                        },
+                          dataLabels: {
+                            enabled: true, 
+                        },
+                          legend: {
+                              position: "bottom", 
+                          },
+                      },
+                  },
+                  {
+                      breakpoint: 768, 
+                      options: {
+                          chart: {
+                              height: 250,
+                          },
+                          xaxis: {
+                              labels: {
+                                  show: true,
+                                  rotate: -90,
+                              },
+                          },
+                          dataLabels: {
+                              enabled: false, 
+                          },
+                      },
+                  },
+                  {
+                      breakpoint: 480, // For very small screens
+                      options: {
+                          chart: {
+                              height: 200,
+                          },
+                          legend: {
+                              show: false, // Hide legend to save space
+                          },
+                      },
+                  },
+              ],
+          },
+          series: [
               {
-                name: "Sun",
-                data: dataSeries(data, 0)
+                  name: "Sun",
+                  data: dataSeries(data, 0),
               },
               {
-                name: "Mon",
-                data: dataSeries(data, 1)
+                  name: "Mon",
+                  data: dataSeries(data, 1),
               },
               {
-                name: "Tue",
-                data: dataSeries(data, 2)
+                  name: "Tue",
+                  data: dataSeries(data, 2),
               },
               {
-                name: "Wed",
-                data: dataSeries(data, 3)
+                  name: "Wed",
+                  data: dataSeries(data, 3),
               },
               {
-                name: "Thu",
-                data: dataSeries(data, 4)
+                  name: "Thu",
+                  data: dataSeries(data, 4),
               },
               {
-                name: "Fri",
-                data:  dataSeries(data, 5)
+                  name: "Fri",
+                  data: dataSeries(data, 5),
               },
               {
-                name: "Sat",
-                data:  dataSeries(data, 6)
+                  name: "Sat",
+                  data: dataSeries(data, 6),
               },
-            ]
-        };
+          ],
+      };
+      
+
+
+
 
         content = (
             <Card>
@@ -123,7 +225,7 @@ function ReviewsActiveTime({ placeId }: Props) {
                   </div>
                   <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong> The chart tracks review activity by hour and day, with colors indicating the number of reviews submitted at each time.</p>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="!p-0">
                     <Chart
                         options={state.options}
                         series={state.series}
