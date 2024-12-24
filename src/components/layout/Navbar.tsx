@@ -86,7 +86,8 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                             <div className={`h-full w-full relative overflow-y-auto`}>
                                 <div className={`p-5 flex flex-row items-center space-x-5`}>
                                     <Link to="/" className="flex flex-row items-center gap-1">
-                                        <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                                    <img className="h-8 w-8 dark:hidden" src={ASSETS.LOGO} alt="logo" />
+                                    <img className="h-8 w-8 hidden dark:block" src={ASSETS.LOGO_DARKMODE} alt="logo" />
                                         <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                                     </Link>
                                 </div>
