@@ -99,14 +99,18 @@ function OnBoardSix() {
 
             setValue("");
         },
-        onError: () => {
-            // toast.error("Request Failed", { description: "Please try after sometimes" })
-            setActiveBusinessMutate({
-                place_id: value,
-                token: auth?.token as string
-            })
+        onError: (error: AxiosError<any>) => {
 
-            setValue("");
+            if(error.response?.status === 410 || error.response?.status === 411){
+                return toast.success("Request Success", { description: error.response?.data.message, position: "top-center" });
+            }else{
+                setActiveBusinessMutate({
+                    place_id: value,
+                    token: auth?.token as string
+                })
+    
+                setValue("");
+            }
         },
     })
 

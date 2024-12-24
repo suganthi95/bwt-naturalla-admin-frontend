@@ -14,6 +14,7 @@ import { Card } from "./card"
 import { useAppContext } from "@/contexts/AuthContext"
 import { toast } from "sonner"
 import Loader from "./Loader"
+import { AxiosError } from "axios"
  
 export function SearchBox() {
 
@@ -90,11 +91,15 @@ export function SearchBox() {
       queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
       toast.success("Request Success", { description: "Business Added Successfully" });
     },
-    onError: () => {
-      // toast.error("Request Failed", { description: error.message })
-      // window.location.reload();
-      queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
-      toast.success("Request Success", { description: "Business Added Successfully" });
+    onError: (error: AxiosError<any>) => {
+      
+      if(error.response?.status === 410 || error.response?.status === 411){
+        return toast.success("Request Success", { description: error.response?.data.message, position: "top-center" });
+      }else{
+        queryClient.invalidateQueries({ queryKey: ['getAllBusiness'] })
+        toast.success("Request Success", { description: "Business Added Successfully" });
+      }
+      
     },
   })
 
