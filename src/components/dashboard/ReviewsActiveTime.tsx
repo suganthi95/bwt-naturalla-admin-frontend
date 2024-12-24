@@ -91,49 +91,265 @@ function ReviewsActiveTime({ placeId }: Props) {
         //     ]
         // };
 
-        const state = {
-          options: {
-              chart: {
-                  id: "basic-bar",
-                  toolbar: {
-                      show: false,
-                  },
-              },
-              xaxis: {
-                categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-              },
+    //     const state = {
+    //       options: {
+    //           chart: {
+    //               id: "basic-bar",
+    //               toolbar: {
+    //                   show: false,
+    //               },
+    //           },
+    //           xaxis: {
+    //             categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+            
+    //           },
+              
+    //         },
+    //         responsive: [
+    //             {
+    //                 breakpoint: 1024, 
+    //                 options: {
+    //                     xaxis: {
+    //                       labels: {
+    //                         show: true,
+    //                         rotate:0
+                            
+                           
+    //                       },
+    //                     },
+    //                     chart: {
+    //                       width: "100%", // Adjust width for mobile
+    //                       height: 300, // Reduce height for mobile
+    //                     },
+    //                     legend: {
+    //                       position: "bottom", // Move legend to the bottom
+    //                       fontSize: "10px",
+    //                     },
+    //                   },
+    //             },
+    //             {
+    //               breakpoint: 768, // Target screens smaller than 768px
+    //               options: {
+    //                 xaxis: {
+    //                   labels: {
+    //                     show: false,
+    //                     rotate:-90
+                        
+                       
+    //                   },
+    //                 },
+    //                 chart: {
+    //                   width: "100%", // Adjust width for mobile
+    //                   height: 300, // Reduce height for mobile
+    //                 },
+    //                 legend: {
+    //                   position: "bottom", // Move legend to the bottom
+    //                   fontSize: "10px",
+    //                 },
+    //               },
+    //             },
+    //             {
+    //               breakpoint: 480, // Target very small screens
+    //               options: {
+    //                 chart: {
+    //                   width: "100%",
+    //                   height: 250,
+    //                 },
+    //                 xaxis: {
+    //                   labels: {
+    //                     show: true,
+    //                     rotate: 90,
+    //                     style: {
+    //                       fontSize: "10px",
+    //                     },
+    //                   },
+    //                 },
+    //                 legend: {
+    //                   fontSize: "8px",
+    //                 },
+    //               },
+    //             },
+    //           ],
+            
+    //         series: [
+    //           {
+    //               name: "Sun",
+    //               data: dataSeries(data, 0),
+    //           },
+    //           {
+    //               name: "Mon",
+    //               data: dataSeries(data, 1),
+    //           },
+    //           {
+    //               name: "Tue",
+    //               data: dataSeries(data, 2),
+    //           },
+    //           {
+    //               name: "Wed",
+    //               data: dataSeries(data, 3),
+    //           },
+    //           {
+    //               name: "Thu",
+    //               data: dataSeries(data, 4),
+    //           },
+    //           {
+    //               name: "Fri",
+    //               data: dataSeries(data, 5),
+    //           },
+    //           {
+    //               name: "Sat",
+    //               data: dataSeries(data, 6),
+    //           },
+    //       ],
+    //   };
+    const state = {
+        options: {
+            chart: {
+                id: "basic-bar",
+                toolbar: {
+                    show: false,
+                },
             },
-            series: [
-              {
-                  name: "Sun",
-                  data: dataSeries(data, 0),
-              },
-              {
-                  name: "Mon",
-                  data: dataSeries(data, 1),
-              },
-              {
-                  name: "Tue",
-                  data: dataSeries(data, 2),
-              },
-              {
-                  name: "Wed",
-                  data: dataSeries(data, 3),
-              },
-              {
-                  name: "Thu",
-                  data: dataSeries(data, 4),
-              },
-              {
-                  name: "Fri",
-                  data: dataSeries(data, 5),
-              },
-              {
-                  name: "Sat",
-                  data: dataSeries(data, 6),
-              },
-          ],
-      };
+            xaxis: {
+               categories: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+             labels: {
+                    style: {
+                        fontSize: "12px",
+                    },
+                    rotate: 0,
+                },
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: "12px",
+                    },
+                },
+            },
+            grid: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                },
+            },
+            legend: {
+                position: "bottom" as "bottom", 
+                fontSize: "12px",
+            },
+            responsive: [
+                {
+                    breakpoint: Number.MAX_VALUE,
+                    options: {
+                        chart: {
+                            height: 500,
+                        },
+                        xaxis: {
+                            labels: {
+                                style: {
+                                    fontSize: "12px",
+                                },
+                                rotate: 0, 
+                            },
+                        },
+                        legend: {
+                            fontSize: "14px", 
+                        },
+                    },
+                },
+                {
+                    breakpoint: 1024, 
+                    options: {
+                        chart: {
+                            height: 400, 
+                        },
+                        xaxis: {
+                            labels: {
+                                style: {
+                                    fontSize: "10px",
+                                },
+                                rotate: -45, 
+                            },
+                        },
+                        legend: {
+                            fontSize: "10px",
+                        },
+                    },
+                },
+                {
+                    breakpoint: 768, 
+                    options: {
+                        chart: {
+                            height: 300, 
+                        },
+                        xaxis: {
+                            labels: {
+                                style: {
+                                    fontSize: "9px",
+                                },
+                                rotate: -45, 
+                            },
+                        },
+                        legend: {
+                            fontSize: "9px",
+                        },
+                    },
+                },
+                {
+                    breakpoint: 480, 
+                    options: {
+                        chart: {
+                            height: 250, 
+                        },
+                        xaxis: {
+                            labels: {
+                                style: {
+                                    fontSize: "8px", 
+                                },
+                                rotate: 90,
+                            },
+                        },
+                        legend: {
+                            fontSize: "8px",
+                        },
+                    },
+                },
+            ],
+        },
+        series: [
+            {
+                name: "Sun",
+                data: dataSeries(data, 0),
+            },
+            {
+                name: "Mon",
+                data: dataSeries(data, 1),
+            },
+            {
+                name: "Tue",
+                data: dataSeries(data, 2),
+            },
+            {
+                name: "Wed",
+                data: dataSeries(data, 3),
+            },
+            {
+                name: "Thu",
+                data: dataSeries(data, 4),
+            },
+            {
+                name: "Fri",
+                data: dataSeries(data, 5),
+            },
+            {
+                name: "Sat",
+                data: dataSeries(data, 6),
+            },
+        ],
+    };
+    
+    
+    
+
       
 
 

@@ -28,7 +28,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       
     },
     {
-      accessorKey: "plan_name",
+      accessorKey: "nplan_name",
       header: "Plan Name",
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("plan_name")? row.getValue("plan_name"):'-') }</div>
