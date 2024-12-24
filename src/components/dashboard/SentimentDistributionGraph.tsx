@@ -111,6 +111,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                     >
                         <Label
                             value='Review count'
+                            className="!text-[10px]   md:text-lg "
                             offset={-10}
                             angle={270}
                             dx={20}
