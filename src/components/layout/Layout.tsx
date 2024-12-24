@@ -164,7 +164,7 @@ function Layout() {
     if(isLoading){
         main = <div className="h-screen flex items-center justify-center flex-col gap-3">
             <div className="hidden lg:flex flex-row items-center gap-1">
-                <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                <img className="h-8 w-8 " src={ASSETS.LOGO} alt="logo" />
                 <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
             </div>
             <div>
@@ -192,7 +192,8 @@ function Layout() {
                             <p className="font-medium dark:text-white lg:hidden">{activeWorkspace.workspace_name}</p>
                             <div className="flex flex-row items-center gap-1">
                         <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
-                            <img className="h-8 w-8" src={ASSETS.LOGO} alt="logo" />
+                            <img className="h-8 w-8 dark:hidden" src={ASSETS.LOGO} alt="logo" />
+                            <img className="h-8 w-8 hidden dark:block" src={ASSETS.LOGO_DARKMODE} alt="logo" />
                             <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
                         </Link>
                         <Badge className={plan.class}>{plan.name}</Badge>
