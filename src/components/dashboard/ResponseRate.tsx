@@ -122,6 +122,7 @@ function ResponseRate({ placeId }: Props) {
                                 strokeWidth={5}
                             >
                             <Label
+                            
                                 content={({ viewBox }) => {
                                 if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                                     return (
@@ -130,6 +131,7 @@ function ResponseRate({ placeId }: Props) {
                                         y={viewBox.cy}
                                         textAnchor="middle"
                                         dominantBaseline="middle"
+                                        className=" "
                                     >
                                         {/* <tspan
                                         x={viewBox.cx}
@@ -141,7 +143,7 @@ function ResponseRate({ placeId }: Props) {
                                         <tspan
                                         x={viewBox.cx}
                                         y={(viewBox.cy || 0)}
-                                        className="fill-muted-foreground"
+                                        className=" dark:fill-slate-300 "
                                         >
                                             Response Rate
                                         </tspan>
