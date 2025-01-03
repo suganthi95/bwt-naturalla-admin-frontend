@@ -78,7 +78,8 @@ export interface GetBusinessType {
     email: string
     zip_code: string
     place_id: string,
-    created_at: Date
+    created_at: Date,
+    active_business: boolean
 }
 
 export type SignUpType = {
