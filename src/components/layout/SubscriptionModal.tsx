@@ -15,6 +15,7 @@ import { AxiosError } from "axios"
 import { toast } from "sonner"
 import Loader from "../ui/Loader"
 import { planFeatures } from "@/lib/utils"
+import ContactUs from "../ui/ContactUs"
 
 function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { triggerPaymentDialog: boolean, setTriggerPaymentDialog: Dispatch<SetStateAction<boolean>> }) {
 
@@ -161,8 +162,8 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                     </div>
                 </div>
 
-                <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-y-scroll">
-                    <div className="flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border">
+                <div className="group grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-y-scroll">
+                    <div className="peer flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border hover:border hover:border-primary hover:bg-[#FFFAF5] transition-all ease-in duration-75">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.standardIcon className="h-10 w-10"/>
 
@@ -237,7 +238,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border">
+                    <div className="peer flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border hover:border hover:border-primary hover:bg-[#FFFAF5] transition-all ease-in duration-75">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.enterpriseIcon className="h-10 w-10"/>
 
@@ -268,7 +269,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            <Button onClick={() => window.open("https://intelliresponse.ai/en/#contact-us")} disabled={isPending} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Contact Us</Button>
+                            <ContactUs/>
                         </div>
                     </div>
 

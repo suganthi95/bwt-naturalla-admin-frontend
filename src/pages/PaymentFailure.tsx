@@ -22,12 +22,12 @@ function PaymentFailure() {
 
     if(isError){
         toast.error("Request Failed", { description: error?.message });
-        navigate("/billing");
+        navigate("/dashboard");
     }
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            navigate("/billing")
+            navigate("/dashboard")
         }, 5000);
 
         return () => clearTimeout(timeout);

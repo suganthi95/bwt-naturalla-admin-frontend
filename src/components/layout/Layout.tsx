@@ -33,11 +33,11 @@ function Layout() {
             code: "standard plan",
             class: "bg-blue-500"
         },
-        {
-            name: "Free Trial",
-            code: "free trial",
-            class: "bg-slate-700"
-        },
+        // {
+        //     name: "Free Trial",
+        //     code: "free trial",
+        //     class: "bg-slate-700"
+        // },
     ];
 
     const navigate = useNavigate();
@@ -196,7 +196,7 @@ function Layout() {
                             <img className="h-8 w-8 hidden dark:block" src={ASSETS.LOGO_DARKMODE} alt="logo" />
                             <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
                         </Link>
-                        <Badge className={plan.class}>{plan.name}</Badge>
+                        {plan?.name && <Badge className={plan?.class}>{plan?.name}</Badge>}
                     </div>
                     </div>
                    
@@ -248,8 +248,7 @@ function Layout() {
                     />
                 </div>
                 <UpgradeToProDialog 
-                    planName={data.plan_name} 
-                    planEndDate={data.plan_end_date} 
+                    isUpgradedUser={data.upgraded_user}
                     clickEvent={() => setOpenPaymentDialog(true)}
                 />
             </main>
