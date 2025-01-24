@@ -59,26 +59,33 @@ function Billing() {
                         }
                         <Separator className="my-2" />
 
-                        {data.started_subscription && <div className="space-y-1 mt-2">
+                        {data.started_subscription && !data.cancel_subscription && <div className="space-y-1 mt-2">
                             <p className="text-sm text-slate-400">Subscription renewal date</p>
                             <p className="font-medium">{dayjs(data?.next_due).format("MMMM DD, YYYY")} ({dayjs(data?.next_due).fromNow()})</p>
                         </div>}
 
                         {data.started_subscription ?
                             <>
-                                <div className="space-y-1 mt-2">
+                                {!data.cancel_subscription && <div className="space-y-1 mt-2">
                                     <p className="text-sm text-slate-400">what you’ll be charged</p>
                                     <p className="font-medium">{data.currency_symbol} {data?.amount}</p>
-                                </div>
+                                </div>}
                                 {data.cancel_subscription && <p className="text-sm text-slate-400">Your subscription has been cancelled but you can continue to use  until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
-                                <div className="space-y-1 mt-4">
-                                    <CancelSubscription Canceled = {data.cancel_subscription}/>
-                                </div>
+                                {!data.cancel_subscription && 
+                                    <div className="space-y-1 mt-4">
+                                        <CancelSubscription Canceled = {data.cancel_subscription}/>
+                                    </div>
+                                }
                             </> :
                             <div className="space-y-1 mt-2">
                                 <p className="text-sm text-slate-900 font-bold">Your subscription will be activated in few minutes</p>
                             </div>
                         }
+
+                        {data.future_subscription && <div className="space-y-1 mt-2">
+                            <p className="text-sm text-slate-400">Your next plan ({data?.future_sub_plan_name}) will start on</p>
+                            <p className="font-medium">{dayjs(data?.future_sub_start_date).format("MMMM DD, YYYY")} ({dayjs(data?.future_sub_start_date).fromNow()})</p>
+                        </div>}
 
                         
                     </Card>

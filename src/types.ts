@@ -180,7 +180,10 @@ export interface BillingResponse {
     amount: number
     currencey: string,
     currency_symbol: string,
-    started_subscription: boolean
+    started_subscription: boolean,
+    future_subscription: boolean,
+    future_sub_start_date: string,
+    future_sub_plan_name: string
   }
   
   export interface InstantCredits {
