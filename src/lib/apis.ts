@@ -2,8 +2,8 @@
 import { TokenResponse } from "@react-oauth/google";
 import axios, { GenericAbortSignal } from "axios";
 
-export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
-// export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"       // live
+// export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
+export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"       // live
 
 // production
 const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
