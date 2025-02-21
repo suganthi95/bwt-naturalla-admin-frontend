@@ -223,5 +223,6 @@ export interface SubscriptionPlanType {
     strike_through_price: number
     price_per_month: number
     discount_pecentage: number,
-    currency_symbol: string
+    currency_symbol: string,
+    active_plan: boolean
 }
