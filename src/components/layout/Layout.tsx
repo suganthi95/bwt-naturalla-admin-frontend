@@ -33,11 +33,11 @@ function Layout() {
             code: "standard plan",
             class: "bg-blue-500"
         },
-        // {
-        //     name: "Free Trial",
-        //     code: "free trial",
-        //     class: "bg-slate-700"
-        // },
+        {
+            name: "Free Trial",
+            code: "free trial",
+            class: "bg-slate-700"
+        },
     ];
 
     const navigate = useNavigate();
@@ -248,7 +248,8 @@ function Layout() {
                     />
                 </div>
                 <UpgradeToProDialog 
-                    isUpgradedUser={data.upgraded_user}
+                    planName={data.plan_name} 
+                    planEndDate={data.plan_end_date} 
                     clickEvent={() => setOpenPaymentDialog(true)}
                 />
             </main>
