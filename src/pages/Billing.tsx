@@ -64,7 +64,9 @@ function Billing() {
                         <p>Credits Plan</p>
                     </div>
 
-                    <div className="py-2 text-md font-medium"></div>
+                    <div></div>
+
+                    {!data.future_subscription && <div></div>}
 
                     <Card className="p-4">
                         {data.started_subscription ? 
