@@ -54,9 +54,11 @@ function Billing() {
                         <p>Current Plan</p>
                     </div>
 
-                    <div className="py-2 text-md font-medium">
-                        <p>Future Plan</p>
-                    </div>
+                    {data.future_subscription &&
+                        <div className="py-2 text-md font-medium">
+                            <p>Future Plan</p>
+                        </div>
+                    }
 
                     <div className="py-2 text-md font-medium">
                         <p>Credits Plan</p>
