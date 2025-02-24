@@ -47,11 +47,23 @@ function Billing() {
         content = (
             
             <>
-                <div className="py-2 text-md font-medium">
-                    <p>Current Plan</p>
-                </div>
 
-                <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+                <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-x-5">
+
+                    <div className="py-2 text-md font-medium">
+                        <p>Current Plan</p>
+                    </div>
+
+                    <div className="py-2 text-md font-medium">
+                        <p>Future Plan</p>
+                    </div>
+
+                    <div className="py-2 text-md font-medium">
+                        <p>Credits Plan</p>
+                    </div>
+
+                    <div className="py-2 text-md font-medium"></div>
+
                     <Card className="p-4">
                         {data.started_subscription ? 
                             <h1 className="text-md text-primary capitalize">{data?.plan_name}: {data?.period}</h1>  :
@@ -70,7 +82,7 @@ function Billing() {
                                     <p className="text-sm text-slate-400">what you’ll be charged</p>
                                     <p className="font-medium">{data.currency_symbol} {data?.amount}</p>
                                 </div>}
-                                {data.cancel_subscription && <p className="text-sm text-slate-400">Your subscription has been cancelled but you can continue to use  until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
+                                {data.cancel_subscription && <p className="text-sm text-slate-400">Your current plan subscription has been cancelled but you can continue to use  until ({dayjs(data?.next_due).format("MMMM DD, YYYY")})</p>}
                                 {!data.cancel_subscription && 
                                     <div className="space-y-1 mt-4">
                                         <CancelSubscription Canceled = {data.cancel_subscription}/>
@@ -82,13 +94,26 @@ function Billing() {
                             </div>
                         }
 
-                        {data.future_subscription && <div className="space-y-1 mt-2">
-                            <p className="text-sm text-slate-400">Your next plan ({data?.future_sub_plan_name}) will start on</p>
-                            <p className="font-medium">{dayjs(data?.future_sub_start_date).format("MMMM DD, YYYY")} ({dayjs(data?.future_sub_start_date).fromNow()})</p>
-                        </div>}
-
                         
                     </Card>
+                    {data.future_subscription &&
+                            
+                        <Card className="p-4">
+                            {data.started_subscription ? 
+                                <h1 className="text-md text-primary capitalize">{data?.future_sub_plan_name}</h1>  :
+                                <h1 className="text-md text-primary capitalize">Subscription In Progress...</h1> 
+                            }
+                            <Separator className="my-2" />
+
+                            {data.future_subscription && <div className="space-y-1 mt-2">
+                                <p className="text-sm text-slate-400">Your next plan ({data?.future_sub_plan_name}) will start on</p>
+                                <p className="font-medium">{dayjs(data?.future_sub_start_date).format("MMMM DD, YYYY")} ({dayjs(data?.future_sub_start_date).fromNow()})</p>
+                            </div>}
+
+                            
+                        </Card>
+                    }
+                        
                     <Card className="p-4">
                         <h1 className="text-md text-primary capitalize">Instant Credits Left: {data.instant_credits.remaining_instant_credits ?? 0} / {data.instant_credits.total_credits ?? 0}</h1>
                         <Separator className="my-2" />
