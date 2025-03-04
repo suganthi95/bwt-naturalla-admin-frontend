@@ -11,9 +11,9 @@ export const isPastDate = (date: Date) => {
 };
 
 // calaculate remainig days
-export const RemainingDays=(endate:Date)=>{
-  const today =dayjs();
-  const end =dayjs(endate);
+export const RemainingDays = (endate: Date) => {
+  const today = dayjs().startOf("day");
+  const end = dayjs(endate).startOf("day");
   return end.diff(today,"day")
 }
 

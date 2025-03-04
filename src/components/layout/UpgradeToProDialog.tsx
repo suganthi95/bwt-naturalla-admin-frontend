@@ -27,8 +27,6 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
   const isFreeTrialEnd = isPastDate(planEndDate);
 
   const balanceDays = RemainingDays(planEndDate);
-  console.log(balanceDays);
-  
 
   const showPopup = () => {
     if (balanceDays > 0 && planName == "free trial") {
