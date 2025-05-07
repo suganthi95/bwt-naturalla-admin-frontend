@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AuthType, SignUpType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
@@ -19,9 +19,17 @@ import { toast } from "sonner";
 import { useAppContext } from "@/contexts/AuthContext";
 import { AxiosError, AxiosResponse } from "axios";
 import useToggle from "@/hooks/useToggle";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 
 function SignUp() {
-  
+  const location = useLocation();
+  const user = localStorage.getItem("auth");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const Mail = parsedUser?.data?.email;
+   useEffect(() => {
+     initializeGA();
+     trackpPageView(location.pathname,Mail);
+   }, []);
   const {
     register,
     handleSubmit,

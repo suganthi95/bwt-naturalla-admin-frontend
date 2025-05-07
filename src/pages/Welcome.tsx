@@ -2,14 +2,22 @@ import { ASSETS } from "@/assets/assets"
 import Loader from "@/components/ui/Loader"
 import { useAppContext } from "@/contexts/AuthContext";
 import { validateUser } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function Welcome() {
-
+    const location = useLocation();
+    const user = localStorage.getItem("auth");
+    const parsedUser = user ? JSON.parse(user) : null;
+    const Mail = parsedUser?.data?.email;
+     useEffect(() => {
+       initializeGA();
+       trackpPageView(location.pathname,Mail);
+     }, []);
     const { auth } = useAppContext();
     const navigate = useNavigate();
     const { isError, error } = useQuery({

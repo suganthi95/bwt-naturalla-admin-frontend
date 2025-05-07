@@ -46,7 +46,7 @@ function AppLanguage() {
     //     }
 
     //     if(selectedValue === "عربي"){
-    //         i18n.changeLanguage("ar");
+    //         Language("ar");
     //         navigate(`/ar/${restRoutes}`)
     //         document.body.setAttribute('dir', 'rtl');
     //     }

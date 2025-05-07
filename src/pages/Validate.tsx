@@ -2,12 +2,21 @@ import { ASSETS } from "@/assets/assets"
 import Loader from "@/components/ui/Loader"
 import { useAppContext } from "@/contexts/AuthContext";
 import { validateUser } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
 function Validate() {
-
+  const location = useLocation();
+  const user = localStorage.getItem("auth");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const Mail = parsedUser?.data?.email;
+   useEffect(() => {
+     initializeGA();
+     trackpPageView(location.pathname,Mail);
+   }, []);
   const { auth } = useAppContext();
   const { isLoading, isSuccess, data } = useQuery({
       queryKey: [ "validateUser" ],

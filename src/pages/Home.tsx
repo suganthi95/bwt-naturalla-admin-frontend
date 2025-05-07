@@ -5,10 +5,20 @@ import ReviewsActiveTime from "@/components/dashboard/ReviewsActiveTime";
 import SentimentDistributionGraph from "@/components/dashboard/SentimentDistributionGraph";
 import SentimentDistributionOvertime from "@/components/dashboard/SentimentDistributionOvertime";
 import TotalReviewsCard from "@/components/dashboard/TotalReviewsCard"
+import { useAppContext } from "@/contexts/AuthContext";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { BusinessList, ValidateUserType, WorkspaceList } from "@/types"
 import { useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios"
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 function Home() {
+  const location = useLocation();
+  const { auth } = useAppContext();
+   useEffect(() => {
+     initializeGA();
+     trackpPageView(location.pathname,auth?.data.email ?? '');
+   }, []);
   const queryClient = useQueryClient();
   const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);
   const [ activeWorkspace ] = validateUser?.data?.data?.workspaceList.filter(item => item.workspace_id === validateUser?.data?.data?.active_workspace) as WorkspaceList[];

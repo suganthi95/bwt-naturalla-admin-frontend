@@ -3,16 +3,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useAppContext } from "@/contexts/AuthContext";
 import { sendFeedback } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { FeedbackFormType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form"
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 
 function Feedback() {
-
+    const location = useLocation();
     const { auth } = useAppContext();
+    useEffect(() => {
+      initializeGA();
+      trackpPageView(location.pathname,auth?.data.email ?? '');
+    }, []);
     const { register, watch, handleSubmit, control, reset, setValue } = useForm<FeedbackFormType>();
     const { mutate, isPending } = useMutation({
         mutationKey: [ "sendFeedback" ],

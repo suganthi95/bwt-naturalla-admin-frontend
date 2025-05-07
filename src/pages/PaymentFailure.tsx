@@ -2,15 +2,20 @@ import { ASSETS } from "@/assets/assets"
 import Loader from "@/components/ui/Loader"
 import { useAppContext } from "@/contexts/AuthContext";
 import { validateUser } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function PaymentFailure() {
-
+    const location = useLocation();
     const { auth } = useAppContext();
+    useEffect(() => {
+      initializeGA();
+      trackpPageView(location.pathname,auth?.data.email ?? '');
+    }, []);
     const navigate = useNavigate();
     const { isError, error } = useQuery({
         queryKey: [ "validateUser" ],

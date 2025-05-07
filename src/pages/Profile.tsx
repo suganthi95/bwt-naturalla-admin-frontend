@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useAppContext } from "@/contexts/AuthContext";
 import { updateUserProfile } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios";
@@ -10,11 +11,16 @@ import { Check, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 function Profile() {
-
+    const location = useLocation();
     const { auth } = useAppContext();
+    useEffect(() => {
+      initializeGA();
+      trackpPageView(location.pathname,auth?.data.email ?? '');
+    }, []);
     const queryClient = useQueryClient();
     const data = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType, message: string }>>([ "validateUser" ]);
     const { email, name: username, active_workspace, workspaceList } = data?.data?.data as ValidateUserType;

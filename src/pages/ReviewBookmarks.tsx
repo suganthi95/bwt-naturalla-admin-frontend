@@ -2,13 +2,23 @@ import ReviewCard from "@/components/reviews/ReviewCard"
 import Loader from "@/components/ui/Loader";
 import { useAppContext } from "@/contexts/AuthContext";
 import { getAllBookmarkedReviews } from "@/lib/apis"
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { BusinessList, ReviewType, ValidateUserType, WorkspaceList } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios";
 import { Bookmark } from "lucide-react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 function ReviewBookmarks() {
-
+    const location = useLocation();
+    const user = localStorage.getItem("auth");
+    const parsedUser = user ? JSON.parse(user) : null;
+    const Mail = parsedUser?.data?.email;
+     useEffect(() => {
+       initializeGA();
+       trackpPageView(location.pathname,Mail);
+     }, []);
     const { auth } = useAppContext();
     const queryClient = useQueryClient();
     const validateUser = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType }>>([ "validateUser" ]);

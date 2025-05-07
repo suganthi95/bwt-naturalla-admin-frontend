@@ -5,12 +5,20 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { getReviews } from "@/lib/apis"
 import { BusinessList, ReviewType, ValidateUserType, WorkspaceList } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AxiosResponse } from "axios";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 
 function Reviews() {
-
+  const location = useLocation();
+  const user = localStorage.getItem("auth");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const Mail = parsedUser?.data?.email;
+   useEffect(() => {
+     initializeGA();
+     trackpPageView(location.pathname,Mail);
+   }, []);
     const { auth } = useAppContext();
     const [ sortKey, setSortKey ] = useState<string>("newest");
     const queryClient = useQueryClient();

@@ -15,11 +15,14 @@ import { AxiosError } from "axios"
 import { toast } from "sonner"
 import Loader from "../ui/Loader"
 import { planFeatures } from "@/lib/utils"
+import { trackEvent } from "@/lib/google_analytics"
 
 function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { triggerPaymentDialog: boolean, setTriggerPaymentDialog: Dispatch<SetStateAction<boolean>> }) {
 
 
     const { auth } = useAppContext();
+    
+
     const [Razorpay] = useRazorpay();
     const navigate = useNavigate();
     const [ openSubscriptionModal, setOpenSubscriptionModal ] = useState<boolean>(false);
@@ -28,6 +31,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
 
     const handleModal = () => {
         setOpenSubscriptionModal(true)
+        trackEvent('Button','Click','upgrade button click',auth?.data.email)
     }
 
     useEffect(() => {
@@ -284,7 +288,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
         <Gift className="h-5 w-5" />
         <span className="text-xs">Upgrade</span>
     </button>
-    <Dialog 
+    <Dialog     
         open={openSubscriptionModal} 
         onOpenChange={() => {
             setOpenSubscriptionModal(prev => !prev);

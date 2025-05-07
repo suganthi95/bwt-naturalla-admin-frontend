@@ -2,6 +2,8 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { Button } from '../ui/button'
 import { useFormContext, Controller } from 'react-hook-form'
 import { OnBoardType } from '@/types';
+import { trackEvent } from '@/lib/google_analytics';
+import { useAppContext } from '@/contexts/AuthContext';
 
 interface Props {
     setPage: React.Dispatch<React.SetStateAction<number>>
@@ -10,8 +12,9 @@ interface Props {
 function OnBoardOne({ setPage }: Props) {
 
     const { register, watch, control, formState: { errors }, setError } = useFormContext<OnBoardType>();
-
+const {auth} = useAppContext()
     const proceedToNext = () => {
+        trackEvent('Button','click','onboard initiated',auth?.data.email)
         if(!watch("business")){
             setError('business', { type: 'required', message: 'Select one option' });
         }else{

@@ -16,6 +16,7 @@ import {
   signInUserByGoogle,
   verifyGoogleUser,
 } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { AuthType } from "@/types";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
@@ -23,11 +24,18 @@ import { AxiosError, AxiosResponse } from "axios";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function SignIn() {
-
+  const location = useLocation();
+  const user = localStorage.getItem("auth");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const Mail = parsedUser?.data?.email;
+   useEffect(() => {
+     initializeGA();
+     trackpPageView(location.pathname,Mail);
+   }, []);
   const { register, handleSubmit } = useForm<{
     email: string;
     password: string;
