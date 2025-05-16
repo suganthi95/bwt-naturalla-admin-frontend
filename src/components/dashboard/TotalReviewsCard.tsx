@@ -4,8 +4,8 @@ import { DashboardDataType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { v4 as uuid } from "uuid";
 import { Card } from "../ui/card";
-import { CircleCheck, Star, Zap } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { Icons } from "@/assets/icons";
 
 interface Props {
     placeId: string
@@ -36,36 +36,39 @@ function TotalReviewsCard({ placeId }: Props) {
 
     if(isSuccess){
         content = (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-            <Card className="p-3 rounded-xl">
-                <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Total Reviews</h1>
-                <Star strokeWidth={0.5} className="h-5 w-5 stroke-none fill-yellow-400"/>
-                </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.totalRatings ?? 0}</p>
-            </Card>
-            <Card className="p-3 rounded-xl">
-                <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Free Credits Remaining</h1>
-                <Zap className="stroke-transparent fill-primary h-5 w-5" />
-                </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.credits ?? 0} / {data.total_credits ?? 0}</p>
-            </Card>
-            <Card className="p-3 rounded-xl">
-                <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Instant Credits Remaining</h1>
-                <Zap className="stroke-transparent fill-primary h-5 w-5" />
-                </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.instant_credits ?? 0} / {data.total_instant_credits ?? 0}</p>
-            </Card>
-            <Card className="p-3 rounded-xl">
-                <div className="flex flex-row items-center justify-between">
-                <h1 className="text-sm font-medium text-slate-500">Total Business</h1>
-                <CircleCheck className="h-5 w-5 stroke-white fill-green-400" />
-                </div>
-                <p className="text-2xl text-secondary font-bold mt-8">{data.total_business ?? 0}</p>
-            </Card>
-        </div>
+<div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+  {[
+    {
+      icon: <Icons.Review className="size-16 text-primary" />,
+      value: data.totalRatings ?? 0,
+      label: 'Total Reviews',
+    },
+    {
+      icon: <Icons.Credits className="size-16 text-primary" />,
+      value: `${data.credits ?? 0} / ${data.total_credits ?? 0}`,
+      label: 'Free Credits Remaining',
+    },
+    {
+      icon: <Icons.Rating className="size-16 text-primary" />,
+      value: `${data.instant_credits ?? 0} / ${data.total_instant_credits ?? 0}`,
+      label: 'Instant Credits Remaining',
+    },
+    {
+      icon: <Icons.Buisness className="size-16 text-primary" />,
+      value: data.total_business ?? 0,
+      label: 'Total Business',
+    },
+  ].map((item, index) => (
+    <Card key={index} className="rounded-xl p-4 flex items-center gap-4 h-full">
+      {item.icon}
+      <div className="flex flex-col">
+        <p className="text-2xl font-bold text-secondary">{item.value}</p>
+        <p className="text-sm text-gray-500 font-medium">{item.label}</p>
+      </div>
+    </Card>
+  ))}
+</div>
+
         )
     }
 

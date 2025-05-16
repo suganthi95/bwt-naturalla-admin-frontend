@@ -68,7 +68,7 @@ function ReviewBookmarks() {
 
     if(isSuccess && data.length > 0){
         content = data?.map((item : ReviewType) => (
-          <ReviewCard key={item.review_id} {...item} place_id={activeBusiness.place_id}/>
+          <ReviewCard key={item.review_id} reviewLength={data?.l} {...item} place_id={activeBusiness.place_id}/>
         ))
     }
 

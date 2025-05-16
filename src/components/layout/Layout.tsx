@@ -196,7 +196,7 @@ function Layout() {
                             <img className="h-8 w-8 hidden dark:block" src={ASSETS.LOGO_DARKMODE} alt="logo" />
                             <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
                         </Link>
-                        <Badge className={plan.class}>{plan.name}</Badge>
+                        {plan?.name && <Badge className={plan?.class}>{plan?.name}</Badge>}
                     </div>
                     </div>
                    

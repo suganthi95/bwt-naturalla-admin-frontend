@@ -28,7 +28,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       
     },
     {
-      accessorKey: "nplan_name",
+      accessorKey: "plan_name",
       header: "Plan Name",
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("plan_name")? row.getValue("plan_name"):'-') }</div>
@@ -87,9 +87,12 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
       accessorKey: "payment_status",
       header: "Payment Status",
       cell: ({ row }) => {
-        if(row.getValue("payment_status") === "success"){
-            return <Badge className="bg-green-400 hover:bg-green-500">{row.getValue("payment_status")}</Badge>
-        }
+        return  <div className="flex items-center justify-center">
+          {row.getValue("payment_status") === "paid" ?
+            <Badge className="bg-green-400 hover:bg-green-500 captilize">{row.getValue("payment_status")}</Badge> :
+            <Badge className="bg-orange-400 hover:bg-orange-500 capitalize">{row.getValue("payment_status")}</Badge>
+          }
+        </div>
       },
     },
     {

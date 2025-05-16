@@ -1,15 +1,16 @@
 import { Icons } from "@/assets/icons";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Loader from "@/components/ui/Loader";
 import { SearchBox } from "@/components/ui/SearchBox"
 import { useAppContext } from "@/contexts/AuthContext"
-import { getAllBusiness, removeBusiness } from "@/lib/apis"
+import { getAllBusiness, removeBusiness, setActiveBusiness } from "@/lib/apis"
 import { initializeGA, trackEvent, trackpPageView } from "@/lib/google_analytics";
 import { GetBusinessType, ValidateUserType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
@@ -41,12 +42,25 @@ function Business() {
     mutationFn: removeBusiness,
     onSuccess: () => {
       toast.success("Request Success", { description: "Business Deleted Successfully" });
-      trackEvent('button','click','business removed',auth?.data.email)
+      trackEvent('button','click','business removed',auth?.data?.email ?? '')
       window.location.reload();
 
     },
     onError: (error) => console.log(error),
-  })
+  });
+
+
+  // set active business
+  const { mutate: setActiveBusinessMutate } = useMutation({
+      mutationKey: [ "setActiveBusiness" ],
+      mutationFn: setActiveBusiness,
+      onSuccess: async () => {
+          window.location.reload();
+      },
+      onError: (error: AxiosError<any>) => {
+          toast.error("Request Failed", { description: error?.response?.data?.message })
+      }
+  });
 
   let content;
 
@@ -77,23 +91,28 @@ function Business() {
               <div className="border p-2 rounded-full">
                 <Icons.googleIcon/>
               </div>
-              {query?.data?.data?.plan_name === "pro-plan" && <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="icon" variant="ghost" className="rounded-full">
-                    <EllipsisVertical/>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuGroup>
-                    {/* <DropdownMenuItem onClick={() => setActiveBusinessMutate({ place_id: item.place_id, token: auth?.token as string })}>
-                      <span>Set Active Business</span>
-                    </DropdownMenuItem> */}
-                    <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string, token: auth?.token as string})}>
-                      <span>Remove Business</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>}
+
+              <div className="flex flex-row items-center gap-2">
+                {item.active_business && <Badge className="bg-primary hover:bg-primary">Primary</Badge>}
+                {query?.data?.data?.plan_name === "pro-plan" && <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" variant="ghost" className="rounded-full">
+                      <EllipsisVertical/>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuGroup>
+                      {!item.active_business && <DropdownMenuItem onClick={() => setActiveBusinessMutate({ place_id: item.place_id, token: auth?.token as string })}>
+                        <span>Set Primary Business</span>
+                      </DropdownMenuItem>}
+                      <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string, token: auth?.token as string})}>
+                        <span>Remove Business</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>}
+              </div>
+              
             </CardTitle>
             <CardDescription className="flex items-center text-secondary justify-between gap-2">
               <span className="text-xl font-bold mt-3">{item.business_name}</span>

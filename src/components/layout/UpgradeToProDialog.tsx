@@ -13,6 +13,7 @@ import { ASSETS } from "@/assets/assets";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+
 interface Props {
   planName: string;
   planEndDate: Date;
@@ -20,13 +21,12 @@ interface Props {
 }
 
 function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
+
   const [modal, setModal] = useState<boolean>(false);
 
   const isFreeTrialEnd = isPastDate(planEndDate);
 
   const balanceDays = RemainingDays(planEndDate);
-  console.log(balanceDays);
-  
 
   const showPopup = () => {
     if (balanceDays > 0 && planName == "free trial") {

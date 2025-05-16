@@ -60,10 +60,14 @@ function App() {
       (async () => {
         try{
   
-          const response = await axios.get("http://ip-api.com/json");
+          const response = await axios.get("https://get.geojs.io/v1/ip/geo.js");
   
           if((response).status === 200){
-            localStorage.setItem("loc", response.data.country)
+
+            const jsonString = response.data.replace(/^geoip\(|\)$/g, "").replace(/\)/, "");
+            const geoipObject = JSON.parse(jsonString);
+
+            localStorage.setItem("loc", geoipObject.country)
           }
   
         }catch(error){

@@ -15,6 +15,7 @@ import { AxiosError } from "axios"
 import { toast } from "sonner"
 import Loader from "../ui/Loader"
 import { planFeatures } from "@/lib/utils"
+import ContactUs from "../ui/ContactUs"
 import { trackEvent } from "@/lib/google_analytics"
 
 function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { triggerPaymentDialog: boolean, setTriggerPaymentDialog: Dispatch<SetStateAction<boolean>> }) {
@@ -31,7 +32,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
 
     const handleModal = () => {
         setOpenSubscriptionModal(true)
-        trackEvent('Button','Click','upgrade button click',auth?.data.email)
+        trackEvent('Button','Click','upgrade button click',auth?.data?.email ?? '')
     }
 
     useEffect(() => {
@@ -165,14 +166,22 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                     </div>
                 </div>
 
-                <div className=" grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-y-scroll">
-                    <div className="flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border">
+                <div className="group grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-y-scroll">
+                    <div className={`peer flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border hover:border hover:border-primary hover:bg-[#FFFAF5] transition-all ease-in duration-75 ${standardPlanData.active_plan && "bg-green-100 hover:bg-green-100 hover:border-none"}`}>
                         <div className="flex flex-row items-center gap-3">
                             <Icons.standardIcon className="h-10 w-10"/>
 
-                            <div className="text-md">
-                                <p className="text-slate-500">For Beginners</p>
-                                <h2 className="text-secondary font-bold text-lg">Standard Plan</h2>
+                            
+                            <div className="flex flex-col gap-y-2 md:flex-row items-center justify-between w-full">
+                                <div className="text-md">
+                                    <p className="text-slate-500">For Beginners</p>
+                                    <h2 className="text-secondary font-bold text-lg">Standard Plan</h2>
+                                </div>
+                                {standardPlanData.active_plan && 
+                                    <div>
+                                        <Button  className="bg-[#bcbf28] hover:bg-[#bcbf28] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">Active Plan</Button>
+                                    </div>
+                                }
                             </div>
                         </div>
 
@@ -195,13 +204,11 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            {auth?.data?.email !== "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(standardPlanData.plan_id, standardPlanData.country)} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Buy Now</Button>}
-                            {auth?.data?.email === "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(15, standardPlanData.country)} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Buy Now</Button>}
-                            
+                            <Button disabled={isPending || standardPlanData.active_plan} onClick={() => buyNowOnclick(standardPlanData.plan_id, standardPlanData.country)} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Buy Now</Button>
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full bg-[#FFFAF5] border border-primary">
+                    <div className={`flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full bg-[#FFFAF5] border border-primary ${proPlanData.active_plan && "bg-green-100 hover:bg-green-100 border-none hover:border-none"}`}>
                         <div className="flex flex-row items-center gap-3">
                             <Icons.proIcon className="h-12 w-12"/>
 
@@ -210,9 +217,16 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                                     <p className="text-slate-500">For Professionals</p>
                                     <h2 className="text-secondary font-bold text-lg flex flex-row items-center gap-2">Pro Plan <Icons.diamondIcon className="h-5 w-5"/></h2>
                                 </div>
-                                <div>
-                                    <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">Best Value</Button>
-                                </div>
+
+                                {proPlanData.active_plan ? 
+                                    <div>
+                                        <Button  className="bg-[#bcbf28] hover:bg-[#bcbf28] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">Active Plan</Button>
+                                    </div>
+                                :
+                                    <div>
+                                        <Button  className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">Best Value</Button>
+                                    </div>
+                                }
                             </div>
 
                         </div>
@@ -236,12 +250,11 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            {auth?.data?.email !== "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white bg-primary hover:bg-primary/80">Buy Now</Button>}
-                            {auth?.data?.email === "demo@embrais.com" && <Button disabled={isPending} onClick={() => buyNowOnclick(17, proPlanData.country)} size="lg" className="w-full bg-primary hover:bg-primary/80 dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Buy Now</Button>}
+                            <Button disabled={isPending || proPlanData.active_plan} onClick={() => buyNowOnclick(proPlanData.plan_id, proPlanData.country)} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white bg-primary hover:bg-primary/80">Buy Now</Button>
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border">
+                    <div className="peer flex flex-col justify-between rounded-xl p-1 md:p-2 xl:p-5 w-full dark:border hover:border hover:border-primary hover:bg-[#FFFAF5] transition-all ease-in duration-75">
                         <div className="flex flex-row items-center gap-3">
                             <Icons.enterpriseIcon className="h-10 w-10"/>
 
@@ -272,7 +285,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
                         </div>
 
                         <div className="mt-2">
-                            <Button onClick={() => window.open("https://intelliresponse.ai/en/#contact-us")} disabled={isPending} size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Contact Us</Button>
+                            <ContactUs/>
                         </div>
                     </div>
 

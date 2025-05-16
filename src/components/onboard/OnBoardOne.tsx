@@ -14,7 +14,7 @@ function OnBoardOne({ setPage }: Props) {
     const { register, watch, control, formState: { errors }, setError } = useFormContext<OnBoardType>();
 const {auth} = useAppContext()
     const proceedToNext = () => {
-        trackEvent('Button','click','onboard initiated',auth?.data.email)
+        trackEvent('Button','click','onboard initiated',auth?.data?.email ?? '')
         if(!watch("business")){
             setError('business', { type: 'required', message: 'Select one option' });
         }else{

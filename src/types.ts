@@ -68,6 +68,7 @@ export interface User {
     heard_through: string | null,
     active_workspace_name: string,
     onboarded: boolean
+    plan_name:string
 }
 
 export interface GetBusinessType {
@@ -78,7 +79,8 @@ export interface GetBusinessType {
     email: string
     zip_code: string
     place_id: string,
-    created_at: Date
+    created_at: Date,
+    active_business: boolean
 }
 
 export type SignUpType = {
@@ -118,7 +120,8 @@ export interface ValidateUserType {
     remaining_credits: number,
     remaining_instant_Credits: number,
     plan_end_date: Date,
-    plan_name: "pro-plan" | "standard plan" | "free trial"
+    plan_name: "pro-plan" | "standard plan" | "free trial",
+    upgraded_user: boolean
 
 }
   
@@ -178,7 +181,10 @@ export interface BillingResponse {
     amount: number
     currencey: string,
     currency_symbol: string,
-    started_subscription: boolean
+    started_subscription: boolean,
+    future_subscription: boolean,
+    future_sub_start_date: string,
+    future_sub_plan_name: string
   }
   
   export interface InstantCredits {
@@ -218,5 +224,6 @@ export interface SubscriptionPlanType {
     strike_through_price: number
     price_per_month: number
     discount_pecentage: number,
-    currency_symbol: string
+    currency_symbol: string,
+    active_plan: boolean
 }
