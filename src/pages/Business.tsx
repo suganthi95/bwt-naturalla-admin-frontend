@@ -42,7 +42,7 @@ function Business() {
     mutationFn: removeBusiness,
     onSuccess: () => {
       toast.success("Request Success", { description: "Business Deleted Successfully" });
-      trackEvent('button','click','business removed',auth?.data?.email ?? '')
+      trackEvent('button','click','business removed')
       window.location.reload();
 
     },

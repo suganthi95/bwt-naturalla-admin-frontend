@@ -93,7 +93,7 @@ function OnBoardSix() {
         mutationKey: [ "addBusiness" ],
         mutationFn: addBusiness,
         onSuccess: () => {
-            trackEvent('button','click','business added',auth?.data?.email?? '')
+            trackEvent('button','click','business added')
             setActiveBusinessMutate({
                 place_id: value,
                 token: auth?.token as string

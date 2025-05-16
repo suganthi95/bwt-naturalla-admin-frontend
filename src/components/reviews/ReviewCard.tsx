@@ -60,35 +60,36 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
                 {props?.author_title}
               </p>
               {/* {props?.sentiment === "negative" ? <ThumbsDown className="size-4 md:size-auto stroke-red-500 fill-red-300" strokeWidth={1} absoluteStrokeWidth /> : <ThumbsUp className="size-4 md:size-auto stroke-green-500 fill-[#96F4A6]" strokeWidth={1} absoluteStrokeWidth />} */}
-              {props?.review_rating === 5 && (
-                <div className="border-2 border-purple-400 bg-purple-100 text-purple-600 rounded-md px-3 text-sm font-medium w-fit grid place-items-center">
-                  Excellent
-                </div>
-              )}
+{props?.review_rating === 5 && (
+  <div className="border-2 border-purple-400 bg-purple-100 text-purple-700 dark:bg-purple-900 dark:border-purple-500 dark:text-purple-200 rounded-md px-3 text-sm font-medium w-fit grid place-items-center">
+    Excellent
+  </div>
+)}
 
-              {props?.review_rating === 4 && (
-                <div className="border-2 border-green-400 bg-green-100 text-green-600 text-sm font-medium rounded-md px-3 w-fit grid place-items-center">
-                  Good
-                </div>
-              )}
+{props?.review_rating === 4 && (
+  <div className="border-2 border-green-400 bg-green-100 text-green-700 dark:bg-green-900 dark:border-green-500 dark:text-green-200 rounded-md px-3 text-sm font-medium w-fit grid place-items-center">
+    Good
+  </div>
+)}
 
-              {props?.review_rating === 3 && (
-                <div className="border-2 border-yellow-400 bg-yellow-100 text-yellow-600 text-sm font-medium rounded-md px-3  w-fit grid place-items-center">
-                  Average
-                </div>
-              )}
+{props?.review_rating === 3 && (
+  <div className="border-2 border-yellow-400 bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:border-yellow-500 dark:text-yellow-200 rounded-md px-3 text-sm font-medium w-fit grid place-items-center">
+    Average
+  </div>
+)}
 
-              {props?.review_rating === 2 && (
-                <div className="border-2 border-orange-400 bg-orange-100 text-orange-600 text-sm font-medium rounded-md px-3  w-fit grid place-items-center">
-                  Below Average
-                </div>
-              )}
+{props?.review_rating === 2 && (
+  <div className="border-2 border-orange-400 bg-orange-100 text-orange-700 dark:bg-orange-900 dark:border-orange-500 dark:text-orange-200 rounded-md px-3 text-sm font-medium w-fit grid place-items-center">
+    Below Average
+  </div>
+)}
 
-              {props?.review_rating === 1 && (
-                <div className="border-2 border-red-400 bg-red-100 text-red-600 rounded-md text-sm font-medium px-3  w-fit grid place-items-center">
-                  Poor
-                </div>
-              )}
+{props?.review_rating === 1 && (
+  <div className="border-2 border-red-400 bg-red-100 text-red-700 dark:bg-red-900 dark:border-red-500 dark:text-red-200 rounded-md px-3 text-sm font-medium w-fit grid place-items-center">
+    Poor
+  </div>
+)}
+
             </div>
             <span className="text-xs text-slate-500">
               {dayjs(props?.review_datetime_utc).fromNow()}

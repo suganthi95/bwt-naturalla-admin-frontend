@@ -32,7 +32,7 @@ function SubscriptionModal({ triggerPaymentDialog, setTriggerPaymentDialog }: { 
 
     const handleModal = () => {
         setOpenSubscriptionModal(true)
-        trackEvent('Button','Click','upgrade button click',auth?.data?.email ?? '')
+        trackEvent('Button','Click','upgrade button click')
     }
 
     useEffect(() => {
