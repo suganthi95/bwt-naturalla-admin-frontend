@@ -68,6 +68,7 @@ export interface User {
     heard_through: string | null,
     active_workspace_name: string,
     onboarded: boolean
+    plan_name:string
 }
 
 export interface GetBusinessType {

@@ -2,22 +2,26 @@
 import { TokenResponse } from "@react-oauth/google";
 import axios, { GenericAbortSignal } from "axios";
 
+// const DASHBOARD_URL = "https://intelliresponsedashboard01-91592131102.asia-south1.run.app";
 
 // production
 // const BASE_URL_V2 = "https://backend-auth-c62gk7tmha-el.a.run.app/api/v1";
 // const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
 // const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1";
-// const DASHBOARD_URL = "https://intelliresponsedashboard01-91592131102.asia-south1.run.app";
+// const DASHBOARD_URL = "https://backend-reviews-91592131102.asia-south1.run.app/api/v1/workspace";
 // export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"       // live
 
 //staging
 const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
 const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
-const DASHBOARD_URL = "https://intelliresponse-dashboard-staging-91592131102.asia-south1.run.app";
+const DASHBOARD_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1/workspace";
 export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
 
-
+// •  Staging
+//    ◦  https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1/workspace
+// •  Production
+//    ◦  https://backend-reviews-91592131102.asia-south1.run.app/api/v1/workspace
 
 export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
 
@@ -231,6 +235,16 @@ export const getDashboard = async ({ placeId, sessionToken, token }: { placeId: 
         }
     })
 }
+export const getAdvanceDashboard = async(place_id:string,token:string)=>{
+return await axios({
+    method:'get',
+    url:`https://topic-modeling-kjew.onrender.com/insights/${place_id}`,
+    headers:{
+        Accept: 'application/json',
+            "Authorization": token
+    }
+})
+}
 
 export const bookmarkReview = async ({ token, place_id, status, review_id }: { token: string, place_id: string, status: boolean, review_id: string }) => {
     
@@ -347,74 +361,80 @@ export const setTimezone = async ({ token, timezone }: { token: string, timezone
     })
 }
 
-export const getSentimentDistribution = async ({ token, placeId }: { token: string, placeId: string }) => {
+export const getSentimentDistribution = async ({ token, placeId ,email}: { token: string, placeId: string,email:string }) => {
     
     return await axios({
         method: "get",
         url: `${DASHBOARD_URL}/sentiment_distribution/${placeId}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            'email':email
         }
     })
 }
 
-export const reviewLenAnalysis = async ({ token, placeId }: { token: string, placeId: string }) => {
+export const reviewLenAnalysis = async ({ token, placeId,email }: { token: string, placeId: string,email:string }) => {
     
     return await axios({
         method: "get",
         url: `${DASHBOARD_URL}/review_length_analysis/${placeId}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            "email":email
         }
     })
 }
 
-export const reviewActiveTime = async ({ token, placeId }: { token: string, placeId: string }) => {
+export const reviewActiveTime = async ({ token, placeId,email }: { token: string, placeId: string,email:string }) => {
     
     return await axios({
         method: "get",
         url: `${DASHBOARD_URL}/reviews_active_time/${placeId}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            "email":email
         }
     })
 }
 
-export const avgSentiment = async ({ token, placeId }: { token: string, placeId: string }) => {
+export const avgSentiment = async ({ token, placeId,email }: { token: string, placeId: string,email:string }) => {
     
     return await axios({
         method: "get",
         url: `${DASHBOARD_URL}/average_sentiment_over_time/${placeId}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            "email":email
         }
     })
 }
 
-export const sentimentDistributionOvertime = async ({ token, placeId }: { token: string, placeId: string }) => {
+export const sentimentDistributionOvertime = async ({ token, placeId ,email}: { token: string, placeId: string ,email:string }) => {
     
     return await axios({
         method: "get",
         url: `${DASHBOARD_URL}/sentiment_distribution_over_time/${placeId}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            "email":email
         }
     })
 }
 
-export const responseRate = async ({ token, placeId }: { token: string, placeId: string }) => {
+export const responseRate = async ({ token, placeId,email }: { token: string, placeId: string,email:string }) => {
     
     return await axios({
         method: "get",
         url: `${DASHBOARD_URL}/response_rate/${placeId}`,
         headers: {
             Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            "email":email
         }
     })
 }

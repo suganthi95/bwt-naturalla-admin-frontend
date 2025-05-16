@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useAppContext } from "@/contexts/AuthContext";
 import { getReviewById, getSuggestions } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
@@ -13,7 +14,14 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function ReplyReview() {
-
+  const location = useLocation();
+  const user = localStorage.getItem("auth");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const Mail = parsedUser?.data?.email;
+   useEffect(() => {
+     initializeGA();
+     trackpPageView(location.pathname,Mail);
+   }, []);
 
     const { state }: { state: { placeId: string, reviewId: string } } = useLocation();
 

@@ -3,15 +3,23 @@ import { Button } from "@/components/ui/button"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useAppContext } from "@/contexts/AuthContext";
 import { resendOtp, verifyOtp } from "@/lib/apis";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { LoaderCircle } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner";
 
 function VerifyOTP() {
-
+    const location = useLocation();
+    const user = localStorage.getItem("auth");
+    const parsedUser = user ? JSON.parse(user) : null;
+    const Mail = parsedUser?.data?.email;
+     useEffect(() => {
+       initializeGA();
+       trackpPageView(location.pathname,Mail);
+     }, []);
     const [ otp, setOtp ] = useState("");
     const { auth } = useAppContext();
     const navigate = useNavigate();

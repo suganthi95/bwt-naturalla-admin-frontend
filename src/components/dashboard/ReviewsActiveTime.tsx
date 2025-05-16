@@ -20,6 +20,7 @@ function ReviewsActiveTime({ placeId }: Props) {
         queryFn: () => reviewActiveTime({
             token: auth?.token as string,
             placeId: placeId,
+            email:auth?.data?.email ?? ''
         }),
         retry: 3,
         refetchOnWindowFocus: true,

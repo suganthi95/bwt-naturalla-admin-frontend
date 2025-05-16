@@ -7,18 +7,26 @@ import Loader from "@/components/ui/Loader";
 import { SearchBox } from "@/components/ui/SearchBox"
 import { useAppContext } from "@/contexts/AuthContext"
 import { getAllBusiness, removeBusiness, setActiveBusiness } from "@/lib/apis"
+import { initializeGA, trackEvent, trackpPageView } from "@/lib/google_analytics";
 import { GetBusinessType, ValidateUserType } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
 function Business() {
+ const location = useLocation();
+ const { auth } = useAppContext();
 
+  useEffect(() => {
+    initializeGA();
+    trackpPageView(location.pathname,auth?.data.email ?? '');
+  }, []);
   dayjs.extend(relativeTime);
-  const { auth } = useAppContext();
   const queryClient = useQueryClient();
   const query = queryClient.getQueryData([ "validateUser" ]) as AxiosResponse<{ data: ValidateUserType }>;
 
@@ -34,6 +42,7 @@ function Business() {
     mutationFn: removeBusiness,
     onSuccess: () => {
       toast.success("Request Success", { description: "Business Deleted Successfully" });
+      trackEvent('button','click','business removed')
       window.location.reload();
 
     },

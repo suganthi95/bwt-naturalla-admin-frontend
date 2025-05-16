@@ -24,6 +24,7 @@ function AverageSentiment({ placeId }: Props) {
         queryFn: () => avgSentiment({
             token: auth?.token as string,
             placeId: placeId,
+            email:auth?.data?.email ?? ''
         }),
         retry: 3,
         refetchOnWindowFocus: true,

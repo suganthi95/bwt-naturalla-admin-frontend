@@ -14,6 +14,7 @@ import { AxiosError } from 'axios';
 import { ASSETS } from '@/assets/assets';
 import Loader from '../ui/Loader';
 import { useNavigate } from 'react-router-dom';
+import { trackEvent } from '@/lib/google_analytics';
 
 function OnBoardSix() {
 
@@ -92,6 +93,7 @@ function OnBoardSix() {
         mutationKey: [ "addBusiness" ],
         mutationFn: addBusiness,
         onSuccess: () => {
+            trackEvent('button','click','business added')
             setActiveBusinessMutate({
                 place_id: value,
                 token: auth?.token as string

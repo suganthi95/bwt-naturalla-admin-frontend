@@ -7,13 +7,20 @@ import OnBoardSix from "@/components/onboard/OnBoardSix";
 import OnBoardThree from "@/components/onboard/OnBoardThree";
 import OnBoardTwo from "@/components/onboard/OnBoardTwo";
 import { Button } from "@/components/ui/button";
+import { useAppContext } from "@/contexts/AuthContext";
+import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { OnBoardType } from "@/types";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 function OnBoard() {
-
+    const location = useLocation();
+   const { auth } = useAppContext();
+    useEffect(() => {
+      initializeGA();
+      trackpPageView(location.pathname,auth?.data.email ?? '');
+    }, []);
     const navigate = useNavigate();
 
     const formState = useForm<OnBoardType>({

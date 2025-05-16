@@ -21,6 +21,7 @@ function ReviewLengthAnalysis({ placeId }: Props) {
         queryFn: () => reviewLenAnalysis({
             token: auth?.token as string,
             placeId: placeId,
+            email:auth?.data?.email ?? ''
         }),
         retry: 3,
         refetchOnWindowFocus: true,
