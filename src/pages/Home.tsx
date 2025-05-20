@@ -503,7 +503,7 @@ function Home() {
           </TabsContent>
 
           <TabsContent value="advanced" className="w-full space-y-4">
-            {validateUser?.data?.data?.plan_name === "pro-plan" ? (
+            {/* {validateUser?.data?.data?.plan_name === "pro-plan" ? (
                 <>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
                     <OverviewCard />
@@ -535,7 +535,22 @@ function Home() {
                   <div>
                     <ImprovementContentSkeleton/>
                   </div>
-                </>}
+                </>} */}
+                    <>
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
+                    <OverviewCard />
+                    <AdvancedSentiment value1={0.4} value2={0.75} />
+                  </div>
+                  <div>
+                    <KeyInsights />
+                  </div>
+                  <div>
+                    <AreaImprovement />
+                  </div>
+                  <div>
+                    <ImporvementContent />
+                  </div>
+                </>
           </TabsContent>
         </Tabs>
       </div>
