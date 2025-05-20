@@ -12,13 +12,17 @@ const DASHBOARD_URL = "https://backend-reviews-91592131102.asia-south1.run.app/a
   // live
 export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"    
 
+
 //staging
 // const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.app/api/v1";
 // const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
 // const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
+
 // const DASHBOARD_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1/workspace";
 // test
 // export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB" 
+
+
 
 
 
