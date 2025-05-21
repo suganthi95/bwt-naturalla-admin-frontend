@@ -31,7 +31,7 @@ function Reviews() {
     trackpPageView(location.pathname, Mail);
   }, []);
   const { auth } = useAppContext();
-  const [sortKey, setSortKey] = useState<string>("5");
+  const [sortKey, setSortKey] = useState<string>("");
   const queryClient = useQueryClient();
   const validateUser = queryClient.getQueryData<
     AxiosResponse<{ data: ValidateUserType }>
@@ -62,7 +62,7 @@ function Reviews() {
         getReviews({
           placeId: activeBusiness?.place_id,
           sort: sortKey,
-          page: page,
+          page:page,
           token: auth?.token as string,
           signal,
         }),
@@ -192,7 +192,7 @@ function Reviews() {
       const scrollTop = container.scrollTop;
       const scrollHeight = container.scrollHeight;
       const clientHeight = container.clientHeight;
-      setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 5); // Adding a small buffer
+      setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 5); 
     }
   }, []);
 
@@ -230,7 +230,7 @@ function Reviews() {
 
         <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
           <SelectTrigger className="w-[100px] h-8">
-            <SelectValue placeholder="Sort " className="">
+            <SelectValue placeholder="Sort by " className="">
               {sortKey ? sortLabels[sortKey] : "Sort"}
             </SelectValue>
           </SelectTrigger>
