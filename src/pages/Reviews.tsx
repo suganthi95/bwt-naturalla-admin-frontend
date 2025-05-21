@@ -82,7 +82,7 @@ function Reviews() {
   }, [data?.data?.data]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
+  const reviewsPerPage = 10;
 
   const totalPages = data ? Math.ceil(actualData?.length / reviewsPerPage) : 0;
   const paginatedReviews = actualData
