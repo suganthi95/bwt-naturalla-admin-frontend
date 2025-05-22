@@ -6,8 +6,8 @@ type Props = {
   value2: number; // between 0 and 1
 };
 
-const COLORS = ["#605BFF", "#E5E7EB"];
-const COLORS2 = ["#FFC327", "#E5E7EB"];
+const COLORS = ["#119E29", "#E5E7EB"];
+const COLORS2 = ["#F02800", "#E5E7EB"];
 
 
 const createChartData = (value: number) => {
@@ -24,7 +24,7 @@ const AdvancedSentiment: React.FC<Props> = ({ value1, value2 }) => {
 
   return (
 <div className="flex flex-col w-full p-4 border rounded-md">
-  <h2 className="text-[#242424] text-start font-bold mb-4 text-base sm:text-lg">
+  <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white text-base sm:text-lg">
     Sentiment Distribution Chart
   </h2>
 

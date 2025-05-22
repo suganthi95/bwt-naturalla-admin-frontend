@@ -28,7 +28,7 @@ import {
   export default function OverviewChartCard() {
     return (
       <div className="w-full p-2 md:p-4 border rounded-md flex flex-col">
-        <h2 className="text-[#242424] font-bold mb-4 text-base sm:text-lg">
+        <h2 className="text-[#242424] font-bold mb-4 dark:text-white text-base sm:text-lg">
           Overview Cards
         </h2>
   

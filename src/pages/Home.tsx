@@ -449,7 +449,7 @@ function Home() {
   const { data: AdvanceDashboard } = useQuery({
     queryKey: ["advancedashboard"],
     queryFn: () =>
-      getAdvanceDashboard(activeBusiness.place_id, auth?.token ?? ""),
+      getAdvanceDashboard(activeBusiness.place_id, auth?.token ?? "",auth?.data?.email ?? ''),
     retry: 2,
     staleTime: 1000 * 60 * 5,
   });
@@ -460,7 +460,7 @@ function Home() {
       <TotalReviewsCard placeId={activeBusiness?.place_id} />
       <div className="flex  justify-between items-start ">
         <Tabs defaultValue="basic" className="w-full">
-          <TabsList className="flex gap-2 mb-4 bg-transparent w-fit">
+          <TabsList className="flex gap-2 mb-4 bg-transparent w-fit  dark:bg-transparent">
             {" "}
             {/* Flex instead of grid for tighter buttons */}
             <TabsTrigger
@@ -503,7 +503,7 @@ function Home() {
           </TabsContent>
 
           <TabsContent value="advanced" className="w-full space-y-4">
-            {/* {validateUser?.data?.data?.plan_name === "pro-plan" ? (
+            {validateUser?.data?.data?.plan_name === "pro-plan" ? (
                 <>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
                     <OverviewCard />
@@ -522,6 +522,9 @@ function Home() {
                
             
             ):  <>
+                <div>
+                    <ImprovementContentSkeleton/>
+                  </div>
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
                     <OverviewChartCardSkeleton/>
                     <AdvancedSentimentSkeleton/>
@@ -532,25 +535,23 @@ function Home() {
                   <div>
                     <AreaImprovementSkeleton />
                   </div>
-                  <div>
-                    <ImprovementContentSkeleton/>
-                  </div>
-                </>} */}
-                    <>
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
-                    <OverviewCard />
-                    <AdvancedSentiment value1={0.4} value2={0.75} />
-                  </div>
-                  <div>
-                    <KeyInsights />
-                  </div>
-                  <div>
-                    <AreaImprovement />
-                  </div>
-                  <div>
-                    <ImporvementContent />
-                  </div>
-                </>
+              
+                </>}
+            {/* <>
+              <div>
+                <ImporvementContent />
+              </div>
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
+                <OverviewCard />
+                <AdvancedSentiment value1={0.4} value2={0.75} />
+              </div>
+              <div>
+                <KeyInsights />
+              </div>
+              <div>
+                <AreaImprovement />
+              </div>
+            </> */}
           </TabsContent>
         </Tabs>
       </div>
