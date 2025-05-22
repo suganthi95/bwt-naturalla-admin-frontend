@@ -9,19 +9,21 @@ import axios, { GenericAbortSignal } from "axios";
 // const BUSINESS_BASE_URL = "https://backend-reviews-c62gk7tmha-el.a.run.app/api/v1";
 // const PAYMENT_BASE_URL = "https://backend-payment-91592131102.asia-south1.run.app/api/v1";
 // const DASHBOARD_URL = "https://backend-reviews-91592131102.asia-south1.run.app/api/v1/workspace";
-// export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"       // live
+  // live
+// export const PAYMENT_KEY = "rzp_live_mz2A9YRKJoRNfV"    
+
 
 //staging
 const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.app/api/v1";
 const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
 const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
 const DASHBOARD_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1/workspace";
-export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"  // test
+// test
+export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB" 
 
-// •  Staging
-//    ◦  https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1/workspace
-// •  Production
-//    ◦  https://backend-reviews-91592131102.asia-south1.run.app/api/v1/workspace
+
+
+
 
 export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
 
@@ -235,13 +237,14 @@ export const getDashboard = async ({ placeId, sessionToken, token }: { placeId: 
         }
     })
 }
-export const getAdvanceDashboard = async(place_id:string,token:string)=>{
+export const getAdvanceDashboard = async(place_id:string,token:string,email:string)=>{
 return await axios({
     method:'get',
-    url:`https://topic-modeling-kjew.onrender.com/insights/${place_id}`,
+    url:`https://topic-modeling-aeec.onrender.com/insights/${place_id}`,
     headers:{
         Accept: 'application/json',
-            "Authorization": token
+            "Authorization": token,
+            email:email
     }
 })
 }

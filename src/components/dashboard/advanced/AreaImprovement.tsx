@@ -7,14 +7,14 @@ const data = [
 ];
 
 // const COLORS = ["#EAB308", "#5687F2", "#EA3A88"];
-const COLORS = ["#EA3A88", "#5687F2", "#EAB308"];
+const COLORS = ["#119E29", "#F02800", "#EAB308"];
 
 
 
 export default function AreaImprovement() {
   return (
     <div className="flex flex-col  w-full p-4 border justify-start items-start">
-      <h2 className="text-[#242424] text-start font-bold mb-4">Areas for Improvement</h2>
+      <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white">Areas for Improvement</h2>
 
     <div className="w-full  mx-auto flex flex-col items-center gap-4 p-4">
      
@@ -48,7 +48,7 @@ export default function AreaImprovement() {
               className="w-4 h-4 rounded-sm"
               style={{ backgroundColor: COLORS[index] }}
             />
-            <span className="text-sm text-neutral-700 font-medium">{entry.name}</span>
+            <span className="text-sm text-neutral-700 font-medium dark:text-slate-300">{entry.name}</span>
           </div>
         ))}
       </div>

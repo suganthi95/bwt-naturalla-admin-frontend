@@ -17,7 +17,7 @@ import {
 } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 
@@ -31,7 +31,7 @@ function Reviews() {
     trackpPageView(location.pathname, Mail);
   }, []);
   const { auth } = useAppContext();
-  const [sortKey, setSortKey] = useState<string>("5");
+  const [sortKey, setSortKey] = useState<string>("");
   const queryClient = useQueryClient();
   const validateUser = queryClient.getQueryData<
     AxiosResponse<{ data: ValidateUserType }>
@@ -43,21 +43,12 @@ function Reviews() {
     (item) => item.place_id === activeWorkspace.active_business
   ) as BusinessList[];
 
-  const [actualData, setActualData] = useState<ReviewType[]>([]);
-  const [isAtBottom, setIsAtBottom] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
   const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    queryClient.cancelQueries({ queryKey: ["getReviews"] });
-    setPage(1);
-    setActualData([]);
-  }, [sortKey]);
-
-  const { isLoading, isError, isSuccess, data, error, isRefetching, refetch } =
-    useQuery({
-      queryKey: ["getReviews", sortKey, activeBusiness?.place_id],
+  const { isLoading, isError, isSuccess, data, error, isRefetching } = useQuery(
+    {
+      queryKey: ["getReviews", sortKey, activeBusiness?.place_id, page],
       queryFn: ({ signal }) =>
         getReviews({
           placeId: activeBusiness?.place_id,
@@ -73,29 +64,52 @@ function Reviews() {
       refetchInterval: false,
       refetchOnReconnect: false,
       enabled: Boolean(activeBusiness?.place_id),
-    });
-
-  useEffect(() => {
-    if (Array.isArray(data?.data?.data)) {
-      setActualData((prev) => [...prev, ...data?.data?.data]);
     }
-  }, [data?.data?.data]);
+  );
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 5;
+  // const reviewsPerPage = 10;
+  // const totalPages = data?.data?.total
+  //   ? Math.ceil(data.data.total / reviewsPerPage)
+  //   : 0;
+  // review_count
+  const totalPages = Number(data?.data?.review_count);
 
-  const totalPages = data ? Math.ceil(actualData?.length / reviewsPerPage) : 0;
-  const paginatedReviews = actualData
-    ? actualData?.slice(
-        (currentPage - 1) * reviewsPerPage,
-        currentPage * reviewsPerPage
-      )
-    : [];
+  function getPaginationPages(
+    currentPage: number,
+    totalPages: number
+  ): (number | string)[] {
+    const pages: (number | string)[] = [];
 
-  // Handle page change safely
-  const onPageChange = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    pages.push(1);
+
+    if (currentPage > 3) {
+      pages.push("...");
+    }
+
+    const start = Math.max(2, currentPage - 1);
+    const end = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (currentPage < totalPages - 2) {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+
+    return pages;
+  }
+
+  const onPageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setCurrentPage(newPage);
+    setPage(newPage);
   };
 
   if (!activeBusiness) {
@@ -131,7 +145,7 @@ function Reviews() {
     );
   }
 
-  if (isSuccess && actualData?.length === 0) {
+  if (isSuccess && data?.data?.data?.length?.length === 0) {
     switch (sortKey) {
       case "5":
         content = (
@@ -174,8 +188,8 @@ function Reviews() {
     }
   }
 
-  if (isSuccess && actualData.length > 0) {
-    content = paginatedReviews?.map((item: ReviewType) => (
+  if (isSuccess && data?.data?.data?.length > 0) {
+    content = data?.data?.data?.map((item: ReviewType) => (
       <Link
         to="/reviews/generate-response"
         key={item.review_id}
@@ -186,36 +200,6 @@ function Reviews() {
     ));
   }
 
-  const handleScroll = useCallback(() => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight;
-      const clientHeight = container.clientHeight;
-      setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 5); // Adding a small buffer
-    }
-  }, []);
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isAtBottom) {
-      queryClient.cancelQueries({ queryKey: ["getReviews"] });
-      setPage((prev) => prev + 1);
-      refetch();
-    }
-  }, [isAtBottom]);
   const sortLabels: Record<string, string> = {
     "5": "Excellent",
     "4": "Good",
@@ -230,7 +214,7 @@ function Reviews() {
 
         <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
           <SelectTrigger className="w-[100px] h-8">
-            <SelectValue placeholder="Sort " className="">
+            <SelectValue placeholder="Sort by " className="">
               {sortKey ? sortLabels[sortKey] : "Sort"}
             </SelectValue>
           </SelectTrigger>
@@ -244,16 +228,8 @@ function Reviews() {
         </Select>
       </div>
       <div className="py-3  overflow-x-hidden h-full">{content}</div>
-      <div className="fixed bottom-2 right-28   md:left-36 lg:right-0">
-        <p className="text-center text-sm  text-secondary">
-          {isAtBottom && data?.data?.total > 0
-            ? "fetching more reviews..."
-            : isAtBottom && data?.data?.total === 0
-            ? "we've reached the end"
-            : ""}
-        </p>
-      </div>
-      {totalPages > 1 && (
+
+      {totalPages > 0 && (
         <div className="flex justify-center items-center gap-2 py-4">
           <button
             onClick={() => onPageChange(currentPage - 1)}
@@ -264,19 +240,27 @@ function Reviews() {
             Previous
           </button>
 
-          {[...Array(totalPages)].map((_, idx) => {
-            const page = idx + 1;
+          {getPaginationPages(currentPage, totalPages).map((page) => {
+            if (typeof page === "string") {
+              return (
+                <span key={`dots-${page}-${Math.random()}`} className="px-2">
+                  {page}
+                </span>
+              );
+            }
+
             const isActive = page === currentPage;
+
             return (
               <button
-                key={page}
+                key={`page-${page}`}
                 onClick={() => onPageChange(page)}
                 className={`px-4 py-2 rounded-md font-semibold transition-colors duration-200
-            ${
-              isActive
-                ? "bg-[#0f344e] text-white shadow-lg"
-                : "bg-[#0f344e]/20 text-[#0f344e] hover:bg-[#0f344e]/40"
-            }`}
+        ${
+          isActive
+            ? "bg-[#0f344e] text-white shadow-lg"
+            : "bg-[#0f344e]/20 text-[#0f344e] hover:bg-[#0f344e]/40"
+        }`}
                 aria-current={isActive ? "page" : undefined}
                 aria-label={`Page ${page}`}
               >
