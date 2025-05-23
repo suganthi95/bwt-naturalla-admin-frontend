@@ -449,11 +449,15 @@ function Home() {
   const { data: AdvanceDashboard } = useQuery({
     queryKey: ["advancedashboard"],
     queryFn: () =>
-      getAdvanceDashboard(activeBusiness.place_id, auth?.token ?? "",auth?.data?.email ?? ''),
+      getAdvanceDashboard(
+        activeBusiness.place_id,
+        auth?.token ?? "",
+        auth?.data?.email ?? ""
+      ),
     retry: 2,
     staleTime: 1000 * 60 * 5,
+    select: (data) => data?.data,
   });
-  console.log(AdvanceDashboard);
 
   return (
     <div className="flex flex-col w-full gap-6 p-4 md:p-2  relative overflow-y-auto md:pb-20">
@@ -504,46 +508,61 @@ function Home() {
 
           <TabsContent value="advanced" className="w-full space-y-4">
             {validateUser?.data?.data?.plan_name === "pro-plan" ? (
-                <>
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
-                    <OverviewCard />
-                    <AdvancedSentiment value1={0.4} value2={0.75} />
-                  </div>
-                  <div>
-                    <KeyInsights />
-                  </div>
-                  <div>
-                    <AreaImprovement />
-                  </div>
-                  <div>
-                    <ImporvementContent />
-                  </div>
-                </>
-               
-            
-            ):  <>
+              <>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
+                  <OverviewCard />
+                  <AdvancedSentiment
+                    value1={
+                      AdvanceDashboard?.metadata?.sentiment_distribution
+                        ?.negative
+                    }
+                    value2={
+                      AdvanceDashboard?.metadata?.sentiment_distribution
+                        ?.positive
+                    }
+                  />
+                </div>
                 <div>
-                    <ImprovementContentSkeleton/>
-                  </div>
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
-                    <OverviewChartCardSkeleton/>
-                    <AdvancedSentimentSkeleton/>
-                  </div>
-                  <div>
-                    <KeyInsightsSkeleton/>
-                  </div>
-                  <div>
-                    <AreaImprovementSkeleton />
-                  </div>
-              
-                </>}
+                  <KeyInsights />
+                </div>
+                <div>
+                  <AreaImprovement />
+                </div>
+                <div>
+                  <ImporvementContent />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <ImprovementContentSkeleton />
+                </div>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
+                  <OverviewChartCardSkeleton />
+                  <AdvancedSentimentSkeleton />
+                </div>
+                <div>
+                  <KeyInsightsSkeleton />
+                </div>
+                <div>
+                  <AreaImprovementSkeleton />
+                </div>
+              </>
+            )}
             {/* <>
               <div>
                 <ImporvementContent />
               </div>
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
                 <OverviewCard />
-                <AdvancedSentiment value1={0.4} value2={0.75} />
+                <AdvancedSentiment
+                  value1={
+                    AdvanceDashboard?.metadata?.sentiment_distribution?.negative
+                  }
+                  value2={
+                    AdvanceDashboard?.metadata?.sentiment_distribution?.positive
+                  }
+                />
               </div>
               <div>
                 <KeyInsights />
