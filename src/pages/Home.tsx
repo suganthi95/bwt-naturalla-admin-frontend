@@ -446,7 +446,7 @@ function Home() {
       </div>
     );
   }
-  const { data: AdvanceDashboard } = useQuery({
+  const { data: AdvanceDashboard ,isSuccess:AdvanceDashboardSuccess,isError:AdvanceDashboardError } = useQuery({
     queryKey: ["advancedashboard"],
     queryFn: () =>
       getAdvanceDashboard(
@@ -507,7 +507,7 @@ function Home() {
           </TabsContent>
 
           <TabsContent value="advanced" className="w-full space-y-4">
-            {validateUser?.data?.data?.plan_name === "pro-plan" ? (
+            {(validateUser?.data?.data?.plan_name === "pro-plan" && AdvanceDashboardSuccess && !AdvanceDashboardError )? (
               <>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
                   <OverviewCard />
