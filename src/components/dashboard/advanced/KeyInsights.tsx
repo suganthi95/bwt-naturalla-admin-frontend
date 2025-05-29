@@ -1,22 +1,26 @@
 import { Badge } from "@/components/ui/badge";
 
-const positiveInsights = [
-  "Efficient",
-  "Extensive",
-  "Customization",
-  "Curated",
-  "Excellent Selection",
-];
+// const positiveInsights = [
+//   "Efficient",
+//   "Extensive",
+//   "Customization",
+//   "Curated",
+//   "Excellent Selection",
+// ];
 
-const negativeInsights = [
-  "Slow Delivery",
-  "Limited Support",
-  "High Cost",
-  "Complex Setup",
-  "Few Integrations",
-];
+// const negativeInsights = [
+//   "Slow Delivery",
+//   "Limited Support",
+//   "High Cost",
+//   "Complex Setup",
+//   "Few Integrations",
+// ];
+ type Props = {
+  positiveInsights:string[]
+  negativeInsights:string[]
+ }
 
-export default function KeyInsights() {
+export default function KeyInsights({negativeInsights,positiveInsights}:Props) {
   return (
     <div className="flex flex-col gap-6 w-full p-4 border rounded-lg">
       <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white">

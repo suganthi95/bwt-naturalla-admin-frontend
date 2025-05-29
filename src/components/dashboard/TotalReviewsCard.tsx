@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import { Icons } from "@/assets/icons";
+import { Trans } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -41,29 +42,29 @@ function TotalReviewsCard({ placeId }: Props) {
     {
       icon: <Icons.Review className="size-16 text-primary" />,
       value: data.totalRatings ?? 0,
-      label: 'Total Reviews',
+      label: 'total_reviews',
     },
     {
       icon: <Icons.Credits className="size-16 text-primary" />,
       value: `${data.credits ?? 0} / ${data.total_credits ?? 0}`,
-      label: 'Free Credits Remaining',
+      label: 'free_credits_remaining',
     },
     {
       icon: <Icons.Rating className="size-16 text-primary" />,
       value: `${data.instant_credits ?? 0} / ${data.total_instant_credits ?? 0}`,
-      label: 'Instant Credits Remaining',
+      label: 'instant_credits_remaining',
     },
     {
       icon: <Icons.Buisness className="size-16 text-primary" />,
       value: data.total_business ?? 0,
-      label: 'Total Business',
+      label: 'total_business',
     },
   ].map((item, index) => (
     <Card key={index} className="rounded-xl p-4 flex items-center gap-4 h-full">
       {item.icon}
       <div className="flex flex-col">
         <p className="text-2xl font-bold text-secondary">{item.value}</p>
-        <p className="text-sm text-gray-500 font-medium">{item.label}</p>
+        <p className="text-sm text-gray-500 font-medium"><Trans i18nKey={item.label}/></p>
       </div>
     </Card>
   ))}

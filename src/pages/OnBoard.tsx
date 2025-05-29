@@ -12,6 +12,7 @@ import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { OnBoardType } from "@/types";
 import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form";
+import { Trans } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom"
 
 function OnBoard() {
@@ -19,7 +20,7 @@ function OnBoard() {
    const { auth } = useAppContext();
     useEffect(() => {
       initializeGA();
-      trackpPageView(location.pathname,auth?.data.email ?? '');
+      trackpPageView(location.pathname,auth?.data?.email ?? '');
     }, []);
     const navigate = useNavigate();
 
@@ -68,14 +69,14 @@ function OnBoard() {
     <div className="h-svh overflow-y-scroll  flex bg-white text-slate-950 pt-20">
         <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
             <div>
-                <Button onClick={goBackClick} size="sm" variant="secondary">Go back</Button>
+                <Button onClick={goBackClick} size="sm" variant="secondary"><Trans i18nKey={'go_back'}/></Button>
             </div>
             <Link to="/" className="flex flex-row gap-3">
                 <img src={ASSETS.LOGO} alt="logo" className="w-8 md:w-auto" />
                 <div>
                     <p className="font-bold text-xl md:text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                     <span className="text-slate-500">
-                        Turning Reviews Into Insights
+                       <Trans i18nKey={'title'}/>
                     </span>
                 </div>
             </Link>
@@ -87,7 +88,7 @@ function OnBoard() {
             </div>
 
             <div className="mt-1">
-                <p>{page + 1} of 6</p>
+                <p>{page + 1} <Trans i18nKey={'of'}/> 6</p>
             </div>
             <FormProvider {...formState}>
                 {section[page].form}

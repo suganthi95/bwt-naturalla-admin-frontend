@@ -1,12 +1,10 @@
 import { ASSETS } from "@/assets/assets";
 import { Icons } from "@/assets/icons";
 import AdvancedSentimentSkeleton from "@/common/AdvancedSentimentSkeleton";
-import AreaImprovementSkeleton from "@/common/AreaImprovementSkeleton";
 import ImprovementContentSkeleton from "@/common/ImprovementContentSkeleton";
 import KeyInsightsSkeleton from "@/common/KeyInsightsSkeleton";
 import OverviewChartCardSkeleton from "@/common/OverviewChartCardSkeleton";
 import AdvancedSentiment from "@/components/dashboard/advanced/AdvancedSentiment";
-import AreaImprovement from "@/components/dashboard/advanced/AreaImprovement";
 import ImporvementContent from "@/components/dashboard/advanced/ImporvementContent";
 import KeyInsights from "@/components/dashboard/advanced/KeyInsights";
 import OverviewCard from "@/components/dashboard/advanced/OverviewCard";
@@ -43,6 +41,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import { CircleAlert, CircleCheck, CircleX, Clock, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -59,7 +58,7 @@ function Home() {
 
   useEffect(() => {
     initializeGA();
-    trackpPageView(location.pathname, auth?.data.email ?? "");
+    trackpPageView(location.pathname, auth?.data?.email ?? "");
   }, []);
   const queryClient = useQueryClient();
 
@@ -178,17 +177,22 @@ function Home() {
               Intelli<span className="text-secondary">Response</span>
             </p>
             <span className="text-slate-500 text-xs md:text-sm">
-              Turning Reviews Into Insights
+              {/* Turning Reviews Into Insights */}
+              <Trans i18nKey={"title"} />
             </span>
           </div>
         </div>
 
         <p className="text-center text-xs md:text-sm text-slate-500">
-          Experience the full capabilities of IntelliResponse without any
-          commitment.
+          {/* Experience the full capabilities of IntelliResponse without any
+          commitment. */}
+          <Trans i18nKey={"fullExperience"} />
         </p>
         <div className="text-center flex flex-row items-center gap-2 font-medium mx-auto dark:text-white">
-          <p>Monthly</p>
+          <p>
+            {/* Monthly */}
+            <Trans i18nKey={"monthly"} />
+          </p>
           <Switch
             checked={planType === "yearly"}
             onCheckedChange={() =>
@@ -196,9 +200,14 @@ function Home() {
             }
           />
           <div className="flex flex-row items-center gap-2">
-            <p>Yearly</p>
+            <p>
+              {/* Yearly */}
+              <Trans i18nKey={"yearly"} />
+            </p>
             <div className="px-3 py-1 bg-[#59C204] rounded-3xl text-white">
-              <p>Save 40%</p>
+              <p>
+                <Trans i18nKey={"save"} /> 40%
+              </p>
             </div>
           </div>
         </div>
@@ -215,15 +224,17 @@ function Home() {
 
               <div className="flex flex-col gap-y-2 md:flex-row items-center justify-between w-full">
                 <div className="text-md">
-                  <p className="text-slate-500">For Beginners</p>
+                  <p className="text-slate-500">
+                    <Trans i18nKey={"plans.beginner"} />
+                  </p>
                   <h2 className="text-secondary font-bold text-lg">
-                    Standard Plan
+                    <Trans i18nKey={"plans.standard"} />
                   </h2>
                 </div>
                 {standardPlanData.active_plan && (
                   <div>
                     <Button className="bg-[#bcbf28] hover:bg-[#bcbf28] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">
-                      Active Plan
+                      <Trans i18nKey={"plans.active_plan"} />
                     </Button>
                   </div>
                 )}
@@ -241,9 +252,11 @@ function Home() {
                 </span>{" "}
                 <span className="text-sm text-slate-500 font-normal">
                   /{" "}
-                  {standardPlanData.period === "monthly"
-                    ? "Monthly"
-                    : "Monthly, Billed Anually"}
+                  {standardPlanData.period === "monthly" ? (
+                    <Trans i18nKey={"monthly"} />
+                  ) : (
+                    <Trans i18nKey={"monthlyBilledAnnually"} />
+                  )}
                 </span>
               </h1>
             </div>
@@ -266,7 +279,9 @@ function Home() {
                       <Clock className="fill-blue-400 stroke-white h-5 w-5" />
                     )}
                   </div>
-                  <p className="text-slate-600 font-bold">{item.text}</p>
+                  <p className="text-slate-600 font-bold">
+                    <Trans i18nKey={item.text} />
+                  </p>
                 </div>
               ))}
             </div>
@@ -283,7 +298,7 @@ function Home() {
                 size="lg"
                 className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white"
               >
-                Buy Now
+                <Trans i18nKey={"buyNow"} />
               </Button>
             </div>
           </div>
@@ -299,22 +314,25 @@ function Home() {
 
               <div className="flex flex-col gap-y-2 md:flex-row items-center justify-between w-full">
                 <div className="text-md">
-                  <p className="text-slate-500">For Professionals</p>
+                  <p className="text-slate-500">
+                    <Trans i18nKey={"plans.professional"} />
+                  </p>
                   <h2 className="text-secondary font-bold text-lg flex flex-row items-center gap-2">
-                    Pro Plan <Icons.diamondIcon className="h-5 w-5" />
+                    <Trans i18nKey={"plans.pro"} />{" "}
+                    <Icons.diamondIcon className="h-5 w-5" />
                   </h2>
                 </div>
 
                 {proPlanData.active_plan ? (
                   <div>
                     <Button className="bg-[#bcbf28] hover:bg-[#bcbf28] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">
-                      Active Plan
+                      <Trans i18nKey={"plans.active_plan"} />
                     </Button>
                   </div>
                 ) : (
                   <div>
                     <Button className="bg-[#59C204] hover:bg-[#59C204] md:p-2 xl:px-4 text-xs lg:text-balance rounded-xl text-white font-bold">
-                      Best Value
+                      <Trans i18nKey={"plans.best_value"} />
                     </Button>
                   </div>
                 )}
@@ -332,9 +350,14 @@ function Home() {
                 </span>{" "}
                 <span className="text-sm text-slate-500 font-normal">
                   /{" "}
-                  {proPlanData.period === "monthly"
+                  {/* {proPlanData.period === "monthly"
                     ? "Monthly"
-                    : "Monthly, Billed Anually"}
+                    : "Monthly, Billed Anually"} */}
+                  {proPlanData.period === "monthly" ? (
+                    <Trans i18nKey={"monthly"} />
+                  ) : (
+                    <Trans i18nKey={"monthlyBilledAnnually"} />
+                  )}
                 </span>
               </h1>
             </div>
@@ -357,7 +380,9 @@ function Home() {
                       <Clock className="fill-blue-400 stroke-white h-5 w-5" />
                     )}
                   </div>
-                  <p className="text-slate-600 font-bold">{item.text}</p>
+                  <p className="text-slate-600 font-bold">
+                    <Trans i18nKey={item.text} />
+                  </p>
                 </div>
               ))}
             </div>
@@ -371,7 +396,7 @@ function Home() {
                 size="lg"
                 className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white bg-primary hover:bg-primary/80"
               >
-                Buy Now
+                <Trans i18nKey={"buyNow"} />
               </Button>
             </div>
           </div>
@@ -381,16 +406,19 @@ function Home() {
               <Icons.enterpriseIcon className="h-10 w-10" />
 
               <div className="text-md">
-                <p className="text-slate-500">For Multiple Business</p>
+                <p className="text-slate-500">
+                  {" "}
+                  <Trans i18nKey={"plans.enterprise"} />
+                </p>
                 <h2 className="text-secondary font-bold text-lg">
-                  Enterprise Plan
+                  <Trans i18nKey={"plans.enterprisePlan"} />
                 </h2>
               </div>
             </div>
 
             <div className="mt-6">
               <h1 className="text-lg md:text-2xl text-secondary font-bold">
-                Contact Sales
+                <Trans i18nKey={"plans.contact_sales"} />
               </h1>
             </div>
 
@@ -415,7 +443,9 @@ function Home() {
                       <Clock className="fill-blue-400 stroke-white h-5 w-5" />
                     )}
                   </div>
-                  <p className="text-slate-600 font-bold">{item.text}</p>
+                  <p className="text-slate-600 font-bold">
+                    <Trans i18nKey={item.text} />
+                  </p>
                 </div>
               ))}
             </div>
@@ -441,12 +471,20 @@ function Home() {
   if (!activeBusiness?.place_id) {
     return (
       <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-        <h1 className="text-xl font-semibold">No Business added</h1>
-        <p className="text-slate-300">Search or Add your business account</p>
+        <h1 className="text-xl font-semibold">
+          <Trans i18nKey={"no_business_added"} />
+        </h1>
+        <p className="text-slate-300">
+          <Trans i18nKey={"search_or_add_business"} />
+        </p>
       </div>
     );
   }
-  const { data: AdvanceDashboard ,isSuccess:AdvanceDashboardSuccess,isError:AdvanceDashboardError } = useQuery({
+  const {
+    data: AdvanceDashboard,
+    isSuccess: AdvanceDashboardSuccess,
+    isError: AdvanceDashboardError,
+  } = useQuery({
     queryKey: ["advancedashboard"],
     queryFn: () =>
       getAdvanceDashboard(
@@ -458,6 +496,7 @@ function Home() {
     staleTime: 1000 * 60 * 5,
     select: (data) => data?.data,
   });
+  console.log(AdvanceDashboard);
 
   return (
     <div className="flex flex-col w-full gap-6 p-4 md:p-2  relative overflow-y-auto md:pb-20">
@@ -474,7 +513,8 @@ function Home() {
               value="basic"
               className="px-6 py-2  data-[state=active]:bg-primary  data-[state=active]:text-white rounded-lg text-sm font-medium border border-muted bg-transparent hover:bg-muted/30 transition"
             >
-              Basic
+              {/* Basic */}
+              <Trans i18nKey={"basic"} />
             </TabsTrigger>
             <TabsTrigger
               onClick={() => {
@@ -483,7 +523,7 @@ function Home() {
               value="advanced"
               className="px-6 py-2 rounded-lg data-[state=active]:bg-primary  data-[state=active]:text-white text-sm font-medium border border-muted bg-transparent hover:bg-muted/30 transition"
             >
-              Advanced
+              <Trans i18nKey={"advanced"} />
             </TabsTrigger>
           </TabsList>
 
@@ -507,10 +547,20 @@ function Home() {
           </TabsContent>
 
           <TabsContent value="advanced" className="w-full space-y-4">
-            {(validateUser?.data?.data?.plan_name === "pro-plan" && AdvanceDashboardSuccess && !AdvanceDashboardError )? (
+            {validateUser?.data?.data?.plan_name === "pro-plan" &&
+            AdvanceDashboardSuccess &&
+            !AdvanceDashboardError ? (
               <>
+                <div>
+                  <ImporvementContent
+                    data={AdvanceDashboard?.negative_insights?.areas_to_improve}
+                  />
+                </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
-                  <OverviewCard />
+                  <OverviewCard
+                    monthly={AdvanceDashboard?.sentiment_trend?.monthly}
+                    yearly={AdvanceDashboard?.sentiment_trend?.yearly}
+                  />
                   <AdvancedSentiment
                     value1={
                       AdvanceDashboard?.metadata?.sentiment_distribution
@@ -523,13 +573,14 @@ function Home() {
                   />
                 </div>
                 <div>
-                  <KeyInsights />
-                </div>
-                <div>
-                  <AreaImprovement />
-                </div>
-                <div>
-                  <ImporvementContent />
+                  <KeyInsights
+                    negativeInsights={
+                      AdvanceDashboard?.negative_insights?.keywords
+                    }
+                    positiveInsights={
+                      AdvanceDashboard?.positive_insights?.key_strengths
+                    }
+                  />
                 </div>
               </>
             ) : (
@@ -544,17 +595,14 @@ function Home() {
                 <div>
                   <KeyInsightsSkeleton />
                 </div>
-                <div>
-                  <AreaImprovementSkeleton />
-                </div>
               </>
             )}
             {/* <>
               <div>
-                <ImporvementContent />
+                <ImporvementContent data={AdvanceDashboard?.negative_insights?.areas_to_improve} />
               </div>
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full">
-                <OverviewCard />
+                <OverviewCard monthly={AdvanceDashboard?.sentiment_trend?.monthly} yearly={AdvanceDashboard?.sentiment_trend?.yearly} />
                 <AdvancedSentiment
                   value1={
                     AdvanceDashboard?.metadata?.sentiment_distribution?.negative
@@ -565,11 +613,9 @@ function Home() {
                 />
               </div>
               <div>
-                <KeyInsights />
+                <KeyInsights negativeInsights={AdvanceDashboard?.negative_insights?.keywords} positiveInsights={AdvanceDashboard?.positive_insights?.key_strengths} />
               </div>
-              <div>
-                <AreaImprovement />
-              </div>
+             
             </> */}
           </TabsContent>
         </Tabs>

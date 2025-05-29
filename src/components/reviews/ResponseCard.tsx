@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { ReviewSuggestionType } from "@/types";
 import { toast } from "sonner";
 import { ASSETS } from "@/assets/assets";
+import { Trans } from "react-i18next";
 
 function ResponseCard(props: ReviewSuggestionType) {
 
@@ -30,7 +31,7 @@ function ResponseCard(props: ReviewSuggestionType) {
                 <div>
                     <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                     {/* <span className="text-xs text-light-grey">{dayjs(new Date()).fromNow()}</span> */}
-                    <span className="text-xs text-light-grey">This is an AI Generated response</span>
+                    <span className="text-xs text-light-grey"><Trans i18nKey={'ai_generated_response'}/></span>
                 </div>
             </div>
         </CardHeader>
@@ -45,7 +46,7 @@ function ResponseCard(props: ReviewSuggestionType) {
                             </div>
 
                             <div>
-                                <p className="font-semibold">Casual Tone</p>
+                                <p className="font-semibold"><Trans i18nKey={'casual'}/></p>
                             </div>
                         </div>
                     </CardHeader>
@@ -71,7 +72,7 @@ function ResponseCard(props: ReviewSuggestionType) {
                             </div>
 
                             <div>
-                                <p className="font-semibold">Professional Tone</p>
+                                <p className="font-semibold"><Trans i18nKey={'professional'}/></p>
                             </div>
                         </div>
                     </CardHeader>
@@ -90,7 +91,7 @@ function ResponseCard(props: ReviewSuggestionType) {
                 </Card>
             </div>
 
-            <p className="text-sm font-semibold">Copy the response and respond</p>
+            <p className="text-sm font-semibold"><Trans i18nKey={'copyAndRespond'}/></p>
 
         </CardContent>
         

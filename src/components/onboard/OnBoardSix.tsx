@@ -15,6 +15,7 @@ import { ASSETS } from '@/assets/assets';
 import Loader from '../ui/Loader';
 import { useNavigate } from 'react-router-dom';
 import { trackEvent } from '@/lib/google_analytics';
+import { Trans } from 'react-i18next';
 
 function OnBoardSix() {
 
@@ -30,17 +31,50 @@ function OnBoardSix() {
         return JSON.parse(location)
     }
 
-    const messages = [
-        <p className='text-slate-500 text-center'><span className='text-primary'>Tip: </span>Personalize your review responses to show customers you really care.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Use our sentiment analysis to pinpoint areas where you can improve your service.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Quick Tip: </span>Consistency is key—maintain the same tone across all your responses.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Tip: </span>Leverage positive reviews in your marketing materials to build trust.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Use sentiment analysis to identify areas of improvement in your customer service.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Quick Tip: </span>Make it a habit to respond to all reviews, whether positive or negative. Consistent engagement shows that you value customer feedback.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Did you know? </span>AI-generated responses can save you up to 70% of the time you’d spend crafting responses.</p>,
-        <p className='text-slate-500 text-center'><span className='text-primary'>Pro Tip: </span>Don’t shy away from negative feedback. Addressing it publicly can show potential customers that you’re committed to improving.</p>,
-    ];
-      
+    // const messages = [
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'tip'}/>: </span>Personalize your review responses to show customers you really care.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'pro_tip'}/>: </span>Use our sentiment analysis to pinpoint areas where you can improve your service.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'quick_tip'}/>: </span>Consistency is key—maintain the same tone across all your responses.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'tip'}/>: </span>Leverage positive reviews in your marketing materials to build trust.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'pro_tip'}/>: </span>Use sentiment analysis to identify areas of improvement in your customer service.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'quick_tip'}/>: </span>Make it a habit to respond to all reviews, whether positive or negative. Consistent engagement shows that you value customer feedback.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'did_you_know'}/>: </span>AI-generated responses can save you up to 70% of the time you’d spend crafting responses.</p>,
+    //     <p className='text-slate-500 text-center'><span className='text-primary'><Trans i18nKey={'pro_tip'}/>: </span>Don’t shy away from negative feedback. Addressing it publicly can show potential customers that you’re committed to improving.</p>,
+    // ];
+      const messages = [
+        <p className="text-slate-500 text-center" key={0}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.0" />
+        </p>,
+        <p className="text-slate-500 text-center" key={1}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.1" />
+        </p>,
+        <p className="text-slate-500 text-center" key={2}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.2" />
+        </p>,
+        <p className="text-slate-500 text-center" key={3}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.3" />
+        </p>,
+        <p className="text-slate-500 text-center" key={4}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.4" />
+        </p>,
+        <p className="text-slate-500 text-center" key={5}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.5" />
+        </p>,
+        <p className="text-slate-500 text-center" key={6}>
+            <span className="text-primary"><Trans i18nKey="did_you_know" />: </span>
+            <Trans i18nKey="messages.6" />
+        </p>,
+        <p className="text-slate-500 text-center" key={7}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.7" />
+        </p>
+        ];
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
     // set user as onboarded

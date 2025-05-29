@@ -5,6 +5,7 @@ import DeleteAccount from "@/components/settings/DeleteAccount";
 import Notification from "@/components/settings/Notification";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { useEffect } from "react";
+import { Trans } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 function Settings() {
@@ -19,7 +20,7 @@ function Settings() {
   return (
     <div className="p-2 flex flex-col flex-1 overflow-y-scroll overflow-hidden ">
         <div className="flex flex-row items-center justify-between py-1">
-            <h1 className="font-semibold">Settings</h1>
+            <h1 className="font-semibold"><Trans i18nKey={'settings'}/></h1>
         </div>
 
         <Notification/>

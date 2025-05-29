@@ -6,10 +6,12 @@ import { useAppContext } from "@/contexts/AuthContext"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { downloadBlobAsPDF } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 function DownloadInvoice({ paymentId, paymentOn }: { paymentId: string, paymentOn: string }) {
 
     const { auth } = useAppContext();
+    const {t} = useTranslation()
     const { mutate, isPending } = useMutation({
         mutationKey: [ "fetchInvoice" ],
         mutationFn: fetchInvoice,
@@ -18,7 +20,7 @@ function DownloadInvoice({ paymentId, paymentOn }: { paymentId: string, paymentO
         },
         onError: (error: AxiosError<any>) => {
             console.log(error)
-            toast.error("Request Failed", { description: error?.response?.data || error?.message });
+            toast.error(t('request_failed'), { description: error?.response?.data || error?.message });
         }  
     });
 

@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
 import { useEffect } from "react";
+import { Trans } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -24,7 +25,7 @@ function Business() {
 
   useEffect(() => {
     initializeGA();
-    trackpPageView(location.pathname,auth?.data.email ?? '');
+    trackpPageView(location.pathname,auth?.data?.email ?? '');
   }, []);
   dayjs.extend(relativeTime);
   const queryClient = useQueryClient();
@@ -76,8 +77,8 @@ function Business() {
   if(isSuccess && data?.data?.data?.length === 0){
       content = (
         <div className="flex flex-col items-center justify-center p-2 ml-1 mr-2 mb-2 flex-1 overflow-hidden">
-          <h1 className="text-xl font-semibold">No Business added</h1>
-          <p className="text-slate-300">Search or Add your business account</p>
+          <h1 className="text-xl font-semibold"><Trans i18nKey={'no_business_added'}/></h1>
+          <p className="text-slate-300"><Trans i18nKey={'search_or_add_business'}/></p>
         </div>
       )
   }
@@ -93,7 +94,7 @@ function Business() {
               </div>
 
               <div className="flex flex-row items-center gap-2">
-                {item.active_business && <Badge className="bg-primary hover:bg-primary">Primary</Badge>}
+                {item.active_business && <Badge className="bg-primary hover:bg-primary"><Trans i18nKey={'primary'}/></Badge>}
                 {query?.data?.data?.plan_name === "pro-plan" && <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button size="icon" variant="ghost" className="rounded-full">
@@ -103,10 +104,10 @@ function Business() {
                   <DropdownMenuContent className="w-56">
                     <DropdownMenuGroup>
                       {!item.active_business && <DropdownMenuItem onClick={() => setActiveBusinessMutate({ place_id: item.place_id, token: auth?.token as string })}>
-                        <span>Set Primary Business</span>
+                        <span><Trans i18nKey={'setPrimaryBusiness'}/></span>
                       </DropdownMenuItem>}
                       <DropdownMenuItem onClick={() => mutate({ place_id: item.place_id, email: auth?.data?.email as string, token: auth?.token as string})}>
-                        <span>Remove Business</span>
+                        <span><Trans i18nKey={'removeBusiness'}/></span>
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
@@ -120,7 +121,7 @@ function Business() {
           </CardHeader>
           <CardContent>
               <span className="text-sm text-slate-400">{item?.street_number}, {item?.street}, {item?.city}, {item?.zip_code}</span>
-              <p className="text-sm text-slate-400">Added {dayjs(item.created_at).fromNow()}</p>
+              <p className="text-sm text-slate-400"><Trans i18nKey={'added'}/> {dayjs(item.created_at).fromNow()}</p>
           </CardContent>
         </Card>
       ))}

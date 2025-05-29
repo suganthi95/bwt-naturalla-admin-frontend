@@ -8,6 +8,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios";
 import { Bookmark } from "lucide-react";
 import { useEffect } from "react";
+import { Trans } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 function ReviewBookmarks() {
@@ -43,8 +44,8 @@ function ReviewBookmarks() {
     if(!activeBusiness){
       return (
           <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-              <h1 className="text-xl font-semibold">No Business added</h1>
-              <p className="text-slate-300">Search or Add your business account</p>
+              <h1 className="text-xl font-semibold"><Trans i18nKey={'no_business_added'}/></h1>
+              <p className="text-slate-300"><Trans i18nKey={'search_or_add_business'}/></p>
           </div>
       )
     }
@@ -61,8 +62,8 @@ function ReviewBookmarks() {
 
     if(isSuccess && data.length === 0){
         content = <div className="mt-[10%] mx-auto flex items-center justify-center flex-col gap-3">
-            <p className="text-secondary font-bold">There are no bookmarks at this time.</p>
-            <p className="text-slate-400 text-sm flex flex-row items-center gap-2">Click <Bookmark /> icon to save reviews</p>
+            <p className="text-secondary font-bold"><Trans i18nKey={'no_bookmarks'}/></p>
+            <p className="text-slate-400 text-sm flex flex-row items-center gap-2"><Trans i18nKey={'click'}/> <Bookmark /><Trans i18nKey={'icon_to_save_reviews'}/></p>
         </div>
     }
 
@@ -75,7 +76,7 @@ function ReviewBookmarks() {
   return (
     <div className="p-2 flex flex-col flex-1 overflow-hidden">
         <div className="flex flex-row items-center justify-between py-1">
-            <h1 className="font-semibold">Bookmarks</h1>
+            <h1 className="font-semibold"><Trans i18nKey={'bookmarks'}/></h1>
             {/* <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
                 <SelectTrigger className="w-[100px] h-8">
                     <SelectValue placeholder="Sort" />

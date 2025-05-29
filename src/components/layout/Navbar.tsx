@@ -12,6 +12,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { ASSETS } from "@/assets/assets";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import { Trans } from "react-i18next";
 
 function Navbar({ content, data }: { content: CollapseType, data: ValidateUserType }){
 
@@ -53,7 +54,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
     return(
         <div>
             <div className="px-3 py-3  border-slate-200 dark:border-slate-800 border flex items-center flex-row justify-between w-full">
-                <h1 className="hidden lg:block text-xl font-semibold ml-3"><span className="text-primary">Welcome to</span> {activeWorkspace?.workspace_name}</h1>
+                <h1 className="hidden lg:block text-xl font-semibold ml-3"><span className="text-primary"><Trans i18nKey={'welcome'}/></span> {activeWorkspace?.workspace_name}</h1>
                 <div className="flex flex-row  items-center justify-center gap-5">
 
                     {data?.businessList.length > 0 ? 
@@ -70,7 +71,7 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                         <Link className="h-7" to="/business">
                             <Button className="h-7">
                                 <PlusCircle className="h-4 w-4 text-light-grey" />
-                                <span className="text-xs text-light-grey font-semibold ml-2">Add Business</span>
+                                <span className="text-xs text-light-grey font-semibold ml-2"><Trans i18nKey={'contact_sales'}/></span>
                             </Button>
                         </Link>
                     
@@ -95,18 +96,18 @@ function Navbar({ content, data }: { content: CollapseType, data: ValidateUserTy
                                 <div onClickCapture={() => setOpenSheet(!openSheet)}>
                                     {Object.keys(content).map((menu: string, index: number) => (
                                         <Tabs key={`menu-nav-${index}`} value={tabValue}>
-                                        <p className="px-2 text-sm text-secondary py-2 hover:no-underline border-b-2 uppercase dark:text-white">{menu}</p>
+                                        <p className="px-2 text-sm text-secondary py-2 hover:no-underline border-b-2 uppercase dark:text-white"><Trans i18nKey={menu}/></p>
                                             <TabsList className="flex -ml-5 flex-col h-full rounded-none bg-white dark:bg-slate-950">
                                                 {content[menu as keyof CollapseType].filter((item: MenuType) => item.shouldVisible).map((item: MenuType) => (
                                                     <TabsTrigger key={`menu-${item.name}`} title={item.name} onClick={() => redirect(item)} className={`p-2 px-8 rounded-md flex items-center justify-start text-center space-x-3 bg-white data-[state=active]:bg-secondary data-[state=active]:text-white dark:bg-slate-950 w-full`} value={item.route}>
                                                         <div className='flex-col '>
                                                      <div className='flex items-center gap-x-3'>
                                                     {item.icon}
-                                                   <p>{item.name}</p>
+                                                   <p><Trans i18nKey={item.name}/></p>
                                                      </div>
                                                      <div>
                                                     {item.name === "Google Review" && (
-                                                    <p className="mt-4 bg-primary text-white rounded-md py-1">Coming Soon...</p>
+                                                    <p className="mt-4 bg-primary text-white rounded-md py-1"><Trans i18nKey={'comingSoon'}/>...</p>
                                                     )}
                                                      </div>
                                                      </div>

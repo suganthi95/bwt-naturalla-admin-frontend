@@ -7,6 +7,7 @@ import { getSentimentDistribution } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
+import { Trans } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -39,7 +40,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
         content = (
             <Card>
                 <CardContent className="h-[350px] flex items-center justify-center">
-                    <p className="text-center text-sm text-slate-500">No data found</p>
+                  <p className="text-center text-sm text-slate-500"><Trans i18nKey={'no_data_found'}/></p>
                 </CardContent>
             </Card>
         )
@@ -58,26 +59,26 @@ function SentimentDistributionGraph({ placeId }: Props) {
             <Card>
                 <CardHeader>
                     <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg md:text-balance">Sentiment Distribution</CardTitle>
+                        <CardTitle className="text-lg md:text-balance"><Trans i18nKey={'sentimentDistribution.title'}/></CardTitle>
                     <Popover>
                             <PopoverTrigger>
                             <Info className="h-4 w-4 text-primary " />
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20">
                                 <div className="bg-white rounded-lg dark:bg-slate-700  text-justify  ">
-                                     <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Sentiment Distribution</h3>
+                                     <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white"><Trans i18nKey={'sentimentDistribution.title'}/></h3>
                                      <div className="space-y-2">
                                          <div>
-                                            <strong className="text-sm">What it shows:</strong>
-                                            <p className="text-xs text-gray-500 dark:text-slate-300">This histogram displays the spread of sentiment scores for your reviews, showing how many reviews fall into each sentiment category</p>
+                                            <strong className="text-sm"><Trans i18nKey={'what_it_shows'}/></strong>
+                                            <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'sentimentDistribution.description1'}/></p>
                                          </div>
                                          <div>
-                                            <strong className="text-sm">What it shows:</strong>
-                                            <p className="text-xs text-gray-500 dark:text-slate-300"> The x-axis represents the sentiment scores (ranging from negative to positive), while the y-axis indicates the count of reviews within each sentiment category.</p>
+                                            <strong className="text-sm"><Trans i18nKey={'what_it_shows'}/></strong>
+                                            <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'sentimentDistribution.description2'}/></p>
                                          </div>
                                          <div>
-                                            <strong  className="text-sm">How to read it:</strong>
-                                            <p className="text-xs text-gray-500 dark:text-slate-300">The x-axis shows sentiment scores (from negative to positive), and the y-axis shows the number of reviews for each score. A higher number of positive reviews suggests customer satisfaction, while a concentration of negative reviews can highlight areas for improvement.</p>
+                                            <strong  className="text-sm"><Trans i18nKey={'how_to_read_it'}/></strong>
+                                            <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'sentimentDistribution.description3'}/></p>
                                          </div>
                                      </div>
                                 </div>
@@ -85,7 +86,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                     </Popover>
 
                     </div>
-                    <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong>What it shows:</strong>The x-axis represents the sentiment scores (ranging from negative to positive), while the y-axis indicates the count of reviews within each sentiment category.</p>
+                    <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong><Trans i18nKey={'what_it_shows'}/></strong> <Trans i18nKey={'sentimentDistribution.description1'}/></p>
                 </CardHeader>
                 <CardContent className="p-0 lg:p-3">
                 <ChartContainer config={chartConfig}>
@@ -135,7 +136,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                     </Bar>
                     </BarChart>
                 </ChartContainer>
-                <p className="text-center text-sm text-slate-500">Sentiment score</p>
+                <p className="text-center text-sm text-slate-500"><Trans i18nKey={'sentimentScore'}/></p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

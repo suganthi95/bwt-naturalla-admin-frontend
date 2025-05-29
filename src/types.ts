@@ -50,9 +50,9 @@ export type ReviewSuggestionType = {
 }
 
 export interface AuthType {
-    data: User
-    message: "Success",
-    token: string
+    data ?: User
+    message ?: "Success",
+    token : string
 }
 
 export interface User {
@@ -149,7 +149,7 @@ export interface DashboardDataType {
 export type CollapseType  = {
     "general": MenuType[]
     "menu": MenuType[]
-    "apps/integrations": MenuType[]
+    "appsintegration": MenuType[]
 }
 
 export type MenuType = {

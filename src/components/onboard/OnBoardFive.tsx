@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { onBoardUser } from '@/lib/apis';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
+import { Trans, useTranslation } from 'react-i18next';
 
 interface Props {
     setPage: React.Dispatch<React.SetStateAction<number>>,
@@ -15,7 +16,7 @@ interface Props {
 
 function OnBoardFive({ setPage }: Props) {
     const { register, handleSubmit, formState: { errors }, setError, watch } = useFormContext<OnBoardType>();
-
+   const {t} = useTranslation()
     const { setAuth } = useAppContext();
     const { auth } = useAppContext();
 
@@ -47,14 +48,14 @@ function OnBoardFive({ setPage }: Props) {
             submitOnboardForm();
             setPage(prev => prev + 1);
         }else{
-            setError("workspaceName", { type: 'required', message: 'Workspace name is required' })
+            setError("workspaceName", { type: 'required', message: t('workspaceNameRequired') })
         }
     }
 
 
     return (
         <div className="mt-10">
-            <h1 className="text-2xl lg:text-4xl font-medium">Lastly, What would you like to name your workspace ?</h1>
+            <h1 className="text-2xl lg:text-4xl font-medium"><Trans i18nKey={'lastlyWorkspaceName'}/></h1>
 
             <div>
                 <Input
@@ -64,7 +65,7 @@ function OnBoardFive({ setPage }: Props) {
                     {...register("workspaceName", {
                         required: {
                             value: true,
-                            message: "Add your workspace name"
+                            message: t('addYourWorkspaceName')
                         }
                     })}
                 />
@@ -72,10 +73,10 @@ function OnBoardFive({ setPage }: Props) {
 
             </div>
 
-            <p className='text-slate-500 text-xs mt-10'><span className='font-bold'>Note:</span> You can always change the workspace name later in your settings</p>
+            <p className='text-slate-500 text-xs mt-10'><span className='font-bold'><Trans i18nKey={'note'}/></span> <Trans i18nKey={'workspace_note'}/></p>
 
             <Button onClick={proceedToNext} className="mt-5 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
-                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : "Continue"}
+                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin" /> : <Trans i18nKey={'continue'}/>}
             </Button>
         </div>
     )

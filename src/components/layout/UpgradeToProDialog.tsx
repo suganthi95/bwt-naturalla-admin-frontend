@@ -13,6 +13,7 @@ import { ASSETS } from "@/assets/assets";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { Trans } from "react-i18next";
 
 interface Props {
   planName: string;
@@ -21,7 +22,6 @@ interface Props {
 }
 
 function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
-
   const [modal, setModal] = useState<boolean>(false);
 
   const isFreeTrialEnd = isPastDate(planEndDate);
@@ -37,74 +37,74 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
       }
     }
   };
-  
+
   useEffect(() => {
     showPopup();
   }, [balanceDays, planEndDate]);
 
   let dialogContent;
 
-  if(planName == "free trial" && balanceDays > 0){
+  if (planName == "free trial" && balanceDays > 0) {
     dialogContent = (
       <AlertDialogHeader>
         <AlertDialogTitle className="text-center text-2xl text-[#141618]">
-            <h1>Your free trial ends in {balanceDays} Days</h1>
-        </AlertDialogTitle>
-        <AlertDialogDescription>
-        <div className="text-[#141618] space-y-3 text-base text-center">
-            <p>
-              Your 7-day free trial has expiry soon 
-            </p>
-            <p>So, upgrade now to continue enjoying the pro plan services.</p>
-          </div>
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-    )
-  }
-
-  if(planName == "free trial" && balanceDays === 0){
-    dialogContent = (
-      <AlertDialogHeader>
-        <AlertDialogTitle className="text-center text-2xl text-[#141618]">
-          <h1>Your free trial ends today!</h1>
+          <h1><Trans i18nKey={'trialEnds'}/> {balanceDays} <Trans i18nKey={'days'}/></h1>
         </AlertDialogTitle>
         <AlertDialogDescription>
           <div className="text-[#141618] space-y-3 text-base text-center">
             <p>
-              Your 7-day free trial has now expired. You no longer have access
-              to the Intelliresponse dashboard.{" "}
+              <Trans i18nKey={"trial_expiry_notice"} />
             </p>
-            <p>So, upgrade now to continue enjoying the pro plan services.</p>
+            <p>
+              <Trans i18nKey={"upgrade_now_prompt"} />
+            </p>
           </div>
         </AlertDialogDescription>
       </AlertDialogHeader>
-    )
+    );
   }
 
-  if(planName == "free trial" && balanceDays <= 0){
+  if (planName == "free trial" && balanceDays === 0) {
     dialogContent = (
       <AlertDialogHeader>
         <AlertDialogTitle className="text-center text-2xl text-[#141618]">
-          <h1>Your free trial ended</h1>
+          <h1><Trans i18nKey={'trialEnds'}/> <Trans i18nKey={'today'}/></h1>
         </AlertDialogTitle>
         <AlertDialogDescription>
           <div className="text-[#141618] space-y-3 text-base text-center">
             <p>
-              Your 7-day free trial has expired. You no longer have access
-              to the Intelliresponse dashboard.{" "}
+            <Trans i18nKey={'trialMessage'}/>
             </p>
-            <p>So, upgrade now to continue enjoying the pro plan services.</p>
+            <p><Trans i18nKey={'So_upgrade'}/></p>
           </div>
         </AlertDialogDescription>
       </AlertDialogHeader>
-    )
+    );
+  }
+
+  if (planName == "free trial" && balanceDays <= 0) {
+    dialogContent = (
+      <AlertDialogHeader>
+        <AlertDialogTitle className="text-center text-2xl text-[#141618]">
+          <h1><Trans i18nKey={'trialEnded'}/></h1>
+        </AlertDialogTitle>
+        <AlertDialogDescription>
+          <div className="text-[#141618] space-y-3 text-base text-center">
+            <p>
+             <Trans i18nKey={'trialEndedMessage'}/>
+            </p>
+            <p><Trans i18nKey={'upgrade_now_prompt'}/></p>
+          </div>
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+    );
   }
 
   useEffect(() => {
-    if(planName === "free trial" && isFreeTrialEnd){
-      setModal(true)
+    if (planName === "free trial" && isFreeTrialEnd) {
+      setModal(true);
     }
-  }, [])
+  }, []);
 
   return (
     <AlertDialog open={modal}>
@@ -115,28 +115,25 @@ function UpgradeToProDialog({ planName, planEndDate, clickEvent }: Props) {
             className="h-full w-full object-contain"
           />
         </div>
-        
+
         {dialogContent}
 
         <AlertDialogFooter>
           <div className="w-full flex flex-row items-center justify-center gap-5">
             <Button
               onClick={() => {
-                setModal(false)
-                clickEvent()
+                setModal(false);
+                clickEvent();
               }}
               className={`bg-primary p-2 px-8 hover:bg-primary/50`}
             >
-              Upgrade Now
+              <Trans i18nKey={'upgradeNow'}/>  
             </Button>
-            {planName == "free trial" && balanceDays > 0 &&
-              <Button
-                onClick={() => setModal(false)}
-                className="p-2 px-8"
-              >
-                Maybe Later
+            {planName == "free trial" && balanceDays > 0 && (
+              <Button onClick={() => setModal(false)} className="p-2 px-8">
+              <Trans i18nKey={'maybeLater'}/>  
               </Button>
-            }
+            )}
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,0 +1,131 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ASSETS } from "@/assets/assets";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { ArrowLeft, Check } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const inputSchema = z.object({
+  email: z.string().email("Enter a valid email").nonempty("Email is required"),
+});
+
+type ForgotProps = z.infer<typeof inputSchema>;
+
+function ForgotPassword() {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<ForgotProps>({
+    resolver: zodResolver(inputSchema),
+    mode: "onChange",
+  });
+
+  const handleSendMail = (data: ForgotProps) => {
+    console.log("Reset email to:", data.email);
+    // Integrate reset logic here
+  };
+
+  return (
+    <div className="min-h-screen w-full bg-sandal flex flex-col lg:flex-row">
+      <div className="flex flex-col flex-1 bg-white justify-center px-4 md:px-10 py-8">
+        <Link to="/" className="flex items-center justify-center gap-3 mb-8">
+          <img src={ASSETS.LOGO} alt="logo" className="h-10 md:h-12" />
+          <div>
+            <p className="font-bold text-xl md:text-3xl text-primary">
+              Intelli<span className="text-secondary">Response</span>
+            </p>
+            <span className="text-slate-500 text-sm md:text-base">
+              Turning Reviews Into Insights
+            </span>
+          </div>
+        </Link>
+
+        <div className="w-full max-w-md mx-auto space-y-6 text-center">
+          <h2 className="font-bold text-xl md:text-4xl uppercase text-title dark:text-white">
+            Forgot Password!
+          </h2>
+          <p className="text-lead text-xs md:text-base font-light">
+            Enter the email address associated with your account. We’ll verify
+            it and send you a link to reset your password.
+          </p>
+
+          <form
+            onSubmit={handleSubmit(handleSendMail)}
+            className="space-y-6 text-left"
+          >
+            <div>
+              <label
+                htmlFor="email"
+                className="block font-medium text-sm mb-1 text-[#292D34]"
+              >
+                Email Address
+              </label>
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  {...register("email")}
+                  className={`w-full h-11 ${
+                    errors.email ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+                {isValid && !errors.email && (
+                  <Check
+                    className="absolute right-3 top-3 text-green-500"
+                    size={20}
+                  />
+                )}
+              </div>
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-4">
+              <Button
+                type="button"
+                variant="outline"
+                className="text-sm md:text-base h-11 md:h-12 rounded-md"
+                onClick={() => navigate("/login")}
+              >
+                <ArrowLeft className="mr-2" size={18} /> Back to Login
+              </Button>
+              <Button
+                type="submit"
+                className="bg-[#FF840F] hover:bg-primary text-white text-sm md:text-base h-11 md:h-12 rounded-md"
+              >
+                Reset Password
+              </Button>
+            </div>
+          </form>
+        </div>
+        <div className="grid place-items-center">
+          <p className="text-muted-foreground text-center fixed bottom-3   text-xs md:text-sm">
+            © 2025 Copyrights by <strong>Embrais AI Solutions</strong>. All
+            Rights Reserved.
+          </p>
+        </div>
+      </div>
+
+      {/* Right Panel - Illustration */}
+      <div className="hidden lg:flex flex-1 items-center justify-center bg-[#FFEEE1]">
+        <img
+          src={ASSETS.FORGOT_EMAIL}
+          alt="forgot password illustration"
+          className="w-2/3 max-w-[400px]"
+        />
+      </div>
+    </div>
+  );
+}
+
+export default ForgotPassword;
