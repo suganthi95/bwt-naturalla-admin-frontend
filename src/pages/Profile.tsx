@@ -11,6 +11,7 @@ import { Check, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
+import { Trans } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -19,7 +20,7 @@ function Profile() {
     const { auth } = useAppContext();
     useEffect(() => {
       initializeGA();
-      trackpPageView(location.pathname,auth?.data.email ?? '');
+      trackpPageView(location.pathname,auth?.data?.email ?? '');
     }, []);
     const queryClient = useQueryClient();
     const data = queryClient.getQueryData<AxiosResponse<{ data: ValidateUserType, message: string }>>([ "validateUser" ]);
@@ -111,13 +112,13 @@ function Profile() {
         </div>
 
         <div className="mt-8 px-5">
-            <h1 className="text-2xl text-secondary font-medium">Profile</h1>
+            <h1 className="text-2xl text-secondary font-medium"><Trans i18nKey ={'profile'}/></h1>
             {/* <p className="text-slate-400">Update your photo and personal details here</p> */}
         </div>
 
         <div className="mx-5 space-y-5 py-5 my-5 border-t border-b">
             <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
-                <p>Email</p>
+                <p><Trans i18nKey ={'email'}/></p>
                 
                 <div className="flex flex-row items-center gap-2">
                     <div className="w-full">
@@ -133,7 +134,7 @@ function Profile() {
                 </div>
             </div>
             <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
-                <p>Username</p>
+                <p><Trans i18nKey={'username'}/></p>
                 <div className="flex flex-row items-center gap-2">
                     <div className="w-full">
                         <Input
@@ -154,7 +155,7 @@ function Profile() {
                 </div>
             </div>
             <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
-                <p>Workspace Name</p>
+                <p><Trans i18nKey={'workspace_name'}/></p>
                 
                 <div className="flex flex-row items-center gap-2">
                     <div className="w-full">
@@ -179,7 +180,7 @@ function Profile() {
 
         <div className="mx-5">
             <div className="grid grid-cols-1 gap-y-3 md:grid-cols-2  lg:grid-cols-3 xl:gap-20">
-                <p>Password</p>
+                <p><Trans i18nKey={'password'}/></p>
                 <div>
                     <Input
                         type={"password"} 

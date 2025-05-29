@@ -45,117 +45,117 @@ export const planFeatures = {
   standard: [
     {
       icon: "success",
-      text: "Upto One Business Location"
+      text: "features.oneLocation"
     },
     {
       icon: "success",
-      text: "Suitable For Single Business Owners",
+      text: "features.oneOwner",
     },
     {
       icon: "success",
-      text: "Upto 60 Free Credits"
+      text: "features.sixtyCredits"
     },
     {
       icon: "success",
-      text: "AI-Powered Responses"
+      text: "features.aiResponses"
     },
     {
       icon: "success",
-      text: "Sentiment Analysis"
+      text: "features.sentiment"
     },
     {
       icon: "success",
-      text: "Analytics Dashboard"
+      text: "features.dashboard"
     },
     {
       icon: "error",
-      text: "Multilingual Support"
+      text: "features.multilingual"
     },
     {
       icon: "error",
-      text: "Workspace Integration"
+      text: "features.workspace"
     },
     {
       icon: "error",
-      text: "Insights and Recommendations"
+      text: "features.insights"
     },
   ],
 
   pro: [
     {
       icon: "success",
-      text: "Upto Three Business Location"
+      text: "features.threeLocation"
     },
     {
       icon: "success",
-      text: "Suitable For Franchisors Business Owners",
+      text: "features.franchiseOwners",
     },
     {
       icon: "success",
-      text: "Upto 200 Free Credits"
+      text: "features.twoHundredCredits"
     },
     {
       icon: "success",
-      text: "AI-Powered Responses"
+      text: "features.comingSoon"
     },
     {
       icon: "success",
-      text: "Sentiment Analysis"
+      text: "features.moreThanThree"
     },
     {
       icon: "success",
-      text: "Analytics Dashboard"
+      text: "features.multiOwners"
     },
     {
       icon: "coming soon",
-      text: "Multilingual Support (Coming Soon)"
+      text: "features.multilingual_support"
     },
     {
       icon: "coming soon",
-      text: "Workspace Integration (Coming Soon)"
+      text: "features.workspace_integration"
     },
     {
       icon: "coming soon",
-      text: "Insights and Recommendations (Coming Soon)"
+      text: "features.insights_and_recommendations"
     },
   ],
 
   enterprise: [
     {
       icon: "success",
-      text: "More Than Three Business Location"
+      text: "features.more_than_three_business_locations"
     },
     {
       icon: "success",
-      text: "Suitable For Multi-Business Owners",
+      text: "features.suitable_for_multi_business_owners",
     },
     {
       icon: "success",
-      text: "Unlimited Free Credits"
+      text: "features.unlimited_free_credits"
     },
     {
       icon: "success",
-      text: "AI-Powered Responses"
+      text: "features.ai_powered_responses"
     },
     {
       icon: "success",
-      text: "Sentiment Analysis"
+      text: "features.sentiment_analysis"
     },
     {
       icon: "success",
-      text: "Analytics Dashboard"
+      text: "features.analytics_dashboard"
     },
     {
       icon: "coming soon",
-      text: "Multilingual Support (Coming Soon)"
+      text: "features.multilingual_support"
     },
     {
       icon: "coming soon",
-      text: "Workspace Integration (Coming Soon)"
+      text: "features.workspace_integration"
     },
     {
       icon: "coming soon",
-      text: "Insights and Recommendations (Coming Soon)"
+      text: "features.insights_and_recommendations"
     },
   ],
 }

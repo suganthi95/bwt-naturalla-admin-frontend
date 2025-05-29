@@ -1,7 +1,18 @@
-import { Link, Navigate, Outlet, useNavigate } from "react-router-dom"
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { BarChartBig, Bookmark, Briefcase, CircleAlert, CreditCard, EarthLock, House, Settings, UserCog, MessageCircleQuestion } from "lucide-react";
+import {
+  BarChartBig,
+  Bookmark,
+  Briefcase,
+  CircleAlert,
+  CreditCard,
+  EarthLock,
+  House,
+  Settings,
+  UserCog,
+  MessageCircleQuestion,
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { googleLogout } from "@react-oauth/google";
@@ -9,7 +20,14 @@ import LogoutDialog from "../ui/LogoutDialog";
 import { useState } from "react";
 import { ASSETS } from "@/assets/assets";
 import { Icons } from "@/assets/icons";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { validateUser } from "@/lib/apis";
 import Loader from "../ui/Loader";
@@ -19,245 +37,275 @@ import BuyCredits from "../ui/BuyCredits";
 import { Badge } from "../ui/badge";
 import UpgradeToProDialog from "./UpgradeToProDialog";
 import SubscriptionModal from "./SubscriptionModal";
+import { Trans } from "react-i18next";
 
 function Layout() {
+  const plans = [
+    {
+      name: "Pro",
+      code: "pro-plan",
+      class: "bg-orange-500",
+    },
+    {
+      name: "Standard",
+      code: "standard plan",
+      class: "bg-blue-500",
+    },
+    {
+      name: "Free Trial",
+      code: "free trial",
+      class: "bg-slate-700",
+    },
+  ];
 
-    const plans = [
-        {
-            name: "Pro",
-            code: "pro-plan",
-            class: "bg-orange-500"
-        },
-        {
-            name: "Standard",
-            code: "standard plan",
-            class: "bg-blue-500"
-        },
-        {
-            name: "Free Trial",
-            code: "free trial",
-            class: "bg-slate-700"
-        },
-    ];
+  const navigate = useNavigate();
+  const { auth, setAuth } = useAppContext();
+  const [openLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
+  const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
 
-    const navigate = useNavigate();
-    const { auth, setAuth } = useAppContext();
-    const [ openLogoutDialog, setOpenLogoutDialog ] = useState<boolean>(false);
-    const [ openPaymentDialog, setOpenPaymentDialog ] = useState(false);
+  const signout = () => {
+    googleLogout();
+    setAuth(null);
+    localStorage.removeItem("auth");
+    sessionStorage.clear();
+    navigate("/sign-in", { replace: true });
+    window.location.reload();
+  };
 
-    const signout = () => {
-        googleLogout();
-        setAuth(null);
-        localStorage.clear();
-        sessionStorage.clear();
-        navigate("/sign-in", { replace: true });
-        window.location.reload();
-    };
+  const { isLoading, isError, isSuccess, data } = useQuery({
+    queryKey: ["validateUser"],
+    queryFn: () => validateUser(auth?.token as string),
+    refetchOnWindowFocus: true,
+    retry: 3,
+    select: (data): ValidateUserType => data?.data?.data,
+    enabled: Boolean(auth?.token),
+  });
 
-    const { isLoading, isError, isSuccess, data } = useQuery({
-        queryKey: [ "validateUser" ],
-        queryFn: () => validateUser(auth?.token as string),
-        refetchOnWindowFocus: true,
-        retry: 3,
-        select: (data): ValidateUserType => data?.data?.data,
-        enabled: Boolean(auth?.token) 
-    });
-        
+  const menus: CollapseType = {
+    general: [
+      {
+        name: "dashboard",
+        route: "dashboard",
+        icon: <House className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "reviews",
+        route: "reviews",
+        icon: <BarChartBig className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "my_business",
+        route: "business",
+        icon: <Briefcase className="w-5" />,
+        shouldVisible: true,
+      },
+    ],
+    menu: [
+      {
+        name: "bookmark",
+        route: "bookmark",
+        icon: <Bookmark className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "billing",
+        route: "billing",
+        icon: <CreditCard className="w-5" />,
+        shouldVisible: ["pro-plan", "standard plan"].includes(
+          data?.plan_name as string
+        ),
+      },
+      {
+        name: "feedback",
+        route: "feedback",
+        icon: <UserCog className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "privacy_policy",
+        route: "https://intelliresponse.ai/en/privacy-policy",
+        icon: <EarthLock className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "terms_conditions",
+        route: "https://intelliresponse.ai/en/terms-and-conditions",
+        icon: <CircleAlert className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "faq",
+        route: "https://intelliresponse.ai/en/#faq",
+        icon: <MessageCircleQuestion />,
+        shouldVisible: true,
+      },
+      {
+        name: "settings",
+        route: "settings",
+        icon: <Settings className="w-5" />,
+        shouldVisible: true,
+      },
+    ],
 
-    const menus: CollapseType = {
-        "general" : [
-            {
-                name: "Dashboard",
-                route: "dashboard",
-                icon: <House className="w-5" />,
-                shouldVisible: true
-            },
-            {
-                name: "Reviews",
-                route: "reviews",
-                icon: <BarChartBig className="w-5" />,
-                shouldVisible: true
-            },
-            {
-                name: "My Business",
-                route: "business",
-                icon: <Briefcase className="w-5" />,
-                shouldVisible: true
-            },
-        ],
-        "menu" : [
-            {
-                name: "Bookmark",
-                route: "bookmark",
-                icon: <Bookmark className="w-5" />,
-                shouldVisible: true
-            },
-            {
-                name: "Billing",
-                route: "billing",
-                icon:  <CreditCard className="w-5" />,
-                shouldVisible: [ "pro-plan", "standard plan" ].includes(data?.plan_name as string)
-            },
-            {
-                name: "Feedback",
-                route: "feedback",
-                icon: <UserCog className="w-5" />,
-                shouldVisible: true
-            },
-            {
-                name: "Privacy Policy",
-                route: "https://intelliresponse.ai/en/privacy-policy",
-                icon: <EarthLock className="w-5" />,
-                shouldVisible: true
-            },
-            {
-                name: "Terms & Conditions",
-                route: "https://intelliresponse.ai/en/terms-and-conditions",
-                icon: <CircleAlert className="w-5" />,
-                shouldVisible: true
-            },
-            {
-                name:"FAQ",
-                route:"https://intelliresponse.ai/en/#faq",
-                icon:<MessageCircleQuestion/>,
-                shouldVisible:true
-            },
-            {
-                name: "Settings",
-                route: "settings",
-                icon: <Settings className="w-5" />,
-                shouldVisible: true
-            },
-        ],
+    appsintegration: [
+      {
+        name: "google_review",
+        route: "/",
+        icon: <Icons.googleIcon className="w-5 h-6 " />,
+        shouldVisible: true,
+      },
+      {
+        name: "trustpilot",
+        route: "/",
+        icon: <Icons.trustpilotIcon className="w-7 h-7 dark:text-white" />,
+        shouldVisible: true,
+      },
+      {
+        name: "youtube_comments",
+        route: "/",
+        icon: <Icons.youtubeIcon className="w-5 h-6" />,
+        shouldVisible: true,
+      },
+      {
+        name: "trip_advisor",
+        route: "/",
+        icon: <Icons.tripadvisorIcon className="w-5 h-6" />,
+        shouldVisible: true,
+      },
+    ],
+  };
 
-        "apps/integrations": [
-            {
-                name: "Google Review",
-                route: "/",
-                icon: <Icons.googleIcon className="w-5 h-6 " />,
-                shouldVisible: true
-            },
-            {
-                name: "TrustPilot",
-                route: "/",
-                icon: <Icons.trustpilotIcon className="w-7 h-7 dark:text-white" />,
-                shouldVisible: true
-            },
-            {
-                name: "Youtube comments",
-                route: "/",
-                icon: <Icons.youtubeIcon className="w-5 h-6" />,
-                shouldVisible: true
-            },
-            {
-                name: "Trip Advisor",
-                route: "/",
-                icon: <Icons.tripadvisorIcon className="w-5 h-6" />,
-                shouldVisible: true
-            }
-        ]
+  let main;
 
-    }
-
-    let main;
-
-    if(isLoading){
-        main = <div className="h-screen flex items-center justify-center flex-col gap-3">
-            <div className="hidden lg:flex flex-row items-center gap-1">
-                <img className="h-8 w-8 " src={ASSETS.LOGO} alt="logo" />
-                <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
-            </div>
-            <div>
-                <Loader/>
-            </div>
+  if (isLoading) {
+    main = (
+      <div className="h-screen flex items-center justify-center flex-col gap-3">
+        <div className="hidden lg:flex flex-row items-center gap-1">
+          <img className="h-8 w-8 " src={ASSETS.LOGO} alt="logo" />
+          <p className="font-bold text-3xl text-primary">
+            Intelli<span className="text-secondary">Response</span>
+          </p>
         </div>
-    }
+        <div>
+          <Loader />
+        </div>
+      </div>
+    );
+  }
 
-    if(isError){
-        main = <Navigate to="/sign-in"/>
-    }
+  if (isError) {
+    main = <Navigate to="/sign-in" />;
+  }
 
-    if(isSuccess){
-        const [ activeWorkspace ] = data?.workspaceList.filter(item => item.workspace_id === data?.active_workspace);
-        const plan = plans.filter((item) => item.code === data.plan_name)[0];        
+  if (isSuccess) {
+    const [activeWorkspace] = data?.workspaceList.filter(
+      (item) => item.workspace_id === data?.active_workspace
+    );
+    const plan = plans.filter((item) => item.code === data.plan_name)[0];
 
-        main = (
-            <main className="flex flex-col relative  h-screen overflow-y-scroll md:overflow-hidden">
-                <div className="flex flex-col gap-y-4 md:flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
-                    <div className="flex  flex-row gap-1 items-center xl:gap-3">
-                        <p className="h-10 w-10 flex items-center justify-center lg:hidden rounded-lg bg-secondary text-white">
-                            {activeWorkspace.workspace_name[0]}
-                        </p>
-                        
-                            <p className="font-medium dark:text-white lg:hidden">{activeWorkspace.workspace_name}</p>
-                            <div className="flex flex-row items-center gap-1">
-                        <Link to="/" className="hidden lg:flex flex-row items-center gap-1">
-                            <img className="h-8 w-8 dark:hidden" src={ASSETS.LOGO} alt="logo" />
-                            <img className="h-8 w-8 hidden dark:block" src={ASSETS.LOGO_DARKMODE} alt="logo" />
-                            <p className="font-bold text-xl text-primary">Intelli<span className="text-secondary dark:text-slate-400">Response</span></p>
-                        </Link>
-                        {plan?.name && <Badge className={plan?.class}>{plan?.name}</Badge>}
-                    </div>
-                    </div>
-                   
+    main = (
+      <main className="flex flex-col relative  h-screen overflow-y-scroll md:overflow-hidden">
+        <div className="flex flex-col gap-y-4 md:flex-row items-center justify-between px-5 py-2 border dark:border-slate-800 border-slate-200 bg-slate-100 dark:bg-slate-950">
+          <div className="flex  flex-row gap-1 items-center xl:gap-3">
+            <p className="h-10 w-10 flex items-center justify-center lg:hidden rounded-lg bg-secondary text-white">
+              {activeWorkspace.workspace_name[0]}
+            </p>
 
-                    <div className="flex items-center flex-row  gap-2 md:gap-5 xl:gap-10">
-
-                        {[ "pro-plan", "standard plan" ].includes(data?.plan_name) && <BuyCredits/>}
-
-                        <SubscriptionModal triggerPaymentDialog={openPaymentDialog} setTriggerPaymentDialog={setOpenPaymentDialog} />
-
-                        <p className="hidden md:block  text-slate-950 dark:text-white">Welcome, {data?.name}</p>
-                        <div className="flex flex-row items-center gap-2">
-                            <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Avatar className="cursor-pointer">
-                                    <AvatarFallback className="bg-primary text-white">{data?.name[0]}</AvatarFallback>
-                                </Avatar>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-40">
-                                <DropdownMenuLabel>{data?.name}</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => navigate("/profile")}>
-                                        <span>Profile</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => setOpenLogoutDialog(true)}>
-                                        <span>Logout</span>
-                                    </DropdownMenuItem>
-                            </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex flex-row h-full font-inter bg-white dark:bg-slate-950 dark:text-slate-50">
-                    <Sidebar 
-                        content={menus}
-                        data={data}
-                    />
-                    <section className="w-[100%] flex flex-col">
-                        <Navbar 
-                            content={menus}
-                            data={data}
-                        />
-                        <Outlet/>
-                    </section>
-                    <LogoutDialog 
-                        openLogoutDialog={openLogoutDialog} 
-                        setOpenLogoutDialog={setOpenLogoutDialog}
-                        signout={signout}
-                    />
-                </div>
-                <UpgradeToProDialog 
-                    planName={data.plan_name} 
-                    planEndDate={data.plan_end_date} 
-                    clickEvent={() => setOpenPaymentDialog(true)}
+            <p className="font-medium dark:text-white lg:hidden">
+              {activeWorkspace.workspace_name}
+            </p>
+            <div className="flex flex-row items-center gap-1">
+              <Link
+                to="/"
+                className="hidden lg:flex flex-row items-center gap-1"
+              >
+                <img
+                  className="h-8 w-8 dark:hidden"
+                  src={ASSETS.LOGO}
+                  alt="logo"
                 />
-            </main>
-        )
-    }
+                <img
+                  className="h-8 w-8 hidden dark:block"
+                  src={ASSETS.LOGO_DARKMODE}
+                  alt="logo"
+                />
+                <p className="font-bold text-xl text-primary">
+                  Intelli
+                  <span className="text-secondary dark:text-slate-400">
+                    Response
+                  </span>
+                </p>
+              </Link>
+              {plan?.name && (
+                <Badge className={plan?.class}>{plan?.name}</Badge>
+              )}
+            </div>
+          </div>
 
-  
-    return main;
+          <div className="flex items-center flex-row  gap-2 md:gap-5 xl:gap-10">
+            {["pro-plan", "standard plan"].includes(data?.plan_name) && (
+              <BuyCredits />
+            )}
+
+            <SubscriptionModal
+              triggerPaymentDialog={openPaymentDialog}
+              setTriggerPaymentDialog={setOpenPaymentDialog}
+            />
+
+            <p className="hidden md:block  text-slate-950 dark:text-white">
+              <Trans i18nKey={"welcome1"} />, {data?.name}
+            </p>
+            <div className="flex flex-row items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarFallback className="bg-primary text-white">
+                      {data?.name[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40">
+                  <DropdownMenuLabel>{data?.name}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/profile")}>
+                    <span>
+                      <Trans i18nKey={"profile"} />
+                    </span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setOpenLogoutDialog(true)}>
+                    <span>
+                      <Trans i18nKey={"logout"} />
+                    </span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-row h-full font-inter bg-white dark:bg-slate-950 dark:text-slate-50">
+          <Sidebar content={menus} data={data} />
+          <section className="w-[100%] flex flex-col">
+            <Navbar content={menus} data={data} />
+            <Outlet />
+          </section>
+          <LogoutDialog
+            openLogoutDialog={openLogoutDialog}
+            setOpenLogoutDialog={setOpenLogoutDialog}
+            signout={signout}
+          />
+        </div>
+        <UpgradeToProDialog
+          planName={data.plan_name}
+          planEndDate={data.plan_end_date}
+          clickEvent={() => setOpenPaymentDialog(true)}
+        />
+      </main>
+    );
+  }
+
+  return main;
 }
 
-export default Layout
+export default Layout;

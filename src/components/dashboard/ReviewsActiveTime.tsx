@@ -6,6 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 import Chart from "react-apexcharts"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
+import { Trans } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -38,7 +39,7 @@ function ReviewsActiveTime({ placeId }: Props) {
       content = (
           <Card>
               <CardContent className="h-[350px] flex items-center justify-center">
-                  <p className="text-center text-sm text-slate-500">No data found</p>
+                  <p className="text-center text-sm text-slate-500"><Trans i18nKey={'no_data_found'}/></p>
               </CardContent>
           </Card>
       )
@@ -360,33 +361,33 @@ function ReviewsActiveTime({ placeId }: Props) {
             <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg md:text-balance">Reviews Active Time</CardTitle>
+                    <CardTitle className="text-lg md:text-balance"><Trans i18nKey={'reviews_active_time'}/></CardTitle>
                     <Popover>
                       <PopoverTrigger>
                       <Info className="h-4 w-4 text-primary " />
                       </PopoverTrigger>
                       <PopoverContent className="md:w-[400px] -translate-x-7 md:-translate-x-20">
                             <div  className="bg-white rounded-lg dark:bg-slate-700  text-justify   " >
-                                <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Reviews Active Time</h3>
+                                <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white"><Trans i18nKey={'reviews_active_time'}/></h3>
                                 <div className="space-y-2">
                                     <div>
-                                        <strong className="text-sm">What it shows:</strong>
-                                        <p className="text-xs text-gray-500 dark:text-slate-300">This heatmap tracks the times of day and days of the week when most reviews are submitted, helping you understand your audience’s activity patterns.</p>
+                                        <strong className="text-sm"><Trans i18nKey={'what_it_shows'}/></strong>
+                                        <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'reviewActivity.description1'}/></p>
                                     </div>
                                       <div>
-                                          <strong className="text-sm">What it shows:</strong>
-                                          <p className="text-xs text-gray-500 dark:text-slate-300">The chart tracks review activity by hour and day, with colors indicating the number of reviews submitted at each time.</p>
+                                          <strong className="text-sm"><Trans i18nKey={'what_it_shows'}/></strong>
+                                          <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'reviews_active_time_description'}/></p>
                                       </div>
                                       <div>
-                                          <strong  className="text-sm">How to read it:</strong>
-                                          <p className="text-xs text-gray-500 dark:text-slate-300"> Each cell shows the number of reviews submitted during a specific hour on a specific day, with color intensity indicating the frequency. It can help you identify peak times for feedback and plan when to engage with customers for better responses.</p>
+                                          <strong  className="text-sm"><Trans i18nKey={'how_to_read_it'}/></strong>
+                                          <p className="text-xs text-gray-500 dark:text-slate-300"> <Trans i18nKey={'reviewActivity.description3'}/></p>
                                       </div>
                                 </div>
                             </div>
                       </PopoverContent>
                     </Popover>
                   </div>
-                  <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong>What it shows:</strong> The chart tracks review activity by hour and day, with colors indicating the number of reviews submitted at each time.</p>
+                  <p className="text-xs  hidden md:block  !mt-5 text-slate-500"><strong><Trans i18nKey={'what_it_shows'}/></strong> <Trans i18nKey={'reviewActivity.description1'}/></p>
                 </CardHeader>
                 <CardContent className="p-0 lg:p-3">
                     <Chart
@@ -394,7 +395,7 @@ function ReviewsActiveTime({ placeId }: Props) {
                       series={state.series}
                       type="heatmap"
                     />
-                    <p className="text-center text-sm -mt-5 text-slate-500">hours</p>
+                    <p className="text-center text-sm -mt-5 text-slate-500"><Trans i18nKey={'hours'}/></p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

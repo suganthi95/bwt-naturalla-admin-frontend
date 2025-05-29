@@ -20,9 +20,11 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { AxiosError, AxiosResponse } from "axios";
 import useToggle from "@/hooks/useToggle";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
+import { Trans, useTranslation } from "react-i18next";
 
 function SignUp() {
   const location = useLocation();
+  const {t} = useTranslation()
   const user = localStorage.getItem("auth");
   const parsedUser = user ? JSON.parse(user) : null;
   const Mail = parsedUser?.data?.email;
@@ -52,18 +54,18 @@ function SignUp() {
       setAuth(res?.data);
 
       if (res?.data?.data?.onboarded === true) {
-        toast.success("Request Success", { description: "Signed In Successfully" });
+        toast.success(t('request_success'), { description:t('signed_in_successfully') });
         navigate("/dashboard", { replace: true });
         window.location.reload();
       }
 
       if (res?.data?.data?.onboarded === false) {
-        toast.success("Request Success", { description: "Signed In Successfully" });
+        toast.success(t('request_success'), { description:t('signed_in_successfully') });
         navigate("/onboard", { replace: true });
         window.location.reload();
       }
     },
-    onError: (error: AxiosError<any>) => toast.error("Request Failed", { description: error?.response?.data.message || error?.message })
+    onError: (error: AxiosError<any>) => toast.error(t('request_failed'), { description: error?.response?.data.message || error?.message })
   })
 
   const { mutate: verifyGoogleUserMutate } = useMutation({
@@ -75,12 +77,12 @@ function SignUp() {
         name: `${res?.data?.given_name} ${res?.data?.family_name}`,
       });
     },
-    onError: (error: AxiosError<any>) => toast.error("Request Failed", { description: error?.response?.data.message || error?.message })
+    onError: (error: AxiosError<any>) => toast.error(t('request_failed'), { description: error?.response?.data.message || error?.message })
   });
 
   const googleLogin = useGoogleLogin({
     onSuccess: (res) => verifyGoogleUserMutate(res),
-    onError: (error) => toast.error("Request Failed", { description: error.error_description }),
+    onError: (error) => toast.error(t('request_failed'), { description: error.error_description }),
   });
 
 
@@ -93,15 +95,15 @@ function SignUp() {
     mutationFn: signupUser,
     onSuccess: (data) => {
       setAuth(data.data);
-      toast.success("Request Success", {
-        description: "Signed Up Successfully",
+      toast.success(t('request_success'), {
+        description:t('signed_up_successfully'),
       });
       // navigate(`/welcome`, { replace: true });
       navigate(`/verify-email`, { replace: true });
     },
     onError: (error: AxiosError<any>) => {
       console.log(error);
-      toast.error("Request Failed", {
+      toast.error(t('request_failed'), {
         description: error?.response?.data?.message,
       });
     },
@@ -121,7 +123,7 @@ function SignUp() {
       watch("confirmPassword") !== ""
     ) {
       setError("confirmPassword", {
-        message: "Password does not match",
+        message: t('password_mismatch'),
         type: "required",
       });
     } else {
@@ -131,7 +133,7 @@ function SignUp() {
 
   useEffect(() => {
     if (window.innerWidth <= 1024) {
-      toast.success("Use landscape mode for better user experience", {
+      toast.success(t('use_landscape_mode'), {
         position: "top-center",
       });
     }
@@ -153,22 +155,22 @@ function SignUp() {
               Intelli<span className="text-secondary">Response</span>
             </p>
             <span className="text-slate-500 text-sm md:text-balance">
-              Turning Reviews Into Insights
+              <Trans i18nKey={'title'}/>
             </span>
           </div>
         </Link>
         <div className="py-0 px-2 md:px-20 lg:px-32">
           <h1 className="text-secondary text-lg md:text-xl font-bold text-center">
-            Sign Up
+           <Trans i18nKey={'signUp'}/>
           </h1>
           <p className="text-xs text-slate-500 text-center">
-            Create your review engagement account here.
+           <Trans i18nKey={'createAccount'}/>
           </p>
 
           <form onSubmit={submit}>
             <div className="flex flex-col items-start gap-1">
               <label className="font-medium text-xs" htmlFor="username">
-                Username <span className="text-red-500">*</span>
+                <Trans i18nKey={'username'}/> <span className="text-red-500">*</span>
               </label>
               <Input
                 className="dark:bg-white dark:border-slate-200 focus-"
@@ -177,7 +179,7 @@ function SignUp() {
                 {...register("username", {
                   required: {
                     value: true,
-                    message: "Username is required",
+                    message: t('username_required'),
                   },
                 })}
                 required
@@ -189,7 +191,7 @@ function SignUp() {
 
             <div className="flex flex-col items-start gap-1">
               <label className="font-medium text-xs" htmlFor="email">
-                Email <span className="text-red-500">*</span>
+                 <Trans i18nKey={'email'}/>  <span className="text-red-500">*</span>
               </label>
               <Input
                 className="dark:bg-white dark:border-slate-200  safari"
@@ -198,7 +200,7 @@ function SignUp() {
                 {...register("email", {
                   required: {
                     value: true,
-                    message: "Email is required",
+                    message: t('email_required'),
                   },
                   pattern: {
                     value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
@@ -214,7 +216,7 @@ function SignUp() {
 
             <div className="flex flex-col items-start gap-1 relative">
               <label className="font-medium text-xs" htmlFor="password">
-                Password <span className="text-red-500">*</span>
+                 <Trans i18nKey={'password'}/>  <span className="text-red-500">*</span>
               </label>
               <Input
                 className="dark:bg-white dark:border-slate-200 focus:bg-none"
@@ -223,11 +225,11 @@ function SignUp() {
                 {...register("password", {
                   required: {
                     value: true,
-                    message: "Password is required",
+                    message: t('password_required'),
                   },
                   minLength: {
                     value: 6,
-                    message: "Password must be atleast 6 characters",
+                    message: t('password_min_length'),
                   },
                 })}
                 required
@@ -250,7 +252,7 @@ function SignUp() {
 
             <div className="flex flex-col items-start gap-1 relative">
               <label className="font-medium text-xs" htmlFor="email">
-                Confirm Password <span className="text-red-500">*</span>
+                <Trans i18nKey={'confirmPassword'}/> <span className="text-red-500">*</span>
               </label>
               <Input
                 className="dark:bg-white dark:border-slate-200 focus:bg-none"
@@ -259,9 +261,9 @@ function SignUp() {
                 {...register("confirmPassword", {
                   validate: (value) => {
                     if (!value) {
-                      return "Confirm Password is required";
+                      return   t('confirm_password_required');
                     } else if (watch("password") !== value) {
-                      return "Passwords does not match";
+                      return   t('passwords_do_not_match');
                     }
                   },
                 })}
@@ -284,13 +286,13 @@ function SignUp() {
             </div>
 
             <p className="text-xs text-center">
-              By Continuing, you agree to our{" "}
+              <Trans i18nKey={'agreement.prefix'}/>
               <Link
                 className="text-blue-500 hover:underline"
                 to="https://intelliresponse.ai/en/terms-and-conditions"
                 target="_blank"
               >
-                Terms and Conditions
+                <Trans i18nKey={'agreement.terms'}/>
               </Link>
               ,{" "}
               <Link
@@ -298,15 +300,15 @@ function SignUp() {
                 to="https://intelliresponse.ai/en/privacy-policy"
                 target="_blank"
               >
-                Privacy Policy
+                <Trans i18nKey={'agreement.privacy'}/>
               </Link>{" "}
-              <br /> and{" "}
+              <br /> <Trans i18nKey={'agreement.and'}/>
               <Link
                 className="text-blue-500 hover:underline"
                 to="https://intelliresponse.ai/en/end-user-license-agreement"
                 target="_blank"
               >
-                End User License Agreement
+                <Trans i18nKey={'agreement.eula'}/>
               </Link>
             </p>
 
@@ -315,31 +317,33 @@ function SignUp() {
                 {isPending ? (
                   <LoaderCircle className="h-5 w-5 animate-spin" />
                 ) : (
-                  "Sign Up"
+                 <Trans i18nKey={'signUp'}/>
                 )}
               </Button>
             </div>
           </form>
 
-          <p className="text-slate-400 text-center">Or</p>
+          <p className="text-slate-400 text-center"><Trans i18nKey={'or'}/></p>
           <Button
             onClick={submitGoogleLogin}
             className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black"
             variant="outline"
           >
             <Icons.googleIcon />
-            Continue with Google
+            <Trans i18nKey={'continueWithGoogle'}/>
           </Button>
 
           <p className="mt-3 text-center text-xs">
-            Already have an account ?{" "}
+           <Trans i18nKey={'alreadyHaveAccount'}/>
             <Link to="/sign-in" className="font-bold hover:underline">
-              Sign In
+              <Trans i18nKey={'signIn'}/>
             </Link>
           </p>
 
           <p className="text-xs md:text-sm text-center w-full mx-auto mt-3 md:mt-10">
-                © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link> All Rights Reserved. Powered by <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
+                          <Trans i18nKey={'footer.copyright'}/>
+                 <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link>           <Trans i18nKey={'footer.allRightsReserved'}/>
+. <Trans i18nKey={'footer.poweredBy'}/> <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
             </p>
         </div>
       </div>

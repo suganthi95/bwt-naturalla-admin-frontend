@@ -17,11 +17,12 @@ import { Button } from "../ui/button";
 import dayjs from "dayjs";
 import { Badge } from "../ui/badge";
 import DownloadInvoice from "./DownloadInvoice";
+import { Trans } from "react-i18next";
 
 const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     {
       accessorKey: "payment_id",
-      header: "Payment ID",
+      header:()=> <Trans i18nKey='payment_id'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("payment_id")? row.getValue("payment_id"):'-') }</div>
       ),
@@ -29,7 +30,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     },
     {
       accessorKey: "plan_name",
-      header: "Plan Name",
+      header:()=> <Trans i18nKey='plan_name'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("plan_name")? row.getValue("plan_name"):'-') }</div>
       ),
@@ -39,7 +40,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
    
     {
       accessorKey: "payment_on",
-      header: "Payment On",
+      header:()=> <Trans i18nKey='payment_on'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("payment_on")? row.getValue("payment_on"):'-') }</div>
 
@@ -47,7 +48,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     },
     {
       accessorKey: "method",
-      header: "Payment Mode",
+      header:()=> <Trans i18nKey='payment_mode'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("method")? row.getValue("method"):'-') }</div>
 
@@ -55,14 +56,14 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     },
     {
       accessorKey: "payment_date",
-      header: "Date of Payment",
+      header:()=> <Trans i18nKey='date_of_payment'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(dayjs(row.getValue("payment_date")).format("DD-MM-YYYY"))?(dayjs(row.getValue("payment_date")).format("DD-MM-YYYY")):'-'}</div>
       ),
     },
     {
       accessorKey: "validity_from",
-      header: "Valid From",
+      header:()=> <Trans i18nKey='valid_from'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("validity_from")? row.getValue("validity_from"):'-') }</div>
 
@@ -70,7 +71,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     },
     {
       accessorKey: "validity_to",
-      header: "Valid Till",
+      header:()=> <Trans i18nKey='valid_till'/>,
       cell: ({ row }) => (
         <div className="capitalize">{(row.getValue("validity_to")? row.getValue("validity_to"):'-') }</div>
 
@@ -78,14 +79,14 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     },
     {
       accessorKey: "amount_paid",
-      header: "Amount Paid",
+      header:()=> <Trans i18nKey='amount_paid'/>,
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("currency_symbol")} {row.getValue("amount_paid") as number}</div>
       ),
     },
     {
       accessorKey: "payment_status",
-      header: "Payment Status",
+      header:()=> <Trans i18nKey='payment_status'/>,
       cell: ({ row }) => {
         return  <div className="flex items-center justify-center">
           {row.getValue("payment_status") === "paid" ?
@@ -97,7 +98,7 @@ const columns: ColumnDef<PaymentHistoryResponseType>[] = [
     },
     {
       accessorKey: "payment_id",
-      header: "Download Invoice",
+      header:()=> <Trans i18nKey='download_invoice'/>,
       cell: ({ row }) => (
         <DownloadInvoice paymentId={row.getValue("payment_id")} paymentOn={row.getValue("payment_on")}/>
       ),
@@ -198,7 +199,7 @@ function PaymentTable({ data }: { data: PaymentHistoryResponseType[] }) {
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
             >
-                Previous
+               <Trans i18nKey={'previous'}/>
             </Button>
             <Button
                 variant="outline"
@@ -206,7 +207,7 @@ function PaymentTable({ data }: { data: PaymentHistoryResponseType[] }) {
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
             >
-                Next
+               <Trans i18nKey={'next'}/>
             </Button>
         </div>
         </div>

@@ -20,9 +20,11 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
+import { Trans, useTranslation } from "react-i18next";
 
 function Reviews() {
   const location = useLocation();
+  const {t} = useTranslation()
   const user = localStorage.getItem("auth");
   const parsedUser = user ? JSON.parse(user) : null;
   const Mail = parsedUser?.data?.email;
@@ -115,8 +117,8 @@ function Reviews() {
   if (!activeBusiness) {
     return (
       <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-        <h1 className="text-xl font-semibold">No Business added</h1>
-        <p className="text-slate-300">Search or Add your business account</p>
+        <h1 className="text-xl font-semibold"><Trans i18nKey={'no_business_added'}/></h1>
+        <p className="text-slate-300"><Trans i18nKey={'search_or_add_business'}/></p>
       </div>
     );
   }
@@ -128,10 +130,10 @@ function Reviews() {
       <div className="flex flex-col items-center justify-center  gap-2 ">
         <Loader />
         <h1 className="font-semibold text-secondary text-xl">
-          Loading more reviews
+          <Trans i18nKey={'loading_more_reviews'}/>
         </h1>
         <p className="text-sm text-slate-400">
-          We're fetching more reviews for you
+          <Trans i18nKey={'fetching_reviews'}/>
         </p>
       </div>
     );
@@ -210,20 +212,20 @@ function Reviews() {
   return (
     <div className="p-2 pb-20 flex flex-col flex-1 overflow-hidden">
       <div className="flex flex-row items-center justify-between py-1">
-        <h1 className="font-semibold">Reviews</h1>
+        <h1 className="font-semibold"><Trans i18nKey={'reviews'}/></h1>
 
         <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
           <SelectTrigger className="w-[100px] h-8">
-            <SelectValue placeholder="Sort by " className="">
+            <SelectValue placeholder={t('sortBy')} className="">
               {sortKey ? sortLabels[sortKey] : "Sort"}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="5">Excellent</SelectItem>
-            <SelectItem value="4">Good</SelectItem>
-            <SelectItem value="3">Average</SelectItem>
-            <SelectItem value="2"> Below Average</SelectItem>
-            <SelectItem value="1"> Poor</SelectItem>
+            <SelectItem value="5"><Trans i18nKey={'excellent'}/></SelectItem>
+            <SelectItem value="4"><Trans i18nKey={'good'}/></SelectItem>
+            <SelectItem value="3"><Trans i18nKey={'average'}/></SelectItem>
+            <SelectItem value="2"> <Trans i18nKey={'below_average'}/></SelectItem>
+            <SelectItem value="1"> <Trans i18nKey={'poor'}/></SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -237,7 +239,7 @@ function Reviews() {
             className="px-4 py-2 rounded-md bg-[#0f344e] text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-dark transition-colors duration-200"
             aria-label="Previous page"
           >
-            Previous
+           <Trans i18nKey={'previous'}/>
           </button>
 
           {getPaginationPages(currentPage, totalPages).map((page) => {
@@ -275,7 +277,7 @@ function Reviews() {
             className="px-4 py-2 rounded-md bg-[#0f344e] text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-dark transition-colors duration-200"
             aria-label="Next page"
           >
-            Next
+           <Trans i18nKey={'next'}/>
           </button>
         </div>
       )}

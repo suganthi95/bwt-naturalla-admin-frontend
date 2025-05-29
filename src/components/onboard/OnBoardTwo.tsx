@@ -2,6 +2,7 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { Button } from '../ui/button'
 import { useFormContext, Controller } from 'react-hook-form'
 import { OnBoardType } from '@/types';
+import { Trans, useTranslation } from 'react-i18next';
 
 interface Props {
     setPage: React.Dispatch<React.SetStateAction<number>>
@@ -10,20 +11,20 @@ interface Props {
 function OnBoardTwo({ setPage }: Props) {
 
     const { register, watch, control, setError, formState: { errors } } = useFormContext<OnBoardType>();
-
+const {t} = useTranslation()
     const proceedToNext = () => {
         if(!watch("role")){
-            setError('role', { type: 'required', message: 'Select one option' });
+            setError('role', { type: 'required', message: t('selectOneOption') });
         }else{
             setPage(prev => prev + 1)
         }
     }
 
-    const roles = [ "owner", "freelancer", "marketing agency", "team lead", "team member", "others" ]
+    const roles = [ t('owner'), t('freelancer'), t('marketing_agency'), t('team_lead'), t('team_member'), t('others') ]
 
   return (
     <div className="mt-10">
-        <h1 className="text-2xl lg:text-4xl font-medium">What is your role ?</h1>
+        <h1 className="text-2xl lg:text-4xl font-medium"><Trans i18nKey={'role_question'}/></h1>
 
         <Controller
             name='role'
@@ -50,7 +51,7 @@ function OnBoardTwo({ setPage }: Props) {
          <p className="text-xs mt-1 font-medium text-red-500">{errors?.role?.message}</p>
 
         <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
-            Continue
+          <Trans i18nKey={'continue'}/>
         </Button>
     </div>
   )

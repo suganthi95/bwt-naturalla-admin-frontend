@@ -10,10 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from '../ui/input';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
+import { Trans, useTranslation } from 'react-i18next';
 
 function DeleteAccount() {
 
     const { auth, setAuth } = useAppContext();
+    const {t} = useTranslation()
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues: {
@@ -32,7 +34,7 @@ function DeleteAccount() {
             navigate("/", { replace: true })
         },
         onError: (error: AxiosError<any>) => {
-            toast.error("Request Failed", { description: error?.response?.data?.message});
+            toast.error(t('request_failed'), { description: error?.response?.data?.message});
             reset();
         }
     });
@@ -47,7 +49,7 @@ function DeleteAccount() {
     <div className="flex flex-row items-center justify-between rounded-lg border border-slate-200 dark:border-slate-800 p-4 mt-3">
         <div className="space-y-0.5">
             <p className="font-medium">
-                Delete My Account
+               <Trans i18nKey={'delete_my_account'}/>
             </p>
             {/* <p className="text-sm text-slate-400">
                 Use the toggles to turn notifications on or off as you prefer.
@@ -56,20 +58,19 @@ function DeleteAccount() {
         <div>
             <AlertDialog>
                 <AlertDialogTrigger>
-                    <Button className="bg-red-500 hover:bg-red-500/80">Delete Account</Button>
+                    <Button className="bg-red-500 hover:bg-red-500/80">               <Trans i18nKey={'delete_account'}/></Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogTitle><Trans i18nKey={'are_you_absolutely_sure'}/></AlertDialogTitle>
                     <AlertDialogDescription>
                         <div>
-                            This action cannot be undone. This will permanently delete your account
-                            and remove your data from our servers.
+                           <Trans i18nKey={'action_cannot_be_undone'}/>
                         </div>
 
                         <form>
                             <div className='py-3 space-y-1'>
-                                <label htmlFor="confirm-email" className='font-bold'>Please confirm your Email <span className='text-red-500'>*</span></label>
+                                <label htmlFor="confirm-email" className='font-bold'><Trans i18nKey={'please_confirm_your_email'}/> <span className='text-red-500'>*</span></label>
                                 <Input
                                     className='mt-1'
                                     type='email'
@@ -77,11 +78,11 @@ function DeleteAccount() {
                                     {...register("email", {
                                         required: {
                                             value: true,
-                                            message: "Please confirm your email"
+                                            message:t('please_confirm_your_email')
                                         },
                                         pattern: {
                                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                            message: "invalid email address"
+                                            message: t('invalid_email_address'),
                                         }
                                     })}
                                 />
@@ -89,10 +90,10 @@ function DeleteAccount() {
                             </div>
                             <div className='flex items-center justify-end gap-3'>
                                 <AlertDialogCancel asChild>
-                                    <Button variant="secondary" onClick={() => reset()}>Cancel</Button>
+                                    <Button variant="secondary" onClick={() => reset()}><Trans i18nKey={'cancel'}/></Button>
                                 </AlertDialogCancel>
                                 <AlertDialogAction type='submit' asChild>
-                                    <Button onClick={deleteAccountMutate}>Continue</Button>
+                                    <Button onClick={deleteAccountMutate}><Trans i18nKey={'continue'}/></Button>
                                 </AlertDialogAction>
                             </div>
                         </form>

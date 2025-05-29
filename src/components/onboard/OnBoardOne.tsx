@@ -3,6 +3,7 @@ import { Button } from '../ui/button'
 import { useFormContext, Controller } from 'react-hook-form'
 import { OnBoardType } from '@/types';
 import { trackEvent } from '@/lib/google_analytics';
+import { Trans } from 'react-i18next';
 
 interface Props {
     setPage: React.Dispatch<React.SetStateAction<number>>
@@ -39,14 +40,14 @@ function OnBoardOne({ setPage }: Props) {
                         <label 
                             className={watch("business") === "own business" ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
                             htmlFor="own business"
-                        >Own Business</label>
+                        ><Trans i18nKey={'own_business'}/></label>
                     </div>
                     <div className="flex items-center">
                         <RadioGroupItem className="hidden" type="button" value="client business" id="client business" />
                         <label 
                             className={watch("business") === "client business" ? "border border-secondary py-2 px-4 rounded-lg cursor-pointer bg-secondary text-white" : "border border-secondary py-2 px-4 rounded-lg cursor-pointer" }
                             htmlFor="client business"
-                        >Client Business</label>
+                        ><Trans i18nKey={'client_business'}/></label>
                     </div>
                 </RadioGroup>
             )}  
@@ -54,7 +55,7 @@ function OnBoardOne({ setPage }: Props) {
         <p className="text-xs mt-1 font-medium text-red-500">{errors?.business?.message}</p>
 
         <Button onClick={proceedToNext} className="mt-10 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
-            Continue
+           <Trans i18nKey={'continue'}/>
         </Button>
     </div>
   )

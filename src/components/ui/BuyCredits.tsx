@@ -11,6 +11,7 @@ import { buyCredits, getCreditsList, PAYMENT_KEY, verifyCreditCheckout } from "@
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import useRazorpay, { RazorpayOptions } from "react-razorpay";
+import { Trans } from "react-i18next";
 
 
 function BuyCredits() {
@@ -118,7 +119,7 @@ function BuyCredits() {
         <PopoverTrigger asChild>
             <button className="flex w-40 md:w-auto text-xs p-2  md:text-base items-center gap-2 bg-gradient-to-r from-primary/50 to-primary text-white py-1 md:px-2 rounded-lg">
                 <Zap className="h-5 w-5 fill-white stroke-none" />
-                <span className="text-xs"> Buy Instant Credits</span>
+                <span className="text-xs"><Trans i18nKey={'free_credits_remaining'}/></span>
             </button>
         </PopoverTrigger>
         <PopoverContent className="w-[400px]">
@@ -128,12 +129,12 @@ function BuyCredits() {
                 </div>
 
                 <div>
-                    <h1 className="text-md font-bold">Remaining Instant Credits</h1>
-                    <p className="text-sm text-slate-400">Used to find best response for your customer's reviews</p>
+                    <h1 className="text-md font-bold"><Trans i18nKey={'instant_credits_remaining'}/></h1>
+                    <p className="text-sm text-slate-400"><Trans i18nKey={'used_to_find_best_response'}/></p>
                 </div>
 
                 <div>
-                    <Button onClick={handleModal} variant="secondary">Refill Now</Button>
+                    <Button onClick={handleModal} variant="secondary"><Trans/></Button>
                 </div>
             </div>
         </PopoverContent>

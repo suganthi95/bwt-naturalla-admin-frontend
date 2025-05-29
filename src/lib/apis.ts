@@ -23,7 +23,18 @@ export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB"
 
 
 
+export const languageSwitch = async(token:string,lang:string)=>{
+    return await axios({
+        method:'get',
+        url:`${BASE_URL_V2}/auth/set-language/${lang}`,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": token
+        },
 
+    })
+
+}
 
 export const getReviews = async ({ placeId, page, sort, token, signal }: { placeId: string, page: number, sort: string, token: string, signal: GenericAbortSignal }) => {
 

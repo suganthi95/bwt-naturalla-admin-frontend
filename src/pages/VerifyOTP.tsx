@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "sonner";
 
@@ -85,20 +86,20 @@ function VerifyOTP() {
     <div className="h-screen flex bg-white text-slate-950 pt-2 pr-2">
         <div className="flex flex-1 flex-col justify-center p-2 lg:p-10">  
             <div>
-                <Button onClick={goBackClick} size="sm" variant="secondary">Go back</Button>
+                <Button onClick={goBackClick} size="sm" variant="secondary"><Trans i18nKey={'go_back'}/></Button>
             </div>
             <div className="flex flex-row gap-3">
                 <img src={ASSETS.LOGO} alt="logo" />
                 <div>
                     <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                     <span className="text-slate-500">
-                        Turning Reviews Into Insights
+                        <Trans i18nKey={'title'}/>
                     </span>
                 </div>
             </div>
 
             <div className="text-slate-700 mt-5 space-y-3">
-                <p>Enter the <span className="font-bold">OTP</span> which we sent to your email id <br /></p>
+                <p><Trans i18nKey={'enter_the'}/> <span className="font-bold"><Trans i18nKey={'otp'}/></span> <Trans i18nKey={'sent_to_email'}/> <br /></p>
 
                 <div className="pt-3">
                     <InputOTP type="number" maxLength={6} value={otp} onChange={(val) => setOtp(val)}>

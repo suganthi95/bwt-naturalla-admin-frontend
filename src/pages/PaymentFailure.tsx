@@ -6,15 +6,17 @@ import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function PaymentFailure() {
     const location = useLocation();
     const { auth } = useAppContext();
+    const {t} = useTranslation()
     useEffect(() => {
       initializeGA();
-      trackpPageView(location.pathname,auth?.data.email ?? '');
+      trackpPageView(location.pathname,auth?.data?.email ?? '');
     }, []);
     const navigate = useNavigate();
     const { isError, error } = useQuery({
@@ -26,7 +28,7 @@ function PaymentFailure() {
     });
 
     if(isError){
-        toast.error("Request Failed", { description: error?.message });
+        toast.error(t('request_failed'), { description: error?.message });
         navigate("/dashboard");
     }
 

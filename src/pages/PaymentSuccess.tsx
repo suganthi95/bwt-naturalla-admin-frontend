@@ -14,7 +14,7 @@ function PaymentSuccess() {
     const { auth } = useAppContext();
     useEffect(() => {
       initializeGA();
-      trackpPageView(location.pathname,auth?.data.email ?? '');
+      trackpPageView(location.pathname,auth?.data?.email ?? '');
     }, []);
     const navigate = useNavigate();
     const { isError, error } = useQuery({

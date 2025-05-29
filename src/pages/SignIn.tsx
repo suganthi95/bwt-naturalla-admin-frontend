@@ -11,11 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAppContext } from "@/contexts/AuthContext";
 import useToggle from "@/hooks/useToggle";
-import {
-  signinUser,
-  signInUserByGoogle,
-  verifyGoogleUser,
-} from "@/lib/apis";
+import { signinUser, signInUserByGoogle, verifyGoogleUser } from "@/lib/apis";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { AuthType } from "@/types";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -24,6 +20,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { Trans, useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -32,16 +29,17 @@ function SignIn() {
   const user = localStorage.getItem("auth");
   const parsedUser = user ? JSON.parse(user) : null;
   const Mail = parsedUser?.data?.email;
-   useEffect(() => {
-     initializeGA();
-     trackpPageView(location.pathname,Mail);
-   }, []);
+  useEffect(() => {
+    initializeGA();
+    trackpPageView(location.pathname, Mail);
+  }, []);
   const { register, handleSubmit } = useForm<{
     email: string;
     password: string;
   }>();
 
   const { setAuth } = useAppContext();
+  const {t} = useTranslation()
   const navigate = useNavigate();
   const [isPasswordVisible, togglePasswordVisibility] = useToggle();
 
@@ -51,23 +49,29 @@ function SignIn() {
     mutationKey: ["signInUserByGoogle"],
     mutationFn: signInUserByGoogle,
     onSuccess: (res: AxiosResponse<AuthType>) => {
-
       setAuth(res?.data);
 
       if (res?.data?.data?.onboarded === true) {
-        toast.success("Request Success", { description: "Signed In Successfully" });
+        toast.success(t('request_success'), {
+          description: t('signed_in_successfully'),
+        });
         navigate("/dashboard", { replace: true });
         window.location.reload();
       }
 
       if (res?.data?.data?.onboarded === false) {
-        toast.success("Request Success", { description: "Signed In Successfully" });
+        toast.success(t('request_success'), {
+          description: t('signed_in_successfully'),
+        });
         navigate("/onboard", { replace: true });
         window.location.reload();
       }
     },
-    onError: (error: AxiosError<any>) => toast.error("Request Failed", { description: error?.response?.data.message || error?.message })
-  })
+    onError: (error: AxiosError<any>) =>
+      toast.error(t('request_failed'), {
+        description: error?.response?.data.message || error?.message,
+      }),
+  });
 
   const { mutate: verifyGoogleUserMutate } = useMutation({
     mutationKey: ["verifyGoogleUser"],
@@ -78,17 +82,19 @@ function SignIn() {
         name: `${res?.data?.given_name} ${res?.data?.family_name}`,
       });
     },
-    onError: (error: AxiosError<any>) => toast.error("Request Failed", { description: error?.response?.data.message || error?.message })
+    onError: (error: AxiosError<any>) =>
+      toast.error(t('request_failed'), {
+        description: error?.response?.data.message || error?.message,
+      }),
   });
 
   const googleLogin = useGoogleLogin({
     onSuccess: (res) => verifyGoogleUserMutate(res),
-    onError: (error) => toast.error("Request Failed", { description: error.error_description }),
+    onError: (error) =>
+            toast.error(t('request_failed'), { description: error.error_description }),
   });
 
-
   const submitGoogleLogin = () => googleLogin();
-
 
   /*************************************** Normal Sign in ***********************************************/
 
@@ -97,15 +103,15 @@ function SignIn() {
     mutationFn: signinUser,
     onSuccess: (data) => {
       setAuth(data.data);
-      toast.success("Request Success", {
-        description: "Signed In Successfully",
+      toast.success(t('request_success'), {
+        description:t('signed_in_successfully'),
       });
       navigate(`/`, { replace: true });
       window.location.reload();
     },
     onError: (error: AxiosError<any>) => {
       console.log(error);
-      toast.error("Request Failed", {
+      toast.error(t('request_failed'), {
         description: error?.response?.data?.message,
       });
     },
@@ -115,7 +121,7 @@ function SignIn() {
 
   useEffect(() => {
     if (window.innerWidth <= 1024) {
-      toast.success("Use landscape mode for better user experience", {
+      toast.success(t('use_landscape_mode'), {
         position: "top-center",
       });
     }
@@ -138,18 +144,21 @@ function SignIn() {
                   Intelli<span className="text-secondary">Response</span>
                 </p>
                 <span className="text-slate-500 text-sm">
-                  Turning Reviews Into Insights
+                  <Trans i18nKey={"title"} />
                 </span>
               </div>
             </Link>
           </CardHeader>
           <CardContent className="text-center">
-            <h1 className="text-secondary text-xl font-bold">Sign In</h1>
+            <h1 className="text-secondary text-xl font-bold">
+              <Trans i18nKey={"signIn"} />
+            </h1>
 
             <form onSubmit={submit} className="space-y-3">
               <div className="flex flex-col items-start gap-1">
                 <label className="font-medium" htmlFor="email">
-                  Email <span className="text-red-500">*</span>
+                  <Trans i18nKey={"email"} />{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <Input
                   className="dark:bg-white dark:border-slate-200"
@@ -161,9 +170,25 @@ function SignIn() {
               </div>
 
               <div className="flex flex-col items-start gap-1 relative">
-                <label className="font-medium" htmlFor="password">
-                  Password <span className="text-red-500">*</span>
+                <label
+                  className="font-medium flex items-center justify-between w-full"
+                  htmlFor="password"
+                >
+                  <p>
+                    {" "}
+                    <Trans i18nKey={"password"} />{" "}
+                    <span className="text-red-500">*</span>
+                  </p>
+                  <span
+                    onClick={() => {
+                      navigate("/forgot-password");
+                    }}
+                    className="text-sm float-right cursor-pointer text-[#007AFF]"
+                  >
+                    <Trans i18nKey={"forgot_password"} />{" "}
+                  </span>
                 </label>
+
                 <Input
                   className="dark:bg-white dark:border-slate-200"
                   id="password"
@@ -171,26 +196,26 @@ function SignIn() {
                   required
                   {...register("password")}
                 />
-                  {isPasswordVisible ? (
-                    <Eye
-                      onClick={() => togglePasswordVisibility()}
-                      className="text-slate-300 absolute cursor-pointer right-3 top-9"
-                    />
-                  ) : (
-                    <EyeOff
-                      onClick={() => togglePasswordVisibility()}
-                      className="text-slate-300 absolute cursor-pointer right-3 top-9"
-                    />
-                  )}
+                {isPasswordVisible ? (
+                  <Eye
+                    onClick={() => togglePasswordVisibility()}
+                    className="text-slate-300 absolute cursor-pointer right-3 top-9"
+                  />
+                ) : (
+                  <EyeOff
+                    onClick={() => togglePasswordVisibility()}
+                    className="text-slate-300 absolute cursor-pointer right-3 top-9"
+                  />
+                )}
               </div>
               <p className="text-xs text-center">
-                By Continuing, you agree to our{" "}
+                <Trans i18nKey={"agreement.prefix"} />
                 <Link
                   className="text-blue-500 hover:underline"
                   to="https://intelliresponse.ai/en/terms-and-conditions"
                   target="_blank"
                 >
-                  Terms and Conditions
+                  <Trans i18nKey={"agreement.terms"} />
                 </Link>
                 ,{" "}
                 <Link
@@ -198,15 +223,15 @@ function SignIn() {
                   to="https://intelliresponse.ai/en/privacy-policy"
                   target="_blank"
                 >
-                  Privacy Policy
+                  <Trans i18nKey={"agreement.privacy"} />
                 </Link>{" "}
-                <br /> and{" "}
+                <br /> <Trans i18nKey={"agreement.and"} />{" "}
                 <Link
                   className="text-blue-500 hover:underline"
                   to="https://intelliresponse.ai/en/end-user-license-agreement"
                   target="_blank"
                 >
-                  End User License Agreement
+                  <Trans i18nKey={"agreement.eula"} />
                 </Link>
               </p>
               <div>
@@ -222,7 +247,7 @@ function SignIn() {
           </CardContent>
           <CardFooter className="flex flex-col gap-5">
             <p className="text-slate-400 text-xs">
-              Or use your Google account credentials to log in securely.
+              <Trans i18nKey={"useGoogle"} />
             </p>
             <Button
               onClick={submitGoogleLogin}
@@ -230,22 +255,39 @@ function SignIn() {
               variant="outline"
             >
               <Icons.googleIcon />
-              Sign in with Google
+              <Trans i18nKey={"signInWithGoogle"} />
             </Button>
 
             <p className="md:mt-3">
-              Don't have an account ?{" "}
+              <Trans i18nKey={"noAccount"} />
               <Link to="/sign-up" className="font-bold hover:underline">
-                Sign Up
+                <Trans i18nKey={"signUp"} />
               </Link>
             </p>
           </CardFooter>
         </Card>
 
         <h1 className="text-sm absolute bottom-0 hidden md:block">
-            © 2024 Copyrights by <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link> All Rights Reserved. Powered by <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
+          <Trans i18nKey={"footer.copyright"} />
+          <Link
+            className="font-bold hover:underline"
+            to="https://intelliresponse.ai/"
+            target="_blank"
+          >
+            IntelliResponse
+          </Link>{" "}
+          <Trans i18nKey={"footer.allRightsReserved"} />{" "}
+          <Trans i18nKey={"footer.poweredBy"} />{" "}
+          <Link
+            className="font-bold hover:underline"
+            to="https://embrais.com/"
+            target="_blank"
+          >
+            Embrace AI Solutions
+          </Link>
+          .
         </h1>
-        </div>
+      </div>
     </div>
   );
 }

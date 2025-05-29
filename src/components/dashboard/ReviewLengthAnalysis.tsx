@@ -7,6 +7,7 @@ import { reviewLenAnalysis } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
+import { Trans } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -39,7 +40,7 @@ function ReviewLengthAnalysis({ placeId }: Props) {
         content = (
             <Card>
                 <CardContent className="h-[350px] flex items-center justify-center">
-                    <p className="text-center text-sm text-slate-500">No data found</p>
+                  <p className="text-center text-sm text-slate-500"><Trans i18nKey={'no_data_found'}/></p>
                 </CardContent>
             </Card>
         )
@@ -62,33 +63,33 @@ function ReviewLengthAnalysis({ placeId }: Props) {
             <Card className="relative">
                 <CardHeader>
                     <div className="flex items-center  justify-between">
-                        <CardTitle className="text-lg md:text-balance">Review Length Analysis</CardTitle>
+                        <CardTitle className="text-lg md:text-balance"><Trans i18nKey={'review_length_analysis'}/></CardTitle>
                         <Popover >
                             <PopoverTrigger>
                             <Info className="h-4 w-4 text-primary " />
                             </PopoverTrigger>
                             <PopoverContent className="md:w-[400px] absolute   -translate-x-7 md:-translate-x-20 "> 
                                  <div className="bg-white rounded-lg dark:bg-slate-700   text-justify">
-                                      <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">Review Length Analysis</h3>
+                                      <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white"><Trans i18nKey={'review_length_analysis'}/></h3>
                                       <div className="space-y-2">
                                           <div>
-                                              <strong className="text-sm">Purpose:</strong>
-                                               <p className="text-xs text-gray-500 dark:text-slate-300">This chart shows the distribution of review lengths, giving you insight into how detailed your customers are when leaving feedback.</p>
+                                              <strong className="text-sm"><Trans i18nKey={'purpose'}/></strong>
+                                               <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'purpose_description'}/></p>
                                            </div>
                                             <div>
-                                                <strong className="text-sm">What it shows:</strong>
-                                                <p className="text-xs text-gray-500 dark:text-slate-300">The x-axis shows the review length, while the y-axis indicates the frequency of each review length.</p>
+                                                <strong className="text-sm"><Trans i18nKey={'what_it_shows'}/></strong>
+                                                <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'what_it_shows_description'}/></p>
                                             </div>
                                              <div>
-                                                 <strong  className="text-sm">How to read it:</strong>
-                                                  <p className="text-xs text-gray-500 dark:text-slate-300">The x-axis represents the length of the reviews, and the y-axis shows how frequently each review length occurs. If most reviews are short, it might suggest customers are leaving quick feedback, while longer reviews may indicate deeper engagement or issues.</p>
+                                                 <strong  className="text-sm"><Trans i18nKey={'how_to_read_it'}/></strong>
+                                                  <p className="text-xs text-gray-500 dark:text-slate-300"><Trans i18nKey={'how_to_read_it_description'}/></p>
                                             </div>
                                                 </div>
                                  </div>
                             </PopoverContent>
                         </Popover>
                     </div>
-                    <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong>What it shows:</strong> The x-axis shows the review length, while the y-axis indicates the frequency of each review length.</p>
+                    <p className="  hidden md:block  text-xs !mt-5 text-slate-500"><strong><Trans i18nKey={'what_it_shows'}/></strong><Trans i18nKey={'what_it_shows_description'}/></p>
                 </CardHeader>
                 <CardContent className="p-0 lg:p-3">
                 <ChartContainer config={chartConfig}>
@@ -131,7 +132,7 @@ function ReviewLengthAnalysis({ placeId }: Props) {
                         />
                     </BarChart>
                 </ChartContainer>
-                <p className="text-center text-sm text-slate-500">Review length range</p>
+                <p className="text-center text-sm text-slate-500"><Trans i18nKey={'review_length_range'}/></p>
                 </CardContent>
                 {/* <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">

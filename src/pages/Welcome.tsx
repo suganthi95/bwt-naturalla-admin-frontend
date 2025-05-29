@@ -6,6 +6,7 @@ import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { Trans } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -48,7 +49,7 @@ function Welcome() {
             <div>
                 <p className="font-bold text-3xl text-primary">Intelli<span className="text-secondary">Response</span></p>
                 <span className="text-slate-500">
-                    Turning Reviews Into Insights
+                    <Trans i18nKey={'title'}/>
                 </span>
             </div>
         </div>
@@ -63,8 +64,8 @@ function Welcome() {
             </div>
 
             <div className="text-center mt-5">
-                <h1 className="font-medium text-xl">Welcome to IntelliResponse!</h1>
-                <p className="text-slate-400 text-sm">We’re excited to have you on board. Let’s get started with a few quick <br />questions to set up your account and personalize your experience.</p>
+                <h1 className="font-medium text-xl"><Trans i18nKey={'welcome'}/> IntelliResponse!</h1>
+                <p className="text-slate-400 text-sm"><Trans i18nKey={'welcome_intro'}/> <br /><Trans i18nKey={'setup_intro'}/></p>
             </div>
         </div>
     </div>

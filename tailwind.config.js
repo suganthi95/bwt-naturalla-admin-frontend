@@ -28,6 +28,8 @@ export default {
         "secondary": "#0F344E",
         "sandal": "#F7EFE8",
         "error": "#FF0000",
+        "title":"#262222",
+        "lead":"#4B515C",
 
       },
       fontFamily: {

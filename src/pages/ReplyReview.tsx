@@ -11,6 +11,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function ReplyReview() {
@@ -84,14 +85,14 @@ function ReplyReview() {
         <div className="flex flex-row items-center justify-between">
             <div className="flex flex-row items-center gap-2">
               <Button onClick={() => navigate(-1)} title="Go Back" className="h-6 w-6" variant="secondary" size="icon"><ChevronLeft className="h-4 w-4" /></Button>
-              <h1 className="font-semibold">Suggestions</h1>
+              <h1 className="font-semibold"><Trans i18nKey={'suggestions'}/></h1>
             </div>
             {[ undefined, null, 0 ].includes(query.data.data.remaining_credits) ?
               <Popover>
                 <PopoverTrigger>
-                  <Button className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
+                  <Button className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? <Trans i18nKey={'regenerate'}/> : <Trans i18nKey={'generate'}/>}</Button>
                 </PopoverTrigger>
-                <PopoverContent className="text-sm bg-red-400 text-white">You have run out of credits. Please purchase additional credits to continue generating responses.</PopoverContent>
+                <PopoverContent className="text-sm bg-red-400 text-white"><Trans i18nKey={'out_of_credits'}/></PopoverContent>
               </Popover> :
               <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
             }
