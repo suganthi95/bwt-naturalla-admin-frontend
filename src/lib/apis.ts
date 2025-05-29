@@ -18,6 +18,7 @@ const BASE_URL_V2 = "https://backend-auth-staging-91592131102.asia-south1.run.ap
 const BUSINESS_BASE_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1";
 const PAYMENT_BASE_URL = "https://backend-payment-staging-91592131102.asia-south1.run.app/api/v1";
 const DASHBOARD_URL = "https://backend-reviews-staging-91592131102.asia-south1.run.app/api/v1/workspace";
+const ADVANCEDASHBOARD_URL = "https://topic-modeling-fn97.onrender.com"
 // test
 export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB" 
 
@@ -251,7 +252,7 @@ export const getDashboard = async ({ placeId, sessionToken, token }: { placeId: 
 export const getAdvanceDashboard = async(place_id:string,token:string,email:string)=>{
 return await axios({
     method:'get',
-    url:`https://topic-modeling-aeec.onrender.com/insights/${place_id}`,
+    url:`${ADVANCEDASHBOARD_URL}/insights/${place_id}`,
     headers:{
         Accept: 'application/json',
             "Authorization": token,
