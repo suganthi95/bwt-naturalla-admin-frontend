@@ -18,7 +18,7 @@ import { Loader2 } from "lucide-react";
 import { Trans } from "react-i18next";
 
 function AppLanguage() {
-  const { auth } = useAppContext();
+  const { auth,setAuth } = useAppContext();
   const [language, setLanguage] = useState("en");
   const { mutate, isPending } = useMutation({
     mutationKey: ["switchlanguage"],
@@ -39,7 +39,11 @@ function AppLanguage() {
       {
         onSuccess(data) {
           toast.success(data?.data?.message);
-
+          setAuth({
+            data:data?.data?.data,
+            token:data?.data?.token,
+            message:data?.data?.message
+          })
           window.location.reload();
           localStorage.setItem("lang", data?.data?.language);
 

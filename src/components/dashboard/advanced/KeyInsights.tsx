@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Trans } from "react-i18next";
 
 // const positiveInsights = [
 //   "Efficient",
@@ -24,7 +25,7 @@ export default function KeyInsights({negativeInsights,positiveInsights}:Props) {
   return (
     <div className="flex flex-col gap-6 w-full p-4 border rounded-lg">
       <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white">
-        Key Insights
+        <Trans i18nKey={'key_insights_section'}/>
       </h2>
 
       {/* Positive Section */}

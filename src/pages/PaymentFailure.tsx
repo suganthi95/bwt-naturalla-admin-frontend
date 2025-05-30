@@ -6,7 +6,7 @@ import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -54,8 +54,8 @@ function PaymentFailure() {
             </div>
 
             <div className="text-center">
-                <h1 className="font-medium text-xl text-red-500">Payment Unsuccessful!</h1>
-                <p className="text-slate-400 text-sm">Unfortunately, your payment was unsuccessful. Please try again to <br /> ensure uninterrupted access to your <span className="font-medium">IntelliResponse</span> experience.</p>
+                <h1 className="font-medium text-xl text-red-500"><Trans i18nKey={'unsuccessful_title'}/></h1>
+                <p className="text-slate-400 text-sm"><Trans i18nKey={'unsuccessful_try_again'}/> <br />  <Trans i18nKey={'uninterrupted_access'}/> <span className="font-medium">IntelliResponse</span> <Trans i18nKey={'experience'}/>.</p>
             </div>
         </div>
     </div>

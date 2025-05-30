@@ -50,8 +50,8 @@ export type ReviewSuggestionType = {
 }
 
 export interface AuthType {
-    data ?: User
-    message ?: "Success",
+    data: User
+    message: "Success",
     token : string
 }
 
