@@ -1,3 +1,4 @@
+import { Trans } from "react-i18next";
 import {
   ResponsiveContainer,
   BarChart,
@@ -38,7 +39,7 @@ export default function OverviewChartCard({ monthly }: SentimentStats) {
   return (
     <div className="w-full p-2 md:p-4 border rounded-md flex flex-col">
       <h2 className="text-[#242424] font-bold mb-4 dark:text-white text-base sm:text-lg">
-           Overview Cards
+        <Trans i18nKey={'sentiment_over_years'}/>
       </h2>
 
       <div className="w-full h-[250px] sm:h-[300px]">

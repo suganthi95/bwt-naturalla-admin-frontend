@@ -32,6 +32,9 @@ import axios from "axios";
 import ForgotPassword from "./pages/ForgotPassword";
 import "i18next";
 import i18n from "./lib/i18next/i18n";
+import ResetPasswordEmail from "./pages/ResetPasswordEmail";
+import PasswordRest from "./pages/PasswordRest";
+import ResetPasswordSuccess from "./pages/ResetPasswordSuccess";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -142,6 +145,9 @@ function App() {
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/email-sent" element={<ResetPasswordEmail />} />
+      <Route path="/reset-password" element={<PasswordRest />} />
+       <Route path="/reset-password-success" element={<ResetPasswordSuccess />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/verify-email" element={<VerifyOTP />} />
       <Route path="/onboard" element={<OnBoard />} />

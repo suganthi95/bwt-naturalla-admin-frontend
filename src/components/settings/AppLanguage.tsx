@@ -39,7 +39,9 @@ function AppLanguage() {
       {
         onSuccess(data) {
           toast.success(data?.data?.message);
-
+          // setAuth({
+          //   token:data?.data?.token
+          // })
           window.location.reload();
           localStorage.setItem("lang", data?.data?.language);
 

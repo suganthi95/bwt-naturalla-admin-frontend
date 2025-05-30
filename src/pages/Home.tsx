@@ -626,7 +626,7 @@ function Home() {
             <DialogTrigger className="flex absolute right-4 top-[30.6rem] md:top-44 lg:top-32 ">
               <Button className="  bg-[#0F344E]/10 text-[#0F344E] rounded-3xl flex items-center hover:bg-transparent gap-x-2 border border-black font-semibold">
                 <Icons.Lock />
-                Unlock
+               <Trans i18nKey={'unlock'}/>
               </Button>
             </DialogTrigger>
             <DialogContent className="h-full xl:h-auto w-10/12 md:max-w-7xl dark:text-white">

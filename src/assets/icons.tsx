@@ -36,6 +36,38 @@ export const Icons = {
       </defs>
     </svg>
   ),
+    ForgotPasswordSuccess: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      fill="none"
+      viewBox="0 0 72 72"
+    >
+      <rect
+        width="72"
+        height="72"
+        fill="#34C759"
+        fillOpacity="0.1"
+        rx="36"
+      ></rect>
+      <path
+        stroke="#34C759"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+        d="M48.501 37.5c-1 5-4.77 9.708-10.06 10.76a12.5 12.5 0 0 1-11.694-20.664C30.375 23.6 36.501 22.5 41.501 24.5"
+      ></path>
+      <path
+        stroke="#34C759"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+        d="m31.5 35.5 5 5 12-13"
+      ></path>
+    </svg>
+  ),
   Review: (props: IconProps) => (
     <svg
     {...props}

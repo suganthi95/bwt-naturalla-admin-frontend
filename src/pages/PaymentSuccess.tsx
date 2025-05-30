@@ -6,12 +6,14 @@ import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { ValidateUserType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function PaymentSuccess() {
     const location = useLocation();
     const { auth } = useAppContext();
+    const { t}  = useTranslation() 
     useEffect(() => {
       initializeGA();
       trackpPageView(location.pathname,auth?.data?.email ?? '');
@@ -26,7 +28,7 @@ function PaymentSuccess() {
     });
 
     if(isError){
-        toast.error("Request Failed", { description: error?.message });
+        toast.error(t('request_failed'), { description: error?.message });
         navigate("/dashboard");
     }
 
@@ -52,8 +54,8 @@ function PaymentSuccess() {
             </div>
 
             <div className="text-center">
-                <h1 className="font-medium text-xl text-green-500">Payment Successful!</h1>
-                <p className="text-slate-400 text-sm">Thank you for your purchase. Your subscription is now active, <br /> ensuring a seamless <span className="font-medium">IntelliResponse</span> experience moving forward.</p>
+                <h1 className="font-medium text-xl text-green-500"><Trans i18nKey={'successful_title'}/></h1>
+                <p className="text-slate-400 text-sm"><Trans i18nKey={'thank_you_active'}/>, <br /> <Trans i18nKey={'ensuring_seamless'}/> <span className="font-medium">IntelliResponse</span><Trans i18nKey={'experience_forward'}/></p>
             </div>
         </div>
     </div>

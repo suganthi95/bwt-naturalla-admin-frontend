@@ -74,7 +74,7 @@ function Reviews() {
   //   ? Math.ceil(data.data.total / reviewsPerPage)
   //   : 0;
   // review_count
-  const totalPages = Number(data?.data?.review_count);
+  const totalPages = Math.round( Number(data?.data?.review_count)/data?.data?.total);
 
   function getPaginationPages(
     currentPage: number,
@@ -152,35 +152,36 @@ function Reviews() {
       case "5":
         content = (
           <p className="mt-[10%] mx-auto text-center text-secondary font-bold">
-            No excellent reviews found.
+           <Trans i18nKey={'no_excellent_reviews'}/>
           </p>
         );
         break;
       case "4":
         content = (
           <p className="mt-[10%] mx-auto text-center text-secondary font-bold">
-            No good reviews found.
+                      <Trans i18nKey={'no_good_reviews'}/>
+
           </p>
         );
         break;
       case "3":
         content = (
           <p className="mt-[10%] mx-auto text-center text-secondary font-bold">
-            No average reviews found.
+                      <Trans i18nKey={'no_average_reviews'}/>
           </p>
         );
         break;
       case "2":
         content = (
           <p className="mt-[10%] mx-auto text-center text-secondary font-bold">
-            No below average reviews found.
+                      <Trans i18nKey={'no_below_average_reviews'}/>
           </p>
         );
         break;
       case "1":
         content = (
           <p className="mt-[10%] mx-auto text-center text-secondary font-bold">
-            No poor reviews found.
+                      <Trans i18nKey={'no_poor_reviews'}/>
           </p>
         );
         break;
@@ -203,6 +204,7 @@ function Reviews() {
   }
 
   const sortLabels: Record<string, string> = {
+    "0":"All",
     "5": "Excellent",
     "4": "Good",
     "3": "Average",
@@ -217,10 +219,11 @@ function Reviews() {
         <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
           <SelectTrigger className="w-[100px] h-8">
             <SelectValue placeholder={t('sortBy')} className="">
-              {sortKey ? sortLabels[sortKey] : "Sort"}
+              {sortLabels[sortKey] ?? "Sort"}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
+          <SelectItem value="0"><Trans i18nKey={'all'}/></SelectItem>
             <SelectItem value="5"><Trans i18nKey={'excellent'}/></SelectItem>
             <SelectItem value="4"><Trans i18nKey={'good'}/></SelectItem>
             <SelectItem value="3"><Trans i18nKey={'average'}/></SelectItem>
