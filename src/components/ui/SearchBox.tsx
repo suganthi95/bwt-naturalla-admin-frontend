@@ -15,12 +15,14 @@ import { useAppContext } from "@/contexts/AuthContext"
 import { toast } from "sonner"
 import Loader from "./Loader"
 import { AxiosError } from "axios"
+import { Trans, useTranslation } from "react-i18next"
  
 export function SearchBox() {
 
   const { auth } = useAppContext();
   const [open, setOpen] = useState(false);
   const [ input, setInput ] = useState("");
+  const {t} = useTranslation()
   const [value, setValue] = useState("");
   const queryClient = useQueryClient();
   const [userLocation, setUserLocation] = useState<{ latitude: number | null, longitude: number | null }>({
@@ -169,7 +171,7 @@ export function SearchBox() {
                 <Search className="w-5 stroke-slate-400" />
               {value
                 ? <span className="text-ellipsis overflow-hidden">{data?.find((item: any) => item.value === value)?.label}</span>
-                : "Search Business..."}
+                : <Trans i18nKey={'search_business'}/>}
               {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" /> */}
             </Button>
           </div>
@@ -179,14 +181,14 @@ export function SearchBox() {
             <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1">
               <Search className="w-5 stroke-slate-400" />
               <Input 
-                placeholder="Search Business..." 
+                placeholder={t('search_business')}
                 className="border-none outline-none focus-visible:ring-transparent"
                 value={input}
                 onChange={(val) => setInput(val.target.value)}
               />
             </Card>
             <CommandList>
-              <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : "No business found"}</CommandEmpty>
+              <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> :<Trans i18nKey={'no_business_found'}/>}</CommandEmpty>
               <CommandGroup>
                 {data?.map((item: any) => (
                   <CommandItem
@@ -217,7 +219,7 @@ export function SearchBox() {
             className="h-12 mt-8"
           >{getBusinessDetailsPending || addBusinessPending ? 
             <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
-            "Add Business"}
+           <Trans i18nKey={'add_business'}/>}
         </Button>
       }
     </div>

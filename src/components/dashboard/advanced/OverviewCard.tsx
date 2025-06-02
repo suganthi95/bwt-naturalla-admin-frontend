@@ -38,7 +38,7 @@ export default function OverviewChartCard({ monthly }: SentimentStats) {
 
   return (
     <div className="w-full p-2 md:p-4 border rounded-md flex flex-col">
-      <h2 className="text-[#242424] font-bold mb-4 dark:text-white text-base sm:text-lg">
+      <h2 className="text-[#242424] text-lg md:text-balance font-bold mb-4 dark:text-white text-base sm:text-lg">
         <Trans i18nKey={'sentiment_over_years'}/>
       </h2>
 
@@ -50,7 +50,7 @@ export default function OverviewChartCard({ monthly }: SentimentStats) {
           >
             <XAxis dataKey="name" tick={{ fontSize: 10 }} />
             <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
+            <Tooltip  active />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Bar
               dataKey="positive"
@@ -59,6 +59,7 @@ export default function OverviewChartCard({ monthly }: SentimentStats) {
               activeBar={<Rectangle fill="lightgreen" stroke="#119E29" />}
               barSize={20}
             />
+            
             <Bar
               dataKey="negative"
               fill="#F02800"

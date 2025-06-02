@@ -1,4 +1,5 @@
 import { ASSETS } from "@/assets/assets";
+import InitialLoader from "@/common/InitialLoader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resetPassword, verifyForgotPasswordAction } from "@/lib/apis";
@@ -17,7 +18,7 @@ export default function PasswordRest() {
   const naviate = useNavigate();
   const params = useParams();
   const { token } = params || {};
-  const { data ,isError} = useQuery({
+  const { data ,isError,isLoading,isFetching,isSuccess} = useQuery({
     queryKey: ["emailverification"],
     queryFn: () => verifyForgotPasswordAction(token ?? ""),
     select: (data) => data?.data,
@@ -78,7 +79,11 @@ export default function PasswordRest() {
       }
     );
   };
-  return (
+  if(isLoading || isFetching){
+    return <InitialLoader/>
+  }
+if(isSuccess){
+    return (
     <div className="min-h-screen w-full bg-sandal flex flex-col lg:flex-row">
       <div className="flex flex-col flex-1 bg-white justify-center px-4 md:px-10 py-8">
         <div className="space-y-6 w-full max-w-md mx-auto text-center">
@@ -203,4 +208,5 @@ export default function PasswordRest() {
       </div>
     </div>
   );
+}
 }

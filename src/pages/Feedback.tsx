@@ -97,7 +97,7 @@ function Feedback() {
                 </label>
             </div>
 
-            <Button className="bg-primary hover:bg-primary/50">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Send"}</Button>
+            <Button className="bg-primary hover:bg-primary/50">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : <Trans i18nKey={'send'}/>}</Button>
            
         </form>
     </div>

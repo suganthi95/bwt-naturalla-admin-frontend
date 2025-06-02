@@ -16,6 +16,7 @@ import Loader from '../ui/Loader';
 import { useNavigate } from 'react-router-dom';
 import { trackEvent } from '@/lib/google_analytics';
 import { Trans } from 'react-i18next';
+import { t } from 'i18next';
 
 function OnBoardSix() {
 
@@ -250,7 +251,7 @@ function OnBoardSix() {
                         <Card className="flex flex-row items-center gap-2 px-2 py-1 h-fit border-none border-b-1 dark:bg-white">
                             <Search className="w-5 stroke-slate-400" />
                             <Input 
-                                placeholder="Search Business..." 
+                                placeholder={t('search_business')}
                                 className="border-none outline-none focus-visible:ring-transparent dark:bg-white dark:border-slate-200 dark:text-black dark:ring-offset-none dark:placeholder:text-slate-400 dark:focus-visible:ring-none"
                                 value={input}
                                 onChange={(val) => {
@@ -260,7 +261,7 @@ function OnBoardSix() {
                             />
                         </Card>
                         <CommandList className='dark:bg-white dark:text-black'>
-                            <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : "No business found"}</CommandEmpty>
+                            <CommandEmpty>{isLoading ? <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : <Trans i18nKey={'no_business_found'}/>}</CommandEmpty>
                             <CommandGroup>
                             {data?.map((item: any) => (
                                 <CommandItem
@@ -294,7 +295,7 @@ function OnBoardSix() {
                 onClick={getDetailedBusiness} className="mt-5 bg-primary hover:bg-primary/50 dark:bg-primary dark:text-slate-50 hover:dark:bg-primary/50">
                 {getBusinessDetailsPending || addBusinessPending || setActiveBusinessPending ? 
                     <LoaderCircle className="h-5 w-5 animate-spin mx-auto" /> : 
-                    "Add Business"
+                    <Trans i18nKey={'add_business'}/>
                 }
             </Button>
         </div>
