@@ -17,8 +17,8 @@ export default function ImprovementContent({ data }: ImprovementContentProps) {
       </h2>
 
       <Tabs defaultValue={data[0]?.title || ""}>
-        <TabsList className="mb-4 grid gap-x-3 dark:bg-transparent dark:border px-2 grid-cols-2 md:grid-cols-4 h-11">
-          {data.slice(0,4).map((item) => (
+        <TabsList className={`mb-4 grid gap-x-3 dark:bg-transparent dark:border px-2 grid-cols-2 ${data?.length > 5 ? 'md:grid-cols-6':'md:grid-cols-5'}  w-10/12 h-11`}>
+          {data?.map((item) => (
             <TabsTrigger
               key={item.title}
               value={item.title}

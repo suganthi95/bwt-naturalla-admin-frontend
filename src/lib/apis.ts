@@ -24,7 +24,32 @@ const ADVANCEDASHBOARD_URL = "https://topic-modeling-fn97.onrender.com"
 export const PAYMENT_KEY = "rzp_test_xSZldxULopihDB" 
 
 
+export const forgotPasswordEmailRequest = async(email:string)=>{
+ return await axios({
+    method:'post',
+    url:`${BASE_URL_V2}/auth/forgot/password`,
+    data:{
+        email
+    }
+ })
+}
 
+export const verifyForgotPasswordAction = async(token:string)=>{
+    return await axios({
+        method:'get',
+        url:`${BASE_URL_V2}/auth/validate/reset/link/${token}`,
+    })
+}
+export const resetPassword  =async(token:string,password:string)=>{
+    return await axios({
+        method:'post',
+        url:`${BASE_URL_V2}/auth/reset/password`,
+        data:{
+          token,
+          password
+        }
+    })
+}
 export const languageSwitch = async(token:string,lang:string)=>{
     return await axios({
         method:'get',
