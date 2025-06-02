@@ -4,20 +4,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, LoaderCircle } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trans, useTranslation } from "react-i18next";
-
+import { useMutation } from "@tanstack/react-query";
+import { forgotPasswordEmailRequest } from "@/lib/apis";
+import { toast } from "sonner";
 
 function ForgotPassword() {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const inputSchema = z.object({
-    email: z.string().email(t('invalid_email_format')).nonempty(t('email_required')),
+    email: z
+      .string()
+      .email(t("invalid_email_format"))
+      .nonempty(t("email_required")),
   });
-  
+
   type ForgotProps = z.infer<typeof inputSchema>;
   const navigate = useNavigate();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["forgotpassword"],
+    mutationFn:  forgotPasswordEmailRequest,
+  });
 
   const {
     register,
@@ -28,9 +37,14 @@ function ForgotPassword() {
     mode: "onChange",
   });
 
-  const handleSendMail = (data: ForgotProps) => {
-    console.log("Reset email to:", data.email);
-    // Integrate reset logic here
+  const handleSendMail = (formData: ForgotProps) => {
+    console.log("Reset email to:", formData.email);
+    mutate(formData?.email,{
+      onSuccess(data) {
+         toast.success(data?.data?.message)
+         navigate('/reset-password/email-sent',{state:{email:data?.data?.email}})
+      },
+    })
   };
 
   return (
@@ -42,18 +56,18 @@ function ForgotPassword() {
             <p className="font-bold text-xl md:text-3xl text-primary">
               Intelli<span className="text-secondary">Response</span>
             </p>
-             <span className="text-slate-500 text-sm md:text-[15px]">
-               <Trans i18nKey={'title'}/>
-              </span>
+            <span className="text-slate-500 text-sm md:text-[15px]">
+              <Trans i18nKey={"title"} />
+            </span>
           </div>
         </Link>
 
         <div className="w-full max-w-md mx-auto space-y-6 text-center">
           <h2 className="font-bold text-xl md:text-4xl uppercase text-title dark:text-white">
-               <Trans i18nKey={'forgot_password'}/>
+            <Trans i18nKey={"forgot_password"} />
           </h2>
           <p className="text-lead text-xs md:text-base font-light">
-          <Trans i18nKey={'enter_email_info'}/>
+            <Trans i18nKey={"enter_email_info"} />
           </p>
 
           <form
@@ -65,13 +79,13 @@ function ForgotPassword() {
                 htmlFor="email"
                 className="block font-medium text-sm mb-1 text-[#292D34]"
               >
-                <Trans i18nKey={'email_address'}/>
+                <Trans i18nKey={"email_address"} />
               </label>
               <div className="relative">
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Email"
+                  placeholder={t('email')}
                   {...register("email")}
                   className={`w-full h-11 focus-within:border-none ${
                     errors.email ? "border-red-500" : "border-gray-300"
@@ -104,12 +118,15 @@ function ForgotPassword() {
                 type="submit"
                 className="bg-[#FF840F] hover:bg-primary text-white text-sm md:text-base h-11 md:h-12 rounded-md"
               >
-                <Trans i18nKey={'reset_password'}/>
+                {isPending ? (
+                  <LoaderCircle className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Trans i18nKey={"reset_password"} />
+                )}
               </Button>
             </div>
           </form>
         </div>
-       
       </div>
 
       {/* Right Panel - Illustration */}

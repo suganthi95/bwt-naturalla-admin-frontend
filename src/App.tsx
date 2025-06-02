@@ -146,7 +146,7 @@ function App() {
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/email-sent" element={<ResetPasswordEmail />} />
-      <Route path="/reset-password" element={<PasswordRest />} />
+      <Route path="/reset-password/:token" element={<PasswordRest />} />
        <Route path="/reset-password-success" element={<ResetPasswordSuccess />} />
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/verify-email" element={<VerifyOTP />} />

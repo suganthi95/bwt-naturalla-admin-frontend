@@ -6,6 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function ResetPasswordEmail() {
   const { state } = useLocation();
+
   const navigate = useNavigate();
   const { email } = state || {};
 
@@ -48,7 +49,7 @@ export default function ResetPasswordEmail() {
               type="button"
               variant="outline"
               className="border border-[#262222]/30 text-[#262222] dark:text-white md:h-12 md:rounded-lg"
-              onClick={() => window.history.back()}
+              onClick={() =>navigate('/login')}
             >
               <ArrowLeft className="mr-2" /> <Trans i18nKey={'back_to_login'}/>
             </Button>

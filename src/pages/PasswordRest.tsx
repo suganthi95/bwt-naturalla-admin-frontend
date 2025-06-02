@@ -1,32 +1,55 @@
 import { ASSETS } from "@/assets/assets";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { resetPassword, verifyForgotPasswordAction } from "@/lib/apis";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeOff, Eye } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { EyeOff, Eye, LoaderCircle } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import z from "zod";
 
 export default function PasswordRest() {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
+  const naviate = useNavigate();
+  const params = useParams();
+  const { token } = params || {};
+  const { data ,isError} = useQuery({
+    queryKey: ["emailverification"],
+    queryFn: () => verifyForgotPasswordAction(token ?? ""),
+    select: (data) => data?.data,
+  });
+  if (data?.status === false || isError) {
+    setTimeout(() => {
+      naviate("/login");
+    }, 3000);
+    toast.warning(data?.message);
+  }
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["resetpassword"],
+    mutationFn: (args: { token: string; password: string }) =>
+      resetPassword(args.token, args.password),
+  });
   const inputSchema = z
     .object({
       password: z
         .string()
-        .nonempty(t('password_required'))
+        .nonempty(t("password_required"))
         .regex(
           /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
           "Password must be at least 6 characters and include uppercase, lowercase, number, and special character."
         )
-        .min(6, t('password_min_length')),
+        .min(6, t("password_min_length")),
 
-      confirmPassword: z.string().nonempty(t('confirm_password')),
+      confirmPassword: z.string().nonempty(t("confirm_password")),
     })
     .refine((data) => data.password === data.confirmPassword, {
       path: ["confirmPassword"],
-      message: t('passwords_do_not_match'),
+      message: t("passwords_do_not_match"),
     });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -35,12 +58,26 @@ export default function PasswordRest() {
   type PasswordResetProps = z.infer<typeof inputSchema>;
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors },
   } = useForm<PasswordResetProps>({
     resolver: zodResolver(inputSchema),
     mode: "onChange",
   });
+  const submitPassword: SubmitHandler<PasswordResetProps> = (data) => {
+    mutate(
+      {
+        token: token ?? "",
+        password: data?.password,
+      },
+      {
+        onSuccess(data) {
+          toast.success(data?.data?.message);
+           naviate('/reset-password-success')
+        },
+      }
+    );
+  };
   return (
     <div className="min-h-screen w-full bg-sandal flex flex-col lg:flex-row">
       <div className="flex flex-col flex-1 bg-white justify-center px-4 md:px-10 py-8">
@@ -52,34 +89,34 @@ export default function PasswordRest() {
                 Intelli<span className="text-secondary">Response</span>
               </p>
               <span className="text-slate-500 text-sm md:text-base">
-                <Trans i18nKey={'title'}/>
+                <Trans i18nKey={"title"} />
               </span>
             </div>
           </Link>
 
           <h2 className="font-bold text-xl md:text-4xl uppercase text-[#262222] dark:text-white">
-            <Trans i18nKey={'reset_password'}/>
+            <Trans i18nKey={"reset_password"} />
           </h2>
           <p className="text-[#4B515C] text-xs md:text-base font-light">
-           <Trans i18nKey={'enter_email_info'}/>
+            <Trans i18nKey={"enter_email_info"} />
           </p>
 
           <form
-       
             className="space-y-6 text-left"
+            onSubmit={handleSubmit(submitPassword)}
           >
             <div className="w-full">
               <label
                 htmlFor="psw"
                 className="block font-medium text-sm text-secondary dark:text-darkGray mb-1"
               >
-               <Trans i18nKey={'password'}/>
+                <Trans i18nKey={"password"} />
               </label>
               <div className="relative">
                 <Input
                   id="psw"
                   {...register("password", {
-                    required: t('password_required'),
+                    required: t("password_required"),
                   })}
                   type={showPassword ? "text" : "password"}
                   placeholder=""
@@ -107,13 +144,13 @@ export default function PasswordRest() {
                 htmlFor="cfpsw"
                 className="block font-medium text-sm text-secondary dark:text-darkGray mb-1"
               >
-                <Trans i18nKey={'confirm_password'}/>
+                <Trans i18nKey={"confirm_password"} />
               </label>
               <div className="relative">
                 <Input
                   id="cfpsw"
                   {...register("confirmPassword", {
-                    required:t('confirm_password'),
+                    required: t("confirm_password"),
                   })}
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder=""
@@ -146,7 +183,11 @@ export default function PasswordRest() {
               type="submit"
               className="w-full md:h-10 bg-primary hover:bg-primary md:rounded-lg text-sm md:text-base dark:text-white"
             >
-              <Trans i18nKey={'reset_password'}/>
+              {isPending ? (
+                <LoaderCircle className="h-5 w-5 animate-spin" />
+              ) : (
+                <Trans i18nKey={"reset_password"} />
+              )}
             </Button>
           </form>
         </div>

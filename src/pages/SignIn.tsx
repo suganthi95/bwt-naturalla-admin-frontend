@@ -39,7 +39,7 @@ function SignIn() {
   }>();
 
   const { setAuth } = useAppContext();
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [isPasswordVisible, togglePasswordVisibility] = useToggle();
 
@@ -52,23 +52,23 @@ function SignIn() {
       setAuth(res?.data);
 
       if (res?.data?.data?.onboarded === true) {
-        toast.success(t('request_success'), {
-          description: t('signed_in_successfully'),
+        toast.success(t("request_success"), {
+          description: t("signed_in_successfully"),
         });
         navigate("/dashboard", { replace: true });
         window.location.reload();
       }
 
       if (res?.data?.data?.onboarded === false) {
-        toast.success(t('request_success'), {
-          description: t('signed_in_successfully'),
+        toast.success(t("request_success"), {
+          description: t("signed_in_successfully"),
         });
         navigate("/onboard", { replace: true });
         window.location.reload();
       }
     },
     onError: (error: AxiosError<any>) =>
-      toast.error(t('request_failed'), {
+      toast.error(t("request_failed"), {
         description: error?.response?.data.message || error?.message,
       }),
   });
@@ -83,7 +83,7 @@ function SignIn() {
       });
     },
     onError: (error: AxiosError<any>) =>
-      toast.error(t('request_failed'), {
+      toast.error(t("request_failed"), {
         description: error?.response?.data.message || error?.message,
       }),
   });
@@ -91,7 +91,9 @@ function SignIn() {
   const googleLogin = useGoogleLogin({
     onSuccess: (res) => verifyGoogleUserMutate(res),
     onError: (error) =>
-            toast.error(t('request_failed'), { description: error.error_description }),
+      toast.error(t("request_failed"), {
+        description: error.error_description,
+      }),
   });
 
   const submitGoogleLogin = () => googleLogin();
@@ -103,15 +105,15 @@ function SignIn() {
     mutationFn: signinUser,
     onSuccess: (data) => {
       setAuth(data.data);
-      toast.success(t('request_success'), {
-        description:t('signed_in_successfully'),
+      toast.success(t("request_success"), {
+        description: t("signed_in_successfully"),
       });
       navigate(`/`, { replace: true });
       window.location.reload();
     },
     onError: (error: AxiosError<any>) => {
       console.log(error);
-      toast.error(t('request_failed'), {
+      toast.error(t("request_failed"), {
         description: error?.response?.data?.message,
       });
     },
@@ -121,7 +123,7 @@ function SignIn() {
 
   useEffect(() => {
     if (window.innerWidth <= 1024) {
-      toast.success(t('use_landscape_mode'), {
+      toast.success(t("use_landscape_mode"), {
         position: "top-center",
       });
     }
@@ -239,7 +241,7 @@ function SignIn() {
                   {isPending ? (
                     <LoaderCircle className="h-5 w-5 animate-spin" />
                   ) : (
-                    "Sign In"
+                    <Trans i18nKey={"signIn"} />
                   )}
                 </Button>
               </div>

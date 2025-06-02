@@ -496,7 +496,6 @@ function Home() {
     staleTime: 1000 * 60 * 5,
     select: (data) => data?.data,
   });
-  console.log(AdvanceDashboard);
 
   return (
     <div className="flex flex-col w-full gap-6 p-4 md:p-2  relative overflow-y-auto md:pb-20">
@@ -547,7 +546,7 @@ function Home() {
           </TabsContent>
 
           <TabsContent value="advanced" className="w-full space-y-4">
-            {validateUser?.data?.data?.plan_name === "pro-plan" &&
+            {validateUser?.data?.data?.plan_name === "standard plan" &&
             AdvanceDashboardSuccess &&
             !AdvanceDashboardError ? (
               <>

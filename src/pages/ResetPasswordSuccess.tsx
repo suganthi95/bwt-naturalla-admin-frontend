@@ -13,7 +13,7 @@ export default function PasswordResetSuccess() {
 
   return (
     <section className="container mx-auto">
-      <div className="grid place-items-center min-h-screen px-4">
+      <div className="flex flex-col justify-center min-h-screen px-4">
         <div className="w-full px-4 py-6 sm:px-6 lg:px-8 space-y-4 md:space-y-6 text-center">
           
           {/* Logo and title */}
@@ -46,7 +46,7 @@ export default function PasswordResetSuccess() {
           <div className="grid place-items-center">
             <Button
               type="button"
-              className="p-2 px-4  w-fit md:h-12 md:rounded-[12px] dark:text-white"
+              className="p-2 px-4 bg-primary hover:bg-primary  w-fit md:h-12 md:rounded-[12px] dark:text-white"
               onClick={handleLoginRedirect}
             >
               <Trans i18nKey="back_to_login" />
