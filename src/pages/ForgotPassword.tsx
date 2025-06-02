@@ -112,7 +112,7 @@ function ForgotPassword() {
                 className="text-sm md:text-base h-11 md:h-12 rounded-md"
                 onClick={() => navigate("/login")}
               >
-                <ArrowLeft className="mr-2" size={18} /> Back to Login
+                <ArrowLeft className="mr-2" size={18} /> <Trans i18nKey={'back_to_login'}/>
               </Button>
               <Button
                 type="submit"

@@ -94,7 +94,7 @@ function ReplyReview() {
                 </PopoverTrigger>
                 <PopoverContent className="text-sm bg-red-400 text-white"><Trans i18nKey={'out_of_credits'}/></PopoverContent>
               </Popover> :
-              <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? "Regenerate" : "Generate"}</Button>
+              <Button disabled={isLoading} onClick={() => setGenerate(prev => prev + 1)} className="bg-gradient-to-r from-[#CD84F1] to-[#7158E2]">{isSuccess ? <Trans i18nKey={'regenerate'}/> : <Trans i18nKey={'generate'}/>}</Button>
             }
             
         </div>

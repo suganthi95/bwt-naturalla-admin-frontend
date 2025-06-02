@@ -13,6 +13,7 @@ import { useAppContext } from "@/contexts/AuthContext";
 import useToggle from "@/hooks/useToggle";
 import { signinUser, signInUserByGoogle, verifyGoogleUser } from "@/lib/apis";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
+import i18n from "@/lib/i18next/i18n";
 import { AuthType } from "@/types";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
@@ -171,7 +172,7 @@ function SignIn() {
                 />
               </div>
 
-              <div className="flex flex-col items-start gap-1 relative">
+              <div className="flex flex-col  items-start gap-1 relative">
                 <label
                   className="font-medium flex items-center justify-between w-full"
                   htmlFor="password"
@@ -201,12 +202,12 @@ function SignIn() {
                 {isPasswordVisible ? (
                   <Eye
                     onClick={() => togglePasswordVisibility()}
-                    className="text-slate-300 absolute cursor-pointer right-3 top-9"
+                    className={`text-slate-300 absolute cursor-pointer ${i18n.language === 'ar'? 'left-2':'right-3' } top-9`}
                   />
                 ) : (
                   <EyeOff
                     onClick={() => togglePasswordVisibility()}
-                    className="text-slate-300 absolute cursor-pointer right-3 top-9"
+                    className={`text-slate-300 absolute cursor-pointer ${i18n.language === 'ar'? 'left-2':'right-3' } top-9`}
                   />
                 )}
               </div>

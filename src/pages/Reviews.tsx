@@ -76,37 +76,38 @@ function Reviews() {
   // review_count
   const totalPages = Math.round( Number(data?.data?.review_count)/data?.data?.total);
 
-  function getPaginationPages(
-    currentPage: number,
-    totalPages: number
-  ): (number | string)[] {
-    const pages: (number | string)[] = [];
+function getPaginationPages(currentPage: number, totalPages: number): (number | string)[] {
+  currentPage = Math.max(1, Math.min(currentPage, totalPages)); // Clamp
 
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
+  const pages: (number | string)[] = [];
 
-    pages.push(1);
-
-    if (currentPage > 3) {
-      pages.push("...");
-    }
-
-    const start = Math.max(2, currentPage - 1);
-    const end = Math.min(totalPages - 1, currentPage + 1);
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
-    if (currentPage < totalPages - 2) {
-      pages.push("...");
-    }
-
-    pages.push(totalPages);
-
-    return pages;
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
+
+  pages.push(1);
+
+  if (currentPage > 3) {
+    pages.push("...");
+  }
+
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (currentPage < totalPages - 2) {
+    pages.push("...");
+  }
+
+  pages.push(totalPages);
+
+  return pages;
+}
+
+console.log();
 
   const onPageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
@@ -204,12 +205,12 @@ function Reviews() {
   }
 
   const sortLabels: Record<string, string> = {
-    "0":"All",
-    "5": "Excellent",
-    "4": "Good",
-    "3": "Average",
-    "2": "Below Average",
-    "1": "Poor",
+    "0":t('all'),
+    "5": t('excellent'),
+    "4": t('good'),
+    "3": t('average'),
+    "2": t('below_average'),
+    "1": t('poor'),
   };
   return (
     <div className="p-2 pb-20 flex flex-col flex-1 overflow-hidden">
@@ -245,7 +246,7 @@ function Reviews() {
            <Trans i18nKey={'previous'}/>
           </button>
 
-          {getPaginationPages(currentPage, totalPages).map((page) => {
+          {getPaginationPages(currentPage,totalPages).map((page) => {
             if (typeof page === "string") {
               return (
                 <span key={`dots-${page}-${Math.random()}`} className="px-2">

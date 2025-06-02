@@ -24,7 +24,7 @@ const AdvancedSentiment: React.FC<Props> = ({ value1, value2 }) => {
 
   return (
     <div className="flex flex-col w-full p-4 border rounded-md">
-      <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white text-base sm:text-lg">
+      <h2 className="text-[#242424] text-lg md:text-balance text-start font-bold mb-4 dark:text-white text-base sm:text-lg">
      <Trans i18nKey={'sentiment_distribution'}/>
       </h2>
 
@@ -92,11 +92,11 @@ const AdvancedSentiment: React.FC<Props> = ({ value1, value2 }) => {
       <div className="mt-6 flex justify-center gap-8 flex-wrap text-sm sm:text-base">
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-full bg-[#119E29]" />
-          <span className="text-neutral-700 text-sm dark:text-neutral-200">Positive Sentiment</span>
+          <span className="text-neutral-700 text-sm dark:text-neutral-200"><Trans i18nKey={'positive_sentiment'}/></span>
         </div>
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-full bg-[#F02800]" />
-          <span className="text-neutral-700 text-sm dark:text-neutral-200">Negative Sentiment</span>
+          <span className="text-neutral-700 text-sm dark:text-neutral-200"><Trans i18nKey={'negative_sentiment'}/></span>
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ const COLORS = ["#119E29", "#F02800", "#EAB308"];
 export default function AreaImprovement() {
   return (
     <div className="flex flex-col  w-full p-4 border justify-start items-start">
-      <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white">     <Trans i18nKey={'areas_for_improvements'}/>
+      <h2 className="text-[#242424]  text-lg md:text-balance text-start font-bold mb-4 dark:text-white">     <Trans i18nKey={'areas_for_improvements'}/>
     </h2>
 
     <div className="w-full  mx-auto flex flex-col items-center gap-4 p-4">

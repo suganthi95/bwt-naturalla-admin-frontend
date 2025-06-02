@@ -24,7 +24,7 @@ import { Trans } from "react-i18next";
 export default function KeyInsights({negativeInsights,positiveInsights}:Props) {
   return (
     <div className="flex flex-col gap-6 w-full p-4 border rounded-lg">
-      <h2 className="text-[#242424] text-start font-bold mb-4 dark:text-white">
+      <h2 className="text-[#242424] text-lg md:text-balance  text-start font-bold mb-4 dark:text-white">
         <Trans i18nKey={'key_insights_section'}/>
       </h2>
 
@@ -33,7 +33,7 @@ export default function KeyInsights({negativeInsights,positiveInsights}:Props) {
         <div className="flex items-center gap-2">
           <div className="size-3 sm:size-4 bg-green-600 rounded-full" />
           <p className="text-sm font-medium text-[#727272] dark:text-gray-300">
-            Positive
+            <Trans i18nKey={'positive'}/>
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -53,7 +53,7 @@ export default function KeyInsights({negativeInsights,positiveInsights}:Props) {
         <div className="flex items-center gap-2">
           <div className="size-3 sm:size-4 bg-red-600 rounded-full dark:bg-red-500" />
           <p className="text-sm font-medium text-[#727272] dark:text-gray-300">
-            Negative
+            <Trans i18nKey={'negative'}/>
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from './alert-dialog'
 import { Button } from './button'
+import { Trans } from 'react-i18next'
 
 interface Props {
     openLogoutDialog: boolean,
@@ -13,13 +14,13 @@ function LogoutDialog(props : Props) {
     <AlertDialog open={props.openLogoutDialog} onOpenChange={() => props.setOpenLogoutDialog(false)}>
         <AlertDialogContent className='bg-white'>
             <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure you want to Sign out?</AlertDialogTitle>
+            <AlertDialogTitle><Trans i18nKey={'signout_confirmation'}/></AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
                 <AlertDialogCancel asChild>
-                  <Button variant="secondary">Cancel</Button>
+                  <Button variant="secondary"><Trans i18nKey={'cancel'}/></Button>
                 </AlertDialogCancel>
-                <AlertDialogAction onClick={() => props.signout()}>Continue</AlertDialogAction>
+                <AlertDialogAction onClick={() => props.signout()}><Trans i18nKey={'continue'}/></AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
