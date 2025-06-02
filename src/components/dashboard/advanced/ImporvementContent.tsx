@@ -23,7 +23,7 @@ export default function ImprovementContent({ data }: ImprovementContentProps) {
             <TabsTrigger
               key={item.id}
               value={item.id}
-              className="data-[state=active]:bg-primary dark:data-[state=active]:bg-primary  rounded data-[state=active]:text-white"
+              className="data-[state=active]:bg-primary dark:data-[state=active]:bg-primary   rounded data-[state=active]:text-white"
             >
               {item.title}
             </TabsTrigger>
@@ -32,7 +32,7 @@ export default function ImprovementContent({ data }: ImprovementContentProps) {
 
         {data.map((item) => (
           <TabsContent key={item.subtitle} value={item.id}>
-            <h3 className="text-[#242424] dark:text-white  font-bold text-[15px] mb-4">
+            <h3 className="text-[#242424] dark:text-white  text-sm font-bold  mb-4">
               {item.subtitle}
             </h3>
             <ul className="list-disc list-inside dark:text-slate-300 space-y-2 text-neutral-700 text-sm">
