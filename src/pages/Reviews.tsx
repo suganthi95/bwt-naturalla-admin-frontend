@@ -129,6 +129,7 @@ function Reviews() {
     </p>,
   ];
 
+
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   useEffect(() => {
@@ -193,6 +194,40 @@ function Reviews() {
     setCurrentPage(newPage);
     setPage(newPage);
   };
+
+  if(data?.data?.data?.length === 0){
+return   (   <section className="container mx-auto mt-10 grid place-items-center">
+          <div className="flex flex-col gap-y-1 items-center justify-center text-[#323232]">
+            <img
+              src={ASSETS.NO_REVIEWS}
+              className="md:w-5/12"
+              alt="No-Business"
+            />
+            <h2 className="font-bold text-xl md:text-2xl ">
+              <Trans i18nKey={"getting_started"} />
+            </h2>
+            <p className="font-medium text-center text-xs md:text-sm text-[#323232]/50">
+              <Trans i18nKey={"no_feedback_yet"} />
+            </p>
+            <p className="font-medium  text-center  text-xs md:text-sm text-[#323232]/50">
+              <Trans i18nKey={"see_feedback_when_available"} />
+            </p>
+            <Button
+              onClick={() => setIsOpen(true)}
+              className="bg-primary mt-3 md:p-3 md:px-6 rounded-lg hover:bg-primary"
+            >
+              <Trans i18nKey={"add_business"} />
+            </Button>
+            <Dialog open={IsOpen} onOpenChange={setIsOpen}>
+              <DialogContent className="!w-full max-w-fit">
+                <SearchBox onClose={setIsOpen} isWaiting={setBusinessLoading} />
+              </DialogContent>
+            </Dialog>
+          </div>
+          
+        </section>
+        )
+}
   if (businessLoading) {
     return (
       <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 z-[50] bg-transparent backdrop-brightness-[0.3]">
@@ -350,35 +385,7 @@ function Reviews() {
         break;
 
       default:
-        <section className="container mx-auto mt-10 grid place-items-center">
-          <div className="flex flex-col gap-y-1 items-center justify-center text-[#323232]">
-            <img
-              src={ASSETS.NO_REVIEWS}
-              className="md:w-5/12"
-              alt="No-Business"
-            />
-            <h2 className="font-bold text-xl md:text-2xl ">
-              <Trans i18nKey={"getting_started"} />
-            </h2>
-            <p className="font-medium text-center text-xs md:text-sm text-[#323232]/50">
-              <Trans i18nKey={"no_feedback_yet"} />
-            </p>
-            <p className="font-medium  text-center  text-xs md:text-sm text-[#323232]/50">
-              <Trans i18nKey={"see_feedback_when_available"} />
-            </p>
-            <Button
-              onClick={() => setIsOpen(true)}
-              className="bg-primary mt-3 md:p-3 md:px-6 rounded-lg hover:bg-primary"
-            >
-              <Trans i18nKey={"add_business"} />
-            </Button>
-            <Dialog open={IsOpen} onOpenChange={setIsOpen}>
-              <DialogContent className="!w-full max-w-fit">
-                <SearchBox onClose={setIsOpen} isWaiting={setBusinessLoading} />
-              </DialogContent>
-            </Dialog>
-          </div>
-        </section>;
+   
         break;
     }
   }
