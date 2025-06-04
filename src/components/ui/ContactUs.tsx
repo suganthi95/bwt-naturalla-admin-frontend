@@ -1,3 +1,4 @@
+import { Trans } from "react-i18next"
 import { Button } from "./button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./dialog"
 import { Input } from "./input"
@@ -6,16 +7,16 @@ function ContactUs() {
   return (
     <Dialog>
         <DialogTrigger className="w-full">
-            <Button size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white">Contact Us</Button>
+            <Button size="lg" className="w-full dark:bg-primary hover:dark:bg-primary/80 dark:text-white"><Trans i18nKey={'contactUs'}/></Button>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>
-            <DialogTitle>Interested in Enterprise plan?</DialogTitle>
+            <DialogTitle><Trans i18nKey={'interested'}/></DialogTitle>
             <DialogDescription>
                 <form className="space-y-4 mt-5" action="https://formsubmit.co/support@embrais.com" method="POST">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div>
-                            <label htmlFor="firstname">First Name</label>
+                            <label htmlFor="firstname"><Trans i18nKey={'first_name'}/></label>
                             <Input 
                                 id="firstname"
                                 required
@@ -26,7 +27,7 @@ function ContactUs() {
                         </div>
 
                         <div>
-                            <label htmlFor="lastname">Last Name</label>
+                            <label htmlFor="lastname"><Trans i18nKey={'last_name'}/></label>
                             <Input 
                                 id="lastname"
                                 required
@@ -41,7 +42,7 @@ function ContactUs() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
                       <div>
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email"><Trans i18nKey={'email'}/></label>
                         <Input 
                             id="email"
                             required
@@ -52,7 +53,7 @@ function ContactUs() {
                       </div>
 
                       <div>
-                        <label htmlFor="phone">Phone Number</label>
+                        <label htmlFor="phone"><Trans i18nKey={'phone'}/></label>
                         <Input 
                             id="phone"
                             required
@@ -64,29 +65,28 @@ function ContactUs() {
                     </div>
 
                     <div>
-                        <label htmlFor="subject">subject</label>
+                        <label htmlFor="subject"><Trans i18nKey={'subject'}/></label>
                         <Input 
                             id="subject"
                             required
                             type="text" 
                             name="subject"
-                            placeholder={"Write your subject"} 
+                            // placeholder={"Write your subject"} 
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="message">Message</label>
+                        <label htmlFor="message"><Trans i18nKey={'message'}/></label>
                         <Input 
                             id="message"
                             required
                             type="text" 
                             name="message"
-                            placeholder={"Write your message"}
                         />
                     </div>
 
                     <div>
-                        <Button type="submit" className="rounded-md w-full">Send</Button>
+                        <Button type="submit" className="rounded-md w-full"><Trans i18nKey={'send'}/></Button>
                     </div>
                 </form>
             </DialogDescription>

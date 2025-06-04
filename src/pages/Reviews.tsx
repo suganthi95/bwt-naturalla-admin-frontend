@@ -21,6 +21,10 @@ import { useEffect, useState } from "react";
 import { AxiosResponse } from "axios";
 import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { Trans, useTranslation } from "react-i18next";
+import { ASSETS } from "@/assets/assets";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { SearchBox } from "@/components/ui/SearchBox";
 
 function Reviews() {
   const location = useLocation();
@@ -28,6 +32,9 @@ function Reviews() {
   const user = localStorage.getItem("auth");
   const parsedUser = user ? JSON.parse(user) : null;
   const Mail = parsedUser?.data?.email;
+  const [IsOpen,setIsOpen] = useState(false)
+  const [businessLoading,setBusinessLoading] = useState(false)
+
   useEffect(() => {
     initializeGA();
     trackpPageView(location.pathname, Mail);
@@ -68,17 +75,63 @@ function Reviews() {
       enabled: Boolean(activeBusiness?.place_id),
     }
   );
+  useEffect(()=>{
+    setCurrentPage(1)
+  },[sortKey])
+      const messages = [
+        <p className="text-slate-500 text-center" key={0}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.0" />
+        </p>,
+        <p className="text-slate-500 text-center" key={1}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.1" />
+        </p>,
+        <p className="text-slate-500 text-center" key={2}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.2" />
+        </p>,
+        <p className="text-slate-500 text-center" key={3}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.3" />
+        </p>,
+        <p className="text-slate-500 text-center" key={4}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.4" />
+        </p>,
+        <p className="text-slate-500 text-center" key={5}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.5" />
+        </p>,
+        <p className="text-slate-500 text-center" key={6}>
+            <span className="text-primary"><Trans i18nKey="did_you_know" />: </span>
+            <Trans i18nKey="messages.6" />
+        </p>,
+        <p className="text-slate-500 text-center" key={7}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.7" />
+        </p>
+        ];
+    
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+      }, 15000); // Change every 15 seconds
+  
+      return () => clearInterval(interval);
+    }, []);
 
   // const reviewsPerPage = 10;
   // const totalPages = data?.data?.total
   //   ? Math.ceil(data.data.total / reviewsPerPage)
   //   : 0;
   // review_count
-  const totalPages = Math.round( Number(data?.data?.review_count)/data?.data?.total);
+  const totalPages = Math.round( Number(data?.data?.review_count)/10);
 
 function getPaginationPages(currentPage: number, totalPages: number): (number | string)[] {
   currentPage = Math.max(1, Math.min(currentPage, totalPages)); // Clamp
-
   const pages: (number | string)[] = [];
 
   if (totalPages <= 7) {
@@ -87,40 +140,82 @@ function getPaginationPages(currentPage: number, totalPages: number): (number | 
 
   pages.push(1);
 
-  if (currentPage > 3) {
-    pages.push("...");
+  let start = Math.max(2, currentPage - 1);
+  let end = Math.min(totalPages - 1, currentPage + 1);
+
+  if (currentPage <= 3) {
+    start = 2;
+    end = 4;
   }
 
-  const start = Math.max(2, currentPage - 1);
-  const end = Math.min(totalPages - 1, currentPage + 1);
+  if (currentPage >= totalPages - 2) {
+    start = totalPages - 3;
+    end = totalPages - 1;
+  }
+
+  start = Math.max(2, start);
+  end = Math.min(totalPages - 1, end);
+
+  if (start > 2) pages.push("...");
 
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
 
-  if (currentPage < totalPages - 2) {
-    pages.push("...");
-  }
+  if (end < totalPages - 1) pages.push("...");
 
   pages.push(totalPages);
 
   return pages;
 }
 
-console.log();
+
+
 
   const onPageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
     setCurrentPage(newPage);
     setPage(newPage);
   };
+if(businessLoading){
+       return (
+           <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 z-[50] bg-transparent backdrop-brightness-[0.3]">
+               <div>
+                   <Loader/>
+               </div>
+               {messages[currentMessageIndex]}
+           </div>
+     )
+}
 
   if (!activeBusiness) {
     return (
-      <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-        <h1 className="text-xl font-semibold"><Trans i18nKey={'no_business_added'}/></h1>
-        <p className="text-slate-300"><Trans i18nKey={'search_or_add_business'}/></p>
-      </div>
+      // <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
+      //   <h1 className="text-xl font-semibold"><Trans i18nKey={'no_business_added'}/></h1>
+      //   <p className="text-slate-300"><Trans i18nKey={'search_or_add_business'}/></p>
+      // </div>
+          <section className="container mx-auto mt-10 grid place-items-center">
+            <div className="flex flex-col gap-y-1 items-center justify-center text-[#323232]">
+              <img src={ASSETS.NO_REVIEWS} className="md:w-5/12" alt="No-Business" />
+              <h2 className="font-bold text-xl md:text-2xl "><Trans i18nKey={'getting_started'}/></h2>
+              <p className="font-medium text-center text-xs md:text-sm text-[#323232]/50">
+              <Trans i18nKey={'no_feedback_yet'}/>
+              </p>
+              <p className="font-medium  text-center  text-xs md:text-sm text-[#323232]/50">
+                <Trans i18nKey={'see_feedback_when_available'}/>
+                </p>
+            <Button onClick={()=>setIsOpen(true)} className="bg-primary mt-3 md:p-3 md:px-6 rounded-lg hover:bg-primary">
+                <Trans i18nKey={"add_business"} />
+              </Button>
+          
+            </div>
+              <Dialog open={IsOpen} onOpenChange={setIsOpen}> 
+          
+            <DialogContent className="!w-full  max-w-fit">
+              <SearchBox onClose={setIsOpen} isWaiting={setBusinessLoading} />
+            </DialogContent>
+          </Dialog>
+          </section>
     );
   }
 
@@ -217,9 +312,17 @@ console.log();
       <div className="flex flex-row items-center justify-between py-1">
         <h1 className="font-semibold"><Trans i18nKey={'reviews'}/></h1>
 
-        <Select value={sortKey} onValueChange={(value) => setSortKey(value)}>
+        <Select value={sortKey} onValueChange={(value) =>{
+           if(value === '0'){
+            setSortKey('')
+           }
+           else{
+             setSortKey(value)
+
+           }
+           }}>
           <SelectTrigger className="w-[100px] h-8">
-            <SelectValue placeholder={t('sortBy')} className="">
+            <SelectValue placeholder={t('all')} className="">
               {sortLabels[sortKey] ?? "Sort"}
             </SelectValue>
           </SelectTrigger>
@@ -285,6 +388,7 @@ console.log();
           </button>
         </div>
       )}
+     
     </div>
   );
 }

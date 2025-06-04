@@ -33,7 +33,7 @@ export default {
 
       },
       fontFamily: {
-        inter: ['Inter', "sans-serif"]
+        inter: ['Inter', "sans-serif"],
       },
       fontSize: {
         sm: '13px',
