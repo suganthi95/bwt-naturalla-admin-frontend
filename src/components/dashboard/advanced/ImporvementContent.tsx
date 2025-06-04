@@ -91,7 +91,7 @@ export default function ImprovementContent({ data }: ImprovementContentProps) {
       <div className="mb-4 ">
         <Slider {...settings}>
           {data.map((item) => (
-            <div key={item.id} className="px-2 ">
+            <div key={item.id} className="px-2 bg-[#F1F5F9] ">
               <button
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full px-4 py-2 rounded text-sm whitespace-nowrap ${
