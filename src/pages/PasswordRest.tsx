@@ -24,10 +24,9 @@ export default function PasswordRest() {
     select: (data) => data?.data,
   });
   if (data?.status === false || isError) {
-    setTimeout(() => {
-      naviate("/login");
-    }, 3000);
     toast.warning(data?.message);
+      naviate("/login");
+   
   }
 
   const { mutate, isPending } = useMutation({

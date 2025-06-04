@@ -34,4 +34,6 @@ export const ASSETS = {
     "https://ik.imagekit.io/zshycew5c/intelliresponse/email-verify?updatedAt=1733833440990",
   FORGOT_EMAIL:
     "https://ik.imagekit.io/zshycew5c/intelliresponse/Forgot%20password.png?updatedAt=1747993861983",
+  NO_BUSINESS:'https://ik.imagekit.io/zshycew5c/intelliresponse/No%20data-pana%201.png?updatedAt=1748940075635',
+  NO_REVIEWS:'https://ik.imagekit.io/zshycew5c/intelliresponse/Customer%20Survey-pana%201.png?updatedAt=1748940075640'
 };

@@ -1,7 +1,9 @@
+import { ASSETS } from "@/assets/assets";
 import { Icons } from "@/assets/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Loader from "@/components/ui/Loader";
 import { SearchBox } from "@/components/ui/SearchBox"
@@ -14,7 +16,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"
 import { EllipsisVertical } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
@@ -22,6 +24,8 @@ import { toast } from "sonner";
 function Business() {
  const location = useLocation();
  const { auth } = useAppContext();
+const [IsOpen,setIsOpen] = useState(false)
+  const [businessLoading,setBusinessLoading] = useState(false)
 
   useEffect(() => {
     initializeGA();
@@ -37,6 +41,50 @@ function Business() {
     retry: 2,
     refetchOnWindowFocus: false
   });
+      const messages = [
+        <p className="text-slate-500 text-center" key={0}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.0" />
+        </p>,
+        <p className="text-slate-500 text-center" key={1}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.1" />
+        </p>,
+        <p className="text-slate-500 text-center" key={2}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.2" />
+        </p>,
+        <p className="text-slate-500 text-center" key={3}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.3" />
+        </p>,
+        <p className="text-slate-500 text-center" key={4}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.4" />
+        </p>,
+        <p className="text-slate-500 text-center" key={5}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.5" />
+        </p>,
+        <p className="text-slate-500 text-center" key={6}>
+            <span className="text-primary"><Trans i18nKey="did_you_know" />: </span>
+            <Trans i18nKey="messages.6" />
+        </p>,
+        <p className="text-slate-500 text-center" key={7}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.7" />
+        </p>
+        ];
+    
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+      }, 15000); // Change every 15 seconds
+  
+      return () => clearInterval(interval);
+    }, []);
 
   const { mutate } = useMutation({
     mutationKey: [ "removeBusiness" ],
@@ -62,6 +110,16 @@ function Business() {
           toast.error("Request Failed", { description: error?.response?.data?.message })
       }
   });
+  if(businessLoading){
+       return (
+           <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 z-[50] bg-transparent backdrop-brightness-[0.3]">
+               <div>
+                   <Loader/>
+               </div>
+               {messages[currentMessageIndex]}
+           </div>
+     )
+}
 
   let content;
 
@@ -76,10 +134,22 @@ function Business() {
 
   if(isSuccess && data?.data?.data?.length === 0){
       content = (
-        <div className="flex flex-col items-center justify-center p-2 ml-1 mr-2 mb-2 flex-1 overflow-hidden">
-          <h1 className="text-xl font-semibold"><Trans i18nKey={'no_business_added'}/></h1>
-          <p className="text-slate-300"><Trans i18nKey={'search_or_add_business'}/></p>
-        </div>
+       <section className="container mx-auto mt-10 grid place-items-center">
+            <div className="flex flex-col gap-y-1 items-center justify-center text-[#323232]">
+              <img src={ASSETS.NO_BUSINESS} className="md:w-5/12" alt="No-Business" />
+              <h2 className="font-bold text-xl md:text-2xl "><Trans i18nKey={'no_business_found'}/></h2>
+              <p className="font-medium text-center text-xs md:text-sm text-[#323232]/50">
+              <Trans i18nKey={'add_business_to_start'}/>
+              </p>
+              <p className="font-medium  text-center  text-xs md:text-sm text-[#323232]/50">
+                <Trans i18nKey={'see_feedback_after_setup'}/>
+                </p>
+              <Button onClick={()=>setIsOpen(true)} className="bg-primary mt-3 md:p-3 md:px-6 rounded-lg hover:bg-primary">
+                <Trans i18nKey={"add_business"} />
+              </Button>
+             
+            </div>
+          </section>
       )
   }
 
@@ -132,8 +202,14 @@ function Business() {
 
   return (
     <div className="p-3 flex flex-col flex-1 overflow-y-scroll pb-20">
-        {query?.data?.data?.plan_name === "pro-plan" && query.data.data.businessList.length < 3 && <SearchBox/>}
+        {query?.data?.data?.plan_name === "pro-plan" && query.data.data.businessList.length < 3 && <SearchBox onClose={setIsOpen} isWaiting={setIsOpen}/>}
         {content}
+          <Dialog open={IsOpen} onOpenChange={setIsOpen}> 
+          
+            <DialogContent className="!w-full max-w-fit">
+              <SearchBox onClose={setIsOpen} isWaiting={setBusinessLoading} />
+            </DialogContent>
+          </Dialog>
     </div>
   )
 }

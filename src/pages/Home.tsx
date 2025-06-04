@@ -18,6 +18,7 @@ import TotalReviewsCard from "@/components/dashboard/TotalReviewsCard";
 import { Button } from "@/components/ui/button";
 import ContactUs from "@/components/ui/ContactUs";
 import { DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { SearchBox } from "@/components/ui/SearchBox";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppContext } from "@/contexts/AuthContext";
@@ -50,6 +51,8 @@ function Home() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
   const [planType, setPlanType] = useState("monthly");
+const [IsOpen,setIsOpen] = useState(false)
+  const [businessLoading,setBusinessLoading] = useState(false)
 
   const [dashboardValue, setDashboardValue] = useState<"basic" | "advanced">(
     "basic"
@@ -141,6 +144,63 @@ function Home() {
       planId,
     });
   };
+
+      const messages = [
+        <p className="text-slate-500 text-center" key={0}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.0" />
+        </p>,
+        <p className="text-slate-500 text-center" key={1}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.1" />
+        </p>,
+        <p className="text-slate-500 text-center" key={2}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.2" />
+        </p>,
+        <p className="text-slate-500 text-center" key={3}>
+            <span className="text-primary"><Trans i18nKey="tip" />: </span>
+            <Trans i18nKey="messages.3" />
+        </p>,
+        <p className="text-slate-500 text-center" key={4}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.4" />
+        </p>,
+        <p className="text-slate-500 text-center" key={5}>
+            <span className="text-primary"><Trans i18nKey="quick_tip" />: </span>
+            <Trans i18nKey="messages.5" />
+        </p>,
+        <p className="text-slate-500 text-center" key={6}>
+            <span className="text-primary"><Trans i18nKey="did_you_know" />: </span>
+            <Trans i18nKey="messages.6" />
+        </p>,
+        <p className="text-slate-500 text-center" key={7}>
+            <span className="text-primary"><Trans i18nKey="pro_tip" />: </span>
+            <Trans i18nKey="messages.7" />
+        </p>
+        ];
+    
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+      }, 15000); // Change every 15 seconds
+  
+      return () => clearInterval(interval);
+    }, []);
+
+
+    if(businessLoading){
+       return (
+           <div className="h-screen flex items-center justify-center flex-col gap-3 w-full fixed top-0 left-0 z-[50] bg-transparent backdrop-brightness-[0.3]">
+               <div>
+                   <Loader/>
+               </div>
+               {messages[currentMessageIndex]}
+           </div>
+     )
+}
 
   let plans;
 
@@ -470,14 +530,41 @@ function Home() {
 
   if (!activeBusiness?.place_id) {
     return (
-      <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
-        <h1 className="text-xl font-semibold">
-          <Trans i18nKey={"no_business_added"} />
-        </h1>
-        <p className="text-slate-300">
-          <Trans i18nKey={"search_or_add_business"} />
-        </p>
-      </div>
+      // <div className="flex flex-col items-center justify-center p-2 flex-1 overflow-hidden">
+      //   <h1 className="text-xl font-semibold">
+      //     <Trans i18nKey={"no_business_added"} />
+      //   </h1>
+      //   <p className="text-slate-300">
+      //     <Trans i18nKey={"search_or_add_business"} />
+      //   </p>
+      // </div>
+      <section className="container mx-auto mt-10 grid place-items-center">
+        <div className="flex flex-col gap-y-1 items-center justify-center text-[#323232]">
+          <img
+            src={ASSETS.NO_REVIEWS}
+            className="md:w-5/12"
+            alt="No-Business"
+          />
+          <h2 className="font-bold text-xl md:text-2xl ">
+            <Trans i18nKey={"getting_started"} />
+          </h2>
+          <p className="font-medium text-center text-xs md:text-sm text-[#323232]/50">
+            <Trans i18nKey={"no_feedback_yet"} />
+          </p>
+          <p className="font-medium  text-center  text-xs md:text-sm text-[#323232]/50">
+            <Trans i18nKey={"see_feedback_when_available"} />
+          </p>
+            <Button onClick={()=>setIsOpen(true)} className="bg-primary mt-3 md:p-3 md:px-6 rounded-lg hover:bg-primary">
+                <Trans i18nKey={"add_business"} />
+              </Button>
+          <Dialog open={IsOpen} onOpenChange={setIsOpen}> 
+          
+            <DialogContent className="!w-full max-w-fit">
+              <SearchBox onClose={setIsOpen} isWaiting={setBusinessLoading} />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </section>
     );
   }
   const {
@@ -498,6 +585,7 @@ function Home() {
   });
 
   return (
+    <>
     <div className="flex flex-col w-full gap-6 p-4 md:p-2  relative overflow-y-auto md:pb-20">
       <TotalReviewsCard placeId={activeBusiness?.place_id} />
       <div className="flex  justify-between items-start ">
@@ -546,7 +634,7 @@ function Home() {
           </TabsContent>
 
           <TabsContent value="advanced" className="w-full space-y-4">
-            {validateUser?.data?.data?.plan_name === "standard plan" &&
+            {validateUser?.data?.data?.plan_name === "pro-plan" &&
             AdvanceDashboardSuccess &&
             !AdvanceDashboardError ? (
               <>
@@ -625,7 +713,7 @@ function Home() {
             <DialogTrigger className="flex absolute right-4 top-[30.6rem] md:top-44 lg:top-32 ">
               <Button className="  bg-[#0F344E]/10 text-[#0F344E] rounded-3xl flex items-center hover:bg-transparent gap-x-2 border border-black font-semibold">
                 <Icons.Lock />
-               <Trans i18nKey={'unlock'}/>
+                <Trans i18nKey={"unlock"} />
               </Button>
             </DialogTrigger>
             <DialogContent className="h-full xl:h-auto w-10/12 md:max-w-7xl dark:text-white">
@@ -633,7 +721,11 @@ function Home() {
             </DialogContent>
           </Dialog>
         )}
+
+       
     </div>
+    
+    </>
   );
 }
 
