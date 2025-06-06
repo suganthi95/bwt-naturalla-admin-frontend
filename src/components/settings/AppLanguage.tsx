@@ -126,7 +126,7 @@ function AppLanguage() {
             <SelectGroup>
               <SelectLabel><Trans i18nKey={'app_language'}/></SelectLabel>
               <SelectItem value="en">English</SelectItem>
-              <SelectItem value="ar">Arabic</SelectItem>
+              <SelectItem value="ar"><Trans i18nKey={'arabic'}/></SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

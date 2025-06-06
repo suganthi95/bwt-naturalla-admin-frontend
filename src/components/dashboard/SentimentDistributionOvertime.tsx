@@ -7,7 +7,7 @@ import { sentimentDistributionOvertime } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -16,7 +16,7 @@ interface Props {
 function SentimentDistributionOvertime({ placeId }: Props) {
 
     const { auth } = useAppContext();
-
+    const {t} = useTranslation()
     const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "sentimentDistributionOvertime" ],
         queryFn: () => sentimentDistributionOvertime({
@@ -47,18 +47,18 @@ function SentimentDistributionOvertime({ placeId }: Props) {
     }
 
     if(isSuccess && !(data?.filter((item: any) => item.positive === 0 && item.negative === 0).length === 12)){
+        // const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
+  const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
-        const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ];
-
-        const chartData = data.map((item: any) => ({ month: months[item.month - 1], positive: item.positive, negative: item.negative }))
+        const chartData = data.map((item: any) => ({ month:t(`months.${months[item.month - 1]}`), positive: item.positive, negative: item.negative }))
         
         const chartConfig = {
             positive: {
-                label: "positive",
+                label: t("positive"),
                 color: "orange",
             },
             negative: {
-                label: "negative",
+                label: t("negative"),
                 color: "red",
             },
         } satisfies ChartConfig

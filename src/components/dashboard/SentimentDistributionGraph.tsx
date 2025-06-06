@@ -7,7 +7,7 @@ import { getSentimentDistribution } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -16,7 +16,7 @@ interface Props {
 function SentimentDistributionGraph({ placeId }: Props) {
 
     const { auth } = useAppContext();
-
+   const {t} = useTranslation()
     const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "getSentimentDistribution" ],
         queryFn: () => getSentimentDistribution({
@@ -50,7 +50,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
         
         const chartConfig = {
             pv: {
-                label: "sentiment",
+                label: t("sentiment"),
                 color: "bg-primary",
             },
         } satisfies ChartConfig
@@ -112,7 +112,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                         axisLine={false}
                     >
                         <Label
-                            value='Review count'
+                            value={t('review.count')}
                             className="!text-[10px]   md:text-lg "
                             offset={-10}
                             angle={270}
@@ -126,7 +126,7 @@ function SentimentDistributionGraph({ placeId }: Props) {
                         cursor={false}
                         content={<ChartTooltipContent hideLabel />}
                     />
-                    <Bar dataKey="review_count" fill="orange" radius={8}>
+                    <Bar dataKey={t('review_count')} fill="orange" radius={8}>
                         <LabelList
                             position="top"
                             offset={12}

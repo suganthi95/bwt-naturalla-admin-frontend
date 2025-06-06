@@ -14,16 +14,23 @@ import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info, X } from "lucide-react";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { setDayjsLocale } from "@/utils/dayjsConfig";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 interface Props {
   placeId: string;
 }
 
 function AverageSentiment({ placeId }: Props) {
-
+  dayjs.extend(relativeTime);
+  const {t} =useTranslation()
   const { auth } = useAppContext();
-
+  const lang  = localStorage.getItem('lang') || 'en'
+  useEffect(() => {
+    setDayjsLocale(lang);
+  }, [lang]);
   const { isLoading, isSuccess, isError, data } = useQuery({
     queryKey: ["avgSentiment"],
     queryFn: () =>
@@ -54,12 +61,13 @@ function AverageSentiment({ placeId }: Props) {
     );
   }
 
+  const sentimentKey = t('sentiment')
   if (isSuccess && data?.length > 0) {
     const chartData = data
       .filter((item: any) => item.year === 2024)
       .map((item: any) => ({
         month: dayjs(item.date).format("MMM"),
-        sentiment: item.average_sentiment_score,
+        [sentimentKey]: item.average_sentiment_score,
       }));
 
     const chartConfig = {
@@ -146,7 +154,7 @@ function AverageSentiment({ placeId }: Props) {
                 content={<ChartTooltipContent hideLabel />}
               />
               <Line
-                dataKey="sentiment"
+                dataKey={t('sentiment')}
                 type="natural"
                 stroke="orange"
                 strokeWidth={2}

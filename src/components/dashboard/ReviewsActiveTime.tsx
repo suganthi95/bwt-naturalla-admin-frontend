@@ -6,7 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 import Chart from "react-apexcharts"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -15,7 +15,7 @@ interface Props {
 function ReviewsActiveTime({ placeId }: Props) {
 
     const { auth } = useAppContext();
-
+    const {t}  = useTranslation()
     const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "reviewActiveTime" ],
         queryFn: () => reviewActiveTime({
@@ -319,31 +319,31 @@ function ReviewsActiveTime({ placeId }: Props) {
         },
         series: [
             {
-                name: "Sun",
+                name: t('weekdays.sun'),
                 data: dataSeries(data, 0),
             },
             {
-                name: "Mon",
+                name: t('weekdays.mon'),
                 data: dataSeries(data, 1),
             },
             {
-                name: "Tue",
+                name: t('weekdays.tue'),
                 data: dataSeries(data, 2),
             },
             {
-                name: "Wed",
+                name:t('weekdays.wed'),
                 data: dataSeries(data, 3),
             },
             {
-                name: "Thu",
+                name:t('weekdays.thu'),
                 data: dataSeries(data, 4),
             },
             {
-                name: "Fri",
+                name: t('weekdays.fri'),
                 data: dataSeries(data, 5),
             },
             {
-                name: "Sat",
+                name: t('weekdays.sat'),
                 data: dataSeries(data, 6),
             },
         ],
