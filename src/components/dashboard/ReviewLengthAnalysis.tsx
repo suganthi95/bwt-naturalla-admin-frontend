@@ -7,7 +7,7 @@ import { reviewLenAnalysis } from "@/lib/apis";
 import { Skeleton } from "../ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Info } from "lucide-react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Props {
     placeId: string
@@ -16,7 +16,7 @@ interface Props {
 function ReviewLengthAnalysis({ placeId }: Props) {
 
     const { auth } = useAppContext();
-
+    const {t} = useTranslation()
     const { isLoading, isSuccess, isError, data } = useQuery({
         queryKey: [ "ReviewLenAnalysis" ],
         queryFn: () => reviewLenAnalysis({
@@ -50,11 +50,11 @@ function ReviewLengthAnalysis({ placeId }: Props) {
         
         const chartConfig = {
             positive_reviews: {
-                label: "positive reviews",
+                label:t('review.positive'),
                 color: "bg-primary",
             },
             negative_reviews: {
-                label: "negative reviews",
+                label:t('review.negative'),
                 color: "red",
             },
         } satisfies ChartConfig

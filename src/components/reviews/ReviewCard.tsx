@@ -22,7 +22,7 @@ function ReviewCard(props: ReviewType & PlaceIDType) {
   dayjs.extend(relativeTime);
 
   const { auth } = useAppContext();
-  const lang  = localStorage.getItem('lang') || 'er'
+  const lang  = localStorage.getItem('lang') || 'en'
 
   useEffect(() => {
     setDayjsLocale(lang);

@@ -1,6 +1,38 @@
 {
   "title": "Turning reviews into insights",
   "signIn": "Sign In",
+    "review": {
+    "positive": "Positive Reviews",
+    "negative": "Negative Reviews",
+    "count": "Review Count"
+  },
+  "review_count":"review_count",
+
+  "arabic":"Arabic",
+    "sentiment": "sentiment",
+ "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sept",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  },
+   "weekdays": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat"
+  },
   "enter_email_info": "Enter the email address associated with your account. We'll verify it and send you a link to reset your password.",
   "reset_password": "Reset password",
   "back_to_login": "Back to login",
