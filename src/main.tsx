@@ -10,7 +10,6 @@ import {
 import { Toaster } from './components/ui/sonner.tsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AppContextProvider } from './contexts/AuthContext.tsx';
-import './lib/i18next/i18n.ts';
 
 const queryClient = new QueryClient()
 

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { AuthType, SignUpType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
@@ -19,19 +19,11 @@ import { toast } from "sonner";
 import { useAppContext } from "@/contexts/AuthContext";
 import { AxiosError, AxiosResponse } from "axios";
 import useToggle from "@/hooks/useToggle";
-import { initializeGA, trackpPageView } from "@/lib/google_analytics";
 import { Trans, useTranslation } from "react-i18next";
 
 function SignUp() {
-  const location = useLocation();
   const {t} = useTranslation()
-  const user = localStorage.getItem("auth");
-  const parsedUser = user ? JSON.parse(user) : null;
-  const Mail = parsedUser?.data?.email;
-   useEffect(() => {
-     initializeGA();
-     trackpPageView(location.pathname,Mail);
-   }, []);
+  
   const {
     register,
     handleSubmit,
@@ -144,7 +136,7 @@ function SignUp() {
     <div className="p-0 lg:p-2 flex bg-sandal h-screen ">
       <div className="hidden lg:flex flex-1">
         <div className="flex items-center justify-center w-full">
-          <img className="w-2/3" src={ASSETS.SIGNUP_BG_IMG} alt="bg-img" />
+          {/* <img className="w-2/3" src={ASSETS.LOGO} alt="bg-img" /> */}
         </div>
       </div>
       <div className="flex flex-1 flex-col justify-center rounded-xl bg-white relative h-full">
@@ -152,7 +144,7 @@ function SignUp() {
           <img src={ASSETS.LOGO} alt="logo" />
           <div>
             <p className="font-bold text-xl md:text-3xl text-primary">
-              Intelli<span className="text-secondary">Response</span>
+              <span className="text-secondary"></span>
             </p>
             <span className="text-slate-500 text-sm md:text-balance">
               <Trans i18nKey={'title'}/>
@@ -287,7 +279,7 @@ function SignUp() {
 
             <p className="text-xs text-center">
               <Trans i18nKey={'agreement.prefix'}/>
-              <Link
+              {/* <Link
                 className="text-blue-500 hover:underline"
                 to="https://intelliresponse.ai/en/terms-and-conditions"
                 target="_blank"
@@ -309,7 +301,7 @@ function SignUp() {
                 target="_blank"
               >
                 <Trans i18nKey={'agreement.eula'}/>
-              </Link>
+              </Link> */}
             </p>
 
             <div>
@@ -329,7 +321,7 @@ function SignUp() {
             className="w-full flex flex-row items-center gap-2 dark:bg-slate-50 dark:border-slate-200 hover:dark:bg-slate-50/5 hover:dark:text-black"
             variant="outline"
           >
-            <Icons.googleIcon />
+            <Icons.logo />
             <Trans i18nKey={'continueWithGoogle'}/>
           </Button>
 
@@ -340,24 +332,14 @@ function SignUp() {
             </Link>
           </p>
 
-          <p className="text-xs md:text-sm text-center w-full mx-auto mt-3 md:mt-10">
+          {/* <p className="text-xs md:text-sm text-center w-full mx-auto mt-3 md:mt-10">
                           <Trans i18nKey={'footer.copyright'}/>
                  <Link className="font-bold hover:underline" to="https://intelliresponse.ai/" target="_blank">IntelliResponse</Link>           <Trans i18nKey={'footer.allRightsReserved'}/>
 . <Trans i18nKey={'footer.poweredBy'}/> <Link className="font-bold hover:underline" to="https://embrais.com/" target="_blank">Embrace AI Solutions</Link>.
-            </p>
+            </p> */}
         </div>
       </div>
 
-      {/* <AlertDialog open={true}>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                <AlertDialogTitle>Contact Us</AlertDialogTitle>
-                <AlertDialogDescription>
-                    Please contact IntelliResponse team.
-                </AlertDialogDescription>
-                </AlertDialogHeader>
-            </AlertDialogContent>
-        </AlertDialog> */}
     </div>
   );
 }

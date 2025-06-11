@@ -29,7 +29,7 @@ export const downloadBlobAsPDF = (blob: string) => {
   tempLink.href = url;
   tempLink.setAttribute(
     "download",
-    `intelliresponse_invoice_${dayjs(new Date())}.pdf`
+    `invoice_${dayjs(new Date())}.pdf`
   ); // Set the desired filename for the downloaded file
 
   // Append the <a> element to the body and click it to trigger the download

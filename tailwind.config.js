@@ -21,19 +21,13 @@ export default {
     },
     extend: {
       colors: {
-        "gray-100": "#D0D0D0",
-        "gray-200": "#54647A",
-        "gray-300": "#7A7A9D",
-        "primary": "#FF840F",
-        "secondary": "#0F344E",
-        "sandal": "#F7EFE8",
-        "error": "#FF0000",
-        "title":"#262222",
-        "lead":"#4B515C",
+        "primary-green": "#1E401D",
+        "secondary-green": "#81C55A",
+        "yello-lite": "#DAD3BE",
 
       },
       fontFamily: {
-        inter: ['Inter', "sans-serif"],
+        montserrat: ['Montserrat', "sans-serif"],
       },
       fontSize: {
         sm: '13px',
