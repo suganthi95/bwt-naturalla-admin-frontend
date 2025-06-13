@@ -9,6 +9,9 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import Products from "./pages/Products";
 import Profile from "./pages/Profile";
+import AddProducts from "./pages/AddProducts";
+import { ProductInfo } from "./components/products/ProductInfo";
+import { ProductPrice } from "./components/products/ProductPrice";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -48,6 +51,14 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/products/add" element={<AddProducts />}>
+          <Route path="product-info" element={<ProductInfo/>}/>
+          <Route path="product-price" element={<ProductPrice/>}/>
+          <Route path="product-specs" element={<p>product specs</p>}/>
+          <Route path="shipping-info" element={<p>shipping info</p>}/>
+          <Route path="discounts" element={<p>discounts</p>}/>
+          <Route path="seo" element={<p>seo</p>}/>
+        </Route>
         <Route path="/profile" element={<Profile />} />
       </Route>
       <Route path="/sign-in" element={<SignIn />} />

@@ -21,6 +21,7 @@ export default {
     },
     extend: {
       colors: {
+        "primary-blue": "#007AFF",
         "primary-green": "#1E401D",
         "secondary-green": "#81C55A",
         "yello-lite": "#DAD3BE",

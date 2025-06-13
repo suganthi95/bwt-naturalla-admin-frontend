@@ -1,229 +1,49 @@
-import { ReactElement } from "react"
 
-export type ReviewType = {
-    "is_bookmarked": boolean,
-    "google_id": string,
-    "review_id": string,
-    "review_pagination_id": string,
-    "author_link": string,
-    "author_title": string,
-    "author_id": string,
-    "author_image": string,
-    "author_reviews_count": number,
-    "author_ratings_count": number,
-    "review_text": string,
-    "review_img_urls": string | null,
-    "review_img_url": string | null,
-    "review_questions": {
-        "Food": string,
-        "Service": string,
-        "Atmosphere": string
-    },
-    "review_photo_ids": string |null,
-    "owner_answer": string | null,
-    "owner_answer_timestamp": number | null,
-    "owner_answer_timestamp_datetime_utc": string | null,
-    "review_link": string,
-    "review_rating": number,
-    "review_timestamp": number,
-    "review_datetime_utc": string | null,
-    "review_likes": number,
-    "reviews_id": string | null,
-    "sentiment": "positive" | "negative",
-}
-
-export type ReviewSuggestionType = {
-    casual_tone: {
-        response: string,
-        generation_id: string
-    },
-    professional_tone: {
-        response: string,
-        generation_id: string
-    },
-    overall_sentiment: "positive" | "negative",
-    sentiment_score: number,
-    remaining_credit: {
-        credit: number
-    },
-    reviewData: ReviewType
-}
-
-export interface AuthType {
-    data: User
-    message: "Success",
-    token : string
-}
-
-export interface User {
-    name: string,
-    email: string,
-    password: string | null,
-    role: string | null,
-    industry: string | null,
-    created_at: Date,
-    through: "google",
-    workspaces: string[],
-    business_type: string | null,
-    heard_through: string | null,
-    active_workspace_name: string,
-    onboarded: boolean
-    plan_name:string
-}
-
-export interface GetBusinessType {
-    business_name: string
-    street_number: string
-    street: string
-    city: string
-    email: string
-    zip_code: string
-    place_id: string,
-    created_at: Date,
-    active_business: boolean
-}
-
-export type SignUpType = {
-    username: string,
-    email: string,
-    password: string,
-    confirmPassword: string
-}
-
-export type OnBoardType = {
-    business: string,
-    role: string,
-    industry: string[],
-    heardThrough: string,
-    workspaceName: string
-}
-
-export interface ValidateUserType {
-    name: string
-    email: string
-    password: string
-    role: string
-    industry: string
+export type ProductsType = {
+    product_id: number
+    admin_id: any
+    product_name: string
+    category_id: number
+    brand: any
+    tags: any
+    slug: string
+    barcode: any
+    units: any
+    min_order_quantity: number
+    unit_price: number
     created_at: string
-    through: string
-    workspaces: string[]
-    business_type: string
-    heard_through: string
-    onboarded: boolean
-    active_workspace: string
-    onboarded_at: Date | null
-    credit: number,
-    notification: boolean,
-    timezone: string | null,
-    workspaceList: WorkspaceList[],
-    businessList: BusinessList[],
-    remaining_credits: number,
-    remaining_instant_Credits: number,
-    plan_end_date: Date,
-    plan_name: "pro-plan" | "standard plan" | "free trial",
-    upgraded_user: boolean
-
-}
-  
-export interface WorkspaceList {
-    workspace_name: string
-    workspace_id: string
-    active_business: string | null
-}
-
-export interface BusinessList {
-    business_name: string,
-    place_id: string
-}
-
-export interface DashboardDataType {
-    credits: number,
-    total_credits: number,
-    instant_credits: number,
-    total_instant_credits: number,
-    totalRatings: number
-    chartData: any,
-    total_business: string
-}
-
-export type CollapseType  = {
-    "general": MenuType[]
-    "menu": MenuType[]
-    "appsintegration": MenuType[]
-}
-
-export type MenuType = {
-    name: string
-    route: string
-    icon: ReactElement,
-    shouldVisible: boolean
-}
-
-export type FeedbackFormType = {
-    feedbackType: string,
-    message: string,
-    file: FileList
-}
-
-export interface BillingResponse {
-    period: string
-    plan_name: string
-    ends_on: string
-    next_due: string
-    total_credits: number
-    used_credits: number
-    remaining_credits: number
-    workspace_id: string
-    cancel_subscription: boolean
-    cancel_initiated: string
-    cancel_at: string
-    instant_credits: InstantCredits
-    amount: number
-    currencey: string,
-    currency_symbol: string,
-    started_subscription: boolean,
-    future_subscription: boolean,
-    future_sub_start_date: string,
-    future_sub_plan_name: string
-  }
-  
-  export interface InstantCredits {
-    currency_symbol: string
-    total_credits: string
-    used_credits: string
-    remaining_instant_credits: string
-    order_amount: number
-    started_at: string
-    currency: string
-  }
-
-export interface PaymentHistoryResponseType {
-    payment_id: string
-    invoice_id: string
-    method: string
-    payment_date: string
-    payment_status: string
-    amount_paid: number
-    validity_from: string
-    validity_to: string,
-}
-
-export interface SubscriptionPlanType {
-    plan_id: number
-    razorpay_planid: string
-    plan_name: string
-    period: string
-    interval: number
-    plan_desc: string
-    plan_amount: number
-    unit_amount: number
-    currency: string
-    created_at: any
-    updated_at: any
-    country: string
+    is_discounted: boolean
+    short_description: string
+    long_description: string
+    benefits: string
+    how_to_use: string
+    ingredients: string
+    product_specification_pdf: any
+    is_featured: boolean
+    isin_todays_deal: boolean
+    created_by: any
+    discount_type: string
+    start_at: any
+    end_at: any
+    vat_tax: any
+    meta_title: any
+    meta_description: any
+    meta_keywords: any
+    meta_image_url: any
+    cash_on_delivery: boolean
+    shipping_days: any
+    best_selling: boolean
+    offer_ending_soon: boolean
+    description_images: number[]
+    thumbnail_image: number
+    discount_amount: any
+    discount_percent: number
+    discounted_price: any
+    gallery_images: number[]
+    product_videos: any
     strike_through_price: number
-    price_per_month: number
-    discount_pecentage: number,
-    currency_symbol: string,
-    active_plan: boolean
+    product_size: string
+    coupon_id: number
+    benefit_keys: any
+    publish: boolean
 }
