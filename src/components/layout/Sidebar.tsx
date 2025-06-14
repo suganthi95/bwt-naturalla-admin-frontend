@@ -34,8 +34,8 @@ export default function Sidebar() {
         shouldVisible: true,
       },
       {
-        name: "Profile",
-        route: "profile",
+        name: "Orders",
+        route: "orders",
         icon: <Layers className="w-5" />,
         shouldVisible: true,
       },

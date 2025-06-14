@@ -1,0 +1,25 @@
+import OrderTable from "@/components/orders/OrderTable"
+import { Button } from "@/components/ui/button"
+import { Ellipsis } from "lucide-react"
+
+function Orders() {
+  return (
+    <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
+      <div className="flex flex-row items-center justify-between">
+        <h1 className="text-xl font-semibold">Orders</h1>
+
+        <div className="flex flex-row items-center gap-5">
+          {/* <Button>Orders</Button> */}
+          <Button size="icon" variant="outline">
+            <Ellipsis />
+          </Button>
+        </div>
+      </div>
+      <div>
+        <OrderTable/>
+      </div>
+    </div>
+  )
+}
+
+export default Orders
