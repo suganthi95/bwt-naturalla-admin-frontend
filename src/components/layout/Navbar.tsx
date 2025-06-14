@@ -1,38 +1,35 @@
-import { BarChartBig, Bell, Briefcase, House, MessageSquare, Settings } from "lucide-react";
-import { useState } from "react";
-import { useAppContext } from "@/contexts/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Bell, MessageSquare, Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 function Navbar(){
 
-    const { auth } = useAppContext();
-    const path = useLocation();
-    const navigate = useNavigate();
-    const tabValue = path.pathname.split("/").at(-1);
-    const [ openSheet, setOpenSheet ] = useState(false);
+    // const { auth } = useAppContext();
+    // const path = useLocation();
+    // const navigate = useNavigate();
+    // const tabValue = path.pathname.split("/").at(-1);
+    // const [ openSheet, setOpenSheet ] = useState(false);
 
-    const menu = [
-      {
-        name: "dashboard",
-        route: "dashboard",
-        icon: <House className="w-5" />,
-        shouldVisible: true,
-      },
-      {
-        name: "reviews",
-        route: "reviews",
-        icon: <BarChartBig className="w-5" />,
-        shouldVisible: true,
-      },
-      {
-        name: "my_business",
-        route: "business",
-        icon: <Briefcase className="w-5" />,
-        shouldVisible: true,
-      },
-    ]
+    // const menu = [
+    //   {
+    //     name: "dashboard",
+    //     route: "dashboard",
+    //     icon: <House className="w-5" />,
+    //     shouldVisible: true,
+    //   },
+    //   {
+    //     name: "reviews",
+    //     route: "reviews",
+    //     icon: <BarChartBig className="w-5" />,
+    //     shouldVisible: true,
+    //   },
+    //   {
+    //     name: "my_business",
+    //     route: "business",
+    //     icon: <Briefcase className="w-5" />,
+    //     shouldVisible: true,
+    //   },
+    // ]
 
     return(
         <div>

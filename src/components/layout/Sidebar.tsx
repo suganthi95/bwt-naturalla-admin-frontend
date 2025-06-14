@@ -1,5 +1,4 @@
 import { Box, Layers, LayoutDashboard } from "lucide-react";
-import { MenuType } from "@/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Icons } from "@/assets/icons";
@@ -13,7 +12,7 @@ export default function Sidebar() {
   const tabValue = path.pathname.split("/").at(-1);
 
 
-  const redirect = (route: MenuType) => {
+  const redirect = (route: any) => {
     if (["privacy_policy", "terms_conditions", "faq"].includes(route.name)) {
       window.open(route.route, "_blank");
     } else {
@@ -60,8 +59,8 @@ export default function Sidebar() {
           <Tabs value={tabValue}>
             <TabsList className="flex flex-col gap-3 mt-3 h-full rounded-none bg-white dark:bg-slate-950">
               {menu
-                .filter((item: MenuType) => item.shouldVisible)
-                .map((item: MenuType) => (
+                .filter((item) => item.shouldVisible)
+                .map((item) => (
                   <TabsTrigger
                     key={`menu-${item}`}
                     onClick={() =>
