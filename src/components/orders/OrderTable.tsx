@@ -2,81 +2,208 @@ import { getAllProducts } from "@/lib/apis";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ChevronDown, Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
-import { ProductsType } from "@/types";
-import { Switch } from "../ui/switch";
 
 
-const columns: ColumnDef<ProductsType>[] = [
+const columns: ColumnDef<any>[] = [
     {
-      accessorKey: "id",
-      header:()=> "#",
+      accessorKey: "orderId",
+      header:()=> "Order ID",
       cell: ({ row  }) => (
-        <div className="capitalize">{parseInt(row.id) + 1}</div>
+        <div className="capitalize">{row.getValue("orderId")}</div>
       )
     },
     {
-      accessorKey: "product_name",
-      header:()=> "Product Title",
+      accessorKey: "orderDate",
+      header:()=> "Order Date",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("product_name")}</div>
+        <div className="capitalize">{row.getValue("orderDate")}</div>
       )
     },
     {
-      accessorKey: "unit_price",
-      header:()=> "Detail",
+      accessorKey: "orderCode",
+      header:()=> "Order Code",
       cell: ({ row }) => (
-        <div className="capitalize">₹ {row.getValue("unit_price")} / Nos</div>
+        <div className="capitalize">{row.getValue("orderCode")}</div>
       )
     },
     {
-      accessorKey: "stock",
-      header:()=> "Current Stock",
+      accessorKey: "customerName",
+      header:()=> "Customer Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("customerName")}</div>
+      )
+    },
+    {
+      accessorKey: "customerPhone",
+      header:()=> "Customer Phone",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("customerPhone")}</div>
+      )
+    },
+    {
+      accessorKey: "cityState",
+      header:()=> "City / State",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("cityState")}</div>
+      )
+    },
+    {
+      accessorKey: "totalAmount",
+      header:()=> "Total Amount",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("totalAmount")}</div>
+      )
+    },
+    {
+      accessorKey: "paymentStatus",
+      header:()=> "Payment Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("paymentStatus")}</div>
+      )
+    },
+    {
+      accessorKey: "deliveryStatus",
+      header:()=> "Delivery Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("deliveryStatus")}</div>
+      )
+    },
+    {
+      accessorKey: "orderStatus",
+      header:()=> "Order Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("orderStatus")}</div>
+      )
+    },
+    {
+      accessorKey: "shipmentStatus",
+      header:()=> "Shipment Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("shipmentStatus")}</div>
+      )
+    },
+    {
+      accessorKey: "awbCode",
+      header:()=> "AWB Code",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("awbCode")}</div>
+      )
+    },
+    {
+      accessorKey: "trackingUrl",
+      header:()=> "Tracking URL",
       cell: () => (
-        <div className="capitalize">{"44"}</div>
-      )
-    },
-    {
-      accessorKey: "publish",
-      header:()=> "Published",
-      cell: ({ row }) => (
         <div>
-            <Switch checked={row.getValue("publish")}/>
+            <Button>Track</Button>
         </div>
       )
     },
     {
-      accessorKey: "isin_todays_deal",
-      header:()=> "Today's deal",
-      cell: ({ row }) => (
-        <div>
-            <Switch checked={row.getValue("isin_todays_deal")}/>
-        </div>
-      )
-    },
-    {
-      accessorKey: "is_featured",
-      header:()=> "Featured",
-      cell: ({ row }) => (
-        <div>
-            <Switch checked={row.getValue("is_featured")}/>
-        </div>
-      )
-    },
-    {
-      accessorKey: "options",
-      header:()=> "Options",
+      accessorKey: "actions",
+      header:()=> "Actions",
       cell: () => (
-        <Button size="icon" variant={"ghost"}>
-            <Settings className="h-5 w-5 stroke-slate-500"/>
-        </Button>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button size="icon" variant={"ghost"}>
+                    <Settings className="h-5 w-5 stroke-slate-500"/>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[150px]">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">View Order</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Cancel</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Track</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Generate Label</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Resend SMS</DropdownMenuItem>
+            </DropdownMenuContent>
+            </DropdownMenu>
       )
     },
 ]
+
+    const orders = [
+        {
+            orderId: 91,
+            orderDate: "2025-06-14 10:40",
+            orderCode: "NTRULA1749877849164",
+            customerName: "Krishna V",
+            customerPhone: "7904148922",
+            cityState: "Salem, Tamil Nadu",
+            totalAmount: 1099,
+            paymentStatus: "Paid",
+            deliveryStatus: "In-Progress",
+            orderStatus: "In-Progress",
+            shipmentStatus: "In-Transit",
+            awbCode: "123456789",
+            trackingUrl: "https://tracking.example.com/123456789"
+        },
+        {
+            orderId: 92,
+            orderDate: "2025-06-13 16:15",
+            orderCode: "NTRULA1749877849165",
+            customerName: "Anita Sharma",
+            customerPhone: "9876543210",
+            cityState: "Mumbai, Maharashtra",
+            totalAmount: 1599,
+            paymentStatus: "Paid",
+            deliveryStatus: "Delivered",
+            orderStatus: "Completed",
+            shipmentStatus: "Delivered",
+            awbCode: "987654321",
+            trackingUrl: "https://tracking.example.com/987654321"
+        },
+        {
+            orderId: 93,
+            orderDate: "2025-06-12 09:00",
+            orderCode: "NTRULA1749877849166",
+            customerName: "Ravi Kumar",
+            customerPhone: "9123456789",
+            cityState: "Bengaluru, Karnataka",
+            totalAmount: 899,
+            paymentStatus: "Pending",
+            deliveryStatus: "Not Shipped",
+            orderStatus: "Pending",
+            shipmentStatus: "Pending",
+            awbCode: "",
+            trackingUrl: ""
+        },
+        {
+            orderId: 94,
+            orderDate: "2025-06-14 11:05",
+            orderCode: "NTRULA1749877849167",
+            customerName: "Meena George",
+            customerPhone: "9012345678",
+            cityState: "Kochi, Kerala",
+            totalAmount: 1249,
+            paymentStatus: "Paid",
+            deliveryStatus: "Out for Delivery",
+            orderStatus: "In-Progress",
+            shipmentStatus: "Out for Delivery",
+            awbCode: "1122334455",
+            trackingUrl: "https://tracking.example.com/1122334455"
+        },
+        {
+            orderId: 95,
+            orderDate: "2025-06-11 14:30",
+            orderCode: "NTRULA1749877849168",
+            customerName: "Sanjay D",
+            customerPhone: "8765432109",
+            cityState: "Delhi, Delhi",
+            totalAmount: 1349,
+            paymentStatus: "Paid",
+            deliveryStatus: "Cancelled",
+            orderStatus: "Cancelled",
+            shipmentStatus: "Not Applicable",
+            awbCode: "",
+            trackingUrl: ""
+        }
+    ];
 
 function OrderTable() {
 
@@ -88,15 +215,22 @@ function OrderTable() {
 
     console.log(data)
 
+
     const headers = [
-        { label: "#", key: "id" },
-        { label: "Product Title", key: "product_name" },
-        { label: "Detail", key: "unit_price" },
-        { label: "Current Stock", key: "stock" },
-        { label: "Published", key: "publish" },
-        { label: "Today's deal", key: "isin_todays_deal" },
-        { label: "Featured", key: "is_featured" },
-        { label: "Options", key: "options" },
+        { label: "Order ID", key: "orderId" },
+        { label: "Order Date", key: "orderDate" },
+        { label: "Order Code", key: "orderCode" },
+        { label: "Customer Name", key: "customerName" },
+        { label: "Customer Phone", key: "customerPhone" },
+        { label: "City / State", key: "cityState" },
+        { label: "Total Amount", key: "totalAmount" },
+        { label: "Payment Status", key: "paymentStatus" },
+        { label: "Delivery Status", key: "deliveryStatus" },
+        { label: "Order Status", key: "orderStatus" },
+        { label: "Shipment Status", key: "shipmentStatus" },
+        { label: "AWB Code", key: "awbCode" },
+        { label: "Tracking URL", key: "trackingUrl" },
+        { label: "Actions", key: "actions" },
     ];
 
     const [sorting, setSorting] = useState<SortingState>([])
@@ -123,7 +257,7 @@ function OrderTable() {
     
     
     const table = useReactTable({
-        data: data?.data?.products,
+        data: orders,
         columns,
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
