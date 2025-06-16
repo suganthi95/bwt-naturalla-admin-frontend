@@ -22,3 +22,10 @@ export const getAllProducts = async()=>{
         url:`${BASE_URL}/products/products`,
     })
 }
+
+export const getAllOrders =async()=>{
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/order`
+    })
+}

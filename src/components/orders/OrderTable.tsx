@@ -1,4 +1,4 @@
-import { getAllProducts } from "@/lib/apis";
+import { getAllOrders } from "@/lib/apis";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -11,91 +11,91 @@ import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPag
 
 const columns: ColumnDef<any>[] = [
     {
-      accessorKey: "orderId",
+      accessorKey: "order_id",
       header:()=> "Order ID",
       cell: ({ row  }) => (
-        <div className="capitalize">{row.getValue("orderId")}</div>
+        <div className="capitalize">{row.getValue("order_id")}</div>
       )
     },
     {
-      accessorKey: "orderDate",
+      accessorKey: "order_date",
       header:()=> "Order Date",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("orderDate")}</div>
+        <div className="capitalize">{row.getValue("order_date")}</div>
       )
     },
     {
-      accessorKey: "orderCode",
+      accessorKey: "order_code",
       header:()=> "Order Code",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("orderCode")}</div>
+        <div className="capitalize">{row.getValue("order_code")}</div>
       )
     },
     {
-      accessorKey: "customerName",
+      accessorKey: "shipmet_first_name",
       header:()=> "Customer Name",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("customerName")}</div>
+        <div className="capitalize">{row.getValue("shipmet_first_name")}</div>
       )
     },
     {
-      accessorKey: "customerPhone",
+      accessorKey: "shipment_phone_no",
       header:()=> "Customer Phone",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("customerPhone")}</div>
+        <div className="capitalize">{row.getValue("shipment_phone_no")}</div>
       )
     },
     {
-      accessorKey: "cityState",
+      accessorKey: "city",
       header:()=> "City / State",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("cityState")}</div>
+        <div className="capitalize">{row.getValue("city")}</div>
       )
     },
     {
-      accessorKey: "totalAmount",
+      accessorKey: "sub_total",
       header:()=> "Total Amount",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("totalAmount")}</div>
+        <div className="capitalize">{row.getValue("sub_total")}</div>
       )
     },
     {
-      accessorKey: "paymentStatus",
+      accessorKey: "payment_status",
       header:()=> "Payment Status",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("paymentStatus")}</div>
+        <div className="capitalize">{row.getValue("payment_status")}</div>
       )
     },
     {
-      accessorKey: "deliveryStatus",
+      accessorKey: "delivery_status",
       header:()=> "Delivery Status",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("deliveryStatus")}</div>
+        <div className="capitalize">{row.getValue("delivery_status")}</div>
       )
     },
     {
-      accessorKey: "orderStatus",
+      accessorKey: "order_status",
       header:()=> "Order Status",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("orderStatus")}</div>
+        <div className="capitalize">{row.getValue("order_status")}</div>
       )
     },
+    // {
+    //   accessorKey: "shipmentStatus",
+    //   header:()=> "Shipment Status",
+    //   cell: ({ row }) => (
+    //     <div className="capitalize">{row.getValue("shipmentStatus")}</div>
+    //   )
+    // },
     {
-      accessorKey: "shipmentStatus",
-      header:()=> "Shipment Status",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("shipmentStatus")}</div>
-      )
-    },
-    {
-      accessorKey: "awbCode",
+      accessorKey: "awbawb_code",
       header:()=> "AWB Code",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("awbCode")}</div>
+        <div className="capitalize">{row.getValue("awbawb_code")}</div>
       )
     },
     {
-      accessorKey: "trackingUrl",
+      accessorKey: "track_url",
       header:()=> "Tracking URL",
       cell: () => (
         <div>
@@ -127,93 +127,101 @@ const columns: ColumnDef<any>[] = [
     },
 ]
 
-    const orders = [
-        {
-            orderId: 91,
-            orderDate: "2025-06-14 10:40",
-            orderCode: "NTRULA1749877849164",
-            customerName: "Krishna V",
-            customerPhone: "7904148922",
-            cityState: "Salem, Tamil Nadu",
-            totalAmount: 1099,
-            paymentStatus: "Paid",
-            deliveryStatus: "In-Progress",
-            orderStatus: "In-Progress",
-            shipmentStatus: "In-Transit",
-            awbCode: "123456789",
-            trackingUrl: "https://tracking.example.com/123456789"
-        },
-        {
-            orderId: 92,
-            orderDate: "2025-06-13 16:15",
-            orderCode: "NTRULA1749877849165",
-            customerName: "Anita Sharma",
-            customerPhone: "9876543210",
-            cityState: "Mumbai, Maharashtra",
-            totalAmount: 1599,
-            paymentStatus: "Paid",
-            deliveryStatus: "Delivered",
-            orderStatus: "Completed",
-            shipmentStatus: "Delivered",
-            awbCode: "987654321",
-            trackingUrl: "https://tracking.example.com/987654321"
-        },
-        {
-            orderId: 93,
-            orderDate: "2025-06-12 09:00",
-            orderCode: "NTRULA1749877849166",
-            customerName: "Ravi Kumar",
-            customerPhone: "9123456789",
-            cityState: "Bengaluru, Karnataka",
-            totalAmount: 899,
-            paymentStatus: "Pending",
-            deliveryStatus: "Not Shipped",
-            orderStatus: "Pending",
-            shipmentStatus: "Pending",
-            awbCode: "",
-            trackingUrl: ""
-        },
-        {
-            orderId: 94,
-            orderDate: "2025-06-14 11:05",
-            orderCode: "NTRULA1749877849167",
-            customerName: "Meena George",
-            customerPhone: "9012345678",
-            cityState: "Kochi, Kerala",
-            totalAmount: 1249,
-            paymentStatus: "Paid",
-            deliveryStatus: "Out for Delivery",
-            orderStatus: "In-Progress",
-            shipmentStatus: "Out for Delivery",
-            awbCode: "1122334455",
-            trackingUrl: "https://tracking.example.com/1122334455"
-        },
-        {
-            orderId: 95,
-            orderDate: "2025-06-11 14:30",
-            orderCode: "NTRULA1749877849168",
-            customerName: "Sanjay D",
-            customerPhone: "8765432109",
-            cityState: "Delhi, Delhi",
-            totalAmount: 1349,
-            paymentStatus: "Paid",
-            deliveryStatus: "Cancelled",
-            orderStatus: "Cancelled",
-            shipmentStatus: "Not Applicable",
-            awbCode: "",
-            trackingUrl: ""
-        }
-    ];
+    // const orders = [
+    //     {
+    //         orderId: 91,
+    //         orderDate: "2025-06-14 10:40",
+    //         orderCode: "NTRULA1749877849164",
+    //         customerName: "Krishna V",
+    //         customerPhone: "7904148922",
+    //         cityState: "Salem, Tamil Nadu",
+    //         totalAmount: 1099,
+    //         paymentStatus: "Paid",
+    //         deliveryStatus: "In-Progress",
+    //         orderStatus: "In-Progress",
+    //         shipmentStatus: "In-Transit",
+    //         awbCode: "123456789",
+    //         trackingUrl: "https://tracking.example.com/123456789"
+    //     },
+    //     {
+    //         orderId: 92,
+    //         orderDate: "2025-06-13 16:15",
+    //         orderCode: "NTRULA1749877849165",
+    //         customerName: "Anita Sharma",
+    //         customerPhone: "9876543210",
+    //         cityState: "Mumbai, Maharashtra",
+    //         totalAmount: 1599,
+    //         paymentStatus: "Paid",
+    //         deliveryStatus: "Delivered",
+    //         orderStatus: "Completed",
+    //         shipmentStatus: "Delivered",
+    //         awbCode: "987654321",
+    //         trackingUrl: "https://tracking.example.com/987654321"
+    //     },
+    //     {
+    //         orderId: 93,
+    //         orderDate: "2025-06-12 09:00",
+    //         orderCode: "NTRULA1749877849166",
+    //         customerName: "Ravi Kumar",
+    //         customerPhone: "9123456789",
+    //         cityState: "Bengaluru, Karnataka",
+    //         totalAmount: 899,
+    //         paymentStatus: "Pending",
+    //         deliveryStatus: "Not Shipped",
+    //         orderStatus: "Pending",
+    //         shipmentStatus: "Pending",
+    //         awbCode: "",
+    //         trackingUrl: ""
+    //     },
+    //     {
+    //         orderId: 94,
+    //         orderDate: "2025-06-14 11:05",
+    //         orderCode: "NTRULA1749877849167",
+    //         customerName: "Meena George",
+    //         customerPhone: "9012345678",
+    //         cityState: "Kochi, Kerala",
+    //         totalAmount: 1249,
+    //         paymentStatus: "Paid",
+    //         deliveryStatus: "Out for Delivery",
+    //         orderStatus: "In-Progress",
+    //         shipmentStatus: "Out for Delivery",
+    //         awbCode: "1122334455",
+    //         trackingUrl: "https://tracking.example.com/1122334455"
+    //     },
+    //     {
+    //         orderId: 95,
+    //         orderDate: "2025-06-11 14:30",
+    //         orderCode: "NTRULA1749877849168",
+    //         customerName: "Sanjay D",
+    //         customerPhone: "8765432109",
+    //         cityState: "Delhi, Delhi",
+    //         totalAmount: 1349,
+    //         paymentStatus: "Paid",
+    //         deliveryStatus: "Cancelled",
+    //         orderStatus: "Cancelled",
+    //         shipmentStatus: "Not Applicable",
+    //         awbCode: "",
+    //         trackingUrl: ""
+    //     }
+    // ];
 
 function OrderTable() {
 
-    const { data, isLoading, isSuccess } = useQuery({
-        queryKey: [ "getAllProducts" ],
-        queryFn: getAllProducts,
-        refetchOnWindowFocus: false
+    // const { data, isLoading, isSuccess } = useQuery({
+    //     queryKey: [ "getAllProducts" ],
+    //     queryFn: getAllProducts,
+    //     refetchOnWindowFocus: false
+    // });
+
+    // console.log(data)
+    
+    const { data:orders, isLoading, isSuccess } = useQuery({
+        queryKey: [ "getAllorders" ],
+        queryFn: getAllOrders,
+        refetchOnWindowFocus: false,
+        select:(data)=>data?.data?.data
     });
 
-    console.log(data)
 
 
     const headers = [
@@ -242,17 +250,17 @@ function OrderTable() {
 
     const [ globalFilter, setGlobalFilter ] = useState("");
 
-    // const globalFilterFunction = (row, _columnId, filterValue) => {
-    //     const firstName = row.original.runner_first_name?.toLowerCase() || "";
-    //     const lastName = row.original.runner_last_name?.toLowerCase() || "";
-    //     const phoneNumber = row.original.runner_phone_number || "";
-    //     const email = row.original.runner_email_id || "";
+    const globalFilterFunction = (row:any, _columnId:any, filterValue:any) => {
+        const firstName = row.original.runner_first_name?.toLowerCase() || "";
+        const lastName = row.original.runner_last_name?.toLowerCase() || "";
+        const phoneNumber = row.original.runner_phone_number || "";
+        const email = row.original.runner_email_id || "";
     
-    //     return (
-    //     firstName.includes(filterValue.toLowerCase()) || lastName.includes(filterValue.toLowerCase()) ||
-    //     phoneNumber.includes(filterValue) || email.includes(filterValue)
-    //     );
-    // };
+        return (
+        firstName.includes(filterValue.toLowerCase()) || lastName.includes(filterValue.toLowerCase()) ||
+        phoneNumber.includes(filterValue) || email.includes(filterValue)
+        );
+    };
 
     
     
@@ -270,7 +278,7 @@ function OrderTable() {
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        // globalFilterFn: globalFilterFunction,
+        globalFilterFn: globalFilterFunction,
         state: {
             sorting,
             columnFilters,
@@ -295,7 +303,7 @@ function OrderTable() {
     //     content = <p>{error?.response?.data?.message || error?.message}</p>
     //   }
 
-    if(isSuccess && Array.isArray(data?.data?.products)){
+    if(isSuccess && Array.isArray(orders)){
         content = (
             <div className="bg-white rounded-lg p-4  space-y-2">
                 <div className="flex flex-col gap-2 py-1">
@@ -483,8 +491,8 @@ function OrderTable() {
         )
     }
 
-    if(isSuccess && typeof data?.data === "string"){
-        content = <p className="font-bold mt-20 text-center capitalize">{data?.data}</p>
+    if(isSuccess && typeof orders === "string"){
+        content = <p className="font-bold mt-20 text-center capitalize">{orders}</p>
     }
 
     return content;
