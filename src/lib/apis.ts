@@ -6,12 +6,13 @@ import axios from "axios";
 const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
 
 
-export const forgotPasswordEmailRequest = async(email:string)=>{
+export const signin = async({ email, password }: { email: string, password: string })=>{
  return await axios({
     method:'post',
-    url:`${BASE_URL}/auth/forgot/password`,
+    url:`${BASE_URL}/auth/login`,
     data:{
-        email
+        email,
+        password
     }
  })
 }

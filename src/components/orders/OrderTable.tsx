@@ -3,10 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown, Download, Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
+import dayjs from "dayjs";
+import { CSVLink } from "react-csv";
+import { Filter } from "../ui/Filter";
 
 
 const columns: ColumnDef<any>[] = [
@@ -21,7 +24,7 @@ const columns: ColumnDef<any>[] = [
       accessorKey: "order_date",
       header:()=> "Order Date",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("order_date")}</div>
+        <div className="capitalize w-[100px]">{dayjs(row.getValue("order_date")).format("DD-MM-YYYY")}</div>
       )
     },
     {
@@ -80,13 +83,6 @@ const columns: ColumnDef<any>[] = [
         <div className="capitalize">{row.getValue("order_status")}</div>
       )
     },
-    // {
-    //   accessorKey: "shipmentStatus",
-    //   header:()=> "Shipment Status",
-    //   cell: ({ row }) => (
-    //     <div className="capitalize">{row.getValue("shipmentStatus")}</div>
-    //   )
-    // },
     {
       accessorKey: "awbawb_code",
       header:()=> "AWB Code",
@@ -127,95 +123,11 @@ const columns: ColumnDef<any>[] = [
     },
 ]
 
-    // const orders = [
-    //     {
-    //         orderId: 91,
-    //         orderDate: "2025-06-14 10:40",
-    //         orderCode: "NTRULA1749877849164",
-    //         customerName: "Krishna V",
-    //         customerPhone: "7904148922",
-    //         cityState: "Salem, Tamil Nadu",
-    //         totalAmount: 1099,
-    //         paymentStatus: "Paid",
-    //         deliveryStatus: "In-Progress",
-    //         orderStatus: "In-Progress",
-    //         shipmentStatus: "In-Transit",
-    //         awbCode: "123456789",
-    //         trackingUrl: "https://tracking.example.com/123456789"
-    //     },
-    //     {
-    //         orderId: 92,
-    //         orderDate: "2025-06-13 16:15",
-    //         orderCode: "NTRULA1749877849165",
-    //         customerName: "Anita Sharma",
-    //         customerPhone: "9876543210",
-    //         cityState: "Mumbai, Maharashtra",
-    //         totalAmount: 1599,
-    //         paymentStatus: "Paid",
-    //         deliveryStatus: "Delivered",
-    //         orderStatus: "Completed",
-    //         shipmentStatus: "Delivered",
-    //         awbCode: "987654321",
-    //         trackingUrl: "https://tracking.example.com/987654321"
-    //     },
-    //     {
-    //         orderId: 93,
-    //         orderDate: "2025-06-12 09:00",
-    //         orderCode: "NTRULA1749877849166",
-    //         customerName: "Ravi Kumar",
-    //         customerPhone: "9123456789",
-    //         cityState: "Bengaluru, Karnataka",
-    //         totalAmount: 899,
-    //         paymentStatus: "Pending",
-    //         deliveryStatus: "Not Shipped",
-    //         orderStatus: "Pending",
-    //         shipmentStatus: "Pending",
-    //         awbCode: "",
-    //         trackingUrl: ""
-    //     },
-    //     {
-    //         orderId: 94,
-    //         orderDate: "2025-06-14 11:05",
-    //         orderCode: "NTRULA1749877849167",
-    //         customerName: "Meena George",
-    //         customerPhone: "9012345678",
-    //         cityState: "Kochi, Kerala",
-    //         totalAmount: 1249,
-    //         paymentStatus: "Paid",
-    //         deliveryStatus: "Out for Delivery",
-    //         orderStatus: "In-Progress",
-    //         shipmentStatus: "Out for Delivery",
-    //         awbCode: "1122334455",
-    //         trackingUrl: "https://tracking.example.com/1122334455"
-    //     },
-    //     {
-    //         orderId: 95,
-    //         orderDate: "2025-06-11 14:30",
-    //         orderCode: "NTRULA1749877849168",
-    //         customerName: "Sanjay D",
-    //         customerPhone: "8765432109",
-    //         cityState: "Delhi, Delhi",
-    //         totalAmount: 1349,
-    //         paymentStatus: "Paid",
-    //         deliveryStatus: "Cancelled",
-    //         orderStatus: "Cancelled",
-    //         shipmentStatus: "Not Applicable",
-    //         awbCode: "",
-    //         trackingUrl: ""
-    //     }
-    // ];
 
 function OrderTable() {
 
-    // const { data, isLoading, isSuccess } = useQuery({
-    //     queryKey: [ "getAllProducts" ],
-    //     queryFn: getAllProducts,
-    //     refetchOnWindowFocus: false
-    // });
-
-    // console.log(data)
     
-    const { data:orders, isLoading, isSuccess } = useQuery({
+    const { data: orders, isLoading, isSuccess } = useQuery({
         queryKey: [ "getAllorders" ],
         queryFn: getAllOrders,
         refetchOnWindowFocus: false,
@@ -223,21 +135,19 @@ function OrderTable() {
     });
 
 
-
     const headers = [
-        { label: "Order ID", key: "orderId" },
-        { label: "Order Date", key: "orderDate" },
-        { label: "Order Code", key: "orderCode" },
-        { label: "Customer Name", key: "customerName" },
-        { label: "Customer Phone", key: "customerPhone" },
-        { label: "City / State", key: "cityState" },
-        { label: "Total Amount", key: "totalAmount" },
-        { label: "Payment Status", key: "paymentStatus" },
-        { label: "Delivery Status", key: "deliveryStatus" },
-        { label: "Order Status", key: "orderStatus" },
-        { label: "Shipment Status", key: "shipmentStatus" },
-        { label: "AWB Code", key: "awbCode" },
-        { label: "Tracking URL", key: "trackingUrl" },
+        { label: "Order ID", key: "order_id" },
+        { label: "Order Date", key: "order_date" },
+        { label: "Order Code", key: "order_code" },
+        { label: "Customer Name", key: "shipmet_first_name" },
+        { label: "Customer Phone", key: "shipment_phone_no" },
+        { label: "City / State", key: "city" },
+        { label: "Total Amount", key: "sub_total" },
+        { label: "Payment Status", key: "payment_status" },
+        { label: "Delivery Status", key: "delivery_status" },
+        { label: "Order Status", key: "order_status" },
+        { label: "AWB Code", key: "awbawb_code" },
+        { label: "Tracking URL", key: "track_url" },
         { label: "Actions", key: "actions" },
     ];
 
@@ -250,17 +160,15 @@ function OrderTable() {
 
     const [ globalFilter, setGlobalFilter ] = useState("");
 
-    // const globalFilterFunction = (row:any, _columnId:any, filterValue:any) => {
-    //     const firstName = row.original.runner_first_name?.toLowerCase() || "";
-    //     const lastName = row.original.runner_last_name?.toLowerCase() || "";
-    //     const phoneNumber = row.original.runner_phone_number || "";
-    //     const email = row.original.runner_email_id || "";
+    const globalFilterFunction = (row: any, _columnId: string, filterValue: any) => {
+
+        const customerName = row.original.shipmet_first_name?.toLowerCase() || "";
+        const phoneNumber = row.original.shipment_phone_no || "";
     
-    //     return (
-    //     firstName.includes(filterValue.toLowerCase()) || lastName.includes(filterValue.toLowerCase()) ||
-    //     phoneNumber.includes(filterValue) || email.includes(filterValue)
-    //     );
-    // };
+        return (
+            customerName.includes(filterValue.toLowerCase()) || phoneNumber.includes(filterValue.toLowerCase())
+        );
+    };
 
     
     
@@ -278,7 +186,7 @@ function OrderTable() {
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        // globalFilterFn: globalFilterFunction,
+        globalFilterFn: globalFilterFunction,
         state: {
             sorting,
             columnFilters,
@@ -293,7 +201,7 @@ function OrderTable() {
 
     if(isLoading){
         content = (
-        <div className="mt-[10%]">
+        <div className="mt-[10%] text-center">
             Loading...
         </div>
         )
@@ -309,107 +217,60 @@ function OrderTable() {
                 <div className="flex flex-col gap-2 py-1">
                     
                     
-                    <div className="flex flex-row gap-3 w-full">
+                    <div className="flex flex-row justify-between gap-3 w-full">
 
-                        <div className="flex flex-col lg:flex-row gap-3 justify-between w-full">
+                        <div className="flex flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
                             <Input
-                                placeholder="Filter by Name or Mobile Number or Email..."
+                                placeholder="Search by Customer Name or Number..."
                                 value={globalFilter}
                                 onChange={(event) => setGlobalFilter(event.target.value)}
                                 className="w-full lg:max-w-sm"
                             />
 
-                            <div className="flex flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
-                                {/* {table.getColumn("type_name") && (
-                                <Filter
-                                    column={table.getColumn("type_name")}
-                                    title="Filter by Race type"
-                                    options={[
-                                    {
-                                        value: "Run Tickets",
-                                        label: "Run Tickets",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "Run Tickets + Donate",
-                                        label: "Run Tickets + Donate",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    ]}
-                                />
+                            <div>
+                                {table.getColumn("payment_status") && (
+                                    <Filter
+                                        column={table.getColumn("payment_status")}
+                                        title="Filter by Category"
+                                    />
                                 )}
-
-                                {table.getColumn("role") && (
-                                <Filter
-                                    column={table.getColumn("role")}
-                                    title="Filter by Runners"
-                                    options={[
-                                    {
-                                        value: "runner",
-                                        label: "Runners",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "corporate runner",
-                                        label: "Corporate Runners",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    ]}
-                                />
-                                )}
-
-                                {table.getColumn("race_type_name") && (
-                                <Filter
-                                    column={table.getColumn("race_type_name")}
-                                    title="Filter by Run type"
-                                    options={[
-                                    {
-                                        value: "10k",
-                                        label: "10K",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "5k",
-                                        label: "5K",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "1k",
-                                        label: "1K",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    ]}
-                                />
-                                )} */}
                             </div>
                         </div>
                     
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="ml-auto">
-                                Columns <ChevronDown className="ml-2 h-4 w-4" />
+                        <div className="flex flex-row items-center gap-1">
+                            <CSVLink data={orders} headers={headers} filename={"orders.csv"}>
+                                <Button variant="default" className="gap-3 bg-slate-900 hover:bg-slate-900/80">
+                                    <Download className="h-5 w-5" />
+                                    Export
                                 </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-white overflow-scroll max-h-72" align="end">
-                                {table
-                                .getAllColumns()
-                                .filter((column) => column.getCanHide())
-                                .map((column) => {
-                                    return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {headers.filter(item => item.key === column.id)[0]?.label}
-                                    </DropdownMenuCheckboxItem>
-                                    )
-                                })}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                            </CSVLink>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="ml-auto">
+                                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white overflow-scroll max-h-72" align="end">
+                                    {table
+                                    .getAllColumns()
+                                    .filter((column) => column.getCanHide())
+                                    .map((column) => {
+                                        return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className="capitalize"
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) =>
+                                            column.toggleVisibility(!!value)
+                                            }
+                                        >
+                                            {headers.filter(item => item.key === column.id)[0]?.label}
+                                        </DropdownMenuCheckboxItem>
+                                        )
+                                    })}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
                     </div>
                 </div>
                 <div>

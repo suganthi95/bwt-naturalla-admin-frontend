@@ -3,12 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown, Download, Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
 import { ProductsType } from "@/types";
 import { Switch } from "../ui/switch";
+import { Filter } from "../ui/Filter";
+import { CSVLink } from "react-csv";
 
 
 const columns: ColumnDef<ProductsType>[] = [
@@ -24,6 +26,13 @@ const columns: ColumnDef<ProductsType>[] = [
       header:()=> "Product Title",
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("product_name")}</div>
+      )
+    },
+    {
+      accessorKey: "category_title",
+      header:()=> "Category",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("category_title")}</div>
       )
     },
     {
@@ -108,17 +117,13 @@ function ProductsTable() {
 
     const [ globalFilter, setGlobalFilter ] = useState("");
 
-    // const globalFilterFunction = (row, _columnId, filterValue) => {
-    //     const firstName = row.original.runner_first_name?.toLowerCase() || "";
-    //     const lastName = row.original.runner_last_name?.toLowerCase() || "";
-    //     const phoneNumber = row.original.runner_phone_number || "";
-    //     const email = row.original.runner_email_id || "";
+    const globalFilterFunction = (row: any, _columnId: string, filterValue: any) => {
+        const productName = row.original.product_name?.toLowerCase() || "";
     
-    //     return (
-    //     firstName.includes(filterValue.toLowerCase()) || lastName.includes(filterValue.toLowerCase()) ||
-    //     phoneNumber.includes(filterValue) || email.includes(filterValue)
-    //     );
-    // };
+        return (
+            productName.includes(filterValue.toLowerCase())
+        );
+    };
 
     
     
@@ -136,7 +141,7 @@ function ProductsTable() {
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        // globalFilterFn: globalFilterFunction,
+        globalFilterFn: globalFilterFunction,
         state: {
             sorting,
             columnFilters,
@@ -151,7 +156,7 @@ function ProductsTable() {
 
     if(isLoading){
         content = (
-        <div className="mt-[10%]">
+        <div className="mt-[10%] text-center">
             Loading...
         </div>
         )
@@ -170,104 +175,60 @@ function ProductsTable() {
                     <div className="flex flex-row gap-3 w-full">
 
                         <div className="flex flex-col lg:flex-row gap-3 justify-between w-full">
-                            <Input
-                                placeholder="Filter by Name or Mobile Number or Email..."
-                                value={globalFilter}
-                                onChange={(event) => setGlobalFilter(event.target.value)}
-                                className="w-full lg:max-w-sm"
-                            />
 
                             <div className="flex flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
-                                {/* {table.getColumn("type_name") && (
-                                <Filter
-                                    column={table.getColumn("type_name")}
-                                    title="Filter by Race type"
-                                    options={[
-                                    {
-                                        value: "Run Tickets",
-                                        label: "Run Tickets",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "Run Tickets + Donate",
-                                        label: "Run Tickets + Donate",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    ]}
+                                <Input
+                                    placeholder="Search by Product Name..."
+                                    value={globalFilter}
+                                    onChange={(event) => setGlobalFilter(event.target.value)}
+                                    className="w-full lg:w-[300px]"
                                 />
-                                )}
 
-                                {table.getColumn("role") && (
-                                <Filter
-                                    column={table.getColumn("role")}
-                                    title="Filter by Runners"
-                                    options={[
-                                    {
-                                        value: "runner",
-                                        label: "Runners",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "corporate runner",
-                                        label: "Corporate Runners",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    ]}
-                                />
+                                {table.getColumn("category_title") && (
+                                    <Filter
+                                        column={table.getColumn("category_title")}
+                                        title="Filter by Category"
+                                    />
                                 )}
-
-                                {table.getColumn("race_type_name") && (
-                                <Filter
-                                    column={table.getColumn("race_type_name")}
-                                    title="Filter by Run type"
-                                    options={[
-                                    {
-                                        value: "10k",
-                                        label: "10K",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "5k",
-                                        label: "5K",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    {
-                                        value: "1k",
-                                        label: "1K",
-                                        // icon: QuestionMarkCircledIcon,
-                                    },
-                                    ]}
-                                />
-                                )} */}
                             </div>
                         </div>
-                    
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="ml-auto">
-                                Columns <ChevronDown className="ml-2 h-4 w-4" />
+
+                        <div className="flex flex-row items-center gap-1">
+                            <CSVLink data={data?.data?.products} headers={headers} filename={"products.csv"}>
+                                <Button variant="default" className="gap-3 bg-slate-900 hover:bg-slate-900/80">
+                                    <Download className="h-5 w-5" />
+                                    Export
                                 </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-white overflow-scroll max-h-72" align="end">
-                                {table
-                                .getAllColumns()
-                                .filter((column) => column.getCanHide())
-                                .map((column) => {
-                                    return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {headers.filter(item => item.key === column.id)[0]?.label}
-                                    </DropdownMenuCheckboxItem>
-                                    )
-                                })}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                            </CSVLink>
+
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="ml-auto">
+                                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white overflow-scroll max-h-72" align="end">
+                                    {table
+                                    .getAllColumns()
+                                    .filter((column) => column.getCanHide())
+                                    .map((column) => {
+                                        return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className="capitalize"
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) =>
+                                            column.toggleVisibility(!!value)
+                                            }
+                                        >
+                                            {headers.filter(item => item.key === column.id)[0]?.label}
+                                        </DropdownMenuCheckboxItem>
+                                        )
+                                    })}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    
                     </div>
                 </div>
                 <div>
@@ -277,7 +238,7 @@ function ProductsTable() {
                             <TableRow className="bg-slate-50" key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
-                                <TableHead className="font-semibold text-black text-center" key={header.id} colSpan={header.colSpan} >
+                                <TableHead className="font-semibold text-black" key={header.id} colSpan={header.colSpan} >
                                     {header.isPlaceholder
                                     ? null
                                     : flexRender(

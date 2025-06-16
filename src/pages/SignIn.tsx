@@ -3,8 +3,47 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { signin } from "@/lib/apis"
+import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { LoaderCircle } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 function SignIn() {
+
+  const navigate = useNavigate();
+  const { handleSubmit, register } = useForm({
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: [ "signin" ],
+    mutationFn: signin,
+    onSuccess: () => {
+      toast.success("Request Success", {
+        description: "Signed Successfully",
+      });
+      navigate("/", { replace: true })
+    },
+    onError: (error: AxiosError<any>) => {
+      toast.error("Request Failed", {
+        description: error?.response?.data?.message,
+      });
+    }
+  })
+
+  const submit = (data: any) => {
+    mutate({
+      email: data.email,
+      password: data.password
+    })
+  }
+
   return (
     <div className="h-screen flex items-center justify-center bg-slate-50">
       <Card className="w-1/3 border-none shadow-md rounded-2xl">
@@ -17,22 +56,31 @@ function SignIn() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit(submit)} className="space-y-6">
 
             <div className="grid gap-3">
               <Label htmlFor="email">Email</Label>
               <Input
+                disabled={isPending} 
                 id="email"
                 type="email"
                 placeholder="john@example.com"
                 required
+                {...register("email")}
               />
             </div>
             <div className="grid gap-3">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
               </div>
-              <Input id="password" type="password" placeholder="********" required />
+              <Input
+                disabled={isPending} 
+                id="password" 
+                type="password" 
+                placeholder="********" 
+                required 
+                {...register("password")}
+              />
             </div>
 
             <a
@@ -41,8 +89,9 @@ function SignIn() {
             >
               Forgot your password?
             </a>
-            <Button type="submit" className="w-full">
-              Login
+            
+            <Button disabled={isPending} type="submit" className="w-full">
+              {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Login"}
             </Button>
           </form>
         </CardContent>
