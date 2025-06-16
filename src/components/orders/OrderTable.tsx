@@ -250,17 +250,17 @@ function OrderTable() {
 
     const [ globalFilter, setGlobalFilter ] = useState("");
 
-    const globalFilterFunction = (row:any, _columnId:any, filterValue:any) => {
-        const firstName = row.original.runner_first_name?.toLowerCase() || "";
-        const lastName = row.original.runner_last_name?.toLowerCase() || "";
-        const phoneNumber = row.original.runner_phone_number || "";
-        const email = row.original.runner_email_id || "";
+    // const globalFilterFunction = (row:any, _columnId:any, filterValue:any) => {
+    //     const firstName = row.original.runner_first_name?.toLowerCase() || "";
+    //     const lastName = row.original.runner_last_name?.toLowerCase() || "";
+    //     const phoneNumber = row.original.runner_phone_number || "";
+    //     const email = row.original.runner_email_id || "";
     
-        return (
-        firstName.includes(filterValue.toLowerCase()) || lastName.includes(filterValue.toLowerCase()) ||
-        phoneNumber.includes(filterValue) || email.includes(filterValue)
-        );
-    };
+    //     return (
+    //     firstName.includes(filterValue.toLowerCase()) || lastName.includes(filterValue.toLowerCase()) ||
+    //     phoneNumber.includes(filterValue) || email.includes(filterValue)
+    //     );
+    // };
 
     
     
@@ -278,7 +278,7 @@ function OrderTable() {
         getSortedRowModel: getSortedRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        globalFilterFn: globalFilterFunction,
+        // globalFilterFn: globalFilterFunction,
         state: {
             sorting,
             columnFilters,
