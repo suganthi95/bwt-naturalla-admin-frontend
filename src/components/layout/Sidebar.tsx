@@ -1,4 +1,4 @@
-import { Box, Layers, LayoutDashboard } from "lucide-react";
+import { Box, Layers, LayoutDashboard, Truck } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Icons } from "@/assets/icons";
@@ -37,6 +37,12 @@ export default function Sidebar() {
         name: "Orders",
         route: "orders",
         icon: <Layers className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "Shipments",
+        route: "shipments",
+        icon: <Truck className="w-5" />,
         shouldVisible: true,
       },
     ]

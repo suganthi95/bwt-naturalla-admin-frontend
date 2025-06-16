@@ -15,6 +15,7 @@ import Orders from "./pages/Orders";
 import ProductSpecs from "./components/products/ProductSpecs";
 import ProductSEO from "./components/products/ProductSEO";
 import { ProductCoupons } from "./components/products/ProductCoupons";
+import Shipments from "./pages/Shipments";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -62,6 +63,7 @@ function App() {
           <Route path="seo" element={<ProductSEO/>}/>
         </Route>
         <Route path="/orders" element={<Orders />} />
+        <Route path="/shipments" element={<Shipments />} />
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="*" element={<p>no routes found</p>} />
