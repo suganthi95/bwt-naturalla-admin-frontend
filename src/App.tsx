@@ -12,6 +12,9 @@ import AddProducts from "./pages/AddProducts";
 import { ProductInfo } from "./components/products/ProductInfo";
 import { ProductPrice } from "./components/products/ProductPrice";
 import Orders from "./pages/Orders";
+import ProductSpecs from "./components/products/ProductSpecs";
+import ProductSEO from "./components/products/ProductSEO";
+import { ProductCoupons } from "./components/products/ProductCoupons";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -54,10 +57,9 @@ function App() {
         <Route path="/products/add" element={<AddProducts />}>
           <Route path="product-info" element={<ProductInfo/>}/>
           <Route path="product-price" element={<ProductPrice/>}/>
-          <Route path="product-specs" element={<p>product specs</p>}/>
-          <Route path="shipping-info" element={<p>shipping info</p>}/>
-          <Route path="discounts" element={<p>discounts</p>}/>
-          <Route path="seo" element={<p>seo</p>}/>
+          <Route path="product-specs" element={<ProductSpecs/>}/>
+          <Route path="discounts" element={<ProductCoupons/>}/>
+          <Route path="seo" element={<ProductSEO/>}/>
         </Route>
         <Route path="/orders" element={<Orders />} />
       </Route>

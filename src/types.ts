@@ -47,3 +47,27 @@ export type ProductsType = {
     benefit_keys: any
     publish: boolean
 }
+
+export type ProductFormValues = {
+    shortDescription: string;
+    longDescription: string;
+    benefits: string;
+    howToUse: string;
+    ingredients: string;
+    specificationPDF: FileList;
+    isFeatured: boolean;
+    todayDeal: boolean;
+    offerEndingSoon: boolean;
+    bestSelling: boolean;
+    benefitKeywords: string;
+    length: number;
+    weight: number;
+    height: number;
+    breadth: number;
+};
+
+export type ProductSEOFormValues = {
+  metaTitle: string;
+  metaDescription: string;
+  metaImageUrl: string;
+};

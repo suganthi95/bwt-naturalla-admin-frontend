@@ -22,10 +22,6 @@ function AddProducts() {
             route: "product-specs"
         },
         {
-            name: "Shipping Info",
-            route: "shipping-info"
-        },
-        {
             name: "Discounts / Coupon",
             route: "discounts"
         },

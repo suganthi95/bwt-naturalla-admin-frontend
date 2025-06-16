@@ -62,7 +62,7 @@ export default function Sidebar() {
                 .filter((item) => item.shouldVisible)
                 .map((item) => (
                   <TabsTrigger
-                    key={`menu-${item}`}
+                    key={`menu-${item.name}`}
                     onClick={() =>
                       redirect(item)
                     }
