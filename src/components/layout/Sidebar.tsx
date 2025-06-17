@@ -1,4 +1,4 @@
-import { Box, Layers, LayoutDashboard, LogOut, Truck } from "lucide-react";
+import { BadgePercent, Box, Layers, LayoutDashboard, LogOut, Truck, UsersRound, WalletMinimal } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Icons } from "@/assets/icons";
@@ -54,6 +54,24 @@ export default function Sidebar() {
         name: "Shipments",
         route: "shipments",
         icon: <Truck className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "Users",
+        route: "users",
+        icon: <UsersRound className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "Discounts & Coupons",
+        route: "configure-coupons",
+        icon: <BadgePercent className="w-5" />,
+        shouldVisible: true,
+      },
+      {
+        name: "Payment Gateway",
+        route: "payment-gateway",
+        icon: <WalletMinimal className="w-5" />,
         shouldVisible: true,
       },
     ]

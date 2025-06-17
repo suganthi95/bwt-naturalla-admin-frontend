@@ -16,6 +16,9 @@ import ProductSEO from "./components/products/ProductSEO";
 import { ProductCoupons } from "./components/products/ProductCoupons";
 import Shipments from "./pages/Shipments";
 import PrivateRoute from "./pages/PrivateRoute";
+import Users from "./pages/Users";
+import ConfigureCoupons from "./pages/ConfigureCoupons";
+import PaymentGateway from "./pages/PaymentGateway";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -50,6 +53,9 @@ function App() {
         </Route>
         <Route path="/orders" element={<Orders />} />
         <Route path="/shipments" element={<Shipments />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/configure-coupons" element={<ConfigureCoupons />} />
+        <Route path="/payment-gateway" element={<PaymentGateway />} />
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="*" element={<p>no routes found</p>} />

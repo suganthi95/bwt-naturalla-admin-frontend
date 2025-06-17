@@ -19,8 +19,8 @@ function ProductSEO() {
 
     const onSubmit = (data: ProductSEOFormValues) => {
         console.log({
-        ...data,
-        metaKeywords: keywords,
+            ...data,
+            metaKeywords: keywords,
         });
     };
 
