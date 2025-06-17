@@ -1,4 +1,11 @@
 export const ASSETS = {
   LOGO: "https://ik.imagekit.io/zshycew5c/intelliresponse/intelli-response-logo.svg?updatedAt=1719985223239",
-  LOGO_WITH_NAME: "https://ik.imagekit.io/zshycew5c/temporary/Logo%20(10).png?updatedAt=1749724067015"
+  LOGO_WITH_NAME:
+    "https://ik.imagekit.io/zshycew5c/temporary/Logo%20(10).png?updatedAt=1749724067015",
+  PHONEPAY:
+    "https://ik.imagekit.io/3t9llb0gx/Naturella/png-transparent-phonepe-india-unified-payments-interface-india-purple-violet-text-removebg-preview.png?updatedAt=1750167683679",
+  RAZORPAY:
+    "https://ik.imagekit.io/3t9llb0gx/Naturella/png-transparent-razorpay-logo-thumbnail-tech-companies-thumbnail-removebg-preview.png?updatedAt=1750167683550",
+  PHONEPAY2:
+    "https://ik.imagekit.io/3t9llb0gx/Naturella/image%2046.png?updatedAt=1749725477780",
 };

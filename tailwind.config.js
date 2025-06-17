@@ -25,6 +25,9 @@ export default {
         "primary-green": "#1E401D",
         "secondary-green": "#81C55A",
         "yello-lite": "#DAD3BE",
+        "primary-black":'#171925',
+        "lead":'#737373',
+        "light-blue":"#F9FAFB"
 
       },
       fontFamily: {

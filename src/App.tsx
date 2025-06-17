@@ -19,12 +19,12 @@ import PrivateRoute from "./pages/PrivateRoute";
 import Users from "./pages/Users";
 import ConfigureCoupons from "./pages/ConfigureCoupons";
 import PaymentGateway from "./pages/PaymentGateway";
+import ShipmentsDetails from "./pages/ShipmentsDetails";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function App() {
-
   const [mode] = useMode();
 
   // darkmode
@@ -37,22 +37,22 @@ function App() {
     }
   }, [mode]);
 
-
   return (
     <Routes>
-      <Route path="/" element={<PrivateRoute/>}>
+      <Route path="/" element={<PrivateRoute />}>
         <Route index element={<Home />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/add" element={<AddProducts />}>
-          <Route path="product-info" element={<ProductInfo/>}/>
-          <Route path="product-price" element={<ProductPrice/>}/>
-          <Route path="product-specs" element={<ProductSpecs/>}/>
-          <Route path="discounts" element={<ProductCoupons/>}/>
-          <Route path="seo" element={<ProductSEO/>}/>
+          <Route path="product-info" element={<ProductInfo />} />
+          <Route path="product-price" element={<ProductPrice />} />
+          <Route path="product-specs" element={<ProductSpecs />} />
+          <Route path="discounts" element={<ProductCoupons />} />
+          <Route path="seo" element={<ProductSEO />} />
         </Route>
         <Route path="/orders" element={<Orders />} />
         <Route path="/shipments" element={<Shipments />} />
+        <Route path="/shipment-details" element={<ShipmentsDetails />} />
         <Route path="/users" element={<Users />} />
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />

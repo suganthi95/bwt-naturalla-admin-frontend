@@ -18,7 +18,84 @@ export const Icons = {
       ></path>
     </svg>
   ),
-   uploadIcon: (props: IconProps) => (
+  TrackingId: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="#007AFF"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M12.13 11.015A2.225 2.225 0 0 1 8.985 7.87l1.966-1.967a2.225 2.225 0 0 1 3.023-.112m-.27-2.64a2.224 2.224 0 1 1 3.144 3.146l-1.966 1.966a2.225 2.225 0 0 1-3.023.113"
+      ></path>
+      <path
+        stroke="#007AFF"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M17.5 10.833c0 3.143 0 4.714-.977 5.69-.976.976-2.547.977-5.69.977H9.167c-3.143 0-4.714 0-5.69-.977-.976-.976-.977-2.547-.977-5.69V9.167c0-3.143 0-4.714.977-5.69.976-.976 2.547-.977 5.69-.977"
+      ></path>
+    </svg>
+  ),
+  PdfFile: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="17"
+      fill="none"
+      viewBox="0 0 16 17"
+    >
+      <g clipPath="url(#clip0_600_14766)">
+        <path
+          fill="#007AFF"
+          d="M0 2.375c0-1.103.897-2 2-2h5v4c0 .553.447 1 1 1h4v4.5H5.5c-1.103 0-2 .897-2 2v4.5H2c-1.103 0-2-.897-2-2zm12 2H8v-4zm-6.5 7h1a1.751 1.751 0 0 1 0 3.5H6v1c0 .275-.225.5-.5.5a.5.5 0 0 1-.5-.5v-4c0-.275.225-.5.5-.5m1 2.5c.416 0 .75-.334.75-.75a.75.75 0 0 0-.75-.75H6v1.5zm3-2.5h1a1.5 1.5 0 0 1 1.5 1.5v2a1.5 1.5 0 0 1-1.5 1.5h-1a.5.5 0 0 1-.5-.5v-4c0-.275.225-.5.5-.5m1 4c.275 0 .5-.225.5-.5v-2c0-.275-.225-.5-.5-.5H10v3zm2.5-3.5c0-.275.225-.5.5-.5H15c.275 0 .5.225.5.5s-.225.5-.5.5h-1v1h1c.275 0 .5.225.5.5s-.225.5-.5.5h-1v1.5c0 .275-.225.5-.5.5a.5.5 0 0 1-.5-.5z"
+        ></path>
+      </g>
+      <defs>
+        <clipPath id="clip0_600_14766">
+          <path fill="#fff" d="M0 .375h16v16H0z"></path>
+        </clipPath>
+      </defs>
+    </svg>
+  ),
+  BlueFile: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="14"
+      fill="none"
+      viewBox="0 0 12 14"
+    >
+      <path
+        fill="#007AFF"
+        d="M10 13.667a1.333 1.333 0 0 0 1.334-1.334v-8l-4-4H2A1.333 1.333 0 0 0 .667 1.667v10.666A1.333 1.333 0 0 0 2 13.667zm-3.333-12L10 5H6.667zm-4 2.666h2v1.334h-2zm0 2.667h6.667v1.333H2.667zm0 2.667h6.667V11H2.667z"
+      ></path>
+    </svg>
+  ),
+  Print: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="none"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill="#007AFF"
+        d="M6 10.667h4V12H6zm8.666.666h-2v2a1.333 1.333 0 0 1-1.333 1.334H4.666a1.333 1.333 0 0 1-1.333-1.334v-2h-2V6a1.333 1.333 0 0 1 1.333-1.333h.667V3.333A1.333 1.333 0 0 1 4.666 2h6.667a1.333 1.333 0 0 1 1.333 1.333v1.334h.667A1.333 1.333 0 0 1 14.666 6zm-10-6.666h6.667V3.333H4.666zm6.667 4.666H4.666v4h6.667zm2-2.333a1 1 0 1 0-2 0 1 1 0 0 0 2 0"
+      ></path>
+    </svg>
+  ),
+  uploadIcon: (props: IconProps) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -67,5 +144,5 @@ export const Icons = {
         </clipPath>
       </defs>
     </svg>
-  )
+  ),
 };

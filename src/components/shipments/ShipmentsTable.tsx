@@ -3,16 +3,68 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Download, MoveRight, SquarePen, Trash2 } from "lucide-react";
+import { ChevronDown, Download, Eye, MoveRight, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
 import { CSVLink } from "react-csv";
 import { Filter } from "../ui/Filter";
 import { Checkbox } from "../ui/checkbox";
+import { Icons } from "@/assets/icons";
+import { useNavigate } from "react-router-dom";
 
 
-const columns: ColumnDef<any>[] = [
+
+
+const data = [
+    {
+        "awb_code": "AWB123456789",
+        "origin": "Bangalore",
+        "destination": "Mumbai",
+        "pickupdate": "18-07-2025, 13:50",
+        "edd": "22-07-2025, 18:00",
+        "status": "in-process"
+    },
+    {
+        "awb_code": "AWB987654321",
+        "origin": "Delhi",
+        "destination": "Chennai",
+        "pickupdate": "16-07-2025, 09:30",
+        "edd": "21-07-2025, 17:45",
+        "status": "in-transit"
+    },
+    {
+        "awb_code": "AWB564738291",
+        "origin": "Hyderabad",
+        "destination": "Kolkata",
+        "pickupdate": "17-07-2025, 11:00",
+        "edd": "23-07-2025, 14:30",
+        "status": "in-process"
+    },
+    {
+        "awb_code": "AWB112233445",
+        "origin": "Ahmedabad",
+        "destination": "Pune",
+        "pickupdate": "15-07-2025, 16:20",
+        "edd": "20-07-2025, 13:15",
+        "status": "in-transit"
+    },
+    {
+        "awb_code": "AWB998877665",
+        "origin": "Chandigarh",
+        "destination": "Jaipur",
+        "pickupdate": "18-07-2025, 08:10",
+        "edd": "21-07-2025, 12:00",
+        "status": "in-process"
+    }
+]
+
+
+function ShipmentsTable() {
+
+    const navigate  = useNavigate()
+
+    const columns: ColumnDef<any>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -88,8 +140,11 @@ const columns: ColumnDef<any>[] = [
       enableHiding: false,
       cell: () => (
         <div className="flex flex-row items-center gap-5">
-            <Button size={"icon"} className="rounded-full text-green-400 bg-green-400/25 hover:bg-green-400/10">
-                <SquarePen className="h-5 w-5" />
+              <Button onClick={()=>navigate('/shipment-details')} size={"icon"} className="rounded-full text-[#171925] bg-[#1719251A]/10  hover:bg-[#1719251A]/20 ">
+                <Eye className="h-5 w-5" />
+            </Button>
+            <Button size={"icon"} className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20">
+                <Icons.Print className="h-5 w-5" />
             </Button>
             <Button size={"icon"} className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10">
                 <Trash2 className="h-5 w-5" />
@@ -99,53 +154,6 @@ const columns: ColumnDef<any>[] = [
     },
 ]
 
-const data = [
-    {
-        "awb_code": "AWB123456789",
-        "origin": "Bangalore",
-        "destination": "Mumbai",
-        "pickupdate": "18-07-2025, 13:50",
-        "edd": "22-07-2025, 18:00",
-        "status": "in-process"
-    },
-    {
-        "awb_code": "AWB987654321",
-        "origin": "Delhi",
-        "destination": "Chennai",
-        "pickupdate": "16-07-2025, 09:30",
-        "edd": "21-07-2025, 17:45",
-        "status": "in-transit"
-    },
-    {
-        "awb_code": "AWB564738291",
-        "origin": "Hyderabad",
-        "destination": "Kolkata",
-        "pickupdate": "17-07-2025, 11:00",
-        "edd": "23-07-2025, 14:30",
-        "status": "in-process"
-    },
-    {
-        "awb_code": "AWB112233445",
-        "origin": "Ahmedabad",
-        "destination": "Pune",
-        "pickupdate": "15-07-2025, 16:20",
-        "edd": "20-07-2025, 13:15",
-        "status": "in-transit"
-    },
-    {
-        "awb_code": "AWB998877665",
-        "origin": "Chandigarh",
-        "destination": "Jaipur",
-        "pickupdate": "18-07-2025, 08:10",
-        "edd": "21-07-2025, 12:00",
-        "status": "in-process"
-    }
-]
-
-
-function ShipmentsTable() {
-
-    
     const { data: orders, isLoading, isSuccess } = useQuery({
         queryKey: [ "getAllorders" ],
         queryFn: getAllOrders,
