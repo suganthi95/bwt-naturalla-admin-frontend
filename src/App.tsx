@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import Layout from "./components/layout/Layout";
 import SignIn from "./pages/SignIn";
 import { useEffect } from "react";
 import useMode from "./hooks/useMode";
