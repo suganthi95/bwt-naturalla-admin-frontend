@@ -1,36 +1,12 @@
 import { Bell, MessageSquare, Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useAppContext } from "@/contexts/AuthContext";
 
 function Navbar(){
 
-    // const { auth } = useAppContext();
-    // const path = useLocation();
-    // const navigate = useNavigate();
-    // const tabValue = path.pathname.split("/").at(-1);
-    // const [ openSheet, setOpenSheet ] = useState(false);
-
-    // const menu = [
-    //   {
-    //     name: "dashboard",
-    //     route: "dashboard",
-    //     icon: <House className="w-5" />,
-    //     shouldVisible: true,
-    //   },
-    //   {
-    //     name: "reviews",
-    //     route: "reviews",
-    //     icon: <BarChartBig className="w-5" />,
-    //     shouldVisible: true,
-    //   },
-    //   {
-    //     name: "my_business",
-    //     route: "business",
-    //     icon: <Briefcase className="w-5" />,
-    //     shouldVisible: true,
-    //   },
-    // ]
-
+    const { auth } = useAppContext();
+    
     return(
         <div>
             <div className="px-3 py-3 border flex items-center flex-row justify-end w-full">
@@ -48,13 +24,13 @@ function Navbar(){
 
                     <div className="flex flex-row items-center gap-5">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarImage src="" />
+                            <AvatarFallback className="bg-orange-400 text-white">{auth?.firstname[0]}</AvatarFallback>
                         </Avatar>
 
                         <div>
-                            <h1>Kristin Watson</h1>
-                            <p className="text-xs text-slate-400">Admin</p>
+                            <h1>{auth?.firstname} {auth?.lastname}</h1>
+                            <p className="text-xs text-slate-400 capitalize">{auth?.role}</p>
                         </div>
                     </div>
                 </div>

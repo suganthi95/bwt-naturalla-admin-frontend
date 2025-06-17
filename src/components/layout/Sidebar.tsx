@@ -1,16 +1,27 @@
-import { Box, Layers, LayoutDashboard, Truck } from "lucide-react";
+import { Box, Layers, LayoutDashboard, LogOut, Truck } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Icons } from "@/assets/icons";
+import { Button } from "../ui/button";
+import { useState } from "react";
+import LogoutDialog from "../ui/LogoutDialog";
+import { useAppContext } from "@/contexts/AuthContext";
 
 export default function Sidebar() {
 
   const navigate = useNavigate();
+  const { setAuth } = useAppContext();
   
   const path = useLocation();
 
   const tabValue = path.pathname.split("/").at(-1);
 
+  const [ openLogoutDialog, setOpenLogoutDialog ] = useState(false);
+
+  const signout = () => {
+    setAuth(null);
+    localStorage.clear();
+  }
 
   const redirect = (route: any) => {
     if (["privacy_policy", "terms_conditions", "faq"].includes(route.name)) {
@@ -83,7 +94,18 @@ export default function Sidebar() {
             </TabsList>
           </Tabs> 
         </div>
+
+        <div className="flex justify-center items-center">
+          <Button onClick={() => setOpenLogoutDialog(true)} size={"icon"} className="rounded-full absolute bottom-5 text-primary-green bg-transparent hover:bg-secondary-green/20">
+            <LogOut className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
+      <LogoutDialog 
+        openLogoutDialog={openLogoutDialog} 
+        setOpenLogoutDialog={setOpenLogoutDialog} 
+        signout={signout} 
+      />
     </section>
   );
 }

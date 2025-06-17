@@ -16,6 +16,7 @@ import ProductSpecs from "./components/products/ProductSpecs";
 import ProductSEO from "./components/products/ProductSEO";
 import { ProductCoupons } from "./components/products/ProductCoupons";
 import Shipments from "./pages/Shipments";
+import PrivateRoute from "./pages/PrivateRoute";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,23 +36,9 @@ function App() {
   }, [mode]);
 
 
-  let privateRoute = <Layout />
-
-  // if (isError) {
-  //   privateRoute = <Navigate to="/sign-in" />;
-  // }
-
-  // if (isSuccess && data?.onboarded) {
-  //   privateRoute = <Layout />;
-  // }
-
-  // if (isSuccess && data?.onboarded === false) {
-  //   privateRoute = <Navigate to="/validate" />;
-  // }
-
   return (
     <Routes>
-      <Route path="/" element={privateRoute}>
+      <Route path="/" element={<PrivateRoute/>}>
         <Route index element={<Home />} />
         <Route path="/dashboard" element={<Home />} />
         <Route path="/products" element={<Products />} />

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAppContext } from "@/contexts/AuthContext"
 import { signin } from "@/lib/apis"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
@@ -14,6 +15,7 @@ import { toast } from "sonner"
 function SignIn() {
 
   const navigate = useNavigate();
+  const { setAuth } = useAppContext();
   const { handleSubmit, register } = useForm({
     defaultValues: {
       email: "",
@@ -24,10 +26,15 @@ function SignIn() {
   const { mutate, isPending } = useMutation({
     mutationKey: [ "signin" ],
     mutationFn: signin,
-    onSuccess: () => {
+    onSuccess: (data) => {
+
+      const { firstname, lastname, email, role, token } = data.data;
+      setAuth({ token, firstname, lastname, email, role });
+
       toast.success("Request Success", {
         description: "Signed Successfully",
       });
+      
       navigate("/", { replace: true })
     },
     onError: (error: AxiosError<any>) => {

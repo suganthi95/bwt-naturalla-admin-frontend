@@ -71,3 +71,11 @@ export type ProductSEOFormValues = {
   metaDescription: string;
   metaImageUrl: string;
 };
+
+export type AuthType = {
+  token: string,
+  firstname: string,
+  lastname: string,
+  email: string,
+  role: "admin"
+}
