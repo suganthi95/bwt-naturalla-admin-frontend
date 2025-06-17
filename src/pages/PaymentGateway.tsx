@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import {
@@ -21,9 +20,9 @@ function PaymentGateway() {
           </p>
         </div>
 
-        <div>
+        {/* <div>
           <Button>New Discount</Button>
-        </div>
+        </div> */}
       </div>
 
       <div className="grid grid-cols-4 gap-5">
@@ -104,8 +103,23 @@ function PaymentGateway() {
                 <Smartphone className=" !text-2xl text-[#9333EA]" />
               </div>
               <div>
-                <h2 className="font-medium">UPI</h2>
-                <p className="text-[#697078]">Razor Pay, PhonePe </p>
+                <h2 className="font-medium">RazorPay</h2>
+                <p className="text-[#697078]"> RazorPay Payment</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <div className="bg-[#E9FFEF] rounded-xl  px-4  font-medium text-[#166534]">Active</div>
+              <EllipsisVertical />
+            </div>
+          </li>
+           <li className="border p-4 mt-4 flex items-center justify-between">
+            <div className="flex items-center gap-x-3">
+              <div className="size-14  rounded-md grid place-items-center bg-[#9333EA]/10">
+                <Smartphone className=" !text-2xl text-[#9333EA]" />
+              </div>
+              <div>
+                <h2 className="font-medium">PhonePe</h2>
+                <p className="text-[#697078]">PhonePe Payment  </p>
               </div>
             </div>
             <div className="flex items-center gap-x-2">
