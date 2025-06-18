@@ -1,4 +1,4 @@
-import { BadgePercent, Box, Layers, LayoutDashboard, LogOut, Truck, UsersRound, WalletMinimal } from "lucide-react";
+import { BadgePercent, Box, FileText, Layers, LayoutDashboard, LogOut, Truck, UsersRound, WalletMinimal } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { Icons } from "@/assets/icons";
@@ -45,9 +45,15 @@ export default function Sidebar() {
         shouldVisible: true,
       },
       {
+        name: "Categories",
+        route: "categories",
+        icon: <Layers className="w-5" />,
+        shouldVisible: true,
+      },
+           {
         name: "Orders",
         route: "orders",
-        icon: <Layers className="w-5" />,
+        icon: <FileText className="w-5" />,
         shouldVisible: true,
       },
       {

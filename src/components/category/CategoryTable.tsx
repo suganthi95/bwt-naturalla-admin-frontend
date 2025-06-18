@@ -1,0 +1,401 @@
+
+import { useMemo, useState } from "react";
+import { Input } from "../ui/input";
+
+import {
+  Copy,
+  Edit,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
+import { Button } from "../ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import {
+  useReactTable,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  ColumnDef,
+  SortingState,
+  ColumnFiltersState,
+  VisibilityState,
+} from "@tanstack/react-table";
+// import { CSVLink } from "react-csv";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import UpdateCategory from "./UpdateCategory";
+ const dummyCategoryData = [
+    {
+      category: "Hair Care",
+      subcategory: "Shampoo",
+      product_count: 18,
+    },
+    {
+      category: "Hair Care",
+      subcategory: "Conditioner",
+      product_count: 12,
+    },
+    {
+      category: "Skin Care",
+      subcategory: "Face Wash",
+      product_count: 10,
+    },
+    {
+      category: "Skin Care",
+      subcategory: "Moisturizer",
+      product_count: 8,
+    },
+    {
+      category: "Wellness",
+      subcategory: "Supplements",
+      product_count: 6,
+    },
+  ];
+function CategoryTable() {
+
+    const [Isopen, setIsopen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  console.log('selectedCategory: ', selectedCategory);
+  const columns: ColumnDef<any>[] =useMemo(()=>   [
+    {
+      id: "index",
+      header: "#",
+      cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+      enableSorting: false,
+      size: 50,
+    },
+    {
+      accessorKey: "category",
+      header: () => <div className="text-center">Category</div>,
+      cell: ({ row }) => {
+        const { category, category_image } = row.original;
+        return (
+          <div className="flex items-center justify-center gap-2">
+            <img
+              src={category_image}
+              alt={category}
+              className="w-10 h-10 rounded object-cover"
+            />
+            <span className="capitalize">{category}</span>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "subcategory",
+      header: () => <div className="text-center">Subcategory</div>,
+      cell: ({ row }) => (
+        <div className="capitalize text-center">
+          {row.getValue("subcategory")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "product_count",
+      header: () => <div className="text-center">No. of Products</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("product_count")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      header: () => <div className="text-center">Actions</div>,
+      enableHiding: false,
+      cell: ({row}) => (
+        <div className="flex justify-center items-center gap-4">
+          <Button
+           type="button"
+            onClick={() => {
+              setSelectedCategory(row.original);
+              setIsopen(true);
+              console.log('ji');
+              
+            }}
+            className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
+          >
+            <Edit className="h-5 w-5" />
+          </Button>
+
+          <Button
+            size="icon"
+            className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
+          >
+            <Copy className="h-5 w-5" />
+          </Button>
+          <Button
+            size="icon"
+            className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
+          >
+            <Trash2 className="h-5 w-5" />
+          </Button>
+        </div>
+      ),
+    },
+  ],
+  []
+)
+
+
+//   const {
+//     data: categories,
+//     isLoading,
+//     isSuccess,
+//   } = useQuery({
+//     queryKey: ["getAllcategories"],
+//     queryFn: getAllCategories,
+//     refetchOnWindowFocus: false,
+//     select: (data) => data?.data?.data,
+//   });
+
+
+
+ 
+
+  //   const headers = [
+  //     { label: "Category", key: "category" },
+  //     { label: "Subcategory", key: "subcategory" },
+  //     { label: "No. of Products", key: "product_count" },
+  //   ];
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  const globalFilterFunction = (
+    row: any,
+    _columnId: string,
+    filterValue: any
+  ) => {
+    const customerName = row.original.shipmet_first_name?.toLowerCase() || "";
+    const phoneNumber = row.original.shipment_phone_no || "";
+
+    return (
+      customerName.includes(filterValue.toLowerCase()) ||
+      phoneNumber.includes(filterValue.toLowerCase())
+    );
+  };
+
+  const table = useReactTable({
+    data: dummyCategoryData,
+    columns,
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    globalFilterFn: globalFilterFunction,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter,
+    },
+  });
+
+  let content;
+
+//   if (true) {
+//     content = <div className="mt-[10%] text-center">Loading...</div>;
+//   }
+
+  //   if(isError){
+  //     content = <p>{error?.response?.data?.message || error?.message}</p>
+  //   }
+
+  if ( Array.isArray(dummyCategoryData)) {
+    content = (
+      <div className="bg-white rounded-lg p-4  space-y-2">
+        <div className="flex flex-col gap-2 py-1">
+          <div className="flex flex-row justify-between gap-3 w-full">
+            <div className="relative w-full lg:max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Search by Category Name .... "
+                value={globalFilter}
+                onChange={(event) => setGlobalFilter(event.target.value)}
+                className="pl-10 pr-4 py-2"
+              />
+            </div>
+
+            {/* <div className="flex flex-row items-center gap-1">
+              <CSVLink data={dummyCategoryData} headers={headers} filename={"orders.csv"}>
+                <Button
+                  variant="default"
+                  className="gap-3 bg-slate-900 hover:bg-slate-900/80"
+                >
+                  <Download className="h-5 w-5" />
+                  Export
+                </Button>
+              </CSVLink>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="bg-white overflow-scroll max-h-72"
+                  align="end"
+                >
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {
+                            headers.filter((item) => item.key === column.id)[0]
+                              ?.label
+                          }
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div> */}
+          </div>
+        </div>
+        <div>
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow className="bg-slate-50" key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        className="font-semibold text-black text-center"
+                        key={header.id}
+                        colSpan={header.colSpan}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="flex-1 text-sm text-muted-foreground">
+            {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
+            {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
+            Showing {table.getFilteredRowModel().rows.length} entries
+          </div>
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+        <Dialog open={Isopen} onOpenChange={setIsopen}>
+          <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
+            <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
+              <DialogTitle className="">Update Category</DialogTitle>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsopen(false);
+                }}
+              >
+                <X className="w-6 h-6" />
+              </div>
+            </DialogHeader>
+            <UpdateCategory onClose={setIsopen} />
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
+
+  if (true && typeof dummyCategoryData === "string") {
+    content = (
+      <p className="font-bold mt-20 text-center capitalize">
+        {dummyCategoryData}
+      </p>
+    );
+  }
+
+  return content;
+}
+
+export default CategoryTable;

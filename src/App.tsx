@@ -20,6 +20,9 @@ import Users from "./pages/Users";
 import ConfigureCoupons from "./pages/ConfigureCoupons";
 import PaymentGateway from "./pages/PaymentGateway";
 import ShipmentsDetails from "./pages/ShipmentsDetails";
+import Categories from "./pages/Categories";
+import AddCategory from "./pages/AddCategory";
+import MyProfile from "./pages/MyProfile";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -50,6 +53,10 @@ function App() {
           <Route path="discounts" element={<ProductCoupons />} />
           <Route path="seo" element={<ProductSEO />} />
         </Route>
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/add-category" element={<AddCategory />} />
+        <Route path="/my-profile" element={<MyProfile />} />
+
         <Route path="/orders" element={<Orders />} />
         <Route path="/shipments" element={<Shipments />} />
         <Route path="/shipment-details" element={<ShipmentsDetails />} />

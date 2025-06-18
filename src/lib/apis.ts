@@ -17,6 +17,14 @@ export const signin = async({ email, password }: { email: string, password: stri
  })
 }
 
+export const getAllCategories = async()=>{
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/categories`
+    })
+}
+
+
 export const getAllProducts = async() => {
     return await axios({
         method:'get',
@@ -57,3 +65,5 @@ export const addProductInfo = async (data: any) => {
         data: formdata
     })
 }
+
+
