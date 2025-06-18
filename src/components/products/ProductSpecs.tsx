@@ -7,19 +7,51 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ProductFormValues } from "@/types";
+import { useMutation } from "@tanstack/react-query";
+import { addProductSpecs } from "@/lib/apis";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 
 
 function ProductSpecs() {
         
+    const navigate = useNavigate();
+
     const { register, handleSubmit, watch, setValue } = useForm<ProductFormValues>();
 
     const [keywords, setKeywords] = useState<string[]>([]);
 
+    const { mutate, isPending } = useMutation({
+        mutationKey: [ "product-price" ],
+        mutationFn: addProductSpecs,
+        onSuccess: () => {
+            navigate("/products/add/discounts");
+            toast.success("Request Success", {
+                description: "Product Specifications saved successfully"
+            });
+
+        },
+        onError: (error: AxiosError<any>) => {
+            console.log(error)
+            toast.error("Request Failed", {
+                description: error?.response?.data?.message
+            })
+        }
+    })
+
     const onSubmit = (data: ProductFormValues) => {
-        console.log({
-        ...data,
-        benefitKeywords: keywords,
-        });
+        const productId = sessionStorage.getItem("product-id");
+
+        if(productId === null){
+            toast.success("Request Failed", {
+                description: "Add Product Info to create description & specification"
+            });
+        }else{
+
+            mutate({...data, benefitKeywords: keywords, productId})
+        }
     };
 
     const addKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -158,8 +190,8 @@ function ProductSpecs() {
             </div>
 
             <div className="flex items-center justify-end gap-5 mt-6">
-                <Button type="button" variant="secondary">Back</Button>
-                <Button type="submit">Save & Next</Button>
+                <Button onClick={() => navigate("/products/add/product-price")} disabled={isPending} type="button" variant="secondary">Back</Button>
+                <Button disabled={isPending} type="submit">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save & Next"}</Button>
             </div>
         </form>
     )

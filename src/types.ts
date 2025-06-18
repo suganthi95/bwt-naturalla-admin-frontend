@@ -59,17 +59,19 @@ export type ProductFormValues = {
     todayDeal: boolean;
     offerEndingSoon: boolean;
     bestSelling: boolean;
-    benefitKeywords: string;
+    benefitKeywords: string[];
     length: number;
     weight: number;
     height: number;
     breadth: number;
+    productId: string | null | File
 };
 
 export type ProductSEOFormValues = {
   metaTitle: string;
   metaDescription: string;
   metaImageUrl: string;
+  metaImage: any;
 };
 
 export type AuthType = {

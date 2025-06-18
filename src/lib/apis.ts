@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ProductFormValues } from "@/types";
 import axios from "axios";
   
 
@@ -31,12 +32,26 @@ export const getAllOrders = async() => {
     })
 }
 
+export const getProductCategories = async() => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/categories`
+    })
+}
+
+export const getCoupons = async() => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/coupons`
+    })
+}
+
 export const addProductInfo = async (data: any) => {
 
     const formdata = new FormData();
     formdata.append("product_name", data.productName)
-    formdata.append("category_id", "1")
-    formdata.append("subcategory_id", "1")
+    formdata.append("category_id", data.category.split("::")[1])
+    formdata.append("subcategory_id", data.subCategory.split("::")[1])
     formdata.append("units", data.unit)
     formdata.append("min_order_quantity", data.minOrderQty)
     formdata.append("slug", data.slug)
@@ -54,6 +69,89 @@ export const addProductInfo = async (data: any) => {
     return await axios({
         method:'post',
         url:`${BASE_URL}/products/add-product`,
+        data: formdata
+    })
+}
+
+export const addProductPrice = async (data: any) => {
+
+    return await axios({
+        method:'post',
+        url:`${BASE_URL}/products/product-price-stock`,
+        data: {
+            product_id: parseInt(data.productId),
+            unit_price: data.unitPrice,
+            strike_through_price: data.strikeThroughPrice,
+            special_discount_type: data.specialDiscountType,
+            special_discount_percent: data.specialDiscountPercentage,
+            special_discount_amount: data.specialDiscountAmount,
+            discount_start_at: data.discountPeriodStartat,
+            discount_end_at: data.discountPeriodendat,
+            current_stock: data.currentStock,
+            stock_visibility: data.stockVisibility === "show" ? true : false,
+            minimum_stock_warning: data.minimumStockWarning,
+            sku: data.sku,
+        }
+    })
+}
+
+export const addProductSpecs = async (data: ProductFormValues) => {
+
+    const formdata = new FormData();
+    formdata.append("product_id", data.productId as string);
+    formdata.append("short_description", data.shortDescription)
+    formdata.append("long_description", data.longDescription)
+    formdata.append("benefits", data.benefits)
+    formdata.append("how_to_use", data.howToUse)
+    formdata.append("ingredients", data.ingredients)
+    formdata.append("is_featured", data.isFeatured ? "true" : "false")
+    formdata.append("best_selling", data.bestSelling ? "true" : "false")
+    formdata.append("offer_ending_soon", data.offerEndingSoon ? "true" : "false")
+    formdata.append("isin_todays_deal", data.todayDeal ? "true" : "false")
+    formdata.append("length", data.length.toString())
+    formdata.append("weight", data.weight.toString())
+    formdata.append("height", data.height.toString())
+    formdata.append("breadth", data.breadth.toString())
+    formdata.append("pdf", data.specificationPDF[0])
+
+    data.benefitKeywords.forEach((item: string, index: number) => {
+        formdata.append(`benefit_keys[${index}]`, item)
+    });
+
+    return await axios({
+        method:'post',
+        url:`${BASE_URL}/products/product-description`,
+        data: formdata
+    })
+}
+
+export const addCoupons = async (data: { coupon: number, productId: string }) => {
+
+    return await axios({
+        method:'post',
+        url:`${BASE_URL}/products/add/coupon`,
+        data: {
+            coupon_id: data.coupon,
+            product_id: parseInt(data.productId)
+        }
+    })
+}
+
+export const addMetaSEO = async (data: any) => {
+
+    const formdata = new FormData();
+    formdata.append("product_id", data.productId as string);
+    formdata.append("meta_title", data.metaTitle)
+    formdata.append("meta_description", data.metaDescription)
+    formdata.append("image", data.metaImage[0])
+
+    data.metaKeywords.forEach((item: string, index: number) => {
+        formdata.append(`meta_keywords[${index}]`, item)
+    });
+
+    return await axios({
+        method:'post',
+        url:`${BASE_URL}/products/meta/info`,
         data: formdata
     })
 }
