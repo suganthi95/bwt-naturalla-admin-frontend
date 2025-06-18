@@ -1,6 +1,4 @@
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { LoaderCircle, RefreshCw } from "lucide-react"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
@@ -11,29 +9,29 @@ import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
 import { addProductPrice } from "@/lib/apis"
+import { ProductPriceFormType } from "@/types"
 
-const formSchema = z.object({
-  unitPrice: z.coerce.number().min(0),
-  strikeThroughPrice: z.coerce.number().min(0),
-  specialDiscountType: z.string().optional(),
-  specialDiscountAmount: z.coerce.number(),
-  specialDiscountPercentage: z.coerce.number(),
-  discountPeriodStartat: z.string(),
-  discountPeriodendat: z.string(),
-  minimumStockWarning: z.coerce.number(),
-  sku: z.string().min(1),
-  stockVisibility: z.string(),
-  currentStock: z.coerce.number(),
-})
+// const formSchema = z.object({
+//   unitPrice: z.coerce.number().min(0),
+//   strikeThroughPrice: z.coerce.number().min(0),
+//   specialDiscountType: z.string().optional(),
+//   specialDiscountAmount: z.coerce.number(),
+//   specialDiscountPercentage: z.coerce.number(),
+//   discountPeriodStartat: z.string(),
+//   discountPeriodendat: z.string(),
+//   minimumStockWarning: z.coerce.number(),
+//   sku: z.string().min(1),
+//   stockVisibility: z.string(),
+//   currentStock: z.coerce.number(),
+// })
 
 export function ProductPrice() {
 
   const navigate = useNavigate();
-  const { register, setValue, handleSubmit, watch } = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { register, setValue, handleSubmit, watch, formState: { errors } } = useForm<ProductPriceFormType>({
     defaultValues: {
-      unitPrice: 0,
       sku: "",
+      specialDiscountType: "flat"
     }
   });
 
@@ -55,7 +53,7 @@ export function ProductPrice() {
       }
   })
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: ProductPriceFormType) => {
     const productId = sessionStorage.getItem("product-id");
     
     if(productId === null){
@@ -74,19 +72,41 @@ export function ProductPrice() {
         <div className="grid grid-cols-2 gap-10">
           <div>
             <Label>Unit Price *</Label>
-            <Input disabled={isPending} min={1} type="number" {...register("unitPrice")} />
+            <Input 
+              disabled={isPending} 
+              min={1} 
+              type="number" 
+              {...register("unitPrice", {
+                required: {
+                  value: true,
+                  message: "Unit Price is required"
+                }
+              })} 
+            />
+            {errors?.unitPrice && <p className="text-sm text-red-500 mt-1">{errors?.unitPrice.message}</p>}
           </div>
 
           <div>
             <Label>Strike through Price *</Label>
-            <Input disabled={isPending} min={1} type="number" {...register("strikeThroughPrice")} />
+            <Input 
+              disabled={isPending} 
+              min={1} 
+              type="number" 
+              {...register("strikeThroughPrice", {
+                required: {
+                  value: true,
+                  message: "Strike through Price is required"
+                }
+              })} 
+            />
+            {errors?.strikeThroughPrice && <p className="text-sm text-red-500 mt-1">{errors?.strikeThroughPrice.message}</p>}
           </div>
         </div>
         
         <div className="grid grid-cols-2 gap-10">
           <div>
             <Label>Special Discount Type</Label>
-            <Select disabled={isPending} onValueChange={(val) => setValue("specialDiscountType", val)}>
+            <Select disabled={isPending} onValueChange={(val) => setValue("specialDiscountType", val as any)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
@@ -100,12 +120,32 @@ export function ProductPrice() {
           {watch("specialDiscountType") === "flat" ?
             <div>
               <Label>Special Discount (in Amount)</Label>
-              <Input type="number" placeholder="Discount" {...register("specialDiscountAmount")} />
+              <Input 
+                type="number" 
+                placeholder="Discount" 
+                {...register("specialDiscountAmount", {
+                  required: {
+                  value: true,
+                  message: "Special discount amount Price is required"
+                }
+                })} 
+              />
+              {errors?.specialDiscountAmount && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountAmount.message}</p>}
             </div> :
 
             <div>
               <Label>Special Discount (in Percentage)</Label>
-              <Input type="number" placeholder="Discount" {...register("specialDiscountPercentage")} />
+              <Input 
+                type="number" 
+                placeholder="Discount" 
+                {...register("specialDiscountPercentage", {
+                  required: {
+                    value: true,
+                    message: "Strike through percentage is required"
+                  }
+                })} 
+              />
+              {errors?.specialDiscountPercentage && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountPercentage.message}</p>}
             </div>
 
           }
@@ -115,16 +155,35 @@ export function ProductPrice() {
         <div className="grid grid-cols-2 gap-10">
           <div>
             <Label>Special Discount Period Start Date</Label>
-            <div className="relative">
-              <Input disabled={isPending} type="date" {...register("discountPeriodStartat")} placeholder="YYYY-MM-DD" />
-            </div>
+            <Input 
+              disabled={isPending} 
+              type="date" 
+              placeholder="YYYY-MM-DD" 
+              {...register("discountPeriodStartat", {
+                required: {
+                  value: true,
+                  message: "Start at date is required"
+                }
+              })} 
+            />
+            {errors?.discountPeriodStartat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodStartat.message}</p>}
           </div>
 
           <div>
             <Label>Special Discount Period End Date</Label>
-            <div className="relative">
-              <Input disabled={isPending} type="date" {...register("discountPeriodendat")} placeholder="YYYY-MM-DD" />
-            </div>
+            <Input 
+              disabled={isPending} 
+              type="date" 
+              placeholder="YYYY-MM-DD" 
+              {...register("discountPeriodendat", {
+                required: {
+                  value: true,
+                  message: "End at date is required"
+                }
+              })} 
+            />
+            {errors?.discountPeriodendat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodendat.message}</p>}
+
           </div>
 
         </div>
@@ -138,7 +197,17 @@ export function ProductPrice() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div>
             <Label>Minimum Stock Warning</Label>
-            <Input disabled={isPending} type="number" {...register("minimumStockWarning")} />
+            <Input 
+              disabled={isPending} 
+              type="number" 
+              {...register("minimumStockWarning", {
+                required: {
+                  value: true,
+                  message: "Minimum stock warning is required"
+                }
+              })} 
+            />
+            {errors?.minimumStockWarning && <p className="text-sm text-red-500 mt-1">{errors?.minimumStockWarning.message}</p>}
           </div>
 
           <div>
@@ -156,13 +225,34 @@ export function ProductPrice() {
 
           <div className="relative">
             <Label>SKU *</Label>
-            <Input disabled={isPending} {...register("sku")} placeholder="Enter product sku" />
+            <Input 
+              disabled={isPending} 
+              placeholder="Enter product sku" 
+              {...register("sku", {
+                required: {
+                  value: true,
+                  message: "SKU is required"
+                }
+              })} 
+            />
+            {errors?.sku && <p className="text-sm text-red-500 mt-1">{errors?.sku.message}</p>}
             <RefreshCw className="absolute right-3 top-8 h-5 w-5 text-muted-foreground cursor-pointer" />
           </div>
 
           <div>
             <Label>Current Stock</Label>
-            <Input disabled={isPending} type="number" {...register("currentStock")} placeholder="Enter current available quantity" />
+            <Input 
+              disabled={isPending} 
+              type="number" 
+              placeholder="Enter current available quantity" 
+              {...register("currentStock", {
+                required: {
+                  value: true,
+                  message: "Current Stock is required"
+                }
+              })} 
+            />
+            {errors?.currentStock && <p className="text-sm text-red-500 mt-1">{errors?.currentStock.message}</p>}
           </div>
         </div>
       </div>

@@ -19,11 +19,13 @@ function ProductSEO() {
         register,
         handleSubmit,
         formState: { errors },
+        setError,
         watch,
         setValue
     } = useForm<ProductSEOFormValues>({
         defaultValues: {
-            metaImage: null
+            metaImage: null,
+            metaKeyword: ""
         }
     });
 
@@ -70,18 +72,20 @@ function ProductSEO() {
 
     const addKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-        e.preventDefault();
-        const value = e.currentTarget.value.trim();
-        if (value && !keywords.includes(value)) {
-            setKeywords([...keywords, value]);
-            e.currentTarget.value = "";
-        }
+            e.preventDefault();
+            const value = e.currentTarget.value.trim();
+            if (value && !keywords.includes(value)) {
+                setKeywords([...keywords, value]);
+                e.currentTarget.value = "";
+                setError("metaKeyword", { message: "" })
+            }
         }
     };
 
     const removeKeyword = (keyword: string) => {
         setKeywords(keywords.filter((k) => k !== keyword));
     };
+
 
     return (
         <form
@@ -127,18 +131,32 @@ function ProductSEO() {
                     id="metaKeywords"
                     placeholder="Type keyword and press Enter"
                     onKeyDown={addKeyword}
+                    {...register("metaKeyword", {
+                        validate: () => {
+                            if(keywords.length === 0){
+                                return "Meta keyword is required"
+                            }
+                        }
+                    })}
                 />
+
+                {errors.metaKeyword && (
+                    <p className="text-sm text-red-500 mt-1">
+                        {errors?.metaKeyword.message}
+                    </p>
+                )}
+
                 <div className="flex flex-wrap gap-2 mt-2">
-                {keywords.map((kw) => (
-                    <Badge
-                        key={kw}
-                        variant="secondary"
-                        className="cursor-pointer bg-primary-blue text-white hover:bg-primary-blue/80"
-                        onClick={() => removeKeyword(kw)}
-                        >
-                        {kw} ✕
-                    </Badge>
-                ))}
+                    {keywords.map((kw) => (
+                        <Badge
+                            key={kw}
+                            variant="secondary"
+                            className="cursor-pointer bg-primary-blue text-white hover:bg-primary-blue/80"
+                            onClick={() => removeKeyword(kw)}
+                            >
+                            {kw} ✕
+                        </Badge>
+                    ))}
                 </div>
             </div>
 
