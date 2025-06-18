@@ -42,9 +42,9 @@ function AddProducts() {
             <Tabs value={tabValue}>
                 <TabsList>
                     {tabs.map(item => (
-                        <TabsTrigger 
+                        <TabsTrigger
                             key={item.route} 
-                            className={`bg-transparent font-semibold data-[state=active]:bg-transparent data-[state=active]:border-b-[3px] data-[state=active]:border-primary-green data-[state=active]:text-primary-green`} 
+                            className={`bg-transparent font-semibold data-[state=active]:bg-transparent data-[state=active]:border-b-[3px] data-[state=active]:border-primary-green data-[state=active]:text-primary-green disabled:opacity-1`} 
                             onClick={() => navigate(item.route)} 
                             value={item.route}
                         >

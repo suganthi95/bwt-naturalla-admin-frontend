@@ -8,13 +8,16 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { useEffect, useState } from "react"
 import { CloudUpload, LoaderCircle, X } from "lucide-react"
 import { Badge } from "../ui/badge"
-import { useMutation } from "@tanstack/react-query"
-import { addProductInfo } from "@/lib/apis"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { addProductInfo, getProductCategories } from "@/lib/apis"
+import { toast } from "sonner"
+import { AxiosError } from "axios"
+import { useNavigate } from "react-router-dom"
 
 const formSchema = z.object({
   productName: z.string().min(1),
   category: z.string().min(1),
-  brand: z.string().min(1),
+  subCategory: z.string().min(1),
   unit: z.string(),
   minOrderQty: z.coerce.number().min(1),
   tags: z.array(z.string()).optional(),
@@ -28,22 +31,46 @@ type FormType = z.infer<typeof formSchema>
 
 export function ProductInfo() {
 
-    const [tags, setTags] = useState<string[]>([])
-    const [tagInput, setTagInput] = useState("")
+    const navigate = useNavigate();
+    const [tags, setTags] = useState<string[]>([]);
+    const [tagInput, setTagInput] = useState("");
+
+    const { data: categories, isLoading, isError } = useQuery({
+        queryKey: [ "getCategories" ],
+        queryFn: () => getProductCategories(),
+        retry: 3,
+        refetchOnWindowFocus: false,
+        select: (data) => data?.data?.data
+    });
+
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "product-info" ],
         mutationFn: addProductInfo,
-        onSuccess: (data) => console.log(data),
-        onError: (error) => console.log(error)  
+        onSuccess: (data) => {
+            sessionStorage.setItem("product-id", data.data.product_id);
+            navigate("/products/add/product-price");
+            toast.success("Request Success", {
+                description: "Product Info saved successfully"
+            });
+
+        },
+        onError: (error: AxiosError<any>) => {
+            console.log(error)
+            toast.error("Request Failed", {
+                description: error?.response?.data?.message
+            })
+        }
     })
 
     const { register, handleSubmit, setValue, watch } = useForm<FormType>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
+        defaultValues: 
+        // sessionStorage.getItem("product-form") !== null ? JSON.parse(sessionStorage.getItem("product-form") as string) :
+        {
             productName: "",
             category: "",
-            brand: "",
+            subCategory: "",
             unit: "",
             minOrderQty: 1,
             slug: "",
@@ -68,8 +95,14 @@ export function ProductInfo() {
     };
 
     const onSubmit = (data: any) => {
-        data.tags = tags
-        mutate(data)
+        data.tags = tags;
+        const productId = sessionStorage.getItem("product-id");
+        if(productId === null){
+            mutate(data);
+        }else{
+
+            mutate({...data, productId})
+        }
     }
 
 
@@ -85,45 +118,50 @@ export function ProductInfo() {
             <div>
                 <div>
                     <Label>Product Name *</Label>
-                    <Input {...register("productName")} />
+                    <Input disabled={isPending} {...register("productName")} />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 <div>
                     <Label>Category *</Label>
-                    <Select onValueChange={(val) => setValue("category", val)}>
-                        <SelectTrigger>
-                        <SelectValue placeholder="Select Category" />
+                    <Select required disabled={isLoading || isError || isPending} onValueChange={(val) => {
+                        setValue("category", val);
+                        setValue("subCategory", "");
+                    }}>
+                        <SelectTrigger className="capitalize">
+                            <SelectValue placeholder="Select Category" />
                         </SelectTrigger>
                         <SelectContent>
-                        <SelectItem value="Skincare">Skincare</SelectItem>
-                        <SelectItem value="Haircare">Haircare</SelectItem>
+                            {categories?.map((category: any) => (
+                                <SelectItem key={category.category_title} className="capitalize" value={`${category.category_title}::${category.category_id.toString()}`}>{category.category_title}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
 
                 <div>
-                    <Label>Brand *</Label>
-                    <Select onValueChange={(val) => setValue("brand", val)}>
-                        <SelectTrigger>
-                        <SelectValue placeholder="Select Brand" />
+                    <Label>Sub-category *</Label>
+                    <Select required disabled={isLoading || isError || isPending} onValueChange={(val) => setValue("subCategory", val)}>
+                        <SelectTrigger className="capitalize">
+                        <SelectValue placeholder="Select Sub-category" />
                         </SelectTrigger>
                         <SelectContent>
-                        <SelectItem value="Brand A">Brand A</SelectItem>
-                        <SelectItem value="Brand B">Brand B</SelectItem>
+                            {categories?.filter((item: any) => item.category_id.toString() === watch("category")?.split("::")[1])[0]?.subcategories?.map((subcategory: any) => (
+                                <SelectItem key={subcategory.subcategory_name} className="capitalize" value={`${subcategory.subcategory_name}::${subcategory.subcategory_id.toString()}`}>{subcategory.subcategory_name}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                 </div>
 
                 <div>
                     <Label>Unit</Label>
-                    <Input placeholder="Unit (eg kg, pc etc)" {...register("unit")} />
+                    <Input disabled={isPending} required placeholder="Unit (eg kg, pc etc)" {...register("unit")} />
                 </div>
 
                 <div>
                     <Label>Min Order Quantity *</Label>
-                    <Input type="number" {...register("minOrderQty")} />
+                    <Input disabled={isPending} required type="number" {...register("minOrderQty")} />
                 </div>
 
             </div>
@@ -131,6 +169,7 @@ export function ProductInfo() {
             <div>
                 <Label>Tags</Label>
                 <Input
+                    disabled={isPending}
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={addTags}
@@ -153,7 +192,7 @@ export function ProductInfo() {
 
             <div>
                 <Label>Slug</Label>
-                <Input {...register("slug")} placeholder="Product Slug" />
+                <Input disabled={isPending} {...register("slug")} placeholder="Product Slug" />
             </div>
 
             <div>
@@ -178,7 +217,7 @@ export function ProductInfo() {
                             <Label htmlFor={`galleryImages.${i}`} className="flex flex-col gap-2 items-center justify-center border-dashed border-[2px] border-slate-400 rounded-lg p-6 my-4 w-[150px] h-[150px] cursor-pointer">
                                 <CloudUpload className="h-5 w-5" />
                                 <p className="text-xs text-center text-slate-400">Drop your images here or <span className="text-xs text-center text-primary-blue">Select click to browse</span></p>
-                                <Input id={`galleryImages.${i}`} className="hidden" type="file" accept="image/*" {...register(`galleryImages.${i}`)} />
+                                <Input disabled={isPending} id={`galleryImages.${i}`} className="hidden" type="file" accept="image/*" {...register(`galleryImages.${i}`)} />
                             </Label>
                         }
                         
@@ -209,7 +248,7 @@ export function ProductInfo() {
                             <span className="bg-[#E7E7E7] h-[1px] w-full"></span>
                         </div>
                         <p className="text-sm text-center text-primary-blue">Select click to browse</p>
-                        <Input id="thumbnail" className="hidden" type="file" accept="image/*" {...register("thumbnail")} />
+                        <Input disabled={isPending} id="thumbnail" className="hidden" type="file" accept="image/*" {...register("thumbnail")} />
                     </Label>
                 }  
 
@@ -217,8 +256,8 @@ export function ProductInfo() {
 
 
             <div className="flex justify-end items-center gap-5 mt-4">
-                <Button type="button" variant="secondary">Clear All</Button>
-                <Button type="submit">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save & Next"}</Button>
+                {/* <Button type="button" variant="secondary">Clear All</Button> */}
+                <Button disabled={isPending} type="submit">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save & Next"}</Button>
             </div>
         </form>
     )

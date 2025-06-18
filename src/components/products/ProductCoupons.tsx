@@ -1,6 +1,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -20,39 +20,62 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Label } from "../ui/label"
-
-const coupons = [
-  { label: "Coupon 1", value: "en" },
-  { label: "Coupon 2", value: "fr" },
-  { label: "Coupon 3", value: "de" },
-  { label: "Coupon 4", value: "es" },
-  { label: "Coupon 5", value: "pt" },
-  { label: "Coupon 6", value: "ru" },
-  { label: "Coupon 7", value: "ja" },
-  { label: "Coupon 8", value: "ko" },
-  { label: "Coupon 9", value: "zh" },
-] as const
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { addCoupons, getCoupons } from "@/lib/apis"
+import { useNavigate } from "react-router-dom"
+import { AxiosError } from "axios"
 
 const FormSchema = z.object({
-  coupon: z.string({
+  coupon: z.number({
     required_error: "Please select a coupon.",
   }),
 })
 
 export function ProductCoupons() {
 
-    const { watch, setValue, handleSubmit } = useForm<z.infer<typeof FormSchema>>({
+    const navigate = useNavigate();
+    const { data: coupons, isLoading, isError } = useQuery({
+        queryKey: [ "getCoupons" ],
+        queryFn: () => getCoupons(),
+        refetchOnWindowFocus: false,
+        retry: 3,
+        select: (data) => data?.data?.data.map((item: any) => ({ label: item.coupon_code, value: item.coupon_id, name: item.coupon_name }))
+    })
+
+    const { mutate, isPending } = useMutation({
+        mutationKey: [ "addCoupons" ],
+        mutationFn: addCoupons,
+        onSuccess: () => {
+            navigate("/products/add/seo");
+            toast.success("Request Success", {
+                description: "Couponse added successfully"
+            });
+
+        },
+        onError: (error: AxiosError<any>) => {
+            console.log(error)
+            toast.error("Request Failed", {
+                description: error?.response?.data?.message
+            })
+        }
+    })
+
+    const { watch, setValue, handleSubmit, formState: { errors } } = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     })
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast("You submitted the following values", {
-            description: (
-                <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            ),
-        })
+
+        const productId = sessionStorage.getItem("product-id");
+
+        if(productId === null){
+            toast.success("Request Failed", {
+                description: "Add Product Info to submit coupons & discounts"
+            });
+        }else{
+
+            mutate({ coupon: data.coupon, productId: productId })
+        }
     }
 
     return (
@@ -63,6 +86,7 @@ export function ProductCoupons() {
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
+                            disabled={isLoading || isError || isPending}
                             variant="default"
                             role="combobox"
                             className={cn(
@@ -71,11 +95,11 @@ export function ProductCoupons() {
                             )}
                         >
                             {watch("coupon")
-                                ? coupons.find(
-                                    (coupon) => coupon.value === watch("coupon")
+                                ? coupons?.find(
+                                    (coupon: any) => coupon.value === watch("coupon")
                                 )?.label
                                 : "Select coupon"}
-                        <ChevronsUpDown className="opacity-50" />
+                            <ChevronsUpDown className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 w-[500px]">
@@ -87,7 +111,7 @@ export function ProductCoupons() {
                             <CommandList>
                             <CommandEmpty>No coupon found.</CommandEmpty>
                             <CommandGroup>
-                                {coupons.map((coupon) => (
+                                {coupons?.map((coupon: any) => (
                                     <CommandItem
                                         value={coupon.label}
                                         key={coupon.value}
@@ -97,12 +121,12 @@ export function ProductCoupons() {
                                     >
                                         {coupon.label}
                                         <Check
-                                        className={cn(
-                                            "ml-auto",
-                                            coupon.value === watch("coupon")
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
+                                            className={cn(
+                                                "ml-auto",
+                                                coupon.value === watch("coupon")
+                                                ? "opacity-100"
+                                                : "opacity-0"
+                                            )}
                                         />
                                     </CommandItem>
                                 ))}
@@ -111,10 +135,11 @@ export function ProductCoupons() {
                         </Command>
                     </PopoverContent>
                 </Popover>
+                {errors?.coupon?.message && <p className="text-red-500 text-sm">{errors?.coupon?.message}</p>}
             </div>
             <div className="flex items-center justify-end gap-5 mt-6">
-                <Button type="button" variant="secondary">Back</Button>
-                <Button type="submit">Submit</Button>
+                <Button onClick={() => navigate("/products/add/product-specs")} disabled={isPending} type="button" variant="secondary">Back</Button>
+                <Button disabled={isPending} type="submit">{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Submit"}</Button>
             </div>
         </form>
     )
