@@ -11,10 +11,18 @@ import { addCategories } from "@/lib/apis";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
   slug: z.string().min(1, "Slug is required"),
+  tax: z.number().min(0, "Tax is required"),
   thumbnail: z
     .any()
     .refine((file) => file?.length > 0, "Thumbnail is required"),
@@ -68,17 +76,20 @@ export default function AddCategory() {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
+
     if (file && file.type.startsWith("image/")) {
       setValue("thumbnail", [file]);
     }
   };
 
   const onSubmit = (data: FormValues) => {
-    console.log('data: ', data.thumbnail);
-    const finalData  = {
+    console.log("data: ", data.thumbnail[0]);
+    const finalData = {
       ...data,
-      subCategories
-    }
+      thumbnail: data.thumbnail[0], 
+
+      subCategories,
+    };
     mutate(finalData);
   };
 
@@ -166,6 +177,31 @@ export default function AddCategory() {
             <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>
           )}
         </div>
+        <div>
+          <label className="block text-sm font-semibold text-[#232323] mb-1">
+            Tax <span className="text-red-500">*</span>
+          </label>
+
+          <Select
+            onValueChange={(value) => setValue("tax", Number(value))}
+            defaultValue="0"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select tax %" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">0%</SelectItem>
+              <SelectItem value="5">5%</SelectItem>
+              <SelectItem value="12">12%</SelectItem>
+              <SelectItem value="18">18%</SelectItem>
+              <SelectItem value="28">28%</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {errors.tax && (
+            <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
+          )}
+        </div>
 
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
@@ -208,7 +244,17 @@ export default function AddCategory() {
           )}
         </div>
 
-        <div className="pt-2 flex justify-end">
+        <div className="pt-2 gap-x-3 flex justify-end">
+          {thumbnailFile && (
+            <Button
+              variant={"destructive"}
+              type="button"
+              onClick={() => setValue("thumbnail", [])}
+            >
+              {" "}
+              Remove
+            </Button>
+          )}
           <Button type="submit" disabled={isPending}>
             {" "}
             {isPending ? <Loader2 className="animate-spin" /> : "Save"}

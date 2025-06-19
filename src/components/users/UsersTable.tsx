@@ -314,7 +314,6 @@ function UsersTable() {
               className="pl-10 pr-4 py-2"
             />
           </div>
-          {/* Role Filter */}
           <div className="w-[180px]">
             <Select
               onValueChange={(value) =>

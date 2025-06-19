@@ -6,14 +6,17 @@ import { CloudUpload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface Props {
   onClose: (val: boolean) => void;
+  Data:any
 }
 
 const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
   slug: z.string().min(1, "Slug is required"),
+  tax: z.number().min(0, "Tax is required"),
   thumbnail: z
     .any()
     .refine((file) => file?.length > 0, "Thumbnail is required"),
@@ -21,7 +24,8 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export default function UpdateCategory({ onClose }: Props) {
+export default function UpdateCategory({ onClose,Data }: Props) {
+  console.log('Data: ', Data);
   const {
     register,
     handleSubmit,
@@ -62,7 +66,7 @@ export default function UpdateCategory({ onClose }: Props) {
       sub_categories: subCategories,
     };
     console.log(finalData);
-    onClose(false)
+    onClose(false);
   };
 
   const handleAddSubCategory = () => {
@@ -82,8 +86,6 @@ export default function UpdateCategory({ onClose }: Props) {
 
   return (
     <div className="p-2 px-4">
-    
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 max-w-2xl bg-white  rounded-lg"
@@ -147,7 +149,31 @@ export default function UpdateCategory({ onClose }: Props) {
             <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>
           )}
         </div>
+        <div>
+          <label className="block text-sm font-semibold text-[#232323] mb-1">
+            Tax <span className="text-red-500">*</span>
+          </label>
 
+          <Select
+            onValueChange={(value) => setValue("tax", Number(value))}
+            defaultValue="0"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select tax %" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">0%</SelectItem>
+              <SelectItem value="5">5%</SelectItem>
+              <SelectItem value="12">12%</SelectItem>
+              <SelectItem value="18">18%</SelectItem>
+              <SelectItem value="28">28%</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {errors.tax && (
+            <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
+          )}
+        </div>
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
             Thumbnail <span className="text-red-500">*</span>
