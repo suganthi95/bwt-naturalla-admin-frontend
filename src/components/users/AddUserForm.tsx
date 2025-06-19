@@ -163,7 +163,7 @@ export default function AddUserForm({ onClose }: Props) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="user">User</SelectItem>
+            <SelectItem value="manager">Manager</SelectItem>
           </SelectContent>
         </Select>
         {errors.role && (

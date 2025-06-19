@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 
-import { Copy, Edit, Plus, Search, Trash2, X } from "lucide-react";
+import { Copy, Edit, Loader2, Plus, Search, Trash2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -28,12 +28,19 @@ import {
 // import { CSVLink } from "react-csv";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import UpdateCategory from "./UpdateCategory";
-import { getAllCategories } from "@/lib/apis";
-import { useQuery } from "@tanstack/react-query";
+import { deleteCategory, getAllCategories } from "@/lib/apis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import axios from "axios";
 
 function CategoryTable() {
   const [Isopen, setIsopen] = useState(false);
+  const queryClient   = useQueryClient()
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
+    const { mutate: onDelete, isPending } = useMutation({
+      mutationKey: ["deleteuser"],
+      mutationFn: (id: string) => deleteCategory(id),
+    });
   console.log("selectedCategory: ", selectedCategory);
   const columns: ColumnDef<any>[] = useMemo(
     () => [
@@ -48,15 +55,15 @@ function CategoryTable() {
         accessorKey: "category_title",
         header: () => <div className="text-center">Category</div>,
         cell: ({ row }) => {
-          const { category } = row.original;
+          const { category_title,thumbnail_url } = row.original;
           return (
             <div className="flex items-center gap-2">
               <img
                 src={
-                  "https://ik.imagekit.io/3t9llb0gx/Naturella/image%205.png?updatedAt=1749124818824"
+                 thumbnail_url 
                 }
-                alt={category}
-                className="w-14 h-14 rounded object-cover"
+                alt={category_title}
+                className="w-14 h-14 rounded object-contain"
               />
               <span className="capitalize">{row.getValue("category_title")}</span>
             </div>
@@ -91,6 +98,13 @@ function CategoryTable() {
           <div className="text-center">{row.getValue("product_count")}</div>
         ),
       },
+        {
+        accessorKey: "tax_percent",
+        header: () => <div className="text-center">Tax</div>,
+        cell: ({ row }) => (
+          <div className="text-center">{row.getValue("tax_percent")}</div>
+        ),
+      },
       {
         id: "actions",
         header: () => <div className="text-center">Actions</div>,
@@ -104,7 +118,7 @@ function CategoryTable() {
                 onClick={() => {
                   setSelectedCategory(row.original);
                   setIsopen(true);
-                  console.log("ji");
+                
                 }}
                 className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
               >
@@ -137,7 +151,7 @@ function CategoryTable() {
                   <div className="text-sm text-muted-foreground">
                     Are you sure you want to delete{" "}
                     <span className="font-semibold text-black">
-                      {row.original.first_name} {row.original.last_name}
+                      {row.original.category_title} 
                     </span>
                     ? This action cannot be undone.
                   </div>
@@ -148,29 +162,29 @@ function CategoryTable() {
                     </DialogClose>
                     <Button
                       variant="destructive"
-                      // disabled={isPending}
+                      disabled={isPending}
                       onClick={() => {
-                        // onDelete(row.original.user_id.toString(), {
-                        //   onSuccess(data) {
-                        //     setOpen(false);
-                        //     toast.success(data?.data?.message);
-                        //     queryClinet.invalidateQueries({
-                        //       queryKey: ["getusers"],
-                        //     });
-                        //   },
-                        //   onError: (error) => {
-                        //     if (axios.isAxiosError(error)) {
-                        //       toast.error(error?.response?.data?.message);
-                        //     }
-                        //   },
-                        // });
+                        onDelete(row.original.category_id, {
+                          onSuccess(data) {
+                            setOpen(false);
+                            toast.success(data?.data?.message);
+                            queryClient.invalidateQueries({
+                              queryKey: ["getAllcategories"],
+                            });
+                          },
+                          onError: (error) => {
+                            if (axios.isAxiosError(error)) {
+                              toast.error(error?.response?.data?.message);
+                            }
+                          },
+                        });
                       }}
                     >
-                      {/* {isPending ? (
+                      {isPending ? (
                         <Loader2 className="animate-spin" />
                       ) : (
                         "Delete"
-                      )} */}
+                      )}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -191,7 +205,7 @@ function CategoryTable() {
     queryKey: ["getAllcategories"],
     queryFn: getAllCategories,
     refetchOnWindowFocus: false,
-    select: (data) => data?.data?.data,
+    select: (data) => data?.data?.categories,
   });
 
   //   const headers = [
@@ -407,7 +421,7 @@ function CategoryTable() {
                 <X className="w-6 h-6" />
               </div>
             </DialogHeader>
-            <UpdateCategory onClose={setIsopen} />
+            <UpdateCategory Data={selectedCategory} onClose={setIsopen} />
           </DialogContent>
         </Dialog>
       </div>
