@@ -83,7 +83,6 @@ export default function AddCategory() {
   };
 
   const onSubmit = (data: FormValues) => {
-    console.log("data: ", data.thumbnail[0]);
     const finalData = {
       ...data,
       thumbnail: data.thumbnail[0], 

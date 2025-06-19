@@ -34,3 +34,42 @@ export type User = {
   verify_email: boolean;
 };
 
+export type Order = {
+  order_id: number;
+  user_id: number;
+  order_date: string;
+  quantity: number | null;
+  address: string;
+  city: string;
+  state: string;
+  country: string | null;
+  pincode: string;
+  order_amount: number;
+  cash_on_delivery: boolean;
+  payment_method: "prepaid" | "cod" | string;
+  order_code: string;
+  phone_number: string | null;
+  payment_status: "paid" | "unpaid" | string;
+  delivery_status: string;
+  shipping_type_id: number | null;
+  sub_total: number;
+  discount_amount: number;
+  coupon_discount: number | null;
+  tax: number;
+  shipping_fee: number;
+  product_ids: number[];
+  assign_delivery: boolean;
+  order_status: string;
+  shipmet_first_name: string;
+  shipment_last_name: string;
+  shipment_email: string;
+  shipment_phone_no: string;
+  coupon_id: number | null;
+  cart_ids: number[] | null;
+  coupon_dis_amount: number | null;
+  shipment_retry_count: number;
+  awb_code: string | null;
+  shipment_status: string | null;
+  track_url: string | null;
+  profile_pic :string
+};

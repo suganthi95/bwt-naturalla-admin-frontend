@@ -1,43 +1,93 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldErrors, Resolver, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudUpload, X } from "lucide-react";
+import { CloudUpload, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { UpdateCategories } from "@/lib/apis";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import axios from "axios";
 
 interface Props {
   onClose: (val: boolean) => void;
-  Data:any
+  Data: any;
 }
 
 const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
   slug: z.string().min(1, "Slug is required"),
   tax: z.number().min(0, "Tax is required"),
-  thumbnail: z
-    .any()
-    .refine((file) => file?.length > 0, "Thumbnail is required"),
+  thumbnail: z.any(), // manual validation later
 });
 
 type FormValues = z.infer<typeof schema>;
 
-export default function UpdateCategory({ onClose,Data }: Props) {
-  console.log('Data: ', Data);
+export default function UpdateCategory({ onClose, Data }: Props) {
+  const queryClient = useQueryClient();
+  const [existingImage, setExistingImage] = useState<string>(
+    Data?.thumbnail_url || ""
+  );
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["addcategory"],
+    mutationFn: (data: FormValues) => UpdateCategories(data),
+    onSuccess: () => {
+      toast.success("category added successfully");
+      queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });
+      onClose(false);
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
+  const resolver: Resolver<FormValues> = async (values, context, options) => {
+    const result = await zodResolver(schema)(values, context, options);
+
+    const fileUploaded = values.thumbnail && values.thumbnail.length > 0;
+    const isValid = !!fileUploaded || !!existingImage;
+
+    if (!isValid) {
+      (result.errors as FieldErrors<FormValues>).thumbnail = {
+        type: "custom",
+        message: "Thumbnail is required",
+      };
+    }
+
+    return result;
+  };
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
+    trigger,
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver,
+    defaultValues: {
+      category_name: Data.category_title,
+      slug: Data.slug ?? "",
+      tax: Data.tax_percent,
+      thumbnail: [],
+    },
   });
 
   const [subCategoryInput, setSubCategoryInput] = useState("");
-  const [subCategories, setSubCategories] = useState<string[]>([]);
+  const [subCategories, setSubCategories] = useState<string[]>(
+    (Data?.subcategories || []).map((item: any) => item.subcategory_name)
+  );
 
   const thumbnailFile = watch("thumbnail")?.[0];
   const [isDragging, setIsDragging] = useState(false);
@@ -60,13 +110,18 @@ export default function UpdateCategory({ onClose,Data }: Props) {
     }
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
+    const isValid = await trigger();
+    if (!isValid) return;
+
     const finalData = {
       ...data,
-      sub_categories: subCategories,
+      thumbnail: data.thumbnail?.[0] || existingImage,
+      subCategories,
+      category_id: Data.category_id,
     };
-    console.log(finalData);
-    onClose(false);
+
+    mutate(finalData);
   };
 
   const handleAddSubCategory = () => {
@@ -174,66 +229,68 @@ export default function UpdateCategory({ onClose,Data }: Props) {
             <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
           )}
         </div>
-        <div>
-          <label className="block text-sm font-semibold text-[#232323] mb-1">
-            Thumbnail <span className="text-red-500">*</span>
-          </label>
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={`border-2 border-dashed ${
+            isDragging ? "border-blue-500" : "border-[#1E401D]"
+          } rounded-lg p-6 flex items-center justify-center relative min-h-40 max-h-96`}
+        >
           {thumbnailFile ? (
-            <div className="w-[192px]  relative rounded-md ">
+            <div className="relative w-full h-full">
               <img
                 src={URL.createObjectURL(thumbnailFile)}
                 alt="Preview"
-                className="w-full h-fulll object-contain"
+                className="object-contain h-80 w-full rounded-md"
               />
               <button
                 type="button"
                 onClick={() => setValue("thumbnail", [])}
-                className="absolute -top-3 -right-3 bg-white rounded-full p-1 shadow-sm hover:bg-gray-100 transition"
+                className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-100"
+              >
+                <X className="w-4 h-4 text-red-500" />
+              </button>
+            </div>
+          ) : Data.thumbnail_url ? (
+            <div className="relative w-full h-full">
+              <img
+                src={Data.thumbnail_url}
+                alt="Preview"
+                className="object-contain h-80 w-full rounded-md"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("thumbnail", []);
+                  setExistingImage("");
+                }}
+                className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-100"
               >
                 <X className="w-4 h-4 text-red-500" />
               </button>
             </div>
           ) : (
-            <div
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              className={`border-2 border-dashed ${
-                isDragging ? "border-blue-500" : "border-[#1E401D]"
-              } rounded-lg p-6 flex items-center justify-center relative min-h-40 max-h-96`}
-            >
-              {thumbnailFile ? (
-                <img
-                  src={URL.createObjectURL(thumbnailFile)}
-                  alt="Preview"
-                  className="object-contain h-80 w-full rounded-md"
-                />
-              ) : (
-                <label className="flex flex-col items-center justify-center text-gray-500 cursor-pointer w-full h-full">
-                  <CloudUpload className="w-8 h-8 mb-2 text-[#1E401D]" />
-                  <p className="text-xs font-medium text-[#BFBFBF]">
-                    Drop your image or{" "}
-                    <span className="text-blue-500">click to browse</span>
-                  </p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    {...register("thumbnail")}
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
-          )}
-          {errors.thumbnail && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.thumbnail.message as string}
-            </p>
+            <label className="flex flex-col items-center justify-center text-gray-500 cursor-pointer w-full h-full">
+              <CloudUpload className="w-8 h-8 mb-2 text-[#1E401D]" />
+              <p className="text-xs font-medium text-[#BFBFBF]">
+                Drop your image or{" "}
+                <span className="text-blue-500">click to browse</span>
+              </p>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("thumbnail")}
+                className="hidden"
+              />
+            </label>
           )}
         </div>
 
         <div className="pt-2 flex justify-end">
-          <Button type="submit">Update</Button>
+          <Button type="submit">
+            {isPending ? <Loader2 className="animate-spin" /> : "Update"}
+          </Button>
         </div>
       </form>
     </div>

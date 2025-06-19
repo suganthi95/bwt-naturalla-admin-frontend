@@ -41,8 +41,20 @@ function CategoryTable() {
       mutationKey: ["deleteuser"],
       mutationFn: (id: string) => deleteCategory(id),
     });
-  console.log("selectedCategory: ", selectedCategory);
-  const columns: ColumnDef<any>[] = useMemo(
+
+
+  const {
+    data: categories,
+    isLoading,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["getAllcategories"],
+    queryFn: getAllCategories,
+    refetchOnWindowFocus: false,
+    select: (data) => data?.data?.categories,
+  });
+
+    const columns: ColumnDef<any>[] = useMemo(
     () => [
       {
         id: "index",
@@ -196,17 +208,6 @@ function CategoryTable() {
     ],
     []
   );
-
-  const {
-    data: categories,
-    isLoading,
-    isSuccess,
-  } = useQuery({
-    queryKey: ["getAllcategories"],
-    queryFn: getAllCategories,
-    refetchOnWindowFocus: false,
-    select: (data) => data?.data?.categories,
-  });
 
   //   const headers = [
   //     { label: "Category", key: "category" },
@@ -409,7 +410,7 @@ function CategoryTable() {
           </div>
         </div>
         <Dialog open={Isopen} onOpenChange={setIsopen}>
-          <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
+          <DialogContent className="[&>button]:hidden  overflow-y-scroll !max-h-[40rem] !p-0 !max-w-2xl">
             <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
               <DialogTitle className="">Update Category</DialogTitle>
               <div

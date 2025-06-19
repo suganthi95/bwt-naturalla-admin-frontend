@@ -1,37 +1,22 @@
 import { ASSETS } from "@/assets/assets";
 import { Badge } from "../ui/badge";
 import { Mail, Phone } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getOrderDetails } from "@/lib/apis";
+import { Order } from "@/types/type";
 
-export default function OrderDetails() {
-  const products = [
-    {
-      id: 1,
-      image: "https://via.placeholder.com/100x120.png?text=Shampoo",
-      name: "Herbal Shampoo",
-      sku: "SKU1001",
-      quantity: 1,
-      price: 299,
-      oldPrice: 349,
-    },
-    {
-      id: 2,
-      image: "https://via.placeholder.com/100x120.png?text=Soap",
-      name: "Neem Soap",
-      sku: "SKU1002",
-      quantity: 3,
-      price: 99,
-      oldPrice: 129,
-    },
-    {
-      id: 3,
-      image: "https://via.placeholder.com/100x120.png?text=Face+Wash",
-      name: "Aloe Vera Face Wash",
-      sku: "SKU1003",
-      quantity: 2,
-      price: 199,
-      oldPrice: 249,
-    },
-  ];
+interface Props {
+  Order: Order;
+}
+
+export default function OrderDetails({ Order }: Props) {
+  const { data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["getorderdetails", String(Order.order_id)],
+    queryFn: () => getOrderDetails(String(Order?.order_id)),
+    select: (data) => data?.data,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
 
   return (
     <>
@@ -39,20 +24,20 @@ export default function OrderDetails() {
         <div className=" col-span-4">
           <div className="p-4 space-y-4">
             <h2 className="font-semibold">Products</h2>
-            {products.map((product) => (
+            {data?.product?.map((product: any, index: number) => (
               <div
-                key={product.id}
+                key={index}
                 className="flex gap-4 bg-white border rounded-lg p-4 shadow-sm"
               >
                 <img
-                  src={product.image}
-                  alt={product.name}
+                  src={product.product_thumbnail_image}
+                  alt={product.product_name}
                   className="w-24 h-28 object-cover rounded-md"
                 />
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <h3 className="font-semibold text-neutral-800">
-                      {product.name}
+                      {product.product_name}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
                       SKU: {product.sku}
@@ -79,7 +64,7 @@ export default function OrderDetails() {
             <div className="border-2 flex justify-between items-center p-3">
               <p className="font-medium text-sm text-lead">Status</p>
               <Badge className="bg-[#F1E1F9] text-purple-500">
-                In Transist
+               {data?.shipment[0]?.current_status}
               </Badge>
             </div>
           </div>
@@ -89,19 +74,19 @@ export default function OrderDetails() {
 
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span className="font-semibold">₹2000</span>
+              <span className="font-semibold">₹{Order.sub_total}</span>
             </div>
             <div className="flex justify-between items-start text-sm text-muted-foreground">
               <p className="flex flex-col leading-tight">
                 <span className="text-foreground font-medium">Tax</span>
                 <span className="text-xs">Inclusive of 18% tax</span>
               </p>
-              <span className=" font-semibold ">₹2000</span>
+              <span className=" font-semibold ">₹{Order.tax}</span>
             </div>
 
             <div className="flex justify-between">
               <span>Discount</span>
-              <span className="">-₹2000</span>
+              <span className="">-₹{Order.discount_amount}</span>
             </div>
 
             <div className="flex justify-between items-center">
@@ -110,12 +95,14 @@ export default function OrderDetails() {
                 className={`font-semibold  
                          gap-x-1.5 flex items-center`}
               >
-                ₹₹2000
+                ₹{Order.shipping_fee}
               </span>
             </div>
             <div className="flex justify-between font-semibold text-base">
               <span className="font-semibold text-[#0B130B]">Grand Total</span>
-              <span className="text-[#0B130B] font-bold">₹ 2000</span>
+              <span className="text-[#0B130B] font-bold">
+                ₹ {Order.order_amount}
+              </span>
             </div>
           </div>
         </div>
@@ -124,12 +111,22 @@ export default function OrderDetails() {
             <h2 className="font-semibold">Customer</h2>
 
             <div className="border p-2 px-4 flex items-center gap-x-3">
-              <img
-                src={ASSETS.USER}
-                alt="user"
-                className="size-10 rounded-full"
-              />
-              <p className="text-primary-black">Brooklyn Simmons</p>
+              {Order?.profile_pic ? (
+                <img
+                  src={ASSETS.USER}
+                  alt="user"
+                  className="size-10 rounded-full"
+                />
+              ) : (
+                <img
+                  src="https://ik.imagekit.io/nd8r7mpaev/Atlants/user.png?updatedAt=1738227108834"
+                  alt="user"
+                  className="size-10 rounded-full"
+                />
+              )}
+              <p className="text-primary-black">
+                {Order.shipmet_first_name} {Order.shipment_last_name}
+              </p>
             </div>
           </div>
 
@@ -139,12 +136,14 @@ export default function OrderDetails() {
             <div className=" p-2 px-4 space-y-2 border ">
               <p className="text-sm flex items-center gap-x-2 text-[#6C7D95]">
                 {" "}
-                <Mail /> wade.warren@example.gom
+                <Mail /> {Order.shipment_email}
               </p>
-              <p className="text-sm flex items-center gap-x-2 text-[#6C7D95]">
-                {" "}
-                <Phone /> +91-9876543210
-              </p>
+              {Order.phone_number && (
+                <p className="text-sm flex items-center gap-x-2 text-[#6C7D95]">
+                  {" "}
+                  <Phone /> {Order.phone_number}
+                </p>
+              )}
             </div>
           </div>
 
@@ -153,37 +152,45 @@ export default function OrderDetails() {
 
             <div className="border rounded-lg  p-2 px-4 space-y-3.5">
               <div className="flex items-center gap-x-4 justify-between">
-                <h2 className="font-semibold">Priya Sharma</h2>
+                <h2 className="font-semibold">
+                  {Order.shipmet_first_name} {Order.shipment_last_name}
+                </h2>
               </div>
 
               <div className="text-textPrimary">
-                <p>Flat No. 12B, Green Residency</p>
-                <p>Seetha Nagar</p>
-                <p>Chennai, Tamil Nadu - 600034.</p>
+                <p>{Order.address}</p>
+                {/* <p>Seetha Nagar</p> */}
+                <p>
+                  {Order.city}, {Order.state} - {Order.pincode}.
+                </p>
               </div>
 
               <p className="font-medium text-lead text-textPrimary">
-                Ph: +91 98765 43210
+                Ph: {Order.shipment_phone_no}
               </p>
             </div>
           </div>
 
-               <div className=" space-y-4 p-4 text-primary-black">
+          <div className=" space-y-4 p-4 text-primary-black">
             <h2 className="font-semibold">Billing Address</h2>
 
             <div className="border rounded-lg  p-2 px-4 space-y-3.5">
               <div className="flex items-center gap-x-4 justify-between">
-                <h2 className="font-semibold">Priya Sharma</h2>
+                <h2 className="font-semibold">
+                  {Order.shipmet_first_name} {Order.shipment_last_name}
+                </h2>
               </div>
 
               <div className="text-textPrimary">
-                <p>Flat No. 12B, Green Residency</p>
-                <p>Seetha Nagar</p>
-                <p>Chennai, Tamil Nadu - 600034.</p>
+                <p>{Order.address}</p>
+                {/* <p>Seetha Nagar</p> */}
+                <p>
+                  {Order.city}, {Order.state} - {Order.pincode}.
+                </p>
               </div>
 
               <p className="font-medium text-lead text-textPrimary">
-                Ph: +91 98765 43210
+                Ph: {Order.shipment_phone_no}
               </p>
             </div>
           </div>

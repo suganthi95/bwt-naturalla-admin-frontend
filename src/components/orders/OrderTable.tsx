@@ -114,7 +114,7 @@ function OrderTable() {
         return (
           <span
             className={`capitalize px-2 py-1 text-xs font-medium rounded-full ${
-              statusStyles[status.toLowerCase()] || "bg-gray-100 text-gray-700"
+              statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-700"
             }`}
           >
             {status}
@@ -200,7 +200,7 @@ function OrderTable() {
                     {" "}
                     <Badge
                       className={`capitalize px-4  text-xs font-medium rounded-full ${
-                        statusStyles[payment_status.toLowerCase()] ||
+                        statusStyles[payment_status?.toLowerCase()] ||
                         "bg-gray-100 text-gray-700"
                       }`}
                     >
@@ -208,7 +208,7 @@ function OrderTable() {
                     </Badge>
                     <Badge
                       className={`capitalize px-4  text-xs font-medium rounded-full ${
-                        statusStyles[payment_status.toLowerCase()] ||
+                        statusStyles[payment_status?.toLowerCase()] ||
                         "bg-gray-100 text-gray-700"
                       }`}
                     >
@@ -228,7 +228,7 @@ function OrderTable() {
                   <X className="w-6 h-6" />
                 </div>
               </DialogHeader>
-              <OrderDetails />
+              <OrderDetails Order={row.original}/>
             </DialogContent>
           </Dialog>
         );

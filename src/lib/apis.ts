@@ -43,6 +43,12 @@ export const getAllOrders = async () => {
     url: `${BASE_URL}/order`,
   });
 };
+export const getOrderDetails = async (id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/order/${id}`,
+  });
+};
 
 export const getProductCategories = async () => {
   return await axios({
@@ -55,14 +61,13 @@ export const addCategories = async (data: any) => {
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
-//   formdata.append("subcategory_name", data.subCategories);
-data.subCategories.forEach((subCategory: string,index:number) => {
-  formdata.append(`subcategory_name[${index}]`, subCategory);
-});
+  //   formdata.append("subcategory_name", data.subCategories);
+  data.subCategories.forEach((subCategory: string, index: number) => {
+    formdata.append(`subcategory_name[${index}]`, subCategory);
+  });
 
   formdata.append("thumbnail_image", data.thumbnail);
-  formdata.append("tax_percent",  String(data.tax))
-
+  formdata.append("tax_percent", String(data.tax));
 
   return await axios({
     method: "post",
@@ -76,27 +81,21 @@ export const UpdateCategories = async (data: any) => {
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
-//   formdata.append("subcategory_name", data.subCategories);
-data.subCategories.forEach((subCategory: string) => {
-  formdata.append("subcategory_name", subCategory);
-});
+  data.subCategories.forEach((subCategory: string) => {
+    formdata.append("subcategory_name", subCategory);
+  });
 
   formdata.append("thumbnail_image", data.thumbnail);
-  formdata.append("tax_percent",  String(data.tax))
+  formdata.append("category_id", data.category_id);
 
+  formdata.append("tax_percent", String(data.tax));
 
   return await axios({
-    method: "post",
+    method: "put",
     url: `${BASE_URL}/category/updateCategory`,
     data: formdata,
   });
 };
-
-
-
-
-
-
 
 export const deleteCategory = async (id: string) => {
   return await axios({
@@ -138,6 +137,36 @@ export const getCoupons = async () => {
     url: `${BASE_URL}/products/coupons`,
   });
 };
+
+export const PaymentProviders = async () => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/payment/getAllPayments`,
+   
+  });
+};
+
+
+export const togglePayment = async ({
+  provider_name,
+  enabled,
+  user_id,
+}: {
+  provider_name: string;
+  enabled: boolean;
+  user_id: number;
+}) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/payment/payment`,
+    data: {
+      provider_name,
+      enabled,
+      user_id,
+    },
+  });
+};
+
 
 export const addProductInfo = async (data: any) => {
   const formdata = new FormData();

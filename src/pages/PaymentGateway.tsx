@@ -1,4 +1,13 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PaymentProviders, togglePayment } from "@/lib/apis";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
   Check,
@@ -10,6 +19,42 @@ import {
 } from "lucide-react";
 
 function PaymentGateway() {
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["payments"],
+    queryFn: () => PaymentProviders(),
+    select: (data) => data?.data?.data,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["togglepayment"],
+    mutationFn: ({
+      provider_name,
+      enabled,
+      user_id,
+    }: {
+      provider_name: string;
+      enabled: boolean;
+      user_id: number;
+    }) => togglePayment({ provider_name, enabled, user_id }),
+  });
+  if (isLoading || isFetching) {
+    return (
+      <li className="border rounded-lg p-4 mt-4 flex items-center justify-between animate-pulse">
+        <div className="flex items-center gap-x-3">
+          <Skeleton className="size-14 rounded-md" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+        </div>
+        <div className="flex items-center gap-x-3">
+          <Skeleton className="h-6 w-20 rounded-xl" />
+          <Skeleton className="h-6 w-6 rounded-full" />
+        </div>
+      </li>
+    );
+  }
   return (
     <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
       <div className="flex flex-row items-center justify-between">
@@ -97,36 +142,91 @@ function PaymentGateway() {
           </div>
         </div>
         <ul className=" space-y-3 ">
-          <li className="border p-4 mt-4 flex items-center justify-between">
-            <div className="flex items-center gap-x-3">
-              <div className="size-14  rounded-md grid place-items-center bg-[#9333EA]/10">
-                <Smartphone className=" !text-2xl text-[#9333EA]" />
-              </div>
-              <div>
-                <h2 className="font-medium">RazorPay</h2>
-                <p className="text-[#697078]"> RazorPay Payment</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-x-2">
-              <div className="bg-[#E9FFEF] rounded-xl  px-4  font-medium text-[#166534]">Active</div>
-              <EllipsisVertical />
-            </div>
-          </li>
-           <li className="border p-4 mt-4 flex items-center justify-between">
+          {data?.map((payment: any, index: number) => {
+            return (
+              <li
+                key={index}
+                className="border rounded-lg p-4 mt-4 flex items-center justify-between hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center gap-x-3">
+                  <div className="size-14 rounded-md grid place-items-center bg-[#9333EA]/10">
+                    <Smartphone className="text-2xl text-[#9333EA]" />
+                  </div>
+                  <div>
+                    <h2 className="font-medium capitalize">
+                      {payment?.provider_name}
+                    </h2>
+                    <p className="text-sm text-[#697078]">
+                      {payment?.provider_name} Payment
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-x-3">
+                  <div
+                    className={`rounded-xl px-4 py-1 text-sm font-medium ${
+                      payment?.enabled
+                        ? "bg-[#E9FFEF] text-[#166534]"
+                        : "bg-[#FFF3F3] text-[#9F1239]"
+                    }`}
+                  >
+                    {payment?.enabled ? "Active" : "Inactive"}
+                  </div>
+
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button className="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <EllipsisVertical className="text-gray-600" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-40 p-2 shadow-xl border rounded-md bg-white">
+                      <div>
+                        <p
+                          className="cursor-pointer px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                          onClick={() =>{
+                            if(payment?.enabled){
+                              mutate({
+                                enabled:false,
+                                provider_name:payment.provider_name,
+                                user_id:payment.user_id
+                              })
+                            }
+                            else{
+                                mutate({
+                                enabled:true,
+                                provider_name:payment.provider_name,
+                                user_id:payment.user_id
+                              })
+                            }
+                          }}
+                        >
+                          {payment?.enabled ? "Set Inactive" : "Set Active"}
+                        </p>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </li>
+            );
+          })}
+
+          {/* <li className="border p-4 mt-4 flex items-center justify-between">
             <div className="flex items-center gap-x-3">
               <div className="size-14  rounded-md grid place-items-center bg-[#9333EA]/10">
                 <Smartphone className=" !text-2xl text-[#9333EA]" />
               </div>
               <div>
                 <h2 className="font-medium">PhonePe</h2>
-                <p className="text-[#697078]">PhonePe Payment  </p>
+                <p className="text-[#697078]">PhonePe Payment </p>
               </div>
             </div>
             <div className="flex items-center gap-x-2">
-              <div className="bg-[#E9FFEF] rounded-xl  px-4  font-medium text-[#166534]">Active</div>
+              <div className="bg-[#E9FFEF] rounded-xl  px-4  font-medium text-[#166534]">
+                Active
+              </div>
               <EllipsisVertical />
             </div>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>
