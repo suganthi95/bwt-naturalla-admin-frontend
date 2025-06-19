@@ -71,6 +71,7 @@ export type ProductSEOFormValues = {
   metaTitle: string;
   metaDescription: string;
   metaImageUrl: string;
+  metaKeyword: string;
   metaImage: any;
 };
 
@@ -81,3 +82,29 @@ export type AuthType = {
   email: string,
   role: "admin"
 }
+
+export type ProductPriceFormType = {
+  unitPrice: number;
+  strikeThroughPrice: number;
+  specialDiscountType: "flat" | "percentage";
+  specialDiscountAmount: number;
+  specialDiscountPercentage: number;
+  discountPeriodStartat: string;
+  discountPeriodendat: string;
+  minimumStockWarning: number;
+  sku: string;
+  stockVisibility: string;
+  currentStock: number;
+};
+
+export type ProductInfoFormType = {
+  productName: string;
+  category: string;
+  subCategory: string;
+  unit: string;
+  minOrderQty: number;
+  tags: string[];
+  slug: string;
+  galleryImages: any;
+  thumbnail: FileList | null;
+};

@@ -1,11 +1,9 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
+import { Controller, useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CloudUpload, LoaderCircle, X } from "lucide-react"
 import { Badge } from "../ui/badge"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -13,20 +11,20 @@ import { addProductInfo, getProductCategories } from "@/lib/apis"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
+import { ProductInfoFormType } from "@/types"
 
-const formSchema = z.object({
-  productName: z.string().min(1),
-  category: z.string().min(1),
-  subCategory: z.string().min(1),
-  unit: z.string(),
-  minOrderQty: z.coerce.number().min(1),
-  tags: z.array(z.string()).optional(),
-  slug: z.string().optional(),
-  galleryImages: z.any(),
-  thumbnail: z.any()
-})
+// const formSchema = z.object({
+//   productName: z.string({ required_error: "Product Name is required" }),
+//   category: z.string({ required_error: "Select atleast one category" }),
+//   subCategory: z.string({ required_error: "Select atleast one sub category" }),
+//   unit: z.string(),
+//   minOrderQty: z.coerce.number().min(1),
+//   tags: z.array(z.string(), { required_error: "Atleast one tag is required" }),
+//   slug: z.string({ required_error: "Slug is required" }),
+//   galleryImages: z.any(),
+//   thumbnail: z.custom<any>(val => val !== null && val instanceof FileList && val.length > 0, { message: "Thumbnail is required" })
+// })
 
-type FormType = z.infer<typeof formSchema>
 
 
 export function ProductInfo() {
@@ -63,8 +61,7 @@ export function ProductInfo() {
         }
     })
 
-    const { register, handleSubmit, setValue, watch } = useForm<FormType>({
-        resolver: zodResolver(formSchema),
+    const { register, handleSubmit, setValue, watch, setError, control, formState: { errors } } = useForm<ProductInfoFormType>({
         defaultValues: 
         // sessionStorage.getItem("product-form") !== null ? JSON.parse(sessionStorage.getItem("product-form") as string) :
         {
@@ -86,6 +83,7 @@ export function ProductInfo() {
             if (value && !tags.includes(value)) {
                 setTags([...tags, value]);
                 setTagInput("")
+                setError("tags", { message: "" })
             }
         }
     };
@@ -95,6 +93,7 @@ export function ProductInfo() {
     };
 
     const onSubmit = (data: any) => {
+        console.log(errors)
         data.tags = tags;
         const productId = sessionStorage.getItem("product-id");
         if(productId === null){
@@ -106,62 +105,113 @@ export function ProductInfo() {
     }
 
 
-    useEffect(() => {
-        watch((data) => {
-            console.log(data)
-        })
-    }, [watch])
-
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 bg-white rounded-xl mt-5 shadow-md w-[75%]">
 
             <div>
                 <div>
                     <Label>Product Name *</Label>
-                    <Input disabled={isPending} {...register("productName")} />
+                    <Input 
+                        disabled={isPending} 
+                        placeholder="Enter Product Name"
+                        {...register("productName", {
+                            required: {
+                                value: true,
+                                message: "Product Name is required"
+                            }
+                        })} 
+                    />
+                    {errors?.productName && <p className="text-sm text-red-500 mt-1">{errors?.productName?.message}</p>}
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 <div>
                     <Label>Category *</Label>
-                    <Select required disabled={isLoading || isError || isPending} onValueChange={(val) => {
-                        setValue("category", val);
-                        setValue("subCategory", "");
-                    }}>
-                        <SelectTrigger className="capitalize">
-                            <SelectValue placeholder="Select Category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {categories?.map((category: any) => (
-                                <SelectItem key={category.category_title} className="capitalize" value={`${category.category_title}::${category.category_id.toString()}`}>{category.category_title}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <Controller
+                        control={control}
+                        name="category"
+                        rules={{
+                            required: {
+                                value: true,
+                                message: "Category is required"
+                            }
+                        }}
+                        render={({ field }) => (
+                            <Select disabled={isLoading || isError || isPending} onValueChange={(val) => {
+                                field.onChange(val)
+                                setValue("subCategory", "");
+                            }}>
+                                <SelectTrigger className="capitalize">
+                                    <SelectValue placeholder="Select Category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {categories?.map((category: any, index: number) => (
+                                        <SelectItem key={`${category.category_title}-${index}`} className="capitalize" value={`${category.category_title}::${category.category_id.toString()}`}>{category.category_title}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}  
+                    />
+                    {errors?.category && <p className="text-sm text-red-500">{errors?.category?.message}</p>}
                 </div>
 
                 <div>
                     <Label>Sub-category *</Label>
-                    <Select required disabled={isLoading || isError || isPending} onValueChange={(val) => setValue("subCategory", val)}>
-                        <SelectTrigger className="capitalize">
-                        <SelectValue placeholder="Select Sub-category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {categories?.filter((item: any) => item.category_id.toString() === watch("category")?.split("::")[1])[0]?.subcategories?.map((subcategory: any) => (
-                                <SelectItem key={subcategory.subcategory_name} className="capitalize" value={`${subcategory.subcategory_name}::${subcategory.subcategory_id.toString()}`}>{subcategory.subcategory_name}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <Controller
+                        name="subCategory"
+                        control={control}
+                        rules={{
+                            required: {
+                                value: true,
+                                message: "Sub-category is required"
+                            }
+                        }}
+                        render={({ field }) => (
+                            <Select disabled={isLoading || isError || isPending} onValueChange={(val) => field.onChange(val)}>
+                                <SelectTrigger className="capitalize">
+                                <SelectValue placeholder="Select Sub-category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {categories?.filter((item: any) => item.category_id.toString() === watch("category")?.split("::")[1])[0]?.subcategories?.map((subcategory: any) => (
+                                        <SelectItem key={subcategory.subcategory_name} className="capitalize" value={`${subcategory.subcategory_name}::${subcategory.subcategory_id.toString()}`}>{subcategory.subcategory_name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}  
+                    />
+                    {errors?.subCategory && <p className="text-sm text-red-500">{errors?.subCategory?.message}</p>}
                 </div>
 
                 <div>
                     <Label>Unit</Label>
-                    <Input disabled={isPending} required placeholder="Unit (eg kg, pc etc)" {...register("unit")} />
+                    <Input 
+                        disabled={isPending} 
+                        placeholder="Unit (eg kg, pc etc)" 
+                        {...register("unit", {
+                            required: {
+                                value: true,
+                                message: "Unit is required"
+                            }
+                        })} 
+                    />
+                    {errors?.unit && <p className="text-sm text-red-500 mt-1">{errors?.unit?.message}</p>}
                 </div>
 
                 <div>
                     <Label>Min Order Quantity *</Label>
-                    <Input disabled={isPending} required type="number" {...register("minOrderQty")} />
+                    <Input 
+                        disabled={isPending} 
+                        min={1} 
+                        type="number" 
+                        {...register("minOrderQty", {
+                            required: {
+                                value: true,
+                                message: "Minimum order quantity is required"
+                            }
+                        })} 
+                    />
+                    {errors?.minOrderQty && <p className="text-sm text-red-500 mt-1">{errors?.minOrderQty?.message}</p>}
                 </div>
 
             </div>
@@ -171,10 +221,18 @@ export function ProductInfo() {
                 <Input
                     disabled={isPending}
                     value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={addTags}
                     placeholder="Write & enter"
+                    {...register("tags", {
+                        onChange: (e) => setTagInput(e.target.value),
+                        validate: () => {
+                            if(tags.length === 0){
+                                return "Atleast one tag is required"
+                            }
+                        }
+                    })}
                 />
+                {errors?.tags && tags.length === 0 && <p className="text-sm text-red-500">{errors?.tags?.message}</p>}
 
                 <div className="flex flex-wrap gap-2 mt-2">
                     {tags.map((tag) => (
@@ -192,7 +250,19 @@ export function ProductInfo() {
 
             <div>
                 <Label>Slug</Label>
-                <Input disabled={isPending} {...register("slug")} placeholder="Product Slug" />
+                <Input 
+                    disabled={isPending} 
+                    placeholder="Product Slug" 
+                    {...register("slug", {
+                        required: {
+                            value: true,
+                            message: "Slug is required"
+                        }
+                    })} 
+                    
+                />
+
+                {errors?.slug && <p className="text-sm text-red-500">{errors?.slug?.message}</p>}
             </div>
 
             <div>
@@ -217,7 +287,14 @@ export function ProductInfo() {
                             <Label htmlFor={`galleryImages.${i}`} className="flex flex-col gap-2 items-center justify-center border-dashed border-[2px] border-slate-400 rounded-lg p-6 my-4 w-[150px] h-[150px] cursor-pointer">
                                 <CloudUpload className="h-5 w-5" />
                                 <p className="text-xs text-center text-slate-400">Drop your images here or <span className="text-xs text-center text-primary-blue">Select click to browse</span></p>
-                                <Input disabled={isPending} id={`galleryImages.${i}`} className="hidden" type="file" accept="image/*" {...register(`galleryImages.${i}`)} />
+                                <Input 
+                                    disabled={isPending} 
+                                    id={`galleryImages.${i}`} 
+                                    className="hidden" 
+                                    type="file" 
+                                    accept="image/*" 
+                                    {...register(`galleryImages.${i}`)} 
+                                />
                             </Label>
                         }
                         
@@ -235,8 +312,7 @@ export function ProductInfo() {
                             <X className="h-3 w-3"/>
                         </Button>
                         <div className="rounded-lg w-[250px] h-[250px] overflow-hidden border">
-                            <img className="h-full w-full object-cover" src={URL.createObjectURL(watch("thumbnail")[0])} alt="thumbnail" />
-                            
+                            <img className="h-full w-full object-cover" src={URL.createObjectURL(watch("thumbnail" as any)[0])} alt="thumbnail" />
                         </div>
                     </div> :
                     <Label htmlFor="thumbnail" className="flex flex-col gap-2 items-center justify-center border-dashed border-[2px] border-slate-400 rounded-lg p-6 my-4 w-[250px] h-[250px] cursor-pointer">
@@ -248,9 +324,22 @@ export function ProductInfo() {
                             <span className="bg-[#E7E7E7] h-[1px] w-full"></span>
                         </div>
                         <p className="text-sm text-center text-primary-blue">Select click to browse</p>
-                        <Input disabled={isPending} id="thumbnail" className="hidden" type="file" accept="image/*" {...register("thumbnail")} />
+                        <Input 
+                            disabled={isPending} 
+                            id="thumbnail" 
+                            className="hidden" 
+                            type="file" 
+                            accept="image/*" 
+                            {...register("thumbnail", {
+                                required: {
+                                    value: true,
+                                    message: "Thumbnail is required"
+                                }
+                            })} 
+                        />
                     </Label>
-                }  
+                } 
+                {errors?.thumbnail && <p className="text-sm text-red-500">{errors?.thumbnail?.message as string}</p>}
 
             </div>
 
