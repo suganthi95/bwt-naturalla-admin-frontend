@@ -1,4 +1,4 @@
-import { deleteUser, getAllOrders, getUsers } from "@/lib/apis";
+import { deleteUser, getUsers } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";

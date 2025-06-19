@@ -268,7 +268,7 @@ export function ProductInfo() {
             <div>
                 <Label>Upload Product Image *</Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                    You need to add at least 4 images. Pay attention to the quality of the pictures you add, comply with the background color standards. Pictures must be in certain dimensions. Notice that the product shows all the details.
+                    You need to Upload at least 4 images (1000×1000 px) for best display quality, Pay attention to the quality of the pictures you add, comply with the background color standards. Pictures must be in certain dimensions. Notice that the product shows all the details.
                 </p>
 
                 <div className="grid grid-cols-5 gap-4">

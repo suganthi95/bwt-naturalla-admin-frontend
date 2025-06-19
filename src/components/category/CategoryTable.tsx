@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 
-import { Copy, Edit, Loader2, Plus, Search, Trash2, X } from "lucide-react";
+import { Copy, Edit, Plus, Search, Trash2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,

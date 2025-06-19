@@ -1,6 +1,6 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
 import { ChevronLeft, ChevronRight, Ellipsis } from 'lucide-react'
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { Button } from '../ui/button';
 
 type Product = {

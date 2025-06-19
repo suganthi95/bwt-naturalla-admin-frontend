@@ -5,15 +5,9 @@ import * as z from "zod";
 import { Icons } from "@/assets/icons";
 import { useState } from "react";
 import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser } from "@/lib/apis";
-import { toast } from "sonner";
-import axios from "axios";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@radix-ui/react-switch";
 import { useNavigate } from "react-router-dom";
 import { ASSETS } from "@/assets/assets";
 
@@ -43,7 +37,7 @@ export default function MyProfile() {
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate()
-  const queryClinet = useQueryClient()
+  // const queryClinet = useQueryClient()
   // const { mutate, isPending } = useMutation({
   //   mutationKey: ["createuser"],
   //   mutationFn: (data: FormValues) => {
@@ -69,8 +63,7 @@ export default function MyProfile() {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
+    
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
