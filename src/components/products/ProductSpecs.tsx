@@ -90,6 +90,7 @@ function ProductSpecs() {
                         }
                     })} 
                 />
+
                 {errors?.shortDescription && <p className="text-sm text-red-500 mt-1">{errors?.shortDescription.message}</p>}
             </div>
 

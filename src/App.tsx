@@ -23,6 +23,7 @@ import ShipmentsDetails from "./pages/ShipmentsDetails";
 import Categories from "./pages/Categories";
 import AddCategory from "./pages/AddCategory";
 import MyProfile from "./pages/MyProfile";
+import EditProducts from "./pages/EditProducts";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -47,6 +48,13 @@ function App() {
         <Route path="/dashboard" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/add" element={<AddProducts />}>
+          <Route path="product-info" element={<ProductInfo />} />
+          <Route path="product-price" element={<ProductPrice />} />
+          <Route path="product-specs" element={<ProductSpecs />} />
+          <Route path="discounts" element={<ProductCoupons />} />
+          <Route path="seo" element={<ProductSEO />} />
+        </Route>
+        <Route path="/products/edit" element={<EditProducts />}>
           <Route path="product-info" element={<ProductInfo />} />
           <Route path="product-price" element={<ProductPrice />} />
           <Route path="product-specs" element={<ProductSpecs />} />

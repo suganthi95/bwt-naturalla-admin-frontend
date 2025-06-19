@@ -3,14 +3,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CloudUpload, LoaderCircle, X } from "lucide-react"
 import { Badge } from "../ui/badge"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { addProductInfo, getProductCategories } from "@/lib/apis"
+import { addProductInfo, getProductCategories, getProductInfo } from "@/lib/apis"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { ProductInfoFormType } from "@/types"
 
 // const formSchema = z.object({
@@ -29,11 +29,14 @@ import { ProductInfoFormType } from "@/types"
 
 export function ProductInfo() {
 
+    const productId = sessionStorage.getItem("product-id") as string;
     const navigate = useNavigate();
+    const location = useLocation();
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
 
-    const { data: categories, isLoading, isError } = useQuery({
+
+    const { data: categories, isLoading, isError, isSuccess } = useQuery({
         queryKey: [ "getCategories" ],
         queryFn: () => getProductCategories(),
         retry: 3,
@@ -41,16 +44,44 @@ export function ProductInfo() {
         select: (data) => data?.data?.data
     });
 
+    const { data: productInfoDefaults } = useQuery({
+        queryKey: [ "getProductInfo" ],
+        queryFn: () => getProductInfo(productId),
+        retry: 3,
+        refetchOnWindowFocus: false,
+        select: (data):ProductInfoFormType => {
+
+            const { category_id, category_title, gallery_images, min_order_quantity, product_name, slug, subcategory_id, subcategory_name, tags, thumbnail_image, units } = data?.data?.data;
+            return {
+                productName: product_name,
+                category: `${category_title}::${category_id.toString()}`,
+                subCategory: `${subcategory_name}::${subcategory_id.toString()}`,
+                unit: units,
+                minOrderQty: min_order_quantity,
+                tags: tags,
+                slug: slug,
+                galleryImages: gallery_images,
+                thumbnail: thumbnail_image[0]
+            }
+        },
+        enabled: Boolean(productId) && isSuccess
+    });
+
+    // console.log(productInfoDefaults)
+
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "product-info" ],
         mutationFn: addProductInfo,
         onSuccess: (data) => {
             sessionStorage.setItem("product-id", data.data.product_id);
-            navigate("/products/add/product-price");
             toast.success("Request Success", {
                 description: "Product Info saved successfully"
             });
+
+            if(location.pathname === "/products/add/product-info"){
+                navigate("/products/add/product-price");
+            }
 
         },
         onError: (error: AxiosError<any>) => {
@@ -61,10 +92,8 @@ export function ProductInfo() {
         }
     })
 
-    const { register, handleSubmit, setValue, watch, setError, control, formState: { errors } } = useForm<ProductInfoFormType>({
-        defaultValues: 
-        // sessionStorage.getItem("product-form") !== null ? JSON.parse(sessionStorage.getItem("product-form") as string) :
-        {
+    const { register, handleSubmit, setValue, watch, setError, control, reset, formState: { errors } } = useForm<ProductInfoFormType>({
+        defaultValues: {
             productName: "",
             category: "",
             subCategory: "",
@@ -104,6 +133,17 @@ export function ProductInfo() {
         }
     }
 
+    useEffect(() => {
+        if(productInfoDefaults){
+            reset(productInfoDefaults);
+            setTags(productInfoDefaults.tags)
+        }
+    }, [ productInfoDefaults, reset ]);
+
+    // useEffect(() => {
+    //     watch((name) => console.log(name))
+    // }, [watch])
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 bg-white rounded-xl mt-5 shadow-md w-[75%]">
@@ -138,10 +178,13 @@ export function ProductInfo() {
                             }
                         }}
                         render={({ field }) => (
-                            <Select disabled={isLoading || isError || isPending} onValueChange={(val) => {
-                                field.onChange(val)
-                                setValue("subCategory", "");
-                            }}>
+                            <Select 
+                                disabled={isLoading || isError || isPending} 
+                                value={field.value} 
+                                onValueChange={(val) => {
+                                    field.onChange(val)
+                                }}
+                            >
                                 <SelectTrigger className="capitalize">
                                     <SelectValue placeholder="Select Category" />
                                 </SelectTrigger>
@@ -168,7 +211,11 @@ export function ProductInfo() {
                             }
                         }}
                         render={({ field }) => (
-                            <Select disabled={isLoading || isError || isPending} onValueChange={(val) => field.onChange(val)}>
+                            <Select 
+                                disabled={isLoading || isError || isPending} 
+                                value={field.value}
+                                onValueChange={(val) => field.onChange(val)}
+                            >
                                 <SelectTrigger className="capitalize">
                                 <SelectValue placeholder="Select Sub-category" />
                                 </SelectTrigger>
@@ -275,13 +322,15 @@ export function ProductInfo() {
                 {[0, 1, 2, 3, 4].map((_, i) => (
 
                     <div key={i}>
-                        {watch(`galleryImages.${i}`) && watch(`galleryImages.${i}`)[0] ?
+                        {watch(`galleryImages.${i}`) ?
                             <div className="relative w-fit my-4">
                                 <Button onClick={() => setValue(`galleryImages.${i}`, null)} type="button" variant="destructive" className="absolute z-[10] p-0 h-5 w-5 rounded-full -top-2 -right-2">
                                     <X className="h-3 w-3"/>
                                 </Button>
                                 <div className="rounded-lg w-[150px] h-[150px] overflow-hidden border">
-                                    <img className="h-full w-full object-cover" src={URL.createObjectURL(watch(`galleryImages.${i}`)[0])} alt="thumbnail" />
+                                    {watch(`galleryImages.${i}`) instanceof FileList && watch(`galleryImages.${i}`)[0] && <img className="h-full w-full object-cover" src={URL.createObjectURL(watch(`galleryImages.${i}`)[0])} alt="thumbnail" />}
+                                    {watch(`galleryImages.${i}`)?.media_url && <img className="h-full w-full object-cover" src={watch(`galleryImages.${i}`)?.media_url} alt="thumbnail" />}
+                                    
                                 </div>
                             </div> :
                             <Label htmlFor={`galleryImages.${i}`} className="flex flex-col gap-2 items-center justify-center border-dashed border-[2px] border-slate-400 rounded-lg p-6 my-4 w-[150px] h-[150px] cursor-pointer">
@@ -312,7 +361,11 @@ export function ProductInfo() {
                             <X className="h-3 w-3"/>
                         </Button>
                         <div className="rounded-lg w-[250px] h-[250px] overflow-hidden border">
-                            <img className="h-full w-full object-cover" src={URL.createObjectURL(watch("thumbnail" as any)[0])} alt="thumbnail" />
+                            {watch("thumbnail") instanceof FileList ? 
+                                <img className="h-full w-full object-cover" src={URL.createObjectURL(watch("thumbnail" as any)[0])} alt="thumbnail" /> :
+                                <img className="h-full w-full object-cover" src={watch("thumbnail" as any)?.media_url} alt="thumbnail" />
+                            }
+                            {/* <img className="h-full w-full object-cover" src={watch("thumbnail")?. URL.createObjectURL(watch("thumbnail" as any)[0])} alt="thumbnail" /> */}
                         </div>
                     </div> :
                     <Label htmlFor="thumbnail" className="flex flex-col gap-2 items-center justify-center border-dashed border-[2px] border-slate-400 rounded-lg p-6 my-4 w-[250px] h-[250px] cursor-pointer">

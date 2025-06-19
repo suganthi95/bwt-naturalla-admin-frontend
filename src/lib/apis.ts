@@ -47,6 +47,14 @@ export const getProductCategories = async() => {
         url:`${BASE_URL}/products/categories`
     })
 }
+
+export const getProductInfo = async(productId: string) => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/primary/detail/${productId}`
+    })
+}
+
 export const addCategories  = async(data:any)=>{
    
     
@@ -112,11 +120,22 @@ export const addProductInfo = async (data: any) => {
     formdata.append("units", data.unit)
     formdata.append("min_order_quantity", data.minOrderQty)
     formdata.append("slug", data.slug)
-    formdata.append("thumbnail_image", data.thumbnail[0])
     formdata.append("product_id", data.productId ? data.productId : null)
 
-    data.galleryImages.forEach((image: any) => {
-        formdata.append(`gallery_images`, image[0])
+    if(data.thumbnail.media_id){
+        formdata.append("thumbnail_image_id", data.thumbnail.media_id)
+    }else{
+        formdata.append("thumbnail_image", data.thumbnail[0])
+    }
+
+    data.galleryImages.forEach((image: any, index: number) => {
+        if(image.media_id){
+            formdata.append(`gallery_images_id[${index}]`, image.media_id)
+        }else{
+            formdata.append(`gallery_images`, image[0])
+            formdata.append(`gallery_images_id[${index}]`, "null")
+        }
+        
     })
 
     data.tags.forEach((tag: string, index: number) => {
@@ -213,3 +232,13 @@ export const addMetaSEO = async (data: any) => {
     })
 }
 
+export const updateProductToggle = async (data: any) => {
+
+    return await axios({
+        method: 'put',
+        url:`${BASE_URL}/products/update/toggles/${data.productId}`,
+        data: {
+            ...data,
+        }
+    })
+}
