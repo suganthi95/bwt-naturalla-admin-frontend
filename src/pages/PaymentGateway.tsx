@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Popover,
@@ -26,7 +25,7 @@ function PaymentGateway() {
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["togglepayment"],
     mutationFn: ({
       provider_name,

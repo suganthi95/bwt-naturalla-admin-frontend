@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function OrderDetails({ Order }: Props) {
-  const { data, isLoading, isFetching, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["getorderdetails", String(Order.order_id)],
     queryFn: () => getOrderDetails(String(Order?.order_id)),
     select: (data) => data?.data,

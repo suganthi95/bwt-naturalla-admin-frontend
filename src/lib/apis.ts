@@ -56,8 +56,9 @@ export const getProductCategories = async () => {
     url: `${BASE_URL}/category/getCategories`,
   });
 };
+
 export const addCategories = async (data: any) => {
-  const formdata = new FormData();
+    const formdata = new FormData();
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
@@ -69,12 +70,13 @@ export const addCategories = async (data: any) => {
   formdata.append("thumbnail_image", data.thumbnail);
   formdata.append("tax_percent", String(data.tax));
 
-  return await axios({
-    method: "post",
-    url: `${BASE_URL}/category/addCategory`,
-    data: formdata,
-  });
+    return await axios({
+        method: "post",
+        url: `${BASE_URL}/category/addCategory`,
+        data: formdata,
+    });
 };
+
 
 export const UpdateCategories = async (data: any) => {
   const formdata = new FormData();
@@ -96,6 +98,14 @@ export const UpdateCategories = async (data: any) => {
     data: formdata,
   });
 };
+
+export const getProductInfo = async(productId: string) => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/primary/detail/${productId}`
+    })
+}
+
 
 export const deleteCategory = async (id: string) => {
   return await axios({
@@ -169,23 +179,35 @@ export const togglePayment = async ({
 
 
 export const addProductInfo = async (data: any) => {
-  const formdata = new FormData();
-  formdata.append("product_name", data.productName);
-  formdata.append("category_id", data.category.split("::")[1]);
-  formdata.append("subcategory_id", data.subCategory.split("::")[1]);
-  formdata.append("units", data.unit);
-  formdata.append("min_order_quantity", data.minOrderQty);
-  formdata.append("slug", data.slug);
-  formdata.append("thumbnail_image", data.thumbnail[0]);
-  formdata.append("product_id", data.productId ? data.productId : null);
 
-  data.galleryImages.forEach((image: any) => {
-    formdata.append(`gallery_images`, image[0]);
-  });
+    const formdata = new FormData();
+    formdata.append("product_name", data.productName)
+    formdata.append("category_id", data.category.split("::")[1])
+    formdata.append("subcategory_id", data.subCategory.split("::")[1])
+    formdata.append("units", data.unit)
+    formdata.append("min_order_quantity", data.minOrderQty)
+    formdata.append("slug", data.slug)
+    formdata.append("product_id", data.productId ? data.productId : null)
 
-  data.tags.forEach((tag: string, index: number) => {
-    formdata.append(`tags[${index}]`, tag);
-  });
+    if(data.thumbnail.media_id){
+        formdata.append("thumbnail_image_id", data.thumbnail.media_id)
+    }else{
+        formdata.append("thumbnail_image", data.thumbnail[0])
+    }
+
+    data.galleryImages.forEach((image: any, index: number) => {
+        if(image.media_id){
+            formdata.append(`gallery_images_id[${index}]`, image.media_id)
+        }else{
+            formdata.append(`gallery_images`, image[0])
+            formdata.append(`gallery_images_id[${index}]`, "null")
+        }
+        
+    })
+
+    data.tags.forEach((tag: string, index: number) => {
+        formdata.append(`tags[${index}]`, tag);
+    });
 
   return await axios({
     method: "post",
@@ -275,3 +297,14 @@ export const addMetaSEO = async (data: any) => {
     data: formdata,
   });
 };
+
+export const updateProductToggle = async (data: any) => {
+
+    return await axios({
+        method: 'put',
+        url:`${BASE_URL}/products/update/toggles/${data.productId}`,
+        data: {
+            ...data,
+        }
+    })
+}

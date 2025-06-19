@@ -3,91 +3,170 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Download, Settings } from "lucide-react";
+import { ChevronDown, Copy, Download, Edit, Eye, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
 import { ProductsType } from "@/types";
-import { Switch } from "../ui/switch";
 import { Filter } from "../ui/Filter";
 import { CSVLink } from "react-csv";
+import { useNavigate } from "react-router-dom";
+import ProductToggle from "../ui/ProductToggle";
 
-
-const columns: ColumnDef<ProductsType>[] = [
-    {
-      accessorKey: "id",
-      header:()=> "#",
-      cell: ({ row  }) => (
-        <div className="capitalize">{parseInt(row.id) + 1}</div>
-      )
-    },
-    {
-      accessorKey: "product_name",
-      header:()=> "Product Title",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("product_name")}</div>
-      )
-    },
-    {
-      accessorKey: "category_title",
-      header:()=> "Category",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("category_title")}</div>
-      )
-    },
-    {
-      accessorKey: "unit_price",
-      header:()=> "Detail",
-      cell: ({ row }) => (
-        <div className="capitalize">₹ {row.getValue("unit_price")} / Nos</div>
-      )
-    },
-    {
-      accessorKey: "stock",
-      header:()=> "Current Stock",
-      cell: () => (
-        <div className="capitalize">{"44"}</div>
-      )
-    },
-    {
-      accessorKey: "publish",
-      header:()=> "Published",
-      cell: ({ row }) => (
-        <div>
-            <Switch checked={row.getValue("publish")}/>
-        </div>
-      )
-    },
-    {
-      accessorKey: "isin_todays_deal",
-      header:()=> "Today's deal",
-      cell: ({ row }) => (
-        <div>
-            <Switch checked={row.getValue("isin_todays_deal")}/>
-        </div>
-      )
-    },
-    {
-      accessorKey: "is_featured",
-      header:()=> "Featured",
-      cell: ({ row }) => (
-        <div>
-            <Switch checked={row.getValue("is_featured")}/>
-        </div>
-      )
-    },
-    {
-      accessorKey: "options",
-      header:()=> "Options",
-      cell: () => (
-        <Button size="icon" variant={"ghost"}>
-            <Settings className="h-5 w-5 stroke-slate-500"/>
-        </Button>
-      )
-    },
-]
 
 function ProductsTable() {
+
+    const navigate = useNavigate();
+
+    // const [ toggleState, setToggleState ] = useState({
+    //     publish: null,
+    //     isin_todays_deal: null,
+    //     offer_ending_soon: null,
+    //     best_selling: null
+    // });
+
+    const columns: ColumnDef<ProductsType>[] = [
+        {
+            accessorKey: "product_id",
+            header:()=> "Product ID",
+            cell: ({ row  }) => (
+                <div className="capitalize text-primary-blue font-semibold">{row.getValue("product_id")}</div>
+            )
+        },
+        {
+            accessorKey: "product_name",
+            header:()=> "Product Title",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("product_name")}</div>
+            )
+        },
+        {
+            accessorKey: "category_title",
+            header:()=> "Category",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("category_title")}</div>
+            )
+        },
+        {
+            accessorKey: "unit_price",
+            header:()=> "Detail",
+            cell: ({ row }) => (
+                <div className="capitalize">₹ {row.getValue("unit_price")} / Nos</div>
+            )
+        },
+        {
+            accessorKey: "stock",
+            header:()=> "Current Stock",
+            cell: () => (
+                <div className="capitalize">{"44"}</div>
+            )
+        },
+        {
+            accessorKey: "publish",
+            header:()=> "Published",
+            cell: ({ row }) => (
+                // <div>
+                //     <Switch checked={row.getValue("publish")}/>
+                // </div>
+
+                <ProductToggle 
+                    value="publish"
+                    state={row.getValue("publish")}
+                    productId={row.getValue("product_id")}
+                    
+                />
+            )
+        },
+        {
+            accessorKey: "isin_todays_deal",
+            header:()=> "Today's deal",
+            cell: ({ row }) => (
+                <ProductToggle 
+                    state={row.getValue("isin_todays_deal")}
+                    value="isin_todays_deal"
+                    productId={row.getValue("product_id")}
+                />
+                // <div>
+                //     <Switch checked={row.getValue("isin_todays_deal")}/>
+                // </div>
+            )
+        },
+        // {
+        //     accessorKey: "is_featured",
+        //     header:()=> "Featured",
+        //     cell: ({ row }) => (
+        //         <ProductToggle 
+        //             state={row.getValue("is_featured")}
+        //             value="is_featured"
+        //             productId={row.getValue("product_id")}
+        //         />
+        //     )
+        // },
+        {
+            accessorKey: "best_selling",
+            header:()=> "Best Selling",
+            cell: ({ row }) => (
+                <ProductToggle 
+                    state={row.getValue("best_selling")}
+                    value="best_selling"
+                    productId={row.getValue("product_id")}
+                />
+            )
+        },
+        {
+            accessorKey: "offer_ending_soon",
+            header:()=> "Offer Ending Soon",
+            cell: ({ row }) => (
+                <ProductToggle 
+                    state={row.getValue("offer_ending_soon")}
+                    value="offer_ending_soon"
+                    productId={row.getValue("product_id")}
+                />
+            )
+        },
+        {
+            accessorKey: "options",
+            header:()=> "Options",
+            enableSorting: false,
+            enableHiding: false,
+            cell: ({ row }) => (
+
+                <div className="flex flex-row items-center gap-2">
+
+                    <Button
+                        size="icon"
+                        className="rounded-full text-slate-800 bg-slate-800/10 hover:bg-slate-800/20"
+                    >
+                        <Eye className="h-5 w-5" />
+                    </Button>
+
+                    <Button
+                        onClick={() => {
+                            sessionStorage.setItem("product-id", row.getValue("product_id"));
+                            navigate("/products/edit/product-info");
+                        }}
+                        size="icon"
+                        className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
+                    >
+                        <Edit className="h-5 w-5" />
+                    </Button>
+
+                    <Button
+                        size="icon"
+                        className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
+                    >
+                        <Copy className="h-5 w-5" />
+                    </Button>
+                    <Button
+                        size="icon"
+                        className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
+                    >
+                        <Trash2 className="h-5 w-5" />
+                    </Button>
+                </div>
+            )
+        },
+    ]
 
     const { data, isLoading, isSuccess } = useQuery({
         queryKey: [ "getAllProducts" ],
@@ -95,17 +174,18 @@ function ProductsTable() {
         refetchOnWindowFocus: false
     });
 
-    console.log(data)
 
     const headers = [
-        { label: "#", key: "id" },
+        { label: "Product ID", key: "product_id" },
         { label: "Product Title", key: "product_name" },
+        { label: "Category Title", key: "category_title" },
         { label: "Detail", key: "unit_price" },
         { label: "Current Stock", key: "stock" },
         { label: "Published", key: "publish" },
         { label: "Today's deal", key: "isin_todays_deal" },
-        { label: "Featured", key: "is_featured" },
-        { label: "Options", key: "options" },
+        { label: "Best Selling", key: "best_selling" },
+        { label: "Offer Ending Soon", key: "offer_ending_soon" },
+        // { label: "Featured", key: "is_featured" },
     ];
 
     const [sorting, setSorting] = useState<SortingState>([])
@@ -125,8 +205,7 @@ function ProductsTable() {
         );
     };
 
-    
-    
+
     const table = useReactTable({
         data: data?.data?.products,
         columns,
