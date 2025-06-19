@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudUpload, X, } from "lucide-react";
+import { CloudUpload, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addCategories } from "@/lib/apis";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import axios from "axios";
 
 const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
@@ -18,6 +23,22 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function AddCategory() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["addcategory"],
+    mutationFn: (data: FormValues) => addCategories(data),
+    onSuccess: () => {
+      toast.success("category added successfully");
+      queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });
+      navigate("/categories");
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -48,16 +69,17 @@ export default function AddCategory() {
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
     if (file && file.type.startsWith("image/")) {
-      setValue("thumbnail", [file]); 
+      setValue("thumbnail", [file]);
     }
   };
 
   const onSubmit = (data: FormValues) => {
-    const finalData = {
+    console.log('data: ', data.thumbnail);
+    const finalData  = {
       ...data,
-      sub_categories: subCategories,
-    };
-    console.log(finalData);
+      subCategories
+    }
+    mutate(finalData);
   };
 
   const handleAddSubCategory = () => {
@@ -187,7 +209,10 @@ export default function AddCategory() {
         </div>
 
         <div className="pt-2 flex justify-end">
-          <Button type="submit">Save</Button>
+          <Button type="submit" disabled={isPending}>
+            {" "}
+            {isPending ? <Loader2 className="animate-spin" /> : "Save"}
+          </Button>
         </div>
       </form>
     </div>

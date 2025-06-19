@@ -14,7 +14,11 @@ import { Button } from "../ui/button";
 import { Icons } from "@/assets/icons";
 import { Switch } from "../ui/switch";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createUser } from "@/lib/apis";
+import { toast } from "sonner";
+import axios from "axios";
 
 interface Props {
   onClose: (val: boolean) => void;
@@ -42,6 +46,30 @@ type FormValues = z.infer<typeof formSchema>;
 export default function AddUserForm({ onClose }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const queryClinet = useQueryClient()
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["createuser"],
+    mutationFn: (data: FormValues) => {
+      return createUser({
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        phone_no: Number(data.phone),
+        role: data.role,
+      });
+    },
+    onSuccess(data) {
+      onClose(false);
+      toast.success(data?.data?.message);
+      queryClinet.invalidateQueries({queryKey:['getusers']})
+
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -56,8 +84,7 @@ export default function AddUserForm({ onClose }: Props) {
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
-    onClose(false)
+    mutate(data);
   };
 
   return (
@@ -136,7 +163,7 @@ export default function AddUserForm({ onClose }: Props) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="editor">User</SelectItem>
+            <SelectItem value="user">User</SelectItem>
           </SelectContent>
         </Select>
         {errors.role && (
@@ -203,10 +230,18 @@ export default function AddUserForm({ onClose }: Props) {
       </div>
 
       <div className="flex justify-end gap-3 pt-4">
-        <Button type="button" variant="outline">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            onClose(false);
+          }}
+        >
           Cancel
         </Button>
-        <Button type="submit">Create User</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? <Loader2 className="animate-spin" /> : "Create User"}
+        </Button>
       </div>
     </form>
   );

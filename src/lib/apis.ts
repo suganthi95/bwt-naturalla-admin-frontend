@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductFormValues } from "@/types";
+import { CreateUserPayload } from "@/types/type";
 import axios from "axios";
   
 
@@ -46,7 +47,55 @@ export const getProductCategories = async() => {
         url:`${BASE_URL}/products/categories`
     })
 }
+export const addCategories  = async(data:any)=>{
+   
+    
+        const formdata = new FormData();
 
+        formdata.append('category_name',data.category_name)
+        formdata.append('slug',data.slug)
+        formdata.append('subcategory_name',data.subCategories)
+        formdata.append('thumbnail_image',data.thumbnail)
+
+    return await axios({
+        method:'post',
+        url:`${BASE_URL}/category/addCategory`,
+        data:formdata,
+       
+
+    })
+}
+
+export const getUsers = async() => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/auth/getAllUsers`
+    })
+}
+export const createUser  = async(payload:CreateUserPayload)=>{
+ return await axios({
+    method:'post',
+    url:`${BASE_URL}/auth/createUser`,
+    data:payload
+
+ })
+}
+
+export const updateUser = async(payload:CreateUserPayload,id:string)=>{
+    return await axios({
+        method:'put',
+        url:`${BASE_URL}/auth/updateUser/${id}`,
+        data:payload
+    })
+
+}
+
+export const deleteUser = async(id:string)=>{
+return await axios({
+    method:'delete',
+    url:`${BASE_URL}/auth/deleteUser/${id}`
+})
+}
 export const getCoupons = async() => {
     return await axios({
         method:'get',
@@ -163,3 +212,4 @@ export const addMetaSEO = async (data: any) => {
         data: formdata
     })
 }
+

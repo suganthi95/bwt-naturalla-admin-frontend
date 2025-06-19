@@ -1,14 +1,7 @@
-
 import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 
-import {
-  Copy,
-  Edit,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Copy, Edit, Loader2, Plus, Search, Trash2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -33,139 +26,173 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 // import { CSVLink } from "react-csv";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import UpdateCategory from "./UpdateCategory";
- const dummyCategoryData = [
-    {
-      category: "Hair Care",
-      subcategory: "Shampoo",
-      product_count: 18,
-    },
-    {
-      category: "Hair Care",
-      subcategory: "Conditioner",
-      product_count: 12,
-    },
-    {
-      category: "Skin Care",
-      subcategory: "Face Wash",
-      product_count: 10,
-    },
-    {
-      category: "Skin Care",
-      subcategory: "Moisturizer",
-      product_count: 8,
-    },
-    {
-      category: "Wellness",
-      subcategory: "Supplements",
-      product_count: 6,
-    },
-  ];
+import { getAllCategories } from "@/lib/apis";
+import { useQuery } from "@tanstack/react-query";
+
 function CategoryTable() {
-
-    const [Isopen, setIsopen] = useState(false);
+  const [Isopen, setIsopen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
-  console.log('selectedCategory: ', selectedCategory);
-  const columns: ColumnDef<any>[] =useMemo(()=>   [
-    {
-      id: "index",
-      header: "#",
-      cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
-      enableSorting: false,
-      size: 50,
-    },
-    {
-      accessorKey: "category",
-      header: () => <div className="text-center">Category</div>,
-      cell: ({ row }) => {
-        const { category, category_image } = row.original;
-        return (
-          <div className="flex items-center justify-center gap-2">
-            <img
-              src={category_image}
-              alt={category}
-              className="w-10 h-10 rounded object-cover"
-            />
-            <span className="capitalize">{category}</span>
-          </div>
-        );
+  console.log("selectedCategory: ", selectedCategory);
+  const columns: ColumnDef<any>[] = useMemo(
+    () => [
+      {
+        id: "index",
+        header: "#",
+        cell: ({ row }) => <div className="text-center">{row.index + 1}</div>,
+        enableSorting: false,
+        size: 50,
       },
-    },
-    {
-      accessorKey: "subcategory",
-      header: () => <div className="text-center">Subcategory</div>,
-      cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue("subcategory")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "product_count",
-      header: () => <div className="text-center">No. of Products</div>,
-      cell: ({ row }) => (
-        <div className="text-center">{row.getValue("product_count")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      header: () => <div className="text-center">Actions</div>,
-      enableHiding: false,
-      cell: ({row}) => (
-        <div className="flex justify-center items-center gap-4">
-          <Button
-           type="button"
-            onClick={() => {
-              setSelectedCategory(row.original);
-              setIsopen(true);
-              console.log('ji');
-              
-            }}
-            className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
-          >
-            <Edit className="h-5 w-5" />
-          </Button>
+      {
+        accessorKey: "category_title",
+        header: () => <div className="text-center">Category</div>,
+        cell: ({ row }) => {
+          const { category } = row.original;
+          return (
+            <div className="flex items-center gap-2">
+              <img
+                src={
+                  "https://ik.imagekit.io/3t9llb0gx/Naturella/image%205.png?updatedAt=1749124818824"
+                }
+                alt={category}
+                className="w-14 h-14 rounded object-cover"
+              />
+              <span className="capitalize">{row.getValue("category_title")}</span>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "subcategory",
+        header: () => <div className="text-center">Subcategory</div>,
+        cell: ({ row }) => {
+          const subcategories = row.original.subcategories;
 
-          <Button
-            size="icon"
-            className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
-          >
-            <Copy className="h-5 w-5" />
-          </Button>
-          <Button
-            size="icon"
-            className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
-          >
-            <Trash2 className="h-5 w-5" />
-          </Button>
-        </div>
-      ),
-    },
-  ],
-  []
-)
+          return (
+            <div className="capitalize text-center justify-center flex gap-x-1 items-center">
+              {subcategories?.slice(0, 3)?.map((item: any, index: number) => (
+                <span key={index}>{item.subcategory_name}</span>
+              ))}
+              {subcategories.length > 3 && (
+                <span className="text-xs text-muted-foreground">
+                  +{subcategories.length - 3} <Plus />
+                </span>
+              )}
+            </div>
+          );
+        },
+      },
 
+      {
+        accessorKey: "product_count",
+        header: () => <div className="text-center">No. of Products</div>,
+        cell: ({ row }) => (
+          <div className="text-center">{row.getValue("product_count")}</div>
+        ),
+      },
+      {
+        id: "actions",
+        header: () => <div className="text-center">Actions</div>,
+        enableHiding: false,
+        cell: ({ row }) => {
+            const [open, setOpen] = useState(false);
+          return (
+            <div className="flex justify-center items-center gap-4">
+              <Button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(row.original);
+                  setIsopen(true);
+                  console.log("ji");
+                }}
+                className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
+              >
+                <Edit className="h-5 w-5" />
+              </Button>
 
-//   const {
-//     data: categories,
-//     isLoading,
-//     isSuccess,
-//   } = useQuery({
-//     queryKey: ["getAllcategories"],
-//     queryFn: getAllCategories,
-//     refetchOnWindowFocus: false,
-//     select: (data) => data?.data?.data,
-//   });
+              <Button
+                size="icon"
+                className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
+              >
+                <Copy className="h-5 w-5" />
+              </Button>
 
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    size="icon"
+                    className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </Button>
+                </DialogTrigger>
 
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle className="text-lg font-semibold text-red-600">
+                      Delete User
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="text-sm text-muted-foreground">
+                    Are you sure you want to delete{" "}
+                    <span className="font-semibold text-black">
+                      {row.original.first_name} {row.original.last_name}
+                    </span>
+                    ? This action cannot be undone.
+                  </div>
 
- 
+                  <DialogFooter className="mt-4 flex justify-end gap-2">
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                      variant="destructive"
+                      // disabled={isPending}
+                      onClick={() => {
+                        // onDelete(row.original.user_id.toString(), {
+                        //   onSuccess(data) {
+                        //     setOpen(false);
+                        //     toast.success(data?.data?.message);
+                        //     queryClinet.invalidateQueries({
+                        //       queryKey: ["getusers"],
+                        //     });
+                        //   },
+                        //   onError: (error) => {
+                        //     if (axios.isAxiosError(error)) {
+                        //       toast.error(error?.response?.data?.message);
+                        //     }
+                        //   },
+                        // });
+                      }}
+                    >
+                      {/* {isPending ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        "Delete"
+                      )} */}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
+
+  const {
+    data: categories,
+    isLoading,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["getAllcategories"],
+    queryFn: getAllCategories,
+    refetchOnWindowFocus: false,
+    select: (data) => data?.data?.data,
+  });
 
   //   const headers = [
   //     { label: "Category", key: "category" },
@@ -195,7 +222,7 @@ function CategoryTable() {
   };
 
   const table = useReactTable({
-    data: dummyCategoryData,
+    data: categories,
     columns,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -220,15 +247,15 @@ function CategoryTable() {
 
   let content;
 
-//   if (true) {
-//     content = <div className="mt-[10%] text-center">Loading...</div>;
-//   }
+  if (isLoading) {
+    content = <div className="mt-[10%] text-center">Loading...</div>;
+  }
 
-  //   if(isError){
-  //     content = <p>{error?.response?.data?.message || error?.message}</p>
-  //   }
+  // if(isError){
+  //   content = <p>{error?.response?.data?.message || error?.message}</p>
+  // }
 
-  if ( Array.isArray(dummyCategoryData)) {
+  if (isSuccess && Array.isArray(categories)) {
     content = (
       <div className="bg-white rounded-lg p-4  space-y-2">
         <div className="flex flex-col gap-2 py-1">
@@ -387,11 +414,9 @@ function CategoryTable() {
     );
   }
 
-  if (true && typeof dummyCategoryData === "string") {
+  if (isLoading && typeof categories === "string") {
     content = (
-      <p className="font-bold mt-20 text-center capitalize">
-        {dummyCategoryData}
-      </p>
+      <p className="font-bold mt-20 text-center capitalize">{categories}</p>
     );
   }
 

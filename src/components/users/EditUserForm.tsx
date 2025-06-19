@@ -14,29 +14,58 @@ import { Button } from "../ui/button";
 import { Icons } from "@/assets/icons";
 import { Switch } from "../ui/switch";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { User } from "@/types/type";
+import { updateUser } from "@/lib/apis";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import axios from "axios";
 
-interface Props {
-  onClose: (val: boolean) => void;
-}
-const formSchema = z
-  .object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Invalid email"),
-    phone: z
-      .string()
-      .regex(/^[6-9]\d{9}$/, "Enter a valid Indian phone number"),
-    role: z.string().min(1, "Role is required"),
-    isActive: z.boolean().default(true).optional(),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-  })
- 
+const formSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email"),
+  phone: z.string().regex(/^[6-9]\d{9}$/, "Enter a valid Indian phone number"),
+  role: z.string().min(1, "Role is required"),
+  isActive: z.boolean().default(true).optional(),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 type FormValues = z.infer<typeof formSchema>;
-
-export default function EditUserForm({ onClose }: Props) {
+interface Props {
+  onClose: (val: boolean) => void;
+  userDetails: User;
+}
+export default function EditUserForm({ onClose, userDetails }: Props) {
   const [showPassword, setShowPassword] = useState(false);
+  const queryClinet = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["updateuser"],
+    mutationFn: (data: FormValues) => {
+      return updateUser(
+        {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          phone_no: Number(data.phone),
+          role: data.role,
+          new_password: data.password,
+        },
+        userDetails.user_id.toString()
+      );
+    },
+    onSuccess(data) {
+      onClose(false);
+      toast.success(data?.data?.message);
+      queryClinet.invalidateQueries({ queryKey: ["getusers"] });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -46,13 +75,17 @@ export default function EditUserForm({ onClose }: Props) {
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      email: userDetails.email,
+      firstName: userDetails.first_name,
+      lastName: userDetails.last_name,
+      phone: userDetails.phone_no,
+      role: userDetails?.role,
       isActive: true,
     },
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
-    onClose(false)
+    mutate(data);
   };
 
   return (
@@ -123,7 +156,7 @@ export default function EditUserForm({ onClose }: Props) {
 
       <div>
         <Label className="text-primary-black font-semibold">Role</Label>
-        <Select onValueChange={(value) => setValue("role", value)}>
+        <Select defaultValue={userDetails?.role} onValueChange={(value) => setValue("role", value)}>
           <SelectTrigger
             className={` ${errors.phone ? "border-red-500" : "border-border"}`}
           >
@@ -131,7 +164,7 @@ export default function EditUserForm({ onClose }: Props) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="editor">User</SelectItem>
+            <SelectItem value="user">User</SelectItem>
           </SelectContent>
         </Select>
         {errors.role && (
@@ -171,13 +204,13 @@ export default function EditUserForm({ onClose }: Props) {
         )}
       </div>
 
-    
-
       <div className="flex justify-end gap-3 pt-4">
         <Button type="button" variant="outline">
           Cancel
         </Button>
-        <Button type="submit">Update</Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? <Loader2 className="animate-spin" /> : "Update"}
+        </Button>
       </div>
     </form>
   );

@@ -1,15 +1,9 @@
-import { getAllOrders } from "@/lib/apis";
-import { useQuery } from "@tanstack/react-query";
+import { deleteUser, getAllOrders, getUsers } from "@/lib/apis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-import {
-
-  Search,
-  SquarePen,
-  UserRoundX,
-  X,
-} from "lucide-react";
+import { Loader2, Search, SquarePen, UserRoundX, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -44,89 +38,36 @@ import {
 } from "../ui/select";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import EditUserForm from "./EditUserForm";
-
-const data = [
-  {
-    username: "Ramanan",
-    email: "ramanan1633@gmail.com",
-    role: "admin",
-    lastLogin: "18-07-2025, 13:50",
-    status: "active",
-  },
-  {
-    username: "Priya",
-    email: "priya.k@example.com",
-    role: "editor",
-    lastLogin: "15-07-2025, 09:30",
-    status: "inactive",
-  },
-  {
-    username: "Arjun",
-    email: "arjun.m@example.com",
-    role: "viewer",
-    lastLogin: "16-07-2025, 21:10",
-    status: "active",
-  },
-  {
-    username: "Meera",
-    email: "meera.singh@example.com",
-    role: "admin",
-    lastLogin: "17-07-2025, 11:25",
-    status: "active",
-  },
-  {
-    username: "Vikram",
-    email: "vikram.r@example.com",
-    role: "editor",
-    lastLogin: "12-07-2025, 14:50",
-    status: "inactive",
-  },
-  {
-    username: "Aisha",
-    email: "aisha.z@example.com",
-    role: "viewer",
-    lastLogin: "14-07-2025, 18:15",
-    status: "active",
-  },
-];
+import { toast } from "sonner";
+import axios from "axios";
+import { User } from "@/types/type";
 
 function UsersTable() {
+  const queryClinet = useQueryClient();
   const {
-    data: orders,
+    data: users,
     isLoading,
     isSuccess,
   } = useQuery({
-    queryKey: ["getAllorders"],
-    queryFn: getAllOrders,
+    queryKey: ["getusers"],
+    queryFn: getUsers,
     refetchOnWindowFocus: false,
-    select: (data) => data?.data?.data,
+    select: (data) => data?.data?.users,
+  });
+  const { mutate: onDelete, isPending } = useMutation({
+    mutationKey: ["deleteuser"],
+    mutationFn: (id: string) => deleteUser(id),
   });
 
-//   const headers = [
-//     { label: "Username", key: "username" },
-//     { label: "Email Address", key: "email" },
-//     { label: "Role", key: "role" },
-//     { label: "Status", key: "status" },
-//     { label: "Last Login", key: "lastLogin" },
-//   ];
-
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    origin: false,
-  });
-  const [Isopen, setIsopen] = useState(false);
-
-  const [rowSelection, setRowSelection] = useState({});
-
-  const [globalFilter, setGlobalFilter] = useState("");
-  const columns: ColumnDef<any>[] = [
+  const columns: ColumnDef<User>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -147,11 +88,11 @@ function UsersTable() {
       enableHiding: false,
     },
     {
-      accessorKey: "username",
+      accessorKey: "first_name",
       header: () => "Username",
       cell: ({ row }) => (
         <div className="capitalize text-primary-blue font-semibold">
-          {row.getValue("username")}
+          {row.getValue("first_name")}
         </div>
       ),
     },
@@ -202,43 +143,116 @@ function UsersTable() {
       accessorKey: "actions",
       header: () => "Actions",
       enableHiding: false,
-      cell: () => (
-        <div className="flex flex-row items-center gap-5">
-          <Dialog open={Isopen} onOpenChange={setIsopen}>
-            <DialogTrigger>
-              <Button
-                size={"icon"}
-                className="rounded-full text-green-400 bg-green-400/25 hover:bg-green-400/10"
-              >
-                <SquarePen className="h-5 w-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
-              <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
-                <DialogTitle className=""> Update User Details</DialogTitle>
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setIsopen(false);
-                  }}
+      cell: ({ row }) => {
+        const [open, setOpen] = useState(false);
+        const [Isopen, setIsopen] = useState(false);
+        return (
+          <div className="flex flex-row items-center gap-5">
+            <Dialog open={Isopen} onOpenChange={setIsopen}>
+              <DialogTrigger>
+                <Button
+                  size={"icon"}
+                  className="rounded-full text-green-400 bg-green-400/25 hover:bg-green-400/10"
                 >
-                  <X className="w-6 h-6" />
-                </div>
-              </DialogHeader>
-              <EditUserForm onClose={setIsopen} />
-            </DialogContent>
-          </Dialog>
+                  <SquarePen className="h-5 w-5" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
+                <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
+                  <DialogTitle className=""> Update User Details</DialogTitle>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setIsopen(false);
+                    }}
+                  >
+                    <X className="w-6 h-6" />
+                  </div>
+                </DialogHeader>
+                <EditUserForm userDetails={row.original} onClose={setIsopen} />
+              </DialogContent>
+            </Dialog>
 
-          <Button
-            size={"icon"}
-            className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
-          >
-            <UserRoundX className="h-5 w-5" />
-          </Button>
-        </div>
-      ),
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size={"icon"}
+                  className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
+                >
+                  <UserRoundX className="h-5 w-5" />
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-lg font-semibold text-red-600">
+                    Delete User
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="text-sm text-muted-foreground">
+                  Are you sure you want to delete{" "}
+                  <span className="font-semibold text-black">
+                    {row.original.first_name} {row.original.last_name}
+                  </span>
+                  ? This action cannot be undone.
+                </div>
+
+                <DialogFooter className="mt-4 flex justify-end gap-2">
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button
+                    variant="destructive"
+                    disabled={isPending}
+                    onClick={() => {
+                      onDelete(row.original.user_id.toString(), {
+                        onSuccess(data) {
+                          setOpen(false);
+                          toast.success(data?.data?.message);
+                          queryClinet.invalidateQueries({
+                            queryKey: ["getusers"],
+                          });
+                        },
+                        onError: (error) => {
+                          if (axios.isAxiosError(error)) {
+                            toast.error(error?.response?.data?.message);
+                          }
+                        },
+                      });
+                    }}
+                  >
+                    {isPending ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Delete"
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        );
+      },
     },
   ];
+  //   const headers = [
+  //     { label: "Username", key: "username" },
+  //     { label: "Email Address", key: "email" },
+  //     { label: "Role", key: "role" },
+  //     { label: "Status", key: "status" },
+  //     { label: "Last Login", key: "lastLogin" },
+  //   ];
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    origin: false,
+  });
+
+  const [rowSelection, setRowSelection] = useState({});
+
+  const [globalFilter, setGlobalFilter] = useState("");
+
   const globalFilterFunction = (
     row: any,
     _columnId: string,
@@ -250,7 +264,7 @@ function UsersTable() {
   };
 
   const table = useReactTable({
-    data: data,
+    data: users,
     columns,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -283,7 +297,7 @@ function UsersTable() {
   //     content = <p>{error?.response?.data?.message || error?.message}</p>
   //   }
 
-  if (isSuccess && Array.isArray(orders)) {
+  if (isSuccess && Array.isArray(users)) {
     content = (
       <div className="bg-white rounded-lg p-4  space-y-2">
         <div className="flex items-center gap-x-3 ">
@@ -443,10 +457,8 @@ function UsersTable() {
     );
   }
 
-  if (isSuccess && typeof orders === "string") {
-    content = (
-      <p className="font-bold mt-20 text-center capitalize">{orders}</p>
-    );
+  if (isSuccess && typeof users === "string") {
+    content = <p className="font-bold mt-20 text-center capitalize">{users}</p>;
   }
 
   return content;
