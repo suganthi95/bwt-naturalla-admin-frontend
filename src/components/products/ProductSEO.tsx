@@ -154,7 +154,7 @@ function ProductSEO() {
 
             {/* Meta Keywords */}
             <div>
-                <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                <Label htmlFor="metaKeywords">Meta Keywords (Type the keywords and Press "Enter")</Label>
                 <Input
                     id="metaKeywords"
                     placeholder="Type keyword and press Enter"

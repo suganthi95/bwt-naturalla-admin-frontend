@@ -67,8 +67,6 @@ export function ProductInfo() {
         enabled: Boolean(productId) && isSuccess
     });
 
-    // console.log(productInfoDefaults)
-
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "product-info" ],
@@ -140,9 +138,9 @@ export function ProductInfo() {
         }
     }, [ productInfoDefaults, reset, productId ]);
 
-    // useEffect(() => {
-    //     watch((name) => console.log(name))
-    // }, [watch])
+    useEffect(() => {
+        watch((name) => console.log(name))
+    }, [watch])
 
 
     return (
@@ -212,7 +210,7 @@ export function ProductInfo() {
                         }}
                         render={({ field }) => (
                             <Select 
-                                disabled={isLoading || isError || isPending} 
+                                disabled={isLoading || isError || isPending || !Boolean(watch("category"))} 
                                 value={field.value}
                                 onValueChange={(val) => field.onChange(val)}
                             >
@@ -264,7 +262,7 @@ export function ProductInfo() {
             </div>
 
             <div>
-                <Label>Tags</Label>
+                <Label>Tags * (Type the Tag and Press "Enter")</Label>
                 <Input
                     disabled={isPending}
                     value={tagInput}
@@ -322,7 +320,7 @@ export function ProductInfo() {
                 {[0, 1, 2, 3, 4].map((_, i) => (
 
                     <div key={i}>
-                        {watch(`galleryImages.${i}`) ?
+                        {(watch(`galleryImages.${i}`) instanceof FileList && watch(`galleryImages.${i}`)[0]) || watch(`galleryImages.${i}`)?.media_url ?
                             <div className="relative w-fit my-4">
                                 <Button onClick={() => setValue(`galleryImages.${i}`, null)} type="button" variant="destructive" className="absolute z-[10] p-0 h-5 w-5 rounded-full -top-2 -right-2">
                                     <X className="h-3 w-3"/>

@@ -1,5 +1,5 @@
-import { getAllProducts } from "@/lib/apis";
-import { useQuery } from "@tanstack/react-query";
+import { deleteProduct, getAllProducts } from "@/lib/apis";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
@@ -12,11 +12,30 @@ import { Filter } from "../ui/Filter";
 import { CSVLink } from "react-csv";
 import { useNavigate } from "react-router-dom";
 import ProductToggle from "../ui/ProductToggle";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 
 function ProductsTable() {
 
     const navigate = useNavigate();
+
+    const { mutate } = useMutation({
+        mutationKey: [ "deleteProduct" ],
+        mutationFn: deleteProduct,
+        onSuccess: () => {
+            // queryClient.invalidateQueries({ queryKey: [ "getAllProducts" ] });
+            toast.error("Request Success", {
+                description: "Product Deletion Success",
+            });
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error("Request Failed", {
+                description: error?.response?.data?.message,
+            });
+        }
+    })
 
     const columns: ColumnDef<ProductsType>[] = [
         {
@@ -157,12 +176,32 @@ function ProductsTable() {
                     >
                         <Copy className="h-5 w-5" />
                     </Button>
-                    <Button
-                        size="icon"
-                        className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
-                    >
-                        <Trash2 className="h-5 w-5" />
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button
+                                size="icon"
+                                className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
+                            >
+                                <Trash2 className="h-5 w-5" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                                This will permanently delete and remove your product from the servers.
+                            </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                    <Button onClick={() => mutate(row.getValue("product_id"))} variant="destructive">Delete</Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             )
         },

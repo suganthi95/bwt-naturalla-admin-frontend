@@ -218,16 +218,10 @@ function ProductSpecs() {
                     <Input
                         type="file"
                         accept="application/pdf"
-                        {...register("specificationPDF", {
-                            required: {
-                                value: true,
-                                message: "Specification PDF is required"
-                            }
-                        })}
+                        {...register("specificationPDF")}
                     />
                 }
                 
-                {errors?.specificationPDF && <p className="text-sm text-red-500 mt-1">{errors?.specificationPDF.message as string}</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-y-10">
@@ -269,7 +263,7 @@ function ProductSpecs() {
             </div>
 
             <div>
-                <Label>Benefit Keywords</Label>
+                <Label>Benefit Keywords (Type the benefit keywords and Press "Enter")</Label>
                 <Input
                     placeholder="Type keyword and press Enter"
                     onKeyDown={addKeyword}
@@ -301,6 +295,7 @@ function ProductSpecs() {
                     <Label>Length (in CM)</Label>
                     <Input 
                         type="number" 
+                        step="any"
                         {...register("length", 
                             { 
                                 valueAsNumber: true, 
@@ -316,7 +311,8 @@ function ProductSpecs() {
                 <div>
                     <Label>Weight (in KG)</Label>
                     <Input 
-                        type="number" 
+                        type="number"
+                        step="any"
                         {...register("weight", { 
                             valueAsNumber: true,
                             required: {
@@ -331,6 +327,7 @@ function ProductSpecs() {
                     <Label>Height (in CM)</Label>
                     <Input 
                         type="number" 
+                        step="any"
                         {...register("height", { 
                             valueAsNumber: true,
                             required: {
@@ -345,6 +342,7 @@ function ProductSpecs() {
                     <Label>Breadth (in CM)</Label>
                     <Input 
                         type="number" 
+                        step="any"
                         {...register("breadth", { 
                             valueAsNumber: true,
                             required: {

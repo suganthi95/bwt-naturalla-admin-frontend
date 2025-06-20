@@ -399,3 +399,10 @@ export const getShipmentDetails = async(shipmentId: string) => {
         url:`${BASE_URL}/shipment/getShipmentDetails/${shipmentId}`
     })
 }
+
+export const deleteProduct = async(productId: string) => {
+    return await axios({
+        method:'delete',
+        url:`${BASE_URL}/products/products/${productId}`
+    })
+}
