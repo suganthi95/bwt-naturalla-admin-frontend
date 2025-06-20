@@ -7,30 +7,66 @@ import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ProductFormValues } from "@/types";
-import { useMutation } from "@tanstack/react-query";
-import { addProductSpecs } from "@/lib/apis";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { addProductSpecs, getProductSpecs } from "@/lib/apis";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { LoaderCircle } from "lucide-react";
+import { Download, LoaderCircle, X } from "lucide-react";
+import { downloadPDF } from "@/lib/utils";
 
 
 function ProductSpecs() {
         
     const navigate = useNavigate();
-
-    const { register, handleSubmit, watch, setValue, setError, formState: { errors } } = useForm<ProductFormValues>();
+    const productId = sessionStorage.getItem("product-id") as string;   
+    const { register, handleSubmit, watch, setValue, setError, reset, formState: { errors } } = useForm<ProductFormValues>();
 
     const [keywords, setKeywords] = useState<string[]>([]);
+
+    const { data: productSpecDefaults } = useQuery({
+        queryKey: [ "getProductSpecs" ],
+        queryFn: () => getProductSpecs(productId),
+        retry: 3,
+        refetchOnWindowFocus: false,
+        select: (data):ProductFormValues => {
+
+            const { benefit_keys, benefits, best_selling, breadth, height, how_to_use, ingredients, is_featured, isin_todays_deal, length, long_description, offer_ending_soon, pdf_id, pdf_url, short_description, weight } = data?.data?.data;
+
+            return {
+                benefitKeywords: benefit_keys,
+                benefits,
+                bestSelling: best_selling,
+                breadth,
+                height,
+                howToUse: how_to_use,
+                ingredients,
+                isFeatured: is_featured,
+                length,
+                longDescription: long_description,
+                offerEndingSoon: offer_ending_soon, 
+                shortDescription: short_description,
+                specificationPDF: { pdf_id, pdf_url },
+                todayDeal: isin_todays_deal,
+                weight,
+                productId
+            }
+        },
+        enabled: Boolean(productId)
+    });
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "product-price" ],
         mutationFn: addProductSpecs,
         onSuccess: () => {
-            navigate("/products/add/discounts");
+            
             toast.success("Request Success", {
                 description: "Product Specifications saved successfully"
             });
+
+            if(location.pathname === "/products/add/product-specs"){
+                navigate("/products/add/discounts");
+            }
 
         },
         onError: (error: AxiosError<any>) => {
@@ -74,6 +110,14 @@ function ProductSpecs() {
         watch((name) => console.log(name))
     }, [watch])
 
+    useEffect(() => {
+        if(productSpecDefaults){
+            reset(productSpecDefaults);
+            setKeywords(productSpecDefaults.benefitKeywords)
+            setValue("benefitKeywords", []);
+        }
+    }, [ productSpecDefaults, reset ]);
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -81,6 +125,16 @@ function ProductSpecs() {
         >
             <div>
                 <Label>Short Description</Label>
+                <div>
+                   
+                </div>
+                {/* <Controller
+                    control={control}
+                    name="shortDescription"
+                    render={({ field }) => (
+                        <Tiptap content={field.value} />
+                    )}
+                /> */}
                 <Textarea 
                     rows={5} 
                     {...register("shortDescription", {
@@ -153,17 +207,27 @@ function ProductSpecs() {
 
             <div>
                 <Label>Product Specification PDF</Label>
-                <Input
-                    type="file"
-                    accept="application/pdf"
-                    {...register("specificationPDF", {
-                        required: {
-                            value: true,
-                            message: "Specification PDF is required"
-                        }
-                    })}
-                />
-                {errors?.specificationPDF && <p className="text-sm text-red-500 mt-1">{errors?.specificationPDF.message}</p>}
+                {watch("specificationPDF")?.pdf_url ? 
+                    <div className="flex flex-row items-center justify-between gap-5">
+                        <Button onClick={() => downloadPDF(watch("specificationPDF")?.pdf_url)} className="w-full flex flex-row items-center justify-between" type="button" variant={"secondary"}>specifications.pdf <Download className="h-4 w-4" /></Button>
+                        <Button onClick={() => setValue("specificationPDF", null)} size={"icon"} type="button" variant={"secondary"}><X/></Button>
+                    </div>
+                    
+                    :
+
+                    <Input
+                        type="file"
+                        accept="application/pdf"
+                        {...register("specificationPDF", {
+                            required: {
+                                value: true,
+                                message: "Specification PDF is required"
+                            }
+                        })}
+                    />
+                }
+                
+                {errors?.specificationPDF && <p className="text-sm text-red-500 mt-1">{errors?.specificationPDF.message as string}</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-y-10">

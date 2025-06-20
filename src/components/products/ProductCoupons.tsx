@@ -21,9 +21,10 @@ import {
 } from "@/components/ui/popover"
 import { Label } from "../ui/label"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { addCoupons, getCoupons } from "@/lib/apis"
+import { addCoupons, getCoupons, getProductCoupons } from "@/lib/apis"
 import { useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
+import { useEffect } from "react"
 
 const FormSchema = z.object({
   coupon: z.number({
@@ -34,22 +35,43 @@ const FormSchema = z.object({
 export function ProductCoupons() {
 
     const navigate = useNavigate();
-    const { data: coupons, isLoading, isError } = useQuery({
+    const productId = sessionStorage.getItem("product-id") as string; 
+
+    const { data: coupons, isLoading, isError, isSuccess } = useQuery({
         queryKey: [ "getCoupons" ],
         queryFn: () => getCoupons(),
         refetchOnWindowFocus: false,
         retry: 3,
         select: (data) => data?.data?.data.map((item: any) => ({ label: item.coupon_code, value: item.coupon_id, name: item.coupon_name }))
-    })
+    });
+
+    const { data: productCouponDefaults } = useQuery({
+        queryKey: [ "getProductCoupons" ],
+        queryFn: () => getProductCoupons(productId),
+        retry: 3,
+        refetchOnWindowFocus: false,
+        select: (data) => {
+            const { coupon_id } = data?.data?.data;
+            return {
+                coupon: coupon_id
+            }
+        },
+        enabled: Boolean(productId) && isSuccess
+    });
+
+
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "addCoupons" ],
         mutationFn: addCoupons,
         onSuccess: () => {
-            navigate("/products/add/seo");
             toast.success("Request Success", {
                 description: "Couponse added successfully"
             });
+
+            if(location.pathname === "/products/add/discounts"){
+                navigate("/products/add/seo");
+            }
 
         },
         onError: (error: AxiosError<any>) => {
@@ -60,7 +82,7 @@ export function ProductCoupons() {
         }
     })
 
-    const { watch, setValue, handleSubmit, formState: { errors } } = useForm<z.infer<typeof FormSchema>>({
+    const { watch, setValue, handleSubmit, reset, formState: { errors } } = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     })
 
@@ -77,6 +99,12 @@ export function ProductCoupons() {
             mutate({ coupon: data.coupon, productId: productId })
         }
     }
+
+    useEffect(() => {
+        if(productCouponDefaults){
+            reset(productCouponDefaults);
+        }
+    }, [ productCouponDefaults, reset ]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 bg-white rounded-xl mt-5 shadow-md w-[75%]">

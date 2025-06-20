@@ -12,7 +12,6 @@ import { ProductInfo } from "./components/products/ProductInfo";
 import { ProductPrice } from "./components/products/ProductPrice";
 import Orders from "./pages/Orders";
 import ProductSpecs from "./components/products/ProductSpecs";
-import ProductSEO from "./components/products/ProductSEO";
 import { ProductCoupons } from "./components/products/ProductCoupons";
 import Shipments from "./pages/Shipments";
 import PrivateRoute from "./pages/PrivateRoute";
@@ -24,6 +23,7 @@ import Categories from "./pages/Categories";
 import AddCategory from "./pages/AddCategory";
 import MyProfile from "./pages/MyProfile";
 import EditProducts from "./pages/EditProducts";
+import ProductSEO from "./components/products/ProductSEO";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

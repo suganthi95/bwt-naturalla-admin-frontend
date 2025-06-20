@@ -1,16 +1,16 @@
 import { ProductSEOFormValues } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { CloudUpload, LoaderCircle, X } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { addMetaSEO } from "@/lib/apis";
+import { addMetaSEO, getProductSEO } from "@/lib/apis";
 
 
 function ProductSEO() {
@@ -21,16 +21,36 @@ function ProductSEO() {
         formState: { errors },
         setError,
         watch,
-        setValue
+        setValue,
+        reset
     } = useForm<ProductSEOFormValues>({
         defaultValues: {
             metaImage: null,
-            metaKeyword: ""
+            metaKeyword: []
         }
     });
 
+    const productId = sessionStorage.getItem("product-id") as string; 
     const navigate = useNavigate();
     const [keywords, setKeywords] = useState<string[]>([]);
+
+    const { data: productSEODefaults } = useQuery({
+        queryKey: [ "getProductSEO" ],
+        queryFn: () => getProductSEO(productId),
+        retry: 3,
+        refetchOnWindowFocus: false,
+        select: (data): ProductSEOFormValues => {
+            const { meta_description, meta_image_url, meta_keywords, meta_title } = data?.data?.data;
+            return {
+                metaDescription: meta_description,
+                metaKeyword: meta_keywords,
+                metaTitle: meta_title,
+                metaImage: meta_image_url,
+                metaImageUrl: ""
+            }
+        },
+        enabled: Boolean(productId)
+    });
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "addMetaSEO" ],
@@ -85,6 +105,14 @@ function ProductSEO() {
     const removeKeyword = (keyword: string) => {
         setKeywords(keywords.filter((k) => k !== keyword));
     };
+
+    useEffect(() => {
+        if(productSEODefaults){
+            reset(productSEODefaults);
+            setKeywords(productSEODefaults.metaKeyword)
+            setValue("metaKeyword", []);
+        }
+    }, [ productSEODefaults, reset ]);
 
 
     return (
@@ -169,7 +197,9 @@ function ProductSEO() {
                             <X className="h-3 w-3"/>
                         </Button>
                         <div className="rounded-lg w-[250px] h-[250px] overflow-hidden border">
-                            <img className="h-full w-full object-cover" src={URL.createObjectURL(watch("metaImage")[0])} alt="metaImage" />
+                            {typeof watch("metaImage") === "string" && <img className="h-full w-full object-cover" src={watch("metaImage")} alt="metaImage" />}
+                            {watch("metaImage") instanceof FileList && <img className="h-full w-full object-cover" src={URL.createObjectURL(watch("metaImage")[0])} alt="metaImage" />}
+                            
                         </div>
                     </div> :
                     <Label htmlFor="metaImage" className="flex flex-col gap-2 items-center justify-center border-dashed border-[2px] border-slate-400 rounded-lg p-6 my-4 w-[250px] h-[250px] cursor-pointer">

@@ -1,15 +1,17 @@
-import { useForm } from "react-hook-form"
-import { LoaderCircle, RefreshCw } from "lucide-react"
+import { Controller, useForm } from "react-hook-form"
+import { LoaderCircle } from "lucide-react"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Button } from "../ui/button"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
 import { ProductPriceFormType } from "@/types"
-import { addProductPrice } from "@/lib/apis"
+import { addProductPrice, getProductPrice } from "@/lib/apis"
+import { useEffect } from "react"
+import dayjs from "dayjs"
 
 // const formSchema = z.object({
 //   unitPrice: z.coerce.number().min(0),
@@ -28,21 +30,52 @@ import { addProductPrice } from "@/lib/apis"
 export function ProductPrice() {
 
   const navigate = useNavigate();
-  const { register, setValue, handleSubmit, watch, formState: { errors } } = useForm<ProductPriceFormType>({
+  const productId = sessionStorage.getItem("product-id") as string;
+  const { register, handleSubmit, watch, reset, control, formState: { errors } } = useForm<ProductPriceFormType>({
     defaultValues: {
       sku: "",
       specialDiscountType: "flat"
     }
   });
 
+   const { data: productPriceDefaults } = useQuery({
+      queryKey: [ "getProductPrice" ],
+      queryFn: () => getProductPrice(productId),
+      retry: 3,
+      refetchOnWindowFocus: false,
+      select: (data):ProductPriceFormType => {
+
+        const { unit_price, strike_through_price, stock_visibility, special_discount_type, special_discount_percent, special_discount_amount, sku, minimum_stock_warning, discount_start_at, discount_end_at, current_stock } = data?.data?.data;
+        return {
+          unitPrice: unit_price,
+          currentStock: current_stock,
+          discountPeriodendat: dayjs(discount_end_at).format("YYYY-MM-DD"),
+          discountPeriodStartat: dayjs(discount_start_at).format("YYYY-MM-DD"),
+          minimumStockWarning: minimum_stock_warning,   
+          sku, 
+          specialDiscountAmount: special_discount_amount,
+          specialDiscountPercentage: special_discount_percent,
+          specialDiscountType: special_discount_type, 
+          stockVisibility: stock_visibility === "true" ? "show" : "hide", 
+          strikeThroughPrice: strike_through_price
+        }
+      },
+      enabled: Boolean(productId)
+  });
+  
+  console.log(productPriceDefaults);
+
   const { mutate, isPending } = useMutation({
       mutationKey: [ "product-price" ],
       mutationFn: addProductPrice,
       onSuccess: () => {
+        toast.success("Request Success", {
+            description: "Product Price & Stocks saved successfully"
+        });
+
+        if(location.pathname === "/products/add/product-price"){
           navigate("/products/add/product-specs");
-          toast.success("Request Success", {
-              description: "Product Price & Stocks saved successfully"
-          });
+        }
 
       },
       onError: (error: AxiosError<any>) => {
@@ -65,6 +98,13 @@ export function ProductPrice() {
       mutate({...data, productId})
     }
   }
+
+
+  useEffect(() => {
+    if(productPriceDefaults){
+        reset(productPriceDefaults);
+    }
+  }, [ productPriceDefaults, reset ]);
 
 
   return (
@@ -106,15 +146,29 @@ export function ProductPrice() {
         <div className="grid grid-cols-2 gap-10">
           <div>
             <Label>Special Discount Type</Label>
-            <Select disabled={isPending} onValueChange={(val) => setValue("specialDiscountType", val as any)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="flat">Flat</SelectItem>
-                <SelectItem value="percentage">Percentage</SelectItem>
-              </SelectContent>
-            </Select>
+
+            <Controller
+                name="specialDiscountType"
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Special Discount type is required"
+                  }
+                }}
+                render={({ field }) => (
+                  <Select disabled={isPending} value={field.value} onValueChange={(val) => field.onChange(val)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="flat">Flat</SelectItem>
+                      <SelectItem value="percent">Percentage</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}  
+            />
+            
           </div>
 
           {watch("specialDiscountType") === "flat" ?
@@ -212,18 +266,30 @@ export function ProductPrice() {
 
           <div>
             <Label>Stock Visibility</Label>
-            <Select disabled={isPending} onValueChange={(val) => setValue("stockVisibility", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Hide Stock" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="hide">Hide Stock</SelectItem>
-                <SelectItem value="show">Show Stock</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+                name="stockVisibility"
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Stock Visibility is required"
+                  }
+                }}
+                render={({ field }) => (
+                  <Select disabled={isPending} value={field.value} onValueChange={(val) => field.onChange(val)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Hide Stock" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="hide">Hide Stock</SelectItem>
+                      <SelectItem value="show">Show Stock</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}  
+            />
           </div>
 
-          <div className="relative">
+          {/*<div className="relative">
             <Label>SKU *</Label>
             <Input 
               disabled={isPending} 
@@ -237,7 +303,7 @@ export function ProductPrice() {
             />
             {errors?.sku && <p className="text-sm text-red-500 mt-1">{errors?.sku.message}</p>}
             <RefreshCw className="absolute right-3 top-8 h-5 w-5 text-muted-foreground cursor-pointer" />
-          </div>
+          </div>*/}
 
           <div>
             <Label>Current Stock</Label>

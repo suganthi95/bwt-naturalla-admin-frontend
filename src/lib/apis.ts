@@ -57,6 +57,13 @@ export const getProductCategories = async () => {
   });
 };
 
+export const getCategories = async() => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/categories`
+    })
+}
+
 export const addCategories = async (data: any) => {
     const formdata = new FormData();
 
@@ -253,7 +260,13 @@ export const addProductSpecs = async (data: ProductFormValues) => {
   formdata.append("weight", data.weight.toString());
   formdata.append("height", data.height.toString());
   formdata.append("breadth", data.breadth.toString());
-  formdata.append("pdf", data.specificationPDF[0]);
+  // formdata.append("pdf", data.specificationPDF[0]);
+
+  if(data.specificationPDF.pdf_id){
+    formdata.append("pdf_id", data.specificationPDF?.pdf_id)
+  }else{
+      formdata.append("pdf", data.specificationPDF[0])
+  }
 
   data.benefitKeywords.forEach((item: string, index: number) => {
     formdata.append(`benefit_keys[${index}]`, item);
@@ -285,11 +298,18 @@ export const addMetaSEO = async (data: any) => {
   formdata.append("product_id", data.productId as string);
   formdata.append("meta_title", data.metaTitle);
   formdata.append("meta_description", data.metaDescription);
-  formdata.append("image", data.metaImage[0]);
 
   data.metaKeywords.forEach((item: string, index: number) => {
     formdata.append(`meta_keywords[${index}]`, item);
   });
+
+  if(typeof data.metaImage === "string"){
+    formdata.append("image_url", data.metaImage);
+  }
+
+  if(data.metaImage instanceof FileList){
+    formdata.append("image", data.metaImage[0]);
+  }
 
   return await axios({
     method: "post",
@@ -300,11 +320,40 @@ export const addMetaSEO = async (data: any) => {
 
 export const updateProductToggle = async (data: any) => {
 
+  return await axios({
+      method: 'put',
+      url:`${BASE_URL}/products/update/toggles/${data.productId}`,
+      data: {
+          ...data,
+      }
+  })
+}
+
+export const getProductPrice = async(productId: string) => {
     return await axios({
-        method: 'put',
-        url:`${BASE_URL}/products/update/toggles/${data.productId}`,
-        data: {
-            ...data,
-        }
+        method:'get',
+        url:`${BASE_URL}/products/price/stock/${productId}`
+    })
+}
+
+export const getProductSpecs = async(productId: string) => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/spec/${productId}`
+    })
+}
+
+
+export const getProductCoupons = async(productId: string) => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/coupon/${productId}`
+    })
+}
+
+export const getProductSEO = async(productId: string) => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/products/meta/info/${productId}`
     })
 }

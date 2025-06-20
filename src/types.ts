@@ -54,7 +54,7 @@ export type ProductFormValues = {
     benefits: string;
     howToUse: string;
     ingredients: string;
-    specificationPDF: FileList;
+    specificationPDF: any;
     isFeatured: boolean;
     todayDeal: boolean;
     offerEndingSoon: boolean;
@@ -71,7 +71,7 @@ export type ProductSEOFormValues = {
   metaTitle: string;
   metaDescription: string;
   metaImageUrl: string;
-  metaKeyword: string;
+  metaKeyword: string[];
   metaImage: any;
 };
 
@@ -86,7 +86,7 @@ export type AuthType = {
 export type ProductPriceFormType = {
   unitPrice: number;
   strikeThroughPrice: number;
-  specialDiscountType: "flat" | "percentage";
+  specialDiscountType: "flat" | "percent";
   specialDiscountAmount: number;
   specialDiscountPercentage: number;
   discountPeriodStartat: string;

@@ -41,6 +41,25 @@ export const downloadBlobAsPDF = (blob: string) => {
   window.URL.revokeObjectURL(url);
 };
 
+export const downloadPDF = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "specifications.pdf";
+    link.click();
+
+    // Clean up the object URL
+    window.URL.revokeObjectURL(link.href);
+  } catch (error) {
+    console.error('Download failed:', error);
+  }
+};
+
+
 export const planFeatures = {
   standard: [
     {

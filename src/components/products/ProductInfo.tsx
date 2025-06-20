@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { CloudUpload, LoaderCircle, X } from "lucide-react"
 import { Badge } from "../ui/badge"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { addProductInfo, getProductCategories, getProductInfo } from "@/lib/apis"
+import { addProductInfo, getCategories, getProductInfo } from "@/lib/apis"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -38,7 +38,7 @@ export function ProductInfo() {
 
     const { data: categories, isLoading, isError, isSuccess } = useQuery({
         queryKey: [ "getCategories" ],
-        queryFn: () => getProductCategories(),
+        queryFn: () => getCategories(),
         retry: 3,
         refetchOnWindowFocus: false,
         select: (data) => data?.data?.data
