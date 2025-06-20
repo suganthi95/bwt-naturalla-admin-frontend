@@ -384,3 +384,18 @@ export const getProductSEO = async(productId: string) => {
         url:`${BASE_URL}/products/meta/info/${productId}`
     })
 }
+
+
+export const getShipmentList = async() => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/shipment/getShipmentList`
+    })
+}
+
+export const getShipmentDetails = async(shipmentId: string) => {
+    return await axios({
+        method:'get',
+        url:`${BASE_URL}/shipment/getShipmentDetails/${shipmentId}`
+    })
+}

@@ -1,4 +1,4 @@
-import { getAllOrders } from "@/lib/apis";
+import { getShipmentList } from "@/lib/apis";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -12,52 +12,7 @@ import { Filter } from "../ui/Filter";
 import { Checkbox } from "../ui/checkbox";
 import { Icons } from "@/assets/icons";
 import { useNavigate } from "react-router-dom";
-
-
-
-
-const data = [
-    {
-        "awb_code": "AWB123456789",
-        "origin": "Bangalore",
-        "destination": "Mumbai",
-        "pickupdate": "18-07-2025, 13:50",
-        "edd": "22-07-2025, 18:00",
-        "status": "in-process"
-    },
-    {
-        "awb_code": "AWB987654321",
-        "origin": "Delhi",
-        "destination": "Chennai",
-        "pickupdate": "16-07-2025, 09:30",
-        "edd": "21-07-2025, 17:45",
-        "status": "in-transit"
-    },
-    {
-        "awb_code": "AWB564738291",
-        "origin": "Hyderabad",
-        "destination": "Kolkata",
-        "pickupdate": "17-07-2025, 11:00",
-        "edd": "23-07-2025, 14:30",
-        "status": "in-process"
-    },
-    {
-        "awb_code": "AWB112233445",
-        "origin": "Ahmedabad",
-        "destination": "Pune",
-        "pickupdate": "15-07-2025, 16:20",
-        "edd": "20-07-2025, 13:15",
-        "status": "in-transit"
-    },
-    {
-        "awb_code": "AWB998877665",
-        "origin": "Chandigarh",
-        "destination": "Jaipur",
-        "pickupdate": "18-07-2025, 08:10",
-        "edd": "21-07-2025, 12:00",
-        "status": "in-process"
-    }
-]
+import dayjs from "dayjs";
 
 
 function ShipmentsTable() {
@@ -65,115 +20,121 @@ function ShipmentsTable() {
     const navigate  = useNavigate()
 
     const columns: ColumnDef<any>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "awb_code",
-      header:()=> "AWB Code",
-      cell: ({ row  }) => (
-        <div className="capitalize text-primary-blue font-semibold">{row.getValue("awb_code")}</div>
-      )
-    },
-    {
-      accessorKey: "origin",
-      header:()=> "Origin → Destination",
-      enableHiding: false,
-    },
-    {
-      accessorKey: "destination",
-      header:()=> "Origin → Destination",
-      cell: ({ row }) => (
-        <div className="capitalize flex flex-row items-center gap-5">{row.getValue("origin")} <MoveRight /> {row.getValue("destination")}</div>
-      )
-    },
-    {
-      accessorKey: "pickupdate",
-      header:()=> "Pickup Date",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("pickupdate")}</div>
-      )
-    },
-    {
-      accessorKey: "edd",
-      header:()=> "EDD",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("edd")}</div>
-      )
-    },
-    {
-      accessorKey: "status",
-      header:()=> "Status",
-      cell: ({ row }) => {
-        if(row.getValue("status") === "in-process"){
-            return(
-                <span className="bg-orange-400/25 text-orange-400 rounded-full capitalize px-3 py-1">{row.getValue("status")}</span>
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected()}
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Select row"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: "shipment_id",
+            enableHiding: false,
+            enableSorting: false
+        },
+        {
+            accessorKey: "awb_code",
+            header:()=> "AWB Code",
+            cell: ({ row  }) => (
+                <div className="capitalize text-primary-blue font-semibold">{row.getValue("awb_code")}</div>
             )
-        }
-
-        if(row.getValue("status") === "in-transit"){
-            return(
-                <span className="bg-blue-400/25 text-blue-400 rounded-full capitalize px-3 py-1">{row.getValue("status")}</span>
+        },
+        {
+            accessorKey: "origin",
+            header:()=> "Origin → Destination",
+            enableHiding: false,
+        },
+        {
+            accessorKey: "destination",
+            header:()=> "Origin → Destination",
+            cell: ({ row }) => (
+                <div className="capitalize flex flex-row items-center gap-5">{row.getValue("origin")} <MoveRight /> {row.getValue("destination")}</div>
             )
-        }
-      }
-    },
-    {
-      accessorKey: "actions",
-      header:()=> "Actions",
-      enableHiding: false,
-      cell: () => (
-        <div className="flex flex-row items-center gap-5">
-              <Button onClick={()=>navigate('/shipment-details')} size={"icon"} className="rounded-full text-[#171925] bg-[#1719251A]/10  hover:bg-[#1719251A]/20 ">
-                <Eye className="h-5 w-5" />
-            </Button>
-            <Button size={"icon"} className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20">
-                <Icons.Print className="h-5 w-5" />
-            </Button>
-            <Button size={"icon"} className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10">
-                <Trash2 className="h-5 w-5" />
-            </Button>
-        </div>
-      )
-    },
-]
+        },
+        {
+            accessorKey: "pickup_date",
+            header:()=> "Pickup Date",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("pickup_date") ? dayjs(row.getValue("pickup_date")).format("DD-MM-YYYY, hh:mm A") : "-"}</div>
+            )
+        },
+        {
+            accessorKey: "edd",
+            header:()=> "EDD",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("edd") ? dayjs(row.getValue("edd")).format("DD-MM-YYYY, hh:mm A") : "-"}</div>
+            )
+        },
+        {
+            accessorKey: "current_status",
+            header:()=> "Status",
+            cell: ({ row }) => {
+                if(row.getValue("current_status") === "Canceled"){
+                    return(
+                        <span className="bg-orange-400/25 text-orange-400 rounded-full capitalize px-3 py-1">{row.getValue("current_status")}</span>
+                    )
+                }
 
-    const { data: orders, isLoading, isSuccess } = useQuery({
-        queryKey: [ "getAllorders" ],
-        queryFn: getAllOrders,
+                if(row.getValue("current_status") === "Pickup Generated"){
+                    return(
+                        <span className="bg-blue-400/25 text-blue-400 rounded-full capitalize px-3 py-1">{row.getValue("current_status")}</span>
+                    )
+                }
+            }
+        },
+        {
+            accessorKey: "actions",
+            header:()=> "Actions",
+            enableHiding: false,
+            cell: ({ row }) => (
+                <div className="flex flex-row items-center gap-5">
+                    <Button onClick={()=>navigate(`/shipment-details/${row.getValue("shipment_id")}`)} size={"icon"} className="rounded-full text-[#171925] bg-[#1719251A]/10  hover:bg-[#1719251A]/20 ">
+                        <Eye className="h-5 w-5" />
+                    </Button>
+                    <Button size={"icon"} className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20">
+                        <Icons.Print className="h-5 w-5" />
+                    </Button>
+                    <Button size={"icon"} className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10">
+                        <Trash2 className="h-5 w-5" />
+                    </Button>
+                </div>
+            )
+        },
+    ]
+
+    const { data: shipments, isLoading, isSuccess } = useQuery({
+        queryKey: [ "getShipmentList" ],
+        queryFn: getShipmentList,
         refetchOnWindowFocus: false,
-        select:(data)=>data?.data?.data
+        select:(data) => data?.data?.data
     });
 
 
     const headers = [
         { label: "AWB Code", key: "awb_code" },
         { label: "Origin / Destination", key: "destination" },
-        { label: "Pickup Date", key: "pickupdate" },
+        { label: "Pickup Date", key: "pickup_date" },
         { label: "EDD", key: "edd" },
-        { label: "Status", key: "status" },
+        { label: "Status", key: "current_status" },
     ];
 
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-        origin: false
+        origin: false,
+        shipment_id: false
     })
     const [rowSelection, setRowSelection] = useState({})
 
@@ -191,7 +152,7 @@ function ShipmentsTable() {
     
     
     const table = useReactTable({
-        data: data,
+        data: shipments,
         columns,
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
@@ -229,7 +190,7 @@ function ShipmentsTable() {
     //     content = <p>{error?.response?.data?.message || error?.message}</p>
     //   }
 
-    if(isSuccess && Array.isArray(orders)){
+    if(isSuccess && Array.isArray(shipments)){
         content = (
             <div className="bg-white rounded-lg p-4  space-y-2">
                 <div className="flex flex-col gap-2 py-1">
@@ -246,9 +207,9 @@ function ShipmentsTable() {
                             />
 
                             <div>
-                                {table.getColumn("status") && (
+                                {table.getColumn("current_status") && (
                                     <Filter
-                                        column={table.getColumn("status")}
+                                        column={table.getColumn("current_status")}
                                         title="Filter by Category"
                                     />
                                 )}
@@ -256,7 +217,7 @@ function ShipmentsTable() {
                         </div>
                     
                         <div className="flex flex-row items-center gap-1">
-                            <CSVLink data={data} headers={headers} filename={"shipment.csv"}>
+                            <CSVLink data={shipments} headers={headers} filename={"shipment.csv"}>
                                 <Button variant="default" className="gap-3 bg-slate-900 hover:bg-slate-900/80">
                                     <Download className="h-5 w-5" />
                                     Export
@@ -370,8 +331,8 @@ function ShipmentsTable() {
         )
     }
 
-    if(isSuccess && typeof orders === "string"){
-        content = <p className="font-bold mt-20 text-center capitalize">{orders}</p>
+    if(isSuccess && typeof shipments === "string"){
+        content = <p className="font-bold mt-20 text-center capitalize">{shipments}</p>
     }
 
     return content;

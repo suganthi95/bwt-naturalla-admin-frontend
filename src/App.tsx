@@ -68,7 +68,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/shipments" element={<Shipments />} />
-        <Route path="/shipment-details" element={<ShipmentsDetails />} />
+        <Route path="/shipment-details/:shipmentId" element={<ShipmentsDetails />} />
         <Route path="/users" element={<Users />} />
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />
