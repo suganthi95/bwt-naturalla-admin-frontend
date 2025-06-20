@@ -65,7 +65,7 @@ function ConfigureCoupons() {
   } = useQuery({
     queryKey: ["couponlists"],
     queryFn: getConfigureCouponlist,
-    select: (data) => data?.data?.data,
+    select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
@@ -282,7 +282,7 @@ function ConfigureCoupons() {
   };
 
   const table = useReactTable({
-    data: Coupons,
+    data: Coupons?.data || [],
     columns,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -345,13 +345,13 @@ function ConfigureCoupons() {
           <CardHeader>
             <div className="text-xl flex flex-row items justify-between">
               <h1>Active Discounts</h1>
-              <h1>12</h1>
+              <h1>{Coupons?.dashboard?.active_coupons}</h1>
             </div>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <ArrowUpFromLine className="stroke-green-400 h-5 w-5" />
-              <p>23% increase from last month</p>
+              <p> last month</p>
             </div>
           </CardContent>
         </Card>
@@ -373,7 +373,7 @@ function ConfigureCoupons() {
           <CardHeader>
             <div className="text-xl flex flex-row items justify-between">
               <h1>Coupon Usage</h1>
-              <h1>458</h1>
+              <h1>{Coupons?.dashboard?.coupon_usage_count}</h1>
             </div>
           </CardHeader>
           <CardContent>

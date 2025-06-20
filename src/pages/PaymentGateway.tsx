@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaymentProviders, togglePayment } from "@/lib/apis";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   Check,
@@ -19,13 +19,15 @@ import {
 } from "lucide-react";
 
 function PaymentGateway() {
+  const queryClient = useQueryClient();
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["payments"],
     queryFn: () => PaymentProviders(),
-    select: (data) => data?.data?.data,
+    select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
+
   const { mutate, isPending } = useMutation({
     mutationKey: ["togglepayment"],
     mutationFn: ({
@@ -75,7 +77,9 @@ function PaymentGateway() {
           <CardHeader>
             <div className="text-xl text-primary-black flex flex-row items justify-between">
               <h1>Total Transactions</h1>
-              <h1 className="text-2xl font-bold">2,456</h1>
+              <h1 className="text-2xl font-bold">
+                {data?.dashboard[0]?.transaction_count}
+              </h1>
             </div>
           </CardHeader>
           <CardContent>
@@ -105,7 +109,9 @@ function PaymentGateway() {
           <CardHeader>
             <div className="text-xl text-primary-black flex flex-row items justify-between">
               <h1>Revenue</h1>
-              <h1 className="text-2xl font-bold">₹ 15,276</h1>
+              <h1 className="text-2xl font-bold">
+                ₹ {data?.dashboard[0]?.transaction_amount}
+              </h1>
             </div>
           </CardHeader>
           <CardContent>
@@ -142,7 +148,7 @@ function PaymentGateway() {
           </div>
         </div>
         <ul className=" space-y-3 ">
-          {data?.map((payment: any, index: number) => {
+          {data?.data?.map((payment: any, index: number) => {
             return (
               <li
                 key={index}
@@ -185,17 +191,35 @@ function PaymentGateway() {
                           className="cursor-pointer px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                           onClick={() => {
                             if (payment?.enabled) {
-                              mutate({
-                                enabled: false,
-                                provider_id: payment.id,
-                                user_id: payment.user_id,
-                              });
+                              mutate(
+                                {
+                                  enabled: false,
+                                  provider_id: payment.id,
+                                  user_id: payment.user_id,
+                                },
+                                {
+                                  onSuccess() {
+                                    queryClient.invalidateQueries({
+                                      queryKey: ["payments"],
+                                    });
+                                  },
+                                }
+                              );
                             } else {
-                              mutate({
-                                enabled: true,
-                                provider_id: payment.id,
-                                user_id: payment.user_id,
-                              });
+                              mutate(
+                                {
+                                  enabled: true,
+                                  provider_id: payment.id,
+                                  user_id: payment.user_id,
+                                },
+                                {
+                                  onSuccess() {
+                                    queryClient.invalidateQueries({
+                                      queryKey: ["payments"],
+                                    });
+                                  },
+                                }
+                              );
                             }
                           }}
                         >
