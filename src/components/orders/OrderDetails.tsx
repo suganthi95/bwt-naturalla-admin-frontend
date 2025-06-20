@@ -1,4 +1,3 @@
-import { ASSETS } from "@/assets/assets";
 import { Badge } from "../ui/badge";
 import { Mail, Phone } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -49,7 +48,7 @@ export default function OrderDetails({ Order }: Props) {
                 </div>
                 <div className="flex  flex-col gap-2 items-center mt-2">
                   <span className="text-base font-semibold text-primary-black">
-                    Rs.{product.price}
+                    Rs.{product.order_amount}
                   </span>
                   <span className="text-sm text-gray-400 line-through">
                     Rs.{product.oldPrice}
@@ -113,7 +112,7 @@ export default function OrderDetails({ Order }: Props) {
             <div className="border p-2 px-4 flex items-center gap-x-3">
               {Order?.profile_pic ? (
                 <img
-                  src={ASSETS.USER}
+                  src={ Order?.profile_pic || 'https://ik.imagekit.io/nd8r7mpaev/Atlants/user.png?updatedAt=1738227108834'}
                   alt="user"
                   className="size-10 rounded-full"
                 />

@@ -1,5 +1,15 @@
+import AddCoupon from "@/components/coupon/AddCoupon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -16,6 +26,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getConfigureCouponlist } from "@/lib/apis";
+import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -30,6 +42,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import dayjs from "dayjs";
 import {
   ArrowUpFromLine,
   BadgePercent,
@@ -38,32 +51,24 @@ import {
   Search,
   TicketPercent,
   Trash2,
+  X,
 } from "lucide-react";
 import { useState } from "react";
-const data = [
-  {
-    discount_name: "First Purchase",
-    coupon_code: "WELCOME10",
-    type: "fixed amount",
-    value: "10",
-    status: "active",
-    usage: "156",
-    limit: "1000",
-    expiry: "16-07-2025, 09:30",
-  },
-  {
-    discount_name: "Summer Sale 2025",
-    coupon_code: "WELCOME10",
-    type: "percentage",
-    value: "25",
-    status: "active",
-    usage: "346",
-    limit: "1000",
-    expiry: "16-07-2025, 09:30",
-  },
-];
+
 
 function ConfigureCoupons() {
+  const [IsAddOpen,setIsAddOpen] = useState(false)
+  const {
+    data: Coupons,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["couponlists"],
+    queryFn: getConfigureCouponlist,
+    select: (data) => data?.data?.data,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
 
   const columns: ColumnDef<any>[] = [
     {
@@ -83,37 +88,38 @@ function ConfigureCoupons() {
         </div>
       ),
     },
-  {
-  accessorKey: "type",
-  header: () => "Type",
-  cell: ({ row }) => {
-    const type = row.getValue("type") as string;
+    {
+      accessorKey: "discount_type",
+      header: () => "Type",
+      cell: ({ row }) => {
+        const type = row.getValue("discount_type") as string;
 
-    const badgeClasses: Record<string, string> = {
-      "fixed amount": "bg-[#3C40AF]/20 text-[#3C40AF]",
-      "percentage": "bg-[#8130A8]/20 text-[#8130A8]",
-    };
+        const badgeClasses: Record<string, string> = {
+          flat: "bg-[#3C40AF]/20 text-[#3C40AF]",
+          percent: "bg-[#8130A8]/20 text-[#8130A8]",
+        };
 
-    return (
-      <span
-        className={`text-xs font-medium px-3 py-1 rounded-full capitalize ${
-          badgeClasses[type] || "bg-gray-200 text-gray-600"
-        }`}
-      >
-        {type}
-      </span>
-    );
-  },
-},
-
+        return (
+          <span
+            className={`text-xs font-medium px-3 py-1 rounded-full capitalize ${
+              badgeClasses[type] || "bg-gray-200 text-gray-600"
+            }`}
+          >
+            {type === "flat" ? "Fixed Amount" : "Percentage"}
+          </span>
+        );
+      },
+    },
 
     {
-      accessorKey: "value",
+      accessorKey: "discount",
       header: () => "Value",
       cell: ({ row }) => {
-        const type = row.original.type;
-        const value = row.getValue("value");
-        return <div>{type === "percentage" ? `${value}%` : `₹ ${value}`}</div>;
+        const type = row.original.discount_type;
+        const value = row.getValue("discount");
+        return (
+          <div>{type === "percent" ? `${value}% OFF` : `₹ ${value} OFF`}</div>
+        );
       },
     },
     {
@@ -126,10 +132,12 @@ function ConfigureCoupons() {
       ),
     },
     {
-      accessorKey: "expiry",
+      accessorKey: "end_at",
       header: () => "Expiry",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("expiry")}</div>
+        <div className="capitalize">
+          {dayjs(row.getValue("end_at")).format("DD MMM YYYY, hh:mm A")}
+        </div>
       ),
     },
     {
@@ -154,22 +162,96 @@ function ConfigureCoupons() {
       accessorKey: "actions",
       header: () => "Actions",
       enableHiding: false,
-      cell: () => (
-        <div className="flex items-center gap-3">
-          <Button
-            size="icon"
-            className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
-          >
-            <Edit className="text-green-500" />
-          </Button>
-          <Button
-            size="icon"
-            className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
-          >
-            <Trash2 className="h-5 w-5" />
-          </Button>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const [Isopen, setIsopen] = useState(false);
+        const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
+        return (
+          <div className="flex items-center gap-3">
+            <Dialog open={Isopen} onOpenChange={setIsopen}>
+              <DialogTrigger>
+                <Button
+                  size="icon"
+                  className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
+                >
+                  <Edit className="text-green-500" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="[&>button]:hidden  !p-0 !max-w-2xl">
+                <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
+                  <DialogTitle className="">
+                    Update Coupon {row.original.coupon_name}
+                  </DialogTitle>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setIsopen(false);
+                    }}
+                  >
+                    <X className="w-6 h-6" />
+                  </div>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={IsDeleteOpen} onOpenChange={setIsDeleteOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size="icon"
+                  className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="text-lg font-semibold text-red-600">
+                    Delete User
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="text-sm text-muted-foreground">
+                  Are you sure you want to delete{" "}
+                  <span className="font-semibold text-black">
+                    {row.original.category_title}
+                  </span>
+                  ? This action cannot be undone.
+                </div>
+
+                <DialogFooter className="mt-4 flex justify-end gap-2">
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button
+                    variant="destructive"
+                    // disabled={isPending}
+                    onClick={() => {
+                      // onDelete(row.original.category_id, {
+                      //   onSuccess(data) {
+                      //     setOpen(false);
+                      //     toast.success(data?.data?.message);
+                      //     queryClient.invalidateQueries({
+                      //       queryKey: ["getAllcategories"],
+                      //     });
+                      //   },
+                      //   onError: (error) => {
+                      //     if (axios.isAxiosError(error)) {
+                      //       toast.error(error?.response?.data?.message);
+                      //     }
+                      //   },
+                      // });
+                    }}
+                  >
+                    {/* {isPending ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Delete"
+                    )} */}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        );
+      },
     },
   ];
 
@@ -200,7 +282,7 @@ function ConfigureCoupons() {
   };
 
   const table = useReactTable({
-    data: data,
+    data: Coupons,
     columns,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -222,6 +304,10 @@ function ConfigureCoupons() {
       globalFilter,
     },
   });
+
+  if (isLoading || isFetching) {
+    return <div className="mt-[10%] text-center">Loading...</div>;
+  }
   return (
     <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
       <div className="flex flex-row items-center justify-between">
@@ -231,10 +317,27 @@ function ConfigureCoupons() {
             Manage your store discounts and promotional offers
           </p>
         </div>
-
-        <div>
-          <Button>New Discount</Button>
-        </div>
+        <Dialog open={IsAddOpen} onOpenChange={setIsAddOpen}>
+          <DialogTrigger>
+            <Button>New Discount</Button>
+          </DialogTrigger>
+          <DialogContent className="[&>button]:hidden  !p-0 !max-w-2xl">
+            <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
+              <DialogTitle className="">
+                Add Coupon 
+              </DialogTitle>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsAddOpen(false);
+                }}
+              >
+                <X className="w-6 h-6" />
+              </div>
+            </DialogHeader>
+            <AddCoupon onClose={setIsAddOpen}/>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-3 gap-5">

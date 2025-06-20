@@ -14,6 +14,7 @@ import {
   EllipsisVertical,
   IndianRupee,
   LineChart,
+  Loader2,
   Smartphone,
 } from "lucide-react";
 
@@ -25,17 +26,17 @@ function PaymentGateway() {
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["togglepayment"],
     mutationFn: ({
-      provider_name,
+      provider_id,
       enabled,
       user_id,
     }: {
-      provider_name: string;
+      provider_id: string;
       enabled: boolean;
       user_id: number;
-    }) => togglePayment({ provider_name, enabled, user_id }),
+    }) => togglePayment({ provider_id, enabled, user_id }),
   });
   if (isLoading || isFetching) {
     return (
@@ -182,24 +183,29 @@ function PaymentGateway() {
                       <div>
                         <p
                           className="cursor-pointer px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                          onClick={() =>{
-                            if(payment?.enabled){
+                          onClick={() => {
+                            if (payment?.enabled) {
                               mutate({
-                                enabled:false,
-                                provider_name:payment.provider_name,
-                                user_id:payment.user_id
-                              })
-                            }
-                            else{
-                                mutate({
-                                enabled:true,
-                                provider_name:payment.provider_name,
-                                user_id:payment.user_id
-                              })
+                                enabled: false,
+                                provider_id: payment.id,
+                                user_id: payment.user_id,
+                              });
+                            } else {
+                              mutate({
+                                enabled: true,
+                                provider_id: payment.id,
+                                user_id: payment.user_id,
+                              });
                             }
                           }}
                         >
-                          {payment?.enabled ? "Set Inactive" : "Set Active"}
+                          {isPending ? (
+                            <Loader2 className="animate-spin" />
+                          ) : payment?.enabled ? (
+                            "Set Inactive"
+                          ) : (
+                            "Set Active"
+                          )}
                         </p>
                       </div>
                     </PopoverContent>

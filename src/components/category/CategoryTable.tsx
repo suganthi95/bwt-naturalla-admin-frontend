@@ -84,7 +84,7 @@ function CategoryTable() {
       },
       {
         accessorKey: "subcategory",
-        header: () => <div className="text-center">Subcategory</div>,
+        header: () => <div className="text-center">Sub_category</div>,
         cell: ({ row }) => {
           const subcategories = row.original.subcategories;
 
