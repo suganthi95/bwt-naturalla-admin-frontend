@@ -12,7 +12,6 @@ import { ProductInfo } from "./components/products/ProductInfo";
 import { ProductPrice } from "./components/products/ProductPrice";
 import Orders from "./pages/Orders";
 import ProductSpecs from "./components/products/ProductSpecs";
-import ProductSEO from "./components/products/ProductSEO";
 import { ProductCoupons } from "./components/products/ProductCoupons";
 import Shipments from "./pages/Shipments";
 import PrivateRoute from "./pages/PrivateRoute";
@@ -24,6 +23,7 @@ import Categories from "./pages/Categories";
 import AddCategory from "./pages/AddCategory";
 import MyProfile from "./pages/MyProfile";
 import EditProducts from "./pages/EditProducts";
+import ProductSEO from "./components/products/ProductSEO";
 import Settings from "./pages/Settings";
 
 dayjs.extend(utc);
@@ -68,7 +68,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/shipments" element={<Shipments />} />
-        <Route path="/shipment-details" element={<ShipmentsDetails />} />
+        <Route path="/shipment-details/:shipmentId" element={<ShipmentsDetails />} />
         <Route path="/users" element={<Users />} />
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />

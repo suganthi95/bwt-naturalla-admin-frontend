@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { CloudUpload, LoaderCircle, X } from "lucide-react"
 import { Badge } from "../ui/badge"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { addProductInfo, getProductCategories, getProductInfo } from "@/lib/apis"
+import { addProductInfo, getCategories, getProductInfo } from "@/lib/apis"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -38,7 +38,7 @@ export function ProductInfo() {
 
     const { data: categories, isLoading, isError, isSuccess } = useQuery({
         queryKey: [ "getCategories" ],
-        queryFn: () => getProductCategories(),
+        queryFn: () => getCategories(),
         retry: 3,
         refetchOnWindowFocus: false,
         select: (data) => data?.data?.data
@@ -48,7 +48,7 @@ export function ProductInfo() {
         queryKey: [ "getProductInfo" ],
         queryFn: () => getProductInfo(productId),
         retry: 3,
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
         select: (data):ProductInfoFormType => {
 
             const { category_id, category_title, gallery_images, min_order_quantity, product_name, slug, subcategory_id, subcategory_name, tags, thumbnail_image, units } = data?.data?.data;
@@ -66,8 +66,6 @@ export function ProductInfo() {
         },
         enabled: Boolean(productId) && isSuccess
     });
-
-    // console.log(productInfoDefaults)
 
 
     const { mutate, isPending } = useMutation({
@@ -134,15 +132,15 @@ export function ProductInfo() {
     }
 
     useEffect(() => {
-        if(productInfoDefaults){
+        if(productInfoDefaults && productId){
             reset(productInfoDefaults);
             setTags(productInfoDefaults.tags)
         }
-    }, [ productInfoDefaults, reset ]);
+    }, [ productInfoDefaults, reset, productId ]);
 
-    // useEffect(() => {
-    //     watch((name) => console.log(name))
-    // }, [watch])
+    useEffect(() => {
+        watch((name) => console.log(name))
+    }, [watch])
 
 
     return (
@@ -212,7 +210,7 @@ export function ProductInfo() {
                         }}
                         render={({ field }) => (
                             <Select 
-                                disabled={isLoading || isError || isPending} 
+                                disabled={isLoading || isError || isPending || !Boolean(watch("category"))} 
                                 value={field.value}
                                 onValueChange={(val) => field.onChange(val)}
                             >
@@ -264,7 +262,7 @@ export function ProductInfo() {
             </div>
 
             <div>
-                <Label>Tags</Label>
+                <Label>Tags * (Type the Tag and Press "Enter")</Label>
                 <Input
                     disabled={isPending}
                     value={tagInput}
@@ -322,7 +320,7 @@ export function ProductInfo() {
                 {[0, 1, 2, 3, 4].map((_, i) => (
 
                     <div key={i}>
-                        {watch(`galleryImages.${i}`) ?
+                        {(watch(`galleryImages.${i}`) instanceof FileList && watch(`galleryImages.${i}`)[0]) || watch(`galleryImages.${i}`)?.media_url ?
                             <div className="relative w-fit my-4">
                                 <Button onClick={() => setValue(`galleryImages.${i}`, null)} type="button" variant="destructive" className="absolute z-[10] p-0 h-5 w-5 rounded-full -top-2 -right-2">
                                     <X className="h-3 w-3"/>

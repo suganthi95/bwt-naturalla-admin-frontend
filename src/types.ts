@@ -54,7 +54,7 @@ export type ProductFormValues = {
     benefits: string;
     howToUse: string;
     ingredients: string;
-    specificationPDF: FileList;
+    specificationPDF: any;
     isFeatured: boolean;
     todayDeal: boolean;
     offerEndingSoon: boolean;
@@ -71,7 +71,7 @@ export type ProductSEOFormValues = {
   metaTitle: string;
   metaDescription: string;
   metaImageUrl: string;
-  metaKeyword: string;
+  metaKeyword: string[];
   metaImage: any;
 };
 
@@ -86,7 +86,7 @@ export type AuthType = {
 export type ProductPriceFormType = {
   unitPrice: number;
   strikeThroughPrice: number;
-  specialDiscountType: "flat" | "percentage";
+  specialDiscountType: "flat" | "percent";
   specialDiscountAmount: number;
   specialDiscountPercentage: number;
   discountPeriodStartat: string;
@@ -108,3 +108,32 @@ export type ProductInfoFormType = {
   galleryImages: any;
   thumbnail: FileList | null;
 };
+
+export interface ShipmentDetailsType {
+  status: boolean
+  shipment: {
+    shipment_id: string
+    awb_code: string
+    courier_name: string
+    pickup_scheduled_date: string
+    estimated_delivery_date: string
+    delivered_date: any
+    delivered_to: string
+    origin: string
+    destination: string
+    tracking_link: string
+    current_status: string
+    shipping_label: string
+    manifest: string
+  }
+  package: {
+    product_id: number
+    product_name: string
+    length: any
+    breadth: any  
+    height: any
+    weight: any
+  }[]
+  tracking_timeline: any[]
+}
+
