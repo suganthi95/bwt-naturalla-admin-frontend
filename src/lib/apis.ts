@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductFormValues } from "@/types";
-import { CreateUserPayload } from "@/types/type";
+import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
 //staging
@@ -88,7 +88,6 @@ export const addCategories = async (data: any) => {
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
-  //   formdata.append("subcategory_name", data.subCategories);
   data.subCategories.forEach((subCategory: string, index: number) => {
     formdata.append(`subcategory_name[${index}]`, subCategory);
   });
@@ -173,6 +172,28 @@ export const getConfigureCouponlist = async () => {
   });
 };
 
+export const addConfigureCoupons = async(payload:CouponInput)=>{
+  return await axios({
+    method:'post',
+    url:`${BASE_URL}/coupon/addcoupon`,
+    data:payload
+  })
+}
+
+export const updateConfigureCoupons = async(payload:CouponInput,coupon_id:number)=>{
+  return await axios({
+    method:'put',
+    url:`${BASE_URL}/coupon/update/${coupon_id}`,
+    data:payload
+  })
+}
+export const deleteConfigureCoupons = async(id:number)=>{
+  return await axios({
+    method:'delete',
+    url:`${BASE_URL}/coupon/delete/${id}`
+  })
+}
+
 export const PaymentProviders = async () => {
   return await axios({
     method: "get",
@@ -199,6 +220,26 @@ export const togglePayment = async ({
     },
   });
 };
+
+export const getShippingfee = async()=>{
+  return await axios({
+    method:'get',
+    url: `${BASE_URL}/shipment/getshipping-fee`
+  })
+}
+
+export const updateShippingfee = async(shipping_type_id:number,shipping_fee:number,shipping_fee_type:string)=>{
+  return await axios({
+    method:'put',
+    url:`${BASE_URL}/shipment/updateshippingfee/${shipping_type_id}`,
+    data:{
+      shipping_fee,
+      shipping_fee_type
+    }
+  })
+}
+
+
 
 export const getCoupons = async () => {
   return await axios({

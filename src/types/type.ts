@@ -88,3 +88,34 @@ export type ProductReview = {
   last_name: string;
   profile_pic: string | null;
 };
+
+export type CouponInput = {
+  coupon_code: string;
+  coupon_id ? :number;
+  start_at: string; 
+  end_at: string;   
+  discount_type: string;
+  discount: number;
+  created_by ?: number;
+  coupon_name: string;
+  status?: string;
+};
+
+export interface Coupon {
+  coupon_id: number;
+  coupon_type: "ProductBased" | "CategoryBased" | "OrderBased" | string;
+  coupon_code: string;
+  start_at: string; // ISO date string
+  end_at: string;   // ISO date string
+  discount_type: string;
+  discount: number;
+  created_at: string; // ISO date string
+  created_by: number | null;
+  mini_shipping: number | null;
+  max_discount: number | null;
+  product_id: number | null;
+  coupon_name: string;
+  status: "active" | "inactive" | string;
+  usage: number;
+  limits: number | null;
+}

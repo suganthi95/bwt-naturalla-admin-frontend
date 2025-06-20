@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import {
   Popover,
   PopoverContent,
@@ -9,11 +9,9 @@ import { PaymentProviders, togglePayment } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
-  Check,
-  Clock5,
+
   EllipsisVertical,
-  IndianRupee,
-  LineChart,
+
   Loader2,
   Smartphone,
 } from "lucide-react";
@@ -72,7 +70,7 @@ function PaymentGateway() {
         </div> */}
       </div>
 
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-3 gap-5">
         <Card>
           <CardHeader>
             <div className="text-xl text-primary-black flex flex-row items justify-between">
@@ -82,12 +80,12 @@ function PaymentGateway() {
               </h1>
             </div>
           </CardHeader>
-          <CardContent>
+          {/* <CardContent>
             <div className="flex items-center gap-2">
               <LineChart className="stroke-blue-400 h-5 w-5" />
               <p>last 30 days</p>
             </div>
-          </CardContent>
+          </CardContent> */}
         </Card>
         <Card>
           <CardHeader>
@@ -96,14 +94,7 @@ function PaymentGateway() {
               <h1 className="text-2xl font-bold">12</h1>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <div className="size-6 rounded-full grid place-items-center  bg-green-500">
-                <Check className="text-white w-4" />
-              </div>
-              <p>Above Target</p>
-            </div>
-          </CardContent>
+         
         </Card>
         <Card>
           <CardHeader>
@@ -114,28 +105,10 @@ function PaymentGateway() {
               </h1>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <IndianRupee className="stroke-purple-400 font-extrabold h-5 w-5" />
-              <p>This month</p>
-            </div>
-          </CardContent>
+        
         </Card>
 
-        <Card>
-          <CardHeader>
-            <div className="text-xl text-primary-black flex flex-row items justify-between">
-              <h1>Pending</h1>
-              <h1 className="text-2xl font-bold">₹ 1,872</h1>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <Clock5 className="fill-[#F19D02] text-white font-extrabold h-5 w-5" />
-              <p>Awaiting settlement</p>
-            </div>
-          </CardContent>
-        </Card>
+        
       </div>
 
       <div className="border bg-white p-4">
