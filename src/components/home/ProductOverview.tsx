@@ -3,128 +3,74 @@ import { ChevronLeft, ChevronRight, Ellipsis } from 'lucide-react'
 import  { useState } from 'react'
 import { Button } from '../ui/button';
 
-type Product = {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  quantity: number;
-  revenue: number;
-  status: "Active" | "Inactive";
+
+  export type ProductSales = {
+  product_name: string;
+  unit_price: number;
+  publish: boolean;
+  sku: string | null;
+  product_thumbnail_image: string;
+  product_id: number;
+  total_quantity: number;
+  total_revenue: number;
 };
-const data: Product[] = [
-  {
-    id: "P001",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 29.99,
-    quantity: 120,
-    revenue: 3598.8,
-    status: "Active",
-  },
-  {
-    id: "P002",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 49.99,
-    quantity: 80,
-    revenue: 3999.2,
-    status: "Inactive",
-  },
-   {
-    id: "P003",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 49.99,
-    quantity: 80,
-    revenue: 3999.2,
-    status: "Inactive",
-  }, {
-    id: "P004",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 49.99,
-    quantity: 80,
-    revenue: 3999.2,
-    status: "Inactive",
-  }, {
-    id: "P005",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 49.99,
-    quantity: 80,
-    revenue: 3999.2,
-    status: "Inactive",
-  }, {
-    id: "P006",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 49.99,
-    quantity: 80,
-    revenue: 3999.2,
-    status: "Inactive",
-  }, {
-    id: "P007",
-    name: "Red Wine Face Wash",
-    image: "https://via.placeholder.com/80x100",
-    price: 49.99,
-    quantity: 80,
-    revenue: 3999.2,
-    status: "Inactive",
-  },
-];
-const columns: ColumnDef<Product>[] = [
+
+interface Props{
+  product:ProductSales[]
+}
+
+const columns: ColumnDef<ProductSales>[] = [
   {
     header: "Product",
-    accessorKey: "name",
+    accessorKey: "product_name",
     cell: ({ row }) => {
       const product = row.original;
       return (
         <div className="flex gap-3 items-center">
           <img
-            src={product.image}
-            alt={product.name}
+            src={product.product_thumbnail_image}
+            alt={product.product_name}
             className="w-12 h-16 object-cover rounded-md"
           />
           <div>
-            <div className="font-medium text-gray-800">{product.name}</div>
+            <div className="font-medium text-gray-800">{product.product_name}</div>
           </div>
         </div>
       );
     },
   },
-  { accessorKey: "id", header: "Product ID" },
+  { accessorKey: "product_id", header: ()=><div className='truncate'>Product ID</div> },
   {
-    accessorKey: "price",
+    accessorKey: "unit_price",
     header: "Price",
     cell: ({ getValue }) => `₹${(getValue() as number).toFixed(2)}`,
   },
-  { accessorKey: "quantity", header: "Quantity" },
+  { accessorKey: "total_quantity", header: "Quantity" },
   {
-    accessorKey: "revenue",
+    accessorKey: "total_revenue",
     header: "Revenue",
     cell: ({ getValue }) => `₹${(getValue() as number).toFixed(2)}`,
   },
   {
-    accessorKey: "status",
+    accessorKey: "publish",
     header: "Status",
-    cell: ({ getValue }) => {
-      const status = getValue() as string;
+    cell: ({ row }) => {
+      const status = row.original.publish;
       const statusColor =
-        status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700";
+        status ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700";
       return (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
-          {status}
+          {status ? "Active":"In-active"}
         </span>
       );
     },
   },
 ];
 
-export default function ProductOverview() {
+export default function ProductOverview({product}:Props) {
       const [page, setPage] = useState(0);
   const table = useReactTable({
-    data,
+    data:product ?? [],
     columns,
     state: {
       pagination: {
@@ -148,10 +94,10 @@ export default function ProductOverview() {
           <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-gray-700">
           <thead className="text-left bg-gray-50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
+            {table?.getHeaderGroups()?.map((headerGroup) => (
+              <tr key={headerGroup?.id}>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="px-4 py-2 font-medium">
+                  <th key={header?.id} className="px-4 py-2 font-medium">
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
                 ))}
@@ -159,9 +105,9 @@ export default function ProductOverview() {
             ))}
           </thead>
           <tbody className="divide-y">
-            {table.getRowModel().rows.map((row) => (
+            {table?.getRowModel()?.rows?.map((row) => (
               <tr key={row.id} className="hover:bg-gray-50">
-                {row.getVisibleCells().map((cell) => (
+                {row?.getVisibleCells()?.map((cell) => (
                   <td key={cell.id} className="px-4 py-3">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -181,7 +127,7 @@ export default function ProductOverview() {
           <ChevronLeft size={16} />
         </button>
 
-        {Array.from({ length: table.getPageCount() }).map((_, i) => (
+        {Array.from({ length: table.getPageCount() })?.map((_, i) => (
           <Button
             key={i}
             onClick={() => table.setPageIndex(i)}

@@ -18,13 +18,6 @@ function ProductsTable() {
 
     const navigate = useNavigate();
 
-    // const [ toggleState, setToggleState ] = useState({
-    //     publish: null,
-    //     isin_todays_deal: null,
-    //     offer_ending_soon: null,
-    //     best_selling: null
-    // });
-
     const columns: ColumnDef<ProductsType>[] = [
         {
             accessorKey: "product_id",
@@ -52,6 +45,13 @@ function ProductsTable() {
             header:()=> "Detail",
             cell: ({ row }) => (
                 <div className="capitalize">₹ {row.getValue("unit_price")} / Nos</div>
+            )
+        },
+        {
+            accessorKey: "sku",
+            header:()=> "SKU Code",
+            cell: ({ row }) => (
+                <div className="capitalize">{row.getValue("sku") ? row.getValue("sku") : "-"}</div>
             )
         },
         {
@@ -185,6 +185,7 @@ function ProductsTable() {
         { label: "Today's deal", key: "isin_todays_deal" },
         { label: "Best Selling", key: "best_selling" },
         { label: "Offer Ending Soon", key: "offer_ending_soon" },
+        { label: "SKU Code", key: "sku" },
         // { label: "Featured", key: "is_featured" },
     ];
 

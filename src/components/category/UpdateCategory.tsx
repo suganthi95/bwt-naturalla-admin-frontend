@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FieldErrors, Resolver, useForm } from "react-hook-form";
+import { useForm, FieldErrors, Resolver } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CloudUpload, Loader2, X } from "lucide-react";
@@ -12,7 +12,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 import { UpdateCategories } from "@/lib/apis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -27,33 +27,22 @@ const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
   slug: z.string().min(1, "Slug is required"),
   tax: z.number().min(0, "Tax is required"),
-  thumbnail: z.any(), // manual validation later
+  thumbnail: z.any(),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export default function UpdateCategory({ onClose, Data }: Props) {
   const queryClient = useQueryClient();
-  const [existingImage, setExistingImage] = useState<string>(
-    Data?.thumbnail_url || ""
+  const [existingImage, setExistingImage] = useState(Data?.thumbnail_url || "");
+  const [subCategoryInput, setSubCategoryInput] = useState("");
+  const [subCategories, setSubCategories] = useState<string[]>(
+    Data?.subcategories?.map((item: any) => item.subcategory_name) || []
   );
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["addcategory"],
-    mutationFn: (data: FormValues) => UpdateCategories(data),
-    onSuccess: () => {
-      toast.success("category added successfully");
-      queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });
-      onClose(false);
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        toast.error(error?.response?.data?.message);
-      }
-    },
-  });
+  const [isDragging, setIsDragging] = useState(false);
+
   const resolver: Resolver<FormValues> = async (values, context, options) => {
     const result = await zodResolver(schema)(values, context, options);
-
     const fileUploaded = values.thumbnail && values.thumbnail.length > 0;
     const isValid = !!fileUploaded || !!existingImage;
 
@@ -78,28 +67,35 @@ export default function UpdateCategory({ onClose, Data }: Props) {
     resolver,
     defaultValues: {
       category_name: Data.category_title,
-      slug: Data.slug ?? "",
+      slug: Data.slug || "",
       tax: Data.tax_percent,
       thumbnail: [],
     },
   });
 
-  const [subCategoryInput, setSubCategoryInput] = useState("");
-  const [subCategories, setSubCategories] = useState<string[]>(
-    (Data?.subcategories || []).map((item: any) => item.subcategory_name)
-  );
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["addcategory"],
+    mutationFn: (data: FormValues) => UpdateCategories(data),
+    onSuccess: () => {
+      toast.success("Category updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });
+      onClose(false);
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
 
   const thumbnailFile = watch("thumbnail")?.[0];
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const handleDragLeave = () => setIsDragging(false);
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -107,6 +103,20 @@ export default function UpdateCategory({ onClose, Data }: Props) {
     const file = e.dataTransfer.files?.[0];
     if (file && file.type.startsWith("image/")) {
       setValue("thumbnail", [file]);
+    }
+  };
+
+  const handleAddSubCategory = () => {
+    if (subCategoryInput.trim()) {
+      setSubCategories((prev) => [...prev, subCategoryInput.trim()]);
+      setSubCategoryInput("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && subCategoryInput.trim()) {
+      e.preventDefault();
+      handleAddSubCategory();
     }
   };
 
@@ -124,26 +134,11 @@ export default function UpdateCategory({ onClose, Data }: Props) {
     mutate(finalData);
   };
 
-  const handleAddSubCategory = () => {
-    if (subCategoryInput.trim()) {
-      setSubCategories((prev) => [...prev, subCategoryInput.trim()]);
-      setSubCategoryInput("");
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && subCategoryInput.trim()) {
-      e.preventDefault();
-      setSubCategories((prev) => [...prev, subCategoryInput.trim()]);
-      setSubCategoryInput("");
-    }
-  };
-
   return (
     <div className="p-2 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 max-w-2xl bg-white  rounded-lg"
+        className="space-y-6 max-w-2xl bg-white rounded-lg"
       >
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
@@ -176,6 +171,10 @@ export default function UpdateCategory({ onClose, Data }: Props) {
             </Button>
           </div>
 
+          {subCategories.length === 0 && (
+            <p className="text-sm text-red-500 mt-1">Subcategory is required</p>
+          )}
+
           <div className="mt-3 flex flex-wrap gap-2">
             {subCategories.map((item, i) => (
               <Badge
@@ -204,31 +203,31 @@ export default function UpdateCategory({ onClose, Data }: Props) {
             <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>
           )}
         </div>
+
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
             Tax <span className="text-red-500">*</span>
           </label>
-
           <Select
             onValueChange={(value) => setValue("tax", Number(value))}
-            defaultValue="0"
+            defaultValue={String(Data.tax_percent)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select tax %" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">0%</SelectItem>
-              <SelectItem value="5">5%</SelectItem>
-              <SelectItem value="12">12%</SelectItem>
-              <SelectItem value="18">18%</SelectItem>
-              <SelectItem value="28">28%</SelectItem>
+              {[0, 5, 12, 18, 28].map((rate) => (
+                <SelectItem key={rate} value={String(rate)}>
+                  {rate}%
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
-
           {errors.tax && (
             <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
           )}
         </div>
+
         <div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -237,32 +236,21 @@ export default function UpdateCategory({ onClose, Data }: Props) {
             isDragging ? "border-blue-500" : "border-[#1E401D]"
           } rounded-lg p-6 flex items-center justify-center relative min-h-40 max-h-96`}
         >
-          {thumbnailFile ? (
-            <div className="relative w-full h-full">
+          {thumbnailFile || existingImage ? (
+            <div className="relative w-72 h-72 mx-auto">
               <img
-                src={URL.createObjectURL(thumbnailFile)}
+                src={
+                  thumbnailFile
+                    ? URL.createObjectURL(thumbnailFile)
+                    : existingImage
+                }
                 alt="Preview"
-                className="object-contain h-80 w-full rounded-md"
-              />
-              <button
-                type="button"
-                onClick={() => setValue("thumbnail", [])}
-                className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-100"
-              >
-                <X className="w-4 h-4 text-red-500" />
-              </button>
-            </div>
-          ) : Data.thumbnail_url ? (
-            <div className="relative w-full h-full">
-              <img
-                src={Data.thumbnail_url}
-                alt="Preview"
-                className="object-contain h-80 w-full rounded-md"
+                className="object-contain w-full h-full rounded-md"
               />
               <button
                 type="button"
                 onClick={() => {
-                  setValue("thumbnail", []);
+                  setValue("thumbnail", [], { shouldDirty: true });
                   setExistingImage("");
                 }}
                 className="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-100"
@@ -271,7 +259,7 @@ export default function UpdateCategory({ onClose, Data }: Props) {
               </button>
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center text-gray-500 cursor-pointer w-full h-full">
+            <label className="flex flex-col items-center justify-center text-gray-500 cursor-pointer w-full h-80">
               <CloudUpload className="w-8 h-8 mb-2 text-[#1E401D]" />
               <p className="text-xs font-medium text-[#BFBFBF]">
                 Drop your image or{" "}

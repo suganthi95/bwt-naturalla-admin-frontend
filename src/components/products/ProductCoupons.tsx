@@ -101,10 +101,10 @@ export function ProductCoupons() {
     }
 
     useEffect(() => {
-        if(productCouponDefaults){
+        if(productCouponDefaults && productId){
             reset(productCouponDefaults);
         }
-    }, [ productCouponDefaults, reset ]);
+    }, [ productCouponDefaults, reset, productId ]);
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6 bg-white rounded-xl mt-5 shadow-md w-[75%]">

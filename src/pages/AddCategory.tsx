@@ -55,6 +55,9 @@ export default function AddCategory() {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      tax: 0,
+    },
   });
 
   const [subCategoryInput, setSubCategoryInput] = useState("");
@@ -85,7 +88,7 @@ export default function AddCategory() {
   const onSubmit = (data: FormValues) => {
     const finalData = {
       ...data,
-      thumbnail: data.thumbnail[0], 
+      thumbnail: data.thumbnail[0],
 
       subCategories,
     };
@@ -147,7 +150,9 @@ export default function AddCategory() {
               Add
             </Button>
           </div>
-
+          {subCategories?.length === 0 && (
+            <p className="text-sm text-red-500 mt-1">Subcategory is required</p>
+          )}
           <div className="mt-3 flex flex-wrap gap-2">
             {subCategories.map((item, i) => (
               <Badge

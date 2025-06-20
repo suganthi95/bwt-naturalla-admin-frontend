@@ -107,12 +107,12 @@ function ProductSEO() {
     };
 
     useEffect(() => {
-        if(productSEODefaults){
+        if(productSEODefaults && productId){
             reset(productSEODefaults);
             setKeywords(productSEODefaults.metaKeyword)
             setValue("metaKeyword", []);
         }
-    }, [ productSEODefaults, reset ]);
+    }, [ productSEODefaults, reset, productId ]);
 
 
     return (
@@ -175,7 +175,7 @@ function ProductSEO() {
                 )}
 
                 <div className="flex flex-wrap gap-2 mt-2">
-                    {keywords.map((kw) => (
+                    {keywords?.map((kw) => (
                         <Badge
                             key={kw}
                             variant="secondary"

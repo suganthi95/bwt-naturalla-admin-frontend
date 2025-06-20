@@ -111,12 +111,12 @@ function ProductSpecs() {
     }, [watch])
 
     useEffect(() => {
-        if(productSpecDefaults){
+        if(productSpecDefaults && productId){
             reset(productSpecDefaults);
             setKeywords(productSpecDefaults.benefitKeywords)
             setValue("benefitKeywords", []);
         }
-    }, [ productSpecDefaults, reset ]);
+    }, [ productSpecDefaults, reset, productId ]);
 
     return (
         <form
@@ -283,7 +283,7 @@ function ProductSpecs() {
                 />
                 {errors?.benefitKeywords && <p className="text-sm text-red-500 mt-1">{errors?.benefitKeywords.message}</p>}
                 <div className="flex flex-wrap gap-2 mt-2">
-                    {keywords.map((kw: any) => (
+                    {keywords?.map((kw: any) => (
                         <Badge
                             key={kw}
                             variant="secondary"

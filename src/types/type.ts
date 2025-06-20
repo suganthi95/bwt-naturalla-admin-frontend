@@ -73,3 +73,18 @@ export type Order = {
   track_url: string | null;
   profile_pic :string
 };
+
+
+export type ProductReview = {
+  review_id: number;
+  product_id: number;
+  review_author_id: number;
+  review_txt: string;
+  ratings: number;
+  created_at: string; 
+  review_title: string;
+  review_media_files: string | null;
+  first_name: string;
+  last_name: string;
+  profile_pic: string | null;
+};

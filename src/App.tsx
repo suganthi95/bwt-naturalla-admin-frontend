@@ -24,6 +24,7 @@ import AddCategory from "./pages/AddCategory";
 import MyProfile from "./pages/MyProfile";
 import EditProducts from "./pages/EditProducts";
 import ProductSEO from "./components/products/ProductSEO";
+import Settings from "./pages/Settings";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -64,7 +65,7 @@ function App() {
         <Route path="/categories" element={<Categories />} />
         <Route path="/add-category" element={<AddCategory />} />
         <Route path="/my-profile" element={<MyProfile />} />
-
+        <Route path="/settings" element={<Settings />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/shipments" element={<Shipments />} />
         <Route path="/shipment-details" element={<ShipmentsDetails />} />

@@ -101,10 +101,10 @@ export function ProductPrice() {
 
 
   useEffect(() => {
-    if(productPriceDefaults){
+    if(productPriceDefaults && productId){
         reset(productPriceDefaults);
     }
-  }, [ productPriceDefaults, reset ]);
+  }, [ productPriceDefaults, reset, productId ]);
 
 
   return (

@@ -48,7 +48,7 @@ export function ProductInfo() {
         queryKey: [ "getProductInfo" ],
         queryFn: () => getProductInfo(productId),
         retry: 3,
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
         select: (data):ProductInfoFormType => {
 
             const { category_id, category_title, gallery_images, min_order_quantity, product_name, slug, subcategory_id, subcategory_name, tags, thumbnail_image, units } = data?.data?.data;
@@ -134,11 +134,11 @@ export function ProductInfo() {
     }
 
     useEffect(() => {
-        if(productInfoDefaults){
+        if(productInfoDefaults && productId){
             reset(productInfoDefaults);
             setTags(productInfoDefaults.tags)
         }
-    }, [ productInfoDefaults, reset ]);
+    }, [ productInfoDefaults, reset, productId ]);
 
     // useEffect(() => {
     //     watch((name) => console.log(name))
