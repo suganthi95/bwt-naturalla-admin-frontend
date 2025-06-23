@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-import {  Eye, Search, X } from "lucide-react";
+import { Eye, Search, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -147,12 +147,22 @@ function OrderTable() {
     {
       accessorKey: "track_url",
       header: () => "Tracking URL",
-      cell: () => (
+      cell: ({ row }) => (
         <div>
-          <Button>Track</Button>
+          <Button
+            disabled={!row.original.track_url}
+            onClick={() => {
+              if (row.original.track_url) {
+                window.location.href = row.original.track_url;
+              }
+            }}
+          >
+            Track
+          </Button>
         </div>
       ),
     },
+
     {
       accessorKey: "actions",
       header: () => "Actions",
@@ -228,7 +238,7 @@ function OrderTable() {
                   <X className="w-6 h-6" />
                 </div>
               </DialogHeader>
-              <OrderDetails Order={row.original}/>
+              <OrderDetails Order={row.original} />
             </DialogContent>
           </Dialog>
         );
@@ -245,7 +255,6 @@ function OrderTable() {
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.data,
   });
-  
 
   //   const headers = [
   //     { label: "Order ID", key: "order_id" },
