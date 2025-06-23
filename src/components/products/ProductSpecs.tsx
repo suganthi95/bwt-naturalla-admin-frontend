@@ -4,7 +4,7 @@ import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { ProductFormValues } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -14,13 +14,14 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Download, LoaderCircle, X } from "lucide-react";
 import { downloadPDF } from "@/lib/utils";
+import TextEditor from "../ui/TextEditor";
 
 
 function ProductSpecs() {
         
     const navigate = useNavigate();
     const productId = sessionStorage.getItem("product-id") as string;   
-    const { register, handleSubmit, watch, setValue, setError, reset, formState: { errors } } = useForm<ProductFormValues>();
+    const { register, handleSubmit, watch, setValue, setError, control, reset, formState: { errors } } = useForm<ProductFormValues>();
 
     const [keywords, setKeywords] = useState<string[]>([]);
 
@@ -94,7 +95,7 @@ function ProductSpecs() {
         if (e.key === "Enter") {
         e.preventDefault();
         const value = e.currentTarget.value.trim();
-        if (value && !keywords.includes(value)) {
+        if (value && !keywords?.includes(value)) {
             setKeywords([...keywords, value]);
             e.currentTarget.value = "";
             setError("benefitKeywords", { message: "" })
@@ -125,17 +126,24 @@ function ProductSpecs() {
         >
             <div>
                 <Label>Short Description</Label>
-                <div>
-                   
+
+                <div className="mt-1">
+                    <Controller
+                        rules={{
+                            required: {
+                                value: true,
+                                message: "Short description is required"
+                            }
+                        }}
+                        name="shortDescription"
+                        control={control}
+                        render={({ field }) => (
+                            <TextEditor content={field.value} handleChange={(value: any) => field.onChange(value)}/>
+                        )}
+                    />
                 </div>
-                {/* <Controller
-                    control={control}
-                    name="shortDescription"
-                    render={({ field }) => (
-                        <Tiptap content={field.value} />
-                    )}
-                /> */}
-                <Textarea 
+                
+                {/* <Textarea 
                     rows={5} 
                     {...register("shortDescription", {
                         required: {
@@ -143,14 +151,30 @@ function ProductSpecs() {
                             message: "Short description is required"
                         }
                     })} 
-                />
+                /> */}
 
                 {errors?.shortDescription && <p className="text-sm text-red-500 mt-1">{errors?.shortDescription.message}</p>}
             </div>
 
             <div>
                 <Label>Long Description</Label>
-                <Textarea 
+
+                <div className="mt-1">
+                    <Controller
+                        rules={{
+                            required: {
+                                value: true,
+                                message: "Long description is required"
+                            }
+                        }}
+                        name="longDescription"
+                        control={control}
+                        render={({ field }) => (
+                            <TextEditor content={field.value} handleChange={(value: any) => field.onChange(value)}/>
+                        )}
+                    />
+                </div>
+                {/* <Textarea 
                     rows={5} 
                     {...register("longDescription", {
                         required: {
@@ -159,13 +183,29 @@ function ProductSpecs() {
                         }
                     })} 
                     
-                />
+                /> */}
                 {errors?.longDescription && <p className="text-sm text-red-500 mt-1">{errors?.longDescription.message}</p>}
             </div>
 
             <div>
                 <Label>Benefits</Label>
-                <Textarea 
+
+                <div className="mt-1">
+                    <Controller
+                        rules={{
+                            required: {
+                                value: true,
+                                message: "Benefits is required"
+                            }
+                        }}
+                        name="benefits"
+                        control={control}
+                        render={({ field }) => (
+                            <TextEditor content={field.value} handleChange={(value: any) => field.onChange(value)}/>
+                        )}
+                    />
+                </div>
+                {/* <Textarea 
                     rows={5} 
                     {...register("benefits", {
                         required: {
@@ -173,13 +213,30 @@ function ProductSpecs() {
                             message: "Benefits is required"
                         }
                     })} 
-                />
+                /> */}
                 {errors?.benefits && <p className="text-sm text-red-500 mt-1">{errors?.benefits.message}</p>}
             </div>
 
             <div>
                 <Label>How to Use</Label>
-                <Textarea 
+
+                <div className="mt-1">
+                    <Controller
+                        rules={{
+                            required: {
+                                value: true,
+                                message: "How to use description is required"
+                            }
+                        }}
+                        name="howToUse"
+                        control={control}
+                        render={({ field }) => (
+                            <TextEditor content={field.value} handleChange={(value: any) => field.onChange(value)}/>
+                        )}
+                    />
+                </div>
+
+                {/* <Textarea 
                     rows={5} 
                     {...register("howToUse", {
                         required: {
@@ -187,7 +244,7 @@ function ProductSpecs() {
                             message: "How to use description is required"
                         }
                     })} 
-                />
+                /> */}
                 {errors?.howToUse && <p className="text-sm text-red-500 mt-1">{errors?.howToUse.message}</p>}
             </div>
 

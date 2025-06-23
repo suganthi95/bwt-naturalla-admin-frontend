@@ -1,22 +1,25 @@
-import { Bell, MessageSquare, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
   return (
     <div>
-      <div className="px-3 py-3 border flex items-center flex-row justify-end w-full">
+      <div className="px-3 py-3 border flex items-center flex-row justify-between w-full">
+        <div>
+          <h1 className="text-xl font-semibold">Naturalla Store Admin Portal</h1>
+        </div>
         <div className="flex flex-row items-center gap-5">
-          <Button size="icon" variant="secondary">
+          {/* <Button size="icon" variant="secondary">
             <Bell />
           </Button>
           <Button size="icon" variant="secondary">
             <MessageSquare />
-          </Button>
+          </Button> */}
           <Button
             size="icon"
             onClick={() => navigate("/settings")}
@@ -25,7 +28,7 @@ function Navbar() {
             <Settings />
           </Button>
 
-          <div className="flex flex-row items-center gap-5">
+          <Link to="/my-profile" className="flex flex-row items-center gap-5">
             <Avatar className="h-10 w-10">
               <AvatarImage src="" />
               <AvatarFallback className="bg-orange-400 text-white">
@@ -39,7 +42,7 @@ function Navbar() {
               </h1>
               <p className="text-xs text-slate-400 capitalize">{auth?.role}</p>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* <div className="block lg:hidden">

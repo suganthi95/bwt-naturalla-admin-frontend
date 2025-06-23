@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Copy, Download, Edit, Eye, Trash2 } from "lucide-react";
+import { ChevronDown, Download, Edit, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
@@ -152,12 +152,12 @@ function ProductsTable() {
 
                 <div className="flex flex-row items-center gap-2">
 
-                    <Button
+                    {/* <Button
                         size="icon"
                         className="rounded-full text-slate-800 bg-slate-800/10 hover:bg-slate-800/20"
                     >
                         <Eye className="h-5 w-5" />
-                    </Button>
+                    </Button> */}
 
                     <Button
                         onClick={() => {
@@ -170,12 +170,12 @@ function ProductsTable() {
                         <Edit className="h-5 w-5" />
                     </Button>
 
-                    <Button
+                    {/* <Button
                         size="icon"
                         className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
                     >
                         <Copy className="h-5 w-5" />
-                    </Button>
+                    </Button> */}
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button
