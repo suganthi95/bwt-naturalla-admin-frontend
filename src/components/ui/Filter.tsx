@@ -17,7 +17,9 @@ export function Filter({ column, title }: Props) {
   const facets = column?.getFacetedUniqueValues()
   const selectedValues = new Set(column?.getFilterValue())
 
-  const options = [...facets.keys()].map(item => ({ value: item, label: item }))
+  const options = [...facets.keys()].filter(item => item !== null).map(item => ({ value: item, label: item }));
+
+  console.log(options)
 
 
   return (

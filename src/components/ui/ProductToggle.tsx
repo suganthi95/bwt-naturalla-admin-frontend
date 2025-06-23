@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Switch } from "./switch"
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProductToggle } from "@/lib/apis";
 
 interface Props {
@@ -13,10 +13,14 @@ interface Props {
 function ProductToggle({ state, value, productId }: Props) {
 
     const [ toggle, setToggle ] = useState<boolean>(state);
+    const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
         mutationKey: [ "updateProductToggle" ],
-        mutationFn: updateProductToggle
+        mutationFn: updateProductToggle,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [ "getAllProducts" ] })
+        }
     })
 
     const onToggle = () => {

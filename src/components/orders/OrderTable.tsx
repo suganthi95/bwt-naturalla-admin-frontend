@@ -38,13 +38,7 @@ import {
 } from "../ui/dialog";
 import OrderDetails from "./OrderDetails";
 import { Badge } from "../ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Filter } from "../ui/Filter";
 
 function OrderTable() {
   const columns: ColumnDef<any>[] = [
@@ -111,6 +105,13 @@ function OrderTable() {
           failed: "bg-red-100 text-red-700",
           refunded: "bg-blue-100 text-blue-700",
         };
+
+        if(status === null){
+          return(
+            <div className="text-center">-</div>
+          )
+        }
+
         return (
           <span
             className={`capitalize px-2 py-1 text-xs font-medium rounded-full ${
@@ -331,7 +332,7 @@ function OrderTable() {
                 <p className="text-lead text-sm">21 orders found</p>
               </div>
 
-              <div className="w-[180px]">
+              {/* <div className="w-[180px]">
                 <Select
                   onValueChange={(value) =>
                     table
@@ -361,9 +362,9 @@ function OrderTable() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
 
-              <div className="w-[180px]">
+              {/* <div className="w-[180px]">
                 <Select
                   onValueChange={(value) =>
                     table
@@ -393,12 +394,26 @@ function OrderTable() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
+
+              {table.getColumn("order_status") && (
+                <Filter
+                  column={table.getColumn("order_status")}
+                  title="Filter by Order Status"
+                />
+              )}
+
+              {table.getColumn("payment_status") && (
+                <Filter
+                  column={table.getColumn("payment_status")}
+                  title="Filter by Payment Status"
+                />
+              )}
             </div>
             <div className="relative w-full lg:max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search by CustomerName, OrderCode    .... "
+                placeholder="Search by CustomerName, OrderCode.... "
                 value={globalFilter}
                 onChange={(event) => setGlobalFilter(event.target.value)}
                 className="pl-10 pr-4 py-2"
