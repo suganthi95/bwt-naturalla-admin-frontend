@@ -95,7 +95,7 @@ function ProductSpecs() {
         if (e.key === "Enter") {
         e.preventDefault();
         const value = e.currentTarget.value.trim();
-        if (value && !keywords.includes(value)) {
+        if (value && !keywords?.includes(value)) {
             setKeywords([...keywords, value]);
             e.currentTarget.value = "";
             setError("benefitKeywords", { message: "" })
