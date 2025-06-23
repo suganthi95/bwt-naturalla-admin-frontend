@@ -164,7 +164,7 @@ function OrderTable() {
           refunded: "bg-blue-100 text-blue-700",
         };
         const [Isopen, setIsopen] = useState(false);
-        const { payment_status, order_status, order_id } = row.original;
+        const { payment_status, order_status, order_code } = row.original;
         return (
           // <DropdownMenu>
           //     <DropdownMenuTrigger asChild>
@@ -195,7 +195,7 @@ function OrderTable() {
             <DialogContent className="[&>button]:hidden  overflow-y-auto h-[40rem] !p-0 !max-w-6xl">
               <DialogHeader className="border-b-2 p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
                 <div className="space-y-3">
-                  <DialogTitle className="">Order {order_id}</DialogTitle>
+                  <DialogTitle className="">Order {order_code}</DialogTitle>
                   <div className="space-x-3">
                     {" "}
                     <Badge
