@@ -56,6 +56,7 @@ export default function AddUserForm({ onClose }: Props) {
         email: data.email,
         phone_no: Number(data.phone),
         role: data.role,
+        user_password:data.password
       });
     },
     onSuccess(data) {

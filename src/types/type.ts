@@ -4,7 +4,7 @@ export interface CreateUserPayload {
   email: string;
   role: string;
   phone_no: number;
-  new_password ? :string
+  user_password  :string
 }
 
 export type User = {

@@ -149,7 +149,7 @@ export default function ShipmentsDetails() {
           </li>
 
           <li className="col-span-1">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-end items-center">
               <Button
               disabled={!shipment.manifest}
               onClick={()=>{
@@ -209,20 +209,20 @@ export default function ShipmentsDetails() {
                 <h2 className="text-[#0A0A0A] text-sm font-semibold">
                   Documents
                 </h2>
-                <Button size={'icon'} onClick={()=>{
+                <p onClick={()=>{
                   if(shipment.shipping_label){
                     window.location.href = shipment.shipping_label
                   }
-                }} className="text-[#007AFF] font-medium text-sm flex items-center gap-x-1">
+                }} className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1">
                   <Icons.PdfFile /> Shipping Label
-                </Button>
-                <Button  size={'icon'} onClick={()=>{
+                </p>
+                <p onClick={()=>{
                   if(shipment.manifest){
                     window.location.href = shipment.manifest
                   }
-                }} className="text-[#007AFF] font-medium text-sm flex items-center gap-x-1">
+                }} className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1">
                   <Icons.BlueFile /> Manifest
-                </Button>
+                </p>
               </div>
             </div>
           </li>
