@@ -50,9 +50,9 @@ export default function OrderDetails({ Order }: Props) {
                   <span className="text-base font-semibold text-primary-black">
                     Rs.{product.order_amount}
                   </span>
-                  <span className="text-sm text-gray-400 line-through">
+                  {/* <span className="text-sm text-gray-400 line-through">
                     Rs.{product.oldPrice}
-                  </span>
+                  </span> */}
                 </div>
               </div>
             ))}

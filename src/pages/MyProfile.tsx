@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ASSETS } from "@/assets/assets";
+// import { useQuery } from "@tanstack/react-query";
+// import { getProfile } from "@/lib/apis";
+// import { useAppContext } from "@/contexts/AuthContext";
 
 
 const formSchema = z
@@ -33,42 +36,26 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function MyProfile() {
-  const [showPassword, setShowPassword] = useState(false);
-    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const navigate = useNavigate()
-  // const queryClinet = useQueryClient()
-  // const { mutate, isPending } = useMutation({
-  //   mutationKey: ["createuser"],
-  //   mutationFn: (data: FormValues) => {
-  //     return createUser({
-  //       first_name: data.firstName,
-  //       last_name: data.lastName,
-  //       email: data.email,
-  //       phone_no: Number(data.phone),
-  //       role: data.role,
-  //     });
-  //   },
-  //   onSuccess(data) {
-  //     toast.success(data?.data?.message);
-  //     queryClinet.invalidateQueries({queryKey:['getusers']})
 
-  //   },
-  //   onError: (error) => {
-  //     if (axios.isAxiosError(error)) {
-  //       toast.error(error?.response?.data?.message);
-  //     }
-  //   },
-  // });
-  const {
-    register,
-    handleSubmit,
-    
-    formState: { errors },
-  } = useForm<FormValues>({
+  // const { auth } = useAppContext();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const navigate = useNavigate();
+
+  // const { isLoading, isError, data } = useQuery({
+  //   queryKey: ["getProfile"],
+  //   queryFn: () => getProfile(),
+  //   retry: 3,
+  //   refetchOnWindowFocus: false,
+  //   select: (data) => data?.data
+  // })
+
+  
+  const { register, handleSubmit, formState: { errors }} = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-    },
+    defaultValues: {},
   });
 
   const onSubmit = (data: FormValues) => {
@@ -77,13 +64,13 @@ export default function MyProfile() {
   };
 
   return (
-        <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-auto  md:pb-20 bg-slate-100">
- <div className="flex items-center gap-x-2 cursor-pointer" onClick={()=>navigate('/dashboard')}>
-              <ArrowLeft className="text-[#4B5563]" />
-              <div>
-                <h1 className="text-[22px] font-bold">Profile Information</h1>
-              </div>
-            </div>
+    <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-auto  md:pb-20 bg-slate-100">
+      <div className="flex items-center gap-x-2 cursor-pointer" onClick={()=>navigate('/dashboard')}>
+        <ArrowLeft className="text-[#4B5563]" />
+        <div>
+          <h1 className="text-[22px] font-bold">Profile Information</h1>
+        </div>
+      </div>
 
     <form
       onSubmit={handleSubmit(onSubmit)}
