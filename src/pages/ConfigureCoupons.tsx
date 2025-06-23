@@ -1,6 +1,7 @@
 import AddCoupon from "@/components/coupon/AddCoupon";
+import UpdateCoupon from "@/components/coupon/UpdateCoupon";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import {
   Dialog,
   DialogClose,
@@ -26,8 +27,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getConfigureCouponlist } from "@/lib/apis";
-import { useQuery } from "@tanstack/react-query";
+import { deleteConfigureCoupons, getConfigureCouponlist } from "@/lib/apis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -42,22 +43,23 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import axios from "axios";
 import dayjs from "dayjs";
 import {
-  ArrowUpFromLine,
   BadgePercent,
   Edit,
-  LineChart,
+  Loader2,
   Search,
-  TicketPercent,
   Trash2,
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 
 function ConfigureCoupons() {
   const [IsAddOpen,setIsAddOpen] = useState(false)
+  const queryClient = useQueryClient()
   const {
     data: Coupons,
     isLoading,
@@ -70,9 +72,14 @@ function ConfigureCoupons() {
     retry: 1,
   });
 
+      const { mutate: onDelete, isPending } = useMutation({
+        mutationKey: ["deletecoupon"],
+        mutationFn: (id: number) => deleteConfigureCoupons(id),
+      });
+  
   const columns: ColumnDef<any>[] = [
     {
-      accessorKey: "discount_name",
+      accessorKey: "coupon_name",
       header: () => "Discount Name",
       cell: ({ row }) => (
         <div className="capitalize flex items-start gap-x-2 text-primary font-semibold">
@@ -80,7 +87,7 @@ function ConfigureCoupons() {
             <BadgePercent className="text-green-500" />
           </div>
           <div>
-            {row.getValue("discount_name")}
+            {row.getValue("coupon_name")}
             <div className="text-xs text-gray-500">
               {row.original.coupon_code}
             </div>
@@ -190,6 +197,7 @@ function ConfigureCoupons() {
                     <X className="w-6 h-6" />
                   </div>
                 </DialogHeader>
+                <UpdateCoupon onClose={setIsopen} CouponDetails={row.original}/>
               </DialogContent>
             </Dialog>
             <Dialog open={IsDeleteOpen} onOpenChange={setIsDeleteOpen}>
@@ -211,7 +219,7 @@ function ConfigureCoupons() {
                 <div className="text-sm text-muted-foreground">
                   Are you sure you want to delete{" "}
                   <span className="font-semibold text-black">
-                    {row.original.category_title}
+                    {row.original.coupon_name}
                   </span>
                   ? This action cannot be undone.
                 </div>
@@ -222,29 +230,29 @@ function ConfigureCoupons() {
                   </DialogClose>
                   <Button
                     variant="destructive"
-                    // disabled={isPending}
+                    disabled={isPending}
                     onClick={() => {
-                      // onDelete(row.original.category_id, {
-                      //   onSuccess(data) {
-                      //     setOpen(false);
-                      //     toast.success(data?.data?.message);
-                      //     queryClient.invalidateQueries({
-                      //       queryKey: ["getAllcategories"],
-                      //     });
-                      //   },
-                      //   onError: (error) => {
-                      //     if (axios.isAxiosError(error)) {
-                      //       toast.error(error?.response?.data?.message);
-                      //     }
-                      //   },
-                      // });
+                      onDelete(row.original.coupon_id, {
+                        onSuccess(data) {
+                          setIsDeleteOpen(false);
+                          toast.success(data?.data?.message);
+                          queryClient.invalidateQueries({
+                            queryKey: ["couponlists"],
+                          });
+                        },
+                        onError: (error) => {
+                          if (axios.isAxiosError(error)) {
+                            toast.error(error?.response?.data?.message);
+                          }
+                        },
+                      });
                     }}
                   >
-                    {/* {isPending ? (
+                    {isPending ? (
                       <Loader2 className="animate-spin" />
                     ) : (
                       "Delete"
-                    )} */}
+                    )}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -348,40 +356,31 @@ function ConfigureCoupons() {
               <h1>{Coupons?.dashboard?.active_coupons}</h1>
             </div>
           </CardHeader>
-          <CardContent>
+          {/* <CardContent>
             <div className="flex items-center gap-2">
               <ArrowUpFromLine className="stroke-green-400 h-5 w-5" />
               <p> last month</p>
             </div>
-          </CardContent>
+          </CardContent> */}
         </Card>
         <Card>
           <CardHeader>
             <div className="text-xl flex flex-row items justify-between">
-              <h1>Total Savings</h1>
-              <h1>₹ 15,276</h1>
+              <h1>Discount Amount</h1>
+                            <h1>{Coupons?.dashboard?.discount_amount ? `₹ ${Coupons?.dashboard?.discount_amount}` : '0' }</h1>
+
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <LineChart className="stroke-blue-400 h-5 w-5" />
-              <p>Based on last 30 days</p>
-            </div>
-          </CardContent>
+         
         </Card>
         <Card>
           <CardHeader>
             <div className="text-xl flex flex-row items justify-between">
               <h1>Coupon Usage</h1>
-              <h1>{Coupons?.dashboard?.coupon_usage_count}</h1>
+              <h1> {Coupons?.dashboard?.coupon_usage_count}</h1>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <TicketPercent className="stroke-purple-400 h-5 w-5" />
-              <p>This month</p>
-            </div>
-          </CardContent>
+        
         </Card>
       </div>
 

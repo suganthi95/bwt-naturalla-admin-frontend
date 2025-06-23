@@ -85,7 +85,7 @@ export default function OrderDetails({ Order }: Props) {
 
             <div className="flex justify-between">
               <span>Discount</span>
-              <span className="">-₹{Order.discount_amount}</span>
+              <span className="">  {Order?.discount_amount > 0 && '-'}₹{Order.discount_amount}</span>
             </div>
 
             <div className="flex justify-between items-center">
@@ -196,7 +196,6 @@ export default function OrderDetails({ Order }: Props) {
         </div>
       </div>
 
-      <div></div>
     </>
   );
 }
