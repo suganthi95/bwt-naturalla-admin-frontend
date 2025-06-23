@@ -2,7 +2,7 @@ import { Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const { auth } = useAppContext();
@@ -28,7 +28,7 @@ function Navbar() {
             <Settings />
           </Button>
 
-          <Link to="/my-profile" className="flex flex-row items-center gap-5">
+          <div className="flex flex-row items-center gap-5">
             <Avatar className="h-10 w-10">
               <AvatarImage src="" />
               <AvatarFallback className="bg-orange-400 text-white">
@@ -42,7 +42,7 @@ function Navbar() {
               </h1>
               <p className="text-xs text-slate-400 capitalize">{auth?.role}</p>
             </div>
-          </Link>
+          </div>
         </div>
 
         {/* <div className="block lg:hidden">

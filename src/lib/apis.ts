@@ -447,3 +447,13 @@ export const deleteProduct = async(productId: string) => {
         url:`${BASE_URL}/products/products/${productId}`
     })
 }
+
+export const getProfile = async(userId: string) => {
+    return await axios({
+        method:'post',
+        url:`${BASE_URL}/profile/profile-info`,
+        data: {
+          user_id: userId
+        }
+    })
+}
