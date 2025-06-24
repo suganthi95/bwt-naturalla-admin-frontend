@@ -448,12 +448,30 @@ export const deleteProduct = async(productId: string) => {
     })
 }
 
-export const getProfile = async(userId: string) => {
-    return await axios({
-        method:'post',
-        url:`${BASE_URL}/profile/profile-info`,
-        data: {
-          user_id: userId
-        }
-    })
+export const getProfile = async(token: string) => {
+  return await axios({
+      method:'get',
+      url:`${BASE_URL}/profile/profile-info`,
+      headers: {
+        "Authorization": token
+      },
+  })
+}
+
+export const updateProfile = async({ firstname, lastname, email, phoneNumber, token }: any) => {
+  return await axios({
+      method:'put',
+      url:`${BASE_URL}/profile/update-password`,
+      headers: {
+        "Authorization": token
+      },
+      data: {
+        first_name: firstname,
+        last_name: lastname,
+        email: email,
+        phone_no: phoneNumber,
+        // user_password: ,
+        // new_password: ,
+      }
+  })
 }
