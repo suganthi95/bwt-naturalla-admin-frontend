@@ -131,10 +131,10 @@ function ConfigureCoupons() {
     },
     {
       accessorKey: "usage",
-      header: () => "Usage / Limit",
+      header: () => "Usage",
       cell: ({ row }) => (
         <div>
-          {row.getValue("usage")} / {row.original.limit}
+          {row.getValue("usage")}
         </div>
       ),
     },
