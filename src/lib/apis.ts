@@ -235,16 +235,27 @@ export const getShippingfee = async()=>{
   })
 }
 
-export const updateShippingfee = async(shipping_type_id:number,shipping_fee:number,shipping_fee_type:string)=>{
+export const updateShippingfee = async (
+  shipping_type_id: number,
+  min_amount: number, 
+  shipping_fee: number,
+  shipping_fee_type: string,
+  token: string
+) => {
   return await axios({
-    method:'put',
-    url:`${BASE_URL}/shipment/updateshippingfee/${shipping_type_id}`,
-    data:{
+    method: "put",
+    url: `${BASE_URL}/shipment/updateshippingfee/${shipping_type_id}`,
+    data: {
       shipping_fee,
-      shipping_fee_type
-    }
-  })
-}
+      min_amount,
+      shipping_fee_type,
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 
 
 
@@ -262,6 +273,7 @@ export const addProductInfo = async (data: any) => {
   formdata.append("subcategory_id", data.subCategory.split("::")[1]);
   formdata.append("units", data.unit);
   formdata.append("min_order_quantity", data.minOrderQty);
+  formdata.append("hsn_code",data.hsn_code)
   formdata.append("slug", data.slug);
   formdata.append("product_id", data.productId ? data.productId : null);
 

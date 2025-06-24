@@ -50,7 +50,7 @@ export default function EditUserForm({ onClose, userDetails }: Props) {
           email: data.email,
           phone_no: Number(data.phone),
           role: data.role,
-          new_password: data.password,
+          user_password: data.password,
         },
         userDetails.user_id.toString()
       );

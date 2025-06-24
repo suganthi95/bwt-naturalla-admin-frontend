@@ -105,6 +105,7 @@ export type ProductInfoFormType = {
   minOrderQty: number;
   tags: string[];
   slug: string;
+  hsn_code:string
   galleryImages: any;
   thumbnail: FileList | null;
 };

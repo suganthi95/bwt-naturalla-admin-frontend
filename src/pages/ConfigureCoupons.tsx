@@ -131,10 +131,10 @@ function ConfigureCoupons() {
     },
     {
       accessorKey: "usage",
-      header: () => "Usage / Limit",
+      header: () => "Usage",
       cell: ({ row }) => (
         <div>
-          {row.getValue("usage")} / {row.original.limit}
+          {row.getValue("usage")}
         </div>
       ),
     },
@@ -386,14 +386,14 @@ function ConfigureCoupons() {
 
       <div className="border bg-white p-4">
         {/* table comes here */}
-        <div className="flex items-center justify-between">
+        <div className="flex space-y-4 items-center justify-between">
           <div>
             <h1 className=" font-semibold">Active Promotions</h1>
             <p className="text-sm text-lead ">
               Manage your ongoing promotional campaigns
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex  items-center gap-4">
             <div className="relative w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
@@ -405,11 +405,11 @@ function ConfigureCoupons() {
 
             <Select
               value={
-                (table.getColumn("type")?.getFilterValue() as string) ?? "all"
+                (table.getColumn("discount_type")?.getFilterValue() as string) ?? "all"
               }
               onValueChange={(value) => {
                 table
-                  .getColumn("type")
+                  .getColumn("discount_type")
                   ?.setFilterValue(value === "all" ? undefined : value);
               }}
             >
@@ -418,13 +418,13 @@ function ConfigureCoupons() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="fixed amount">Fixed Amount</SelectItem>
-                <SelectItem value="percentage">Percentage</SelectItem>
+                <SelectItem value="flat">Fixed Amount</SelectItem>
+                <SelectItem value="percent">Percentage</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
-        <div>
+        <div className="mt-5">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

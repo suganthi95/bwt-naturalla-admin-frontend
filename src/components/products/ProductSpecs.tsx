@@ -104,7 +104,7 @@ function ProductSpecs() {
     };
 
     const removeKeyword = (keyword: string) => {
-        setKeywords(keywords.filter((k) => k !== keyword));
+        setKeywords(keywords?.filter((k) => k !== keyword));
     };
 
     useEffect(() => {

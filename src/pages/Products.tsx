@@ -1,6 +1,5 @@
 import ProductsTable from "@/components/products/ProductsTable";
 import { Button } from "@/components/ui/button"
-import { Ellipsis } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 function Products() {
@@ -19,9 +18,9 @@ function Products() {
 
         <div className="flex flex-row items-center gap-5">
           <Button onClick={() => redirect()}>Add Product</Button>
-          <Button size="icon" variant="outline">
+          {/* <Button size="icon" variant="outline">
             <Ellipsis />
-          </Button>
+          </Button> */}
         </div>
       </div>
       <div>

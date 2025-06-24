@@ -3,14 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { ChevronDown, Download, Eye, MoveRight, Trash2 } from "lucide-react";
+import { ChevronDown, Download, Eye, MoveRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { useReactTable, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, getFacetedRowModel, getFacetedUniqueValues, ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
 import { CSVLink } from "react-csv";
 import { Filter } from "../ui/Filter";
 import { Checkbox } from "../ui/checkbox";
-import { Icons } from "@/assets/icons";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
@@ -103,12 +102,12 @@ function ShipmentsTable() {
                     <Button onClick={()=>navigate(`/shipment-details/${row.getValue("shipment_id")}`)} size={"icon"} className="rounded-full text-[#171925] bg-[#1719251A]/10  hover:bg-[#1719251A]/20 ">
                         <Eye className="h-5 w-5" />
                     </Button>
-                    <Button size={"icon"} className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20">
+                    {/* <Button size={"icon"} className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20">
                         <Icons.Print className="h-5 w-5" />
                     </Button>
                     <Button size={"icon"} className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10">
                         <Trash2 className="h-5 w-5" />
-                    </Button>
+                    </Button> */}
                 </div>
             )
         },
