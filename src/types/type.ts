@@ -35,6 +35,12 @@ export type User = {
 };
 
 export type Order = {
+  billing_first_name: string;
+  billing_last_name: string;
+  billing_city: string;
+  billing_pincode: string;
+  billing_state: string;
+  billing_phone_no: string;
   order_id: number;
   user_id: number;
   order_date: string;

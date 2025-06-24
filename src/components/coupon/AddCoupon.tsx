@@ -18,15 +18,40 @@ import { toast } from "sonner";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 
-const couponSchema = z.object({
-  coupon_name: z.string().min(1, "Coupon name is required"),
+const couponSchema = z
+  .object({
+    coupon_name: z.string().min(1, "Coupon name is required"),
+    coupon_code: z.string().min(1, "Coupon code is required"),
+    discount_type: z.enum(["flat", "percent"]),
+    discount: z
+      .number({ invalid_type_error: "Discount is required" })
+      .min(1, "Discount must be greater than 0"),
+    start_at: z.string().min(1, "Start date is required"),
+    end_at: z.string().min(1, "End date is required"),
+  })
+  .refine(
+    (data) => {
+      const now = new Date();
+      const start = new Date(data.start_at);
+      return start >= new Date(now.toDateString()); 
+    },
+    {
+      message: "Start date cannot be in the past",
+      path: ["start_at"],
+    }
+  )
+  .refine(
+    (data) => {
+      const start = new Date(data.start_at);
+      const end = new Date(data.end_at);
+      return end > start;
+    },
+    {
+      message: "End date must be after start date",
+      path: ["end_at"],
+    }
+  );
 
-  coupon_code: z.string().min(1, "Coupon code is required"),
-  discount_type: z.enum(["flat", "percent"]),
-  discount: z.number().min(1, "Discount must be greater than 0"),
-  start_at: z.string().min(1, "Start date is required"),
-  end_at: z.string().min(1, "End date is required"),
-});
 
 type CouponFormData = z.infer<typeof couponSchema>;
 interface Props {
@@ -41,7 +66,6 @@ export default function AddCoupon({ onClose }: Props) {
       queryClient.invalidateQueries({ queryKey: ["couponlists"] });
       onClose(false);
       toast.success("coupon created successfully");
-
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -52,6 +76,7 @@ export default function AddCoupon({ onClose }: Props) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     setValue,
   } = useForm<CouponFormData>({
@@ -63,14 +88,27 @@ export default function AddCoupon({ onClose }: Props) {
 
   const onSubmit = (data: CouponFormData) => {
     mutate({
-        coupon_code:data.coupon_code,
-        coupon_name:data.coupon_name,
-        end_at:data.end_at,
-        start_at:data.start_at,
-        discount:data.discount,
-        discount_type:data.discount_type
-    })
+      coupon_code: data.coupon_code,
+      coupon_name: data.coupon_name,
+      end_at: data.end_at,
+      start_at: data.start_at,
+      discount: data.discount,
+      discount_type: data.discount_type,
+    });
   };
+  const startAt = watch("start_at");
+  const getMinEndDateTime = () => {
+    const now = new Date();
+
+    if (startAt) {
+      const start = new Date(startAt);
+      return new Date(start.getTime() + 60 * 1000).toISOString().slice(0, 16); // +1 minute buffer
+    }
+
+    return now.toISOString().slice(0, 16);
+  };
+
+  const now = new Date().toISOString().slice(0, 16);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className=" space-y-4 p-4">
@@ -138,7 +176,7 @@ export default function AddCoupon({ onClose }: Props) {
           <Label className="block text-sm font-semibold text-[#232323] mb-1">
             Start At
           </Label>
-          <Input type="datetime-local" {...register("start_at")} />
+          <Input min={now} type="datetime-local" {...register("start_at")} />
           {errors.start_at && (
             <p className="text-red-500 text-sm">{errors.start_at.message}</p>
           )}
@@ -147,7 +185,11 @@ export default function AddCoupon({ onClose }: Props) {
           <Label className="block text-sm font-semibold text-[#232323] mb-1">
             End At
           </Label>
-          <Input type="datetime-local" {...register("end_at")} />
+          <Input
+            min={getMinEndDateTime()}
+            type="datetime-local"
+            {...register("end_at")}
+          />
           {errors.end_at && (
             <p className="text-red-500 text-sm">{errors.end_at.message}</p>
           )}
@@ -156,7 +198,7 @@ export default function AddCoupon({ onClose }: Props) {
 
       <div className="flex items-center gap-x-3 justify-end">
         <Button type="submit" className="">
-         {isPending ? <Loader2 className="animate-spin"/> : "Add Coupon"} 
+          {isPending ? <Loader2 className="animate-spin" /> : "Add Coupon"}
         </Button>
       </div>
     </form>

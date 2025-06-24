@@ -235,16 +235,27 @@ export const getShippingfee = async()=>{
   })
 }
 
-export const updateShippingfee = async(shipping_type_id:number,shipping_fee:number,shipping_fee_type:string)=>{
+export const updateShippingfee = async (
+  shipping_type_id: number,
+  min_amount: number, 
+  shipping_fee: number,
+  shipping_fee_type: string,
+  token: string
+) => {
   return await axios({
-    method:'put',
-    url:`${BASE_URL}/shipment/updateshippingfee/${shipping_type_id}`,
-    data:{
+    method: "put",
+    url: `${BASE_URL}/shipment/updateshippingfee/${shipping_type_id}`,
+    data: {
       shipping_fee,
-      shipping_fee_type
-    }
-  })
-}
+      min_amount, // this is now number
+      shipping_fee_type,
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 
 
 

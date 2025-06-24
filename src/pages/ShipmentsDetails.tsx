@@ -209,26 +209,32 @@ export default function ShipmentsDetails() {
                 <h2 className="text-[#0A0A0A] text-sm font-semibold">
                   Documents
                 </h2>
-                <p
-                  onClick={() => {
-                    if (shipment.shipping_label) {
-                      window.location.href = shipment.shipping_label;
-                    }
-                  }}
-                  className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1"
-                >
-                  <Icons.PdfFile /> Shipping Label
-                </p>
-                <p
-                  onClick={() => {
-                    if (shipment.manifest) {
-                      window.location.href = shipment.manifest;
-                    }
-                  }}
-                  className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1"
-                >
-                  <Icons.BlueFile /> Manifest
-                </p>
+             <p
+  onClick={() => {
+    if (shipment.shipping_label) {
+      window.location.href = shipment.shipping_label;
+    }
+  }}
+  className={`font-medium text-sm flex items-center gap-x-1
+    ${shipment.shipping_label ? 'text-[#007AFF] cursor-pointer' : 'text-gray-400 cursor-not-allowed'}
+  `}
+>
+  <Icons.PdfFile /> Shipping Label
+</p>
+
+<p
+  onClick={() => {
+    if (shipment.manifest) {
+      window.location.href = shipment.manifest;
+    }
+  }}
+  className={`font-medium text-sm flex items-center gap-x-1
+    ${shipment.manifest ? 'text-[#007AFF] cursor-pointer' : 'text-gray-400 cursor-not-allowed'}
+  `}
+>
+  <Icons.BlueFile /> Manifest
+</p>
+
               </div>
             </div>
           </li>

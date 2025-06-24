@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useAppContext } from "@/contexts/AuthContext";
 import { getShippingfee, updateShippingfee } from "@/lib/apis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
 export default function Settings() {
+  const {auth} =  useAppContext()
   const { data } = useQuery({
     queryKey: ["getshipping"],
     queryFn: getShippingfee,
@@ -19,6 +21,8 @@ export default function Settings() {
 
   // refs to read user input
   const shippingFeeRef = useRef<HTMLInputElement>(null);
+    const min_amountRef = useRef<HTMLInputElement>(null);
+
   const [shippingType, setShippingType] = useState<string>(
     shipping?.shipping_fee_type || "flat"
   );
@@ -27,31 +31,42 @@ export default function Settings() {
     mutationKey: ["updateshippingfee"],
     mutationFn: ({
       shipping_type_id,
+      min_amount,
       shipping_fee,
       shipping_fee_type,
+      token,
     }: {
       shipping_type_id: number;
+      min_amount:number
       shipping_fee: number;
       shipping_fee_type: string;
+      token:string
     }) =>
-      updateShippingfee(shipping_type_id, shipping_fee, shipping_fee_type),
+      updateShippingfee(shipping_type_id, min_amount, shipping_fee,shipping_fee_type,token),
     onSuccess: () => toast.success("Shipping settings updated successfully"),
     onError: () => toast.error("Failed to update shipping"),
   });
 
   const handleSave = () => {
-    if (!shipping?.shipping_type_id || !shippingFeeRef.current) return;
+    if (!shipping?.shipping_type_id || !shippingFeeRef.current || !min_amountRef.current) return;
 
     const shipping_fee = Number(shippingFeeRef.current.value);
     if (isNaN(shipping_fee)) {
       toast.error("Invalid shipping fee amount");
       return;
     }
+        const min_amount = Number(min_amountRef.current.value);
+ if (isNaN(min_amount)) {
+      toast.error("Invalid min  amount");
+      return;
+    }
 
     mutate({
       shipping_type_id: shipping.shipping_type_id,
+      min_amount:min_amount,
       shipping_fee,
       shipping_fee_type: shippingType,
+      token:auth?.token ?? '',
     });
   };
 
@@ -123,8 +138,8 @@ export default function Settings() {
               </span>
               <input
                 type="number"
+                ref={min_amountRef}
                 defaultValue={shipping?.min_amount ?? ""}
-                readOnly
                 placeholder="0.00"
                 className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-[#1E401D]"
               />

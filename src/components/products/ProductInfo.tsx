@@ -51,7 +51,7 @@ export function ProductInfo() {
         refetchOnWindowFocus: true,
         select: (data):ProductInfoFormType => {
 
-            const { category_id, category_title, gallery_images, min_order_quantity, product_name, slug, subcategory_id, subcategory_name, tags, thumbnail_image, units } = data?.data?.data;
+            const { category_id, hsn_code,category_title, gallery_images, min_order_quantity, product_name, slug, subcategory_id, subcategory_name, tags, thumbnail_image, units } = data?.data?.data;
             return {
                 productName: product_name,
                 category: `${category_title}::${category_id.toString()}`,
@@ -60,6 +60,7 @@ export function ProductInfo() {
                 minOrderQty: min_order_quantity,
                 tags: tags,
                 slug: slug,
+                hsn_code:hsn_code,
                 galleryImages: gallery_images,
                 thumbnail: thumbnail_image[0]
             }
@@ -97,6 +98,7 @@ export function ProductInfo() {
             subCategory: "",
             unit: "",
             minOrderQty: 1,
+            hsn_code:"",
             slug: "",
             galleryImages: [],
             thumbnail: null
@@ -308,6 +310,22 @@ export function ProductInfo() {
                 />
 
                 {errors?.slug && <p className="text-sm text-red-500">{errors?.slug?.message}</p>}
+            </div>
+
+                <div>
+                <Label>HSN Code</Label>
+                <Input 
+                    disabled={isPending} 
+                    placeholder="Enter HSN Code" 
+                    {...register("hsn_code",{
+                        required: {
+                            value: true,
+                            message: "HSN code is required"
+ } })} 
+                    
+                />
+
+                {errors?.hsn_code && <p className="text-sm text-red-500">{errors?.slug?.message}</p>}
             </div>
 
             <div>
