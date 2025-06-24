@@ -280,7 +280,7 @@ export function ProductInfo() {
                 {errors?.tags && tags.length === 0 && <p className="text-sm text-red-500">{errors?.tags?.message}</p>}
 
                 <div className="flex flex-wrap gap-2 mt-2">
-                    {tags.map((tag) => (
+                    {tags?.map((tag) => (
                         <Badge
                             key={tag}
                             variant="secondary"
