@@ -59,8 +59,8 @@ export function ProductInfo() {
                 unit: units,
                 minOrderQty: min_order_quantity,
                 tags: tags,
-                slug: slug,
                 hsn_code:hsn_code,
+                slug: slug,
                 galleryImages: gallery_images,
                 thumbnail: thumbnail_image[0]
             }

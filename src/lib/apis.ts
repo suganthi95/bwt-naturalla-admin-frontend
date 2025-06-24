@@ -247,7 +247,7 @@ export const updateShippingfee = async (
     url: `${BASE_URL}/shipment/updateshippingfee/${shipping_type_id}`,
     data: {
       shipping_fee,
-      min_amount, // this is now number
+      min_amount,
       shipping_fee_type,
     },
     headers: {
@@ -273,6 +273,7 @@ export const addProductInfo = async (data: any) => {
   formdata.append("subcategory_id", data.subCategory.split("::")[1]);
   formdata.append("units", data.unit);
   formdata.append("min_order_quantity", data.minOrderQty);
+  formdata.append("hsn_code",data.hsn_code)
   formdata.append("slug", data.slug);
   formdata.append("product_id", data.productId ? data.productId : null);
 

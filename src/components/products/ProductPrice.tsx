@@ -63,7 +63,6 @@ export function ProductPrice() {
       enabled: Boolean(productId)
   });
   
-  console.log(productPriceDefaults);
 
   const { mutate, isPending } = useMutation({
       mutationKey: [ "product-price" ],
@@ -178,13 +177,13 @@ export function ProductPrice() {
                 type="number" 
                 placeholder="Discount" 
                 {...register("specialDiscountAmount", {
-                  required: {
-                  value: true,
-                  message: "Special discount amount Price is required"
-                }
+                //   required: {
+                //   value: true,
+                //   message: "Special discount amount Price is required"
+                // }
                 })} 
               />
-              {errors?.specialDiscountAmount && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountAmount.message}</p>}
+              {/* {errors?.specialDiscountAmount && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountAmount.message}</p>} */}
             </div> :
 
             <div>
@@ -193,13 +192,13 @@ export function ProductPrice() {
                 type="number" 
                 placeholder="Discount" 
                 {...register("specialDiscountPercentage", {
-                  required: {
-                    value: true,
-                    message: "Strike through percentage is required"
-                  }
+                  // required: {
+                  //   value: true,
+                  //   message: "Strike through percentage is required"
+                  // }
                 })} 
               />
-              {errors?.specialDiscountPercentage && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountPercentage.message}</p>}
+              {/* {errors?.specialDiscountPercentage && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountPercentage.message}</p>} */}
             </div>
 
           }
@@ -214,13 +213,13 @@ export function ProductPrice() {
               type="date" 
               placeholder="YYYY-MM-DD" 
               {...register("discountPeriodStartat", {
-                required: {
-                  value: true,
-                  message: "Start at date is required"
-                }
+                // required: {
+                //   value: true,
+                //   message: "Start at date is required"
+                // }
               })} 
             />
-            {errors?.discountPeriodStartat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodStartat.message}</p>}
+            {/* {errors?.discountPeriodStartat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodStartat.message}</p>} */}
           </div>
 
           <div>
@@ -230,13 +229,13 @@ export function ProductPrice() {
               type="date" 
               placeholder="YYYY-MM-DD" 
               {...register("discountPeriodendat", {
-                required: {
-                  value: true,
-                  message: "End at date is required"
-                }
+                // required: {
+                //   value: true,
+                //   message: "End at date is required"
+                // }
               })} 
             />
-            {errors?.discountPeriodendat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodendat.message}</p>}
+            {/* {errors?.discountPeriodendat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodendat.message}</p>} */}
 
           </div>
 
