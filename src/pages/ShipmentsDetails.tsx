@@ -45,19 +45,6 @@ export default function ShipmentsDetails() {
                   </p>
                 </div>
               </div>
-
-              <Button
-                onClick={() => {
-                  if (shipment.shipping_label) {
-                    window.location.href = shipment.shipping_label
-                  }
-                }}
-                disabled={!shipment.shipping_label}
-                className="border-slate-300 text-primary-black font-medium"
-                variant={"outline"}
-              >
-                Print Label
-              </Button>
             </div>
 
             <div className="border rounded-lg bg-white p-4 h-[350px] mt-4">
@@ -130,7 +117,7 @@ export default function ShipmentsDetails() {
                       View Tracking <Icons.TrackingId />
                     </h3> */}
                   <Button
-                  disabled={!shipment.tracking_link}
+                    disabled={!shipment.tracking_link}
                     onClick={() => window.open(shipment.tracking_link)}
                     variant="ghost"
                     className="text-primary-blue hover:text-primary-blue"
@@ -149,24 +136,37 @@ export default function ShipmentsDetails() {
           </li>
 
           <li className="col-span-1">
-            <div className="flex justify-end items-center">
+            <div className="flex justify-between items-center">
               <Button
-              disabled={!shipment.manifest}
-              onClick={()=>{
-                if(shipment.manifest){
-                  window.location.href = shipment.manifest
-                }
-              }}
+                onClick={() => {
+                  if (shipment.shipping_label) {
+                    window.location.href = shipment.shipping_label;
+                  }
+                }}
+                disabled={!shipment.shipping_label}
+                className="border-slate-300 text-primary-black font-medium"
+                variant={"outline"}
+              >
+                Print Label
+              </Button>
+              <Button
+                disabled={!shipment.manifest}
+                onClick={() => {
+                  if (shipment.manifest) {
+                    window.location.href = shipment.manifest;
+                  }
+                }}
                 className="border-slate-300 px-6 text-primary-black font-medium"
                 variant={"outline"}
               >
                 Download Manifest
               </Button>
+
               {/* <Button className="px-6">Edit Shipment</Button> */}
             </div>
             <div className="border rounded-lg bg-white p-4 mt-5 overflow-y-scroll h-[350px]">
-              {/* <h2 className="text-[#0A0A0A] font-semibold">Package Details</h2>
-              {packages.map((item, index) => (
+              <h2 className="text-[#0A0A0A] font-semibold">Package Details</h2>
+              {data?.package.map((item, index) => (
                 <div
                   key={`packagedetails-${index}`}
                   className="mt-4 space-y-5 border-b pb-4"
@@ -180,47 +180,53 @@ export default function ShipmentsDetails() {
                   <div className="flex justify-between items-center">
                     <p className="text-lead text-sm">Length</p>
                     <p className="text-primary-black font-medium">
-                      {item.length ? item.length : "-"}
+                      {item.length ? item.length : "N/A"}
                     </p>
                   </div>
 
                   <div className="flex justify-between items-center">
                     <p className="text-lead text-sm">Width</p>
                     <p className="text-primary-black font-medium">
-                      {item.breadth ? item.breadth : "-"}
+                      {item.breadth ? item.breadth : "N/A"}
                     </p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-lead text-sm">Height</p>
                     <p className="text-primary-black font-medium">
-                      {item.height ? item.height : "-"}
+                      {item.height ? item.height : "N/A"}
                     </p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-lead text-sm">Weight</p>
                     <p className="text-primary-black font-medium">
-                      {item.weight ? item.weight : "-"}
+                      {item.weight ? item.weight : "N/A"}
                     </p>
                   </div>
                 </div>
-              ))} */}
+              ))}
 
               <div className="mt-4 space-y-2">
                 <h2 className="text-[#0A0A0A] text-sm font-semibold">
                   Documents
                 </h2>
-                <p onClick={()=>{
-                  if(shipment.shipping_label){
-                    window.location.href = shipment.shipping_label
-                  }
-                }} className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1">
+                <p
+                  onClick={() => {
+                    if (shipment.shipping_label) {
+                      window.location.href = shipment.shipping_label;
+                    }
+                  }}
+                  className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1"
+                >
                   <Icons.PdfFile /> Shipping Label
                 </p>
-                <p onClick={()=>{
-                  if(shipment.manifest){
-                    window.location.href = shipment.manifest
-                  }
-                }} className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1">
+                <p
+                  onClick={() => {
+                    if (shipment.manifest) {
+                      window.location.href = shipment.manifest;
+                    }
+                  }}
+                  className="text-[#007AFF] font-medium cursor-pointer text-sm flex items-center gap-x-1"
+                >
                   <Icons.BlueFile /> Manifest
                 </p>
               </div>
@@ -230,6 +236,41 @@ export default function ShipmentsDetails() {
         <div className="border rounded-lg bg-white p-4 ">
           <h2 className="text-[#0A0A0A] font-semibold">Tracking Timeline</h2>
           <ul className="mt-4 space-y-4">
+            {data?.tracking_timeline?.map((item: any, index: number) => (
+              <li key={item.id} className="flex items-center gap-x-4">
+                <div
+                  className={`size-10 grid place-items-center rounded-full
+        ${index === 0 ? "bg-green-500" : "bg-[#E1E6EF]"}`}
+                >
+                  {index === 0 ? (
+                    <Check className="text-xl text-white" />
+                  ) : (
+                    <div className="size-3.5 rounded-full bg-[#007AFF]"></div>
+                  )}
+                </div>
+
+                <div className="bg-light-blue p-4 rounded-xl flex items-center justify-between w-full">
+                  <div>
+                    <h2 className="text-primary-black font-semibold">
+                      {item.activity || "Status"}
+                    </h2>
+                    <p className="text-lead text-sm">{item.location}</p>
+                  </div>
+
+                  <div className="text-primary-black grid gap-y-2 place-items-center">
+                    <div className="bg-[#E4E4E4] w-fit px-2 rounded">
+                      <h2 className="font-semibold">{item.status}</h2>
+                    </div>
+                    <p className="">
+                      {dayjs(item.activity_time).format("DD-MM-YYYY, HH:mm")}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* <ul className="mt-4 space-y-4">
             <li className="flex items-center gap-x-4">
               <div className="size-10 bg-green-500 grid place-items-center rounded-full">
                 <Check className=" text-xl text-white" />
@@ -315,7 +356,7 @@ export default function ShipmentsDetails() {
                 </div>
               </div>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     );
