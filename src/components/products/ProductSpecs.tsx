@@ -326,7 +326,7 @@ function ProductSpecs() {
                     onKeyDown={addKeyword}
                     {...register("benefitKeywords", {
                         validate: () => {
-                            if(keywords.length === 0){
+                            if(keywords?.length === 0){
                                 return "Atleast one benefit keyword is required"
                             }
                         }
