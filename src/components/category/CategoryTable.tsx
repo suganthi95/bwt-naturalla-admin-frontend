@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 
-import { Copy, Edit, Loader2, Plus, Search, Trash2, X } from "lucide-react";
+import { Copy, Edit, Loader2, Search, Trash2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -26,22 +26,31 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 // import { CSVLink } from "react-csv";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import UpdateCategory from "./UpdateCategory";
 import { deleteCategory, getAllCategories } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
+import { Badge } from "../ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 function CategoryTable() {
   const [Isopen, setIsopen] = useState(false);
-  const queryClient   = useQueryClient()
+  const queryClient = useQueryClient();
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
-    const { mutate: onDelete, isPending } = useMutation({
-      mutationKey: ["deleteuser"],
-      mutationFn: (id: string) => deleteCategory(id),
-    });
-
+  const { mutate: onDelete, isPending } = useMutation({
+    mutationKey: ["deleteuser"],
+    mutationFn: (id: string) => deleteCategory(id),
+  });
 
   const {
     data: categories,
@@ -54,7 +63,7 @@ function CategoryTable() {
     select: (data) => data?.data?.categories,
   });
 
-    const columns: ColumnDef<any>[] = useMemo(
+  const columns: ColumnDef<any>[] = useMemo(
     () => [
       {
         id: "index",
@@ -67,36 +76,55 @@ function CategoryTable() {
         accessorKey: "category_title",
         header: () => <div className="text-center">Category</div>,
         cell: ({ row }) => {
-          const { category_title,thumbnail_url } = row.original;
+          const { category_title, thumbnail_url } = row.original;
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex  justify-center items-center gap-2">
               <img
-                src={
-                 thumbnail_url 
-                }
+                src={thumbnail_url}
                 alt={category_title}
                 className="w-14 h-14 rounded object-contain"
               />
-              <span className="capitalize">{row.getValue("category_title")}</span>
+              <span className="capitalize">
+                {row.getValue("category_title")}
+              </span>
             </div>
           );
         },
       },
       {
         accessorKey: "subcategory",
-        header: () => <div className="text-center">Sub_category</div>,
+        header: () => <div className="text-center">Sub-category</div>,
         cell: ({ row }) => {
           const subcategories = row.original.subcategories;
 
           return (
-            <div className="capitalize text-center justify-center flex gap-x-1 items-center">
-              {subcategories?.slice(0, 3)?.map((item: any, index: number) => (
-                <span key={index}>{item.subcategory_name}</span>
+            <div className="flex flex-wrap items-center justify-center gap-1 text-center">
+              {subcategories?.slice(0, 2).map((item: any, index: number) => (
+                <Badge
+                  key={index}
+                  className="text-xs px-4 border hover:bg-primary-black/5 border-primary-black bg-primary-black/5 text-primary-black rounded-full capitalize"
+                >
+                  {item.subcategory_name}
+                </Badge>
               ))}
-              {subcategories.length > 3 && (
-                <span className="text-xs text-muted-foreground">
-                  +{subcategories.length - 3} <Plus />
-                </span>
+
+              {subcategories.length > 2 && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge className="text-xs px-3 py-1 border hover:bg-primary-black/5 border-muted text-muted-foreground bg-muted/10 rounded-full cursor-pointer flex items-center gap-1">
+                        +{subcategories.length - 2}
+                        {/* <Plus className="w-3 h-3" /> */}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-xs max-w-xs">
+                      {subcategories
+                        .slice(2)
+                        .map((sub: any) => sub.subcategory_name)
+                        .join(", ")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
           );
@@ -110,7 +138,7 @@ function CategoryTable() {
           <div className="text-center">{row.getValue("product_count")}</div>
         ),
       },
-        {
+      {
         accessorKey: "tax_percent",
         header: () => <div className="text-center">Tax</div>,
         cell: ({ row }) => (
@@ -122,7 +150,7 @@ function CategoryTable() {
         header: () => <div className="text-center">Actions</div>,
         enableHiding: false,
         cell: ({ row }) => {
-            const [open, setOpen] = useState(false);
+          const [open, setOpen] = useState(false);
           return (
             <div className="flex justify-center items-center gap-4">
               <Button
@@ -130,7 +158,6 @@ function CategoryTable() {
                 onClick={() => {
                   setSelectedCategory(row.original);
                   setIsopen(true);
-                
                 }}
                 className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
               >
@@ -163,7 +190,7 @@ function CategoryTable() {
                   <div className="text-sm text-muted-foreground">
                     Are you sure you want to delete{" "}
                     <span className="font-semibold text-black">
-                      {row.original.category_title} 
+                      {row.original.category_title}
                     </span>
                     ? This action cannot be undone.
                   </div>
