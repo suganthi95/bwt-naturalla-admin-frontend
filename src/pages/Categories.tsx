@@ -14,7 +14,7 @@ export default function Categories() {
         </div>
         <div className="flex flex-row items-center gap-5">
           <Button onClick={()=>navigate('/add-category')} className="px-7">Add Category</Button>
-          <Button size="icon" variant="outline">
+           <Button size="icon" variant="outline">
             <Ellipsis />
           </Button>
         </div>

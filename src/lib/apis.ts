@@ -23,31 +23,30 @@ export const signin = async ({
   });
 };
 
-export const getDashboard = async()=>{
-return await axios({
-  method:'get',
-  url:`${BASE_URL}/dashboard/review/product`
-})
-}
-export const getDashboardOrders = async(param:string)=>{
+export const getDashboard = async () => {
   return await axios({
-    method:'get',
-    url:`${BASE_URL}/dashboard/top/orders/${param}`
-  })
-}
-export const getDashboardCities = async(param:string)=>{
+    method: "get",
+    url: `${BASE_URL}/dashboard/review/product`,
+  });
+};
+export const getDashboardOrders = async (param: string) => {
   return await axios({
-    method:'get',
-    url:`${BASE_URL}/dashboard/top/cities/${param}`
-  })
-}
-export const getDashboardProducts = async(param:string)=>{
+    method: "get",
+    url: `${BASE_URL}/dashboard/top/orders/${param}`,
+  });
+};
+export const getDashboardCities = async (param: string) => {
   return await axios({
-    method:'get',
-    url:`${BASE_URL}/dashboard/top/products/${param}`
-  })
-}
-
+    method: "get",
+    url: `${BASE_URL}/dashboard/top/cities/${param}`,
+  });
+};
+export const getDashboardProducts = async (param: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/dashboard/top/products/${param}`,
+  });
+};
 
 export const getAllCategories = async () => {
   return await axios({
@@ -83,12 +82,12 @@ export const getProductCategories = async () => {
   });
 };
 
-export const getCategories = async() => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/products/categories`
-    })
-}
+export const getCategories = async () => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/products/categories`,
+  });
+};
 
 export const addCategories = async (data: any) => {
   const formdata = new FormData();
@@ -179,27 +178,30 @@ export const getConfigureCouponlist = async () => {
   });
 };
 
-export const addConfigureCoupons = async(payload:CouponInput)=>{
+export const addConfigureCoupons = async (payload: CouponInput) => {
   return await axios({
-    method:'post',
-    url:`${BASE_URL}/coupon/addcoupon`,
-    data:payload
-  })
-}
+    method: "post",
+    url: `${BASE_URL}/coupon/addcoupon`,
+    data: payload,
+  });
+};
 
-export const updateConfigureCoupons = async(payload:CouponInput,coupon_id:number)=>{
+export const updateConfigureCoupons = async (
+  payload: CouponInput,
+  coupon_id: number
+) => {
   return await axios({
-    method:'put',
-    url:`${BASE_URL}/coupon/update/${coupon_id}`,
-    data:payload
-  })
-}
-export const deleteConfigureCoupons = async(id:number)=>{
+    method: "put",
+    url: `${BASE_URL}/coupon/update/${coupon_id}`,
+    data: payload,
+  });
+};
+export const deleteConfigureCoupons = async (id: number) => {
   return await axios({
-    method:'delete',
-    url:`${BASE_URL}/coupon/delete/${id}`
-  })
-}
+    method: "delete",
+    url: `${BASE_URL}/coupon/delete/${id}`,
+  });
+};
 
 export const PaymentProviders = async () => {
   return await axios({
@@ -221,23 +223,22 @@ export const togglePayment = async ({
     method: "put",
     url: `${BASE_URL}/payment/updatepayment/${provider_id}`,
     data: {
-    
       enabled,
       user_id,
     },
   });
 };
 
-export const getShippingfee = async()=>{
+export const getShippingfee = async () => {
   return await axios({
-    method:'get',
-    url: `${BASE_URL}/shipment/getshipping-fee`
-  })
-}
+    method: "get",
+    url: `${BASE_URL}/shipment/getshipping-fee`,
+  });
+};
 
 export const updateShippingfee = async (
   shipping_type_id: number,
-  min_amount: number, 
+  min_amount: number,
   shipping_fee: number,
   shipping_fee_type: string,
   token: string
@@ -256,9 +257,6 @@ export const updateShippingfee = async (
   });
 };
 
-
-
-
 export const getCoupons = async () => {
   return await axios({
     method: "get",
@@ -273,7 +271,7 @@ export const addProductInfo = async (data: any) => {
   formdata.append("subcategory_id", data.subCategory.split("::")[1]);
   formdata.append("units", data.unit);
   formdata.append("min_order_quantity", data.minOrderQty);
-  formdata.append("hsn_code",data.hsn_code)
+  formdata.append("hsn_code", data.hsn_code);
   formdata.append("slug", data.slug);
   formdata.append("product_id", data.productId ? data.productId : null);
 
@@ -342,10 +340,10 @@ export const addProductSpecs = async (data: ProductFormValues) => {
   formdata.append("breadth", data.breadth.toString());
   // formdata.append("pdf", data.specificationPDF[0]);
 
-  if(data.specificationPDF.pdf_id){
-    formdata.append("pdf_id", data.specificationPDF?.pdf_id)
-  }else{
-      formdata.append("pdf", data.specificationPDF[0])
+  if (data.specificationPDF.pdf_id) {
+    formdata.append("pdf_id", data.specificationPDF?.pdf_id);
+  } else {
+    formdata.append("pdf", data.specificationPDF[0]);
   }
 
   data.benefitKeywords.forEach((item: string, index: number) => {
@@ -383,11 +381,11 @@ export const addMetaSEO = async (data: any) => {
     formdata.append(`meta_keywords[${index}]`, item);
   });
 
-  if(typeof data.metaImage === "string"){
+  if (typeof data.metaImage === "string") {
     formdata.append("image_url", data.metaImage);
   }
 
-  if(data.metaImage instanceof FileList){
+  if (data.metaImage instanceof FileList) {
     formdata.append("image", data.metaImage[0]);
   }
 
@@ -399,91 +397,112 @@ export const addMetaSEO = async (data: any) => {
 };
 
 export const updateProductToggle = async (data: any) => {
-
   return await axios({
-      method: 'put',
-      url:`${BASE_URL}/products/update/toggles/${data.productId}`,
-      data: {
-          ...data,
-      }
-  })
-}
+    method: "put",
+    url: `${BASE_URL}/products/update/toggles/${data.productId}`,
+    data: {
+      ...data,
+    },
+  });
+};
 
-export const getProductPrice = async(productId: string) => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/products/price/stock/${productId}`
-    })
-}
-
-export const getProductSpecs = async(productId: string) => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/products/spec/${productId}`
-    })
-}
-
-
-export const getProductCoupons = async(productId: string) => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/products/coupon/${productId}`
-    })
-}
-
-export const getProductSEO = async(productId: string) => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/products/meta/info/${productId}`
-    })
-}
-
-
-export const getShipmentList = async() => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/shipment/getShipmentList`
-    })
-}
-
-export const getShipmentDetails = async(shipmentId: string) => {
-    return await axios({
-        method:'get',
-        url:`${BASE_URL}/shipment/getShipmentDetails/${shipmentId}`
-    })
-}
-
-export const deleteProduct = async(productId: string) => {
-    return await axios({
-        method:'delete',
-        url:`${BASE_URL}/products/products/${productId}`
-    })
-}
-
-export const getProfile = async(token: string) => {
+export const getProductPrice = async (productId: string) => {
   return await axios({
-      method:'get',
-      url:`${BASE_URL}/profile/profile-info`,
-      headers: {
-        "Authorization": token
-      },
-  })
-}
+    method: "get",
+    url: `${BASE_URL}/products/price/stock/${productId}`,
+  });
+};
 
-export const updateProfile = async({ firstname, lastname, email, phoneNumber, token }: any) => {
+export const getProductSpecs = async (productId: string) => {
   return await axios({
-      method:'put',
-      url:`${BASE_URL}/profile/update-password`,
-      headers: {
-        "Authorization": token
-      },
-      data: {
-        first_name: firstname,
-        last_name: lastname,
-        email: email,
-        phone_no: phoneNumber,
-        // user_password: ,
-        // new_password: ,
-      }
-  })
-}
+    method: "get",
+    url: `${BASE_URL}/products/spec/${productId}`,
+  });
+};
+
+export const getProductCoupons = async (productId: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/products/coupon/${productId}`,
+  });
+};
+
+export const getProductSEO = async (productId: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/products/meta/info/${productId}`,
+  });
+};
+
+export const getShipmentList = async () => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/shipment/getShipmentList`,
+  });
+};
+
+export const getShipmentDetails = async (shipmentId: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/shipment/getShipmentDetails/${shipmentId}`,
+  });
+};
+
+export const deleteProduct = async (productId: string) => {
+  return await axios({
+    method: "delete",
+    url: `${BASE_URL}/products/products/${productId}`,
+  });
+};
+
+export const getProfile = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/profile/profile-info`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updateProfile = async ({
+  firstname,
+  lastname,
+  email,
+  phoneNumber,
+  token,
+}: any) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/profile/update-password`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      first_name: firstname,
+      last_name: lastname,
+      email: email,
+      phone_no: phoneNumber,
+      // user_password: ,
+      // new_password: ,
+    },
+  });
+};
+
+export const updatePassword = async (
+  token: string,
+  user_password: string,
+  new_password: string
+) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/profile/updateNewPassword`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      user_password,
+      new_password,
+    },
+  });
+};

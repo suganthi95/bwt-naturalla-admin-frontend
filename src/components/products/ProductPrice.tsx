@@ -108,9 +108,14 @@ export function ProductPrice() {
 
   const onSubmit = (data: ProductPriceFormType) => {
     const productId = sessionStorage.getItem("product-id");
-
+    if (data.strikeThroughPrice < data.unitPrice) {
+      toast.warning("Invalid Price", {
+        description: "Strike Through Price should be greater than Unit Price.",
+      });
+      return ;
+    }
     if (productId === null) {
-      toast.success("Request Failed", {
+      toast.success("Request Success", {
         description: "Add Product Info to create description & specification",
       });
     } else {
@@ -161,8 +166,7 @@ export function ProductPrice() {
                 value: true,
                 message: "Strike through Price is required",
               },
-              validate: (value) =>
-                Number(value) < watch("unitPrice")             })}
+            })}
           />
           {errors?.strikeThroughPrice && (
             <p className="text-sm text-red-500 mt-1">
@@ -244,7 +248,7 @@ export function ProductPrice() {
             disabled={isPending}
             type="date"
             placeholder="YYYY-MM-DD"
-            min={new Date().toISOString().split('T')[0]}
+            min={new Date().toISOString().split("T")[0]}
             {...register("discountPeriodStartat", {
               // required: {
               //   value: true,
@@ -260,12 +264,13 @@ export function ProductPrice() {
           <Input
             disabled={isPending}
             type="date"
-            min={watch('discountPeriodStartat')}
+            min={watch("discountPeriodStartat")}
             placeholder="YYYY-MM-DD"
             {...register("discountPeriodendat", {
-            validate: (value) =>
-            !watch('discountPeriodStartat') || value >= watch('discountPeriodStartat') ||
-            "End date must be same or after start date",
+              validate: (value) =>
+                !watch("discountPeriodStartat") ||
+                value >= watch("discountPeriodStartat") ||
+                "End date must be same or after start date",
             })}
           />
         </div>
@@ -277,7 +282,6 @@ export function ProductPrice() {
             <Label>Minimum Stock Warning</Label>
             <Input
               disabled={isPending}
-              
               type="number"
               {...register("minimumStockWarning", {
                 required: {

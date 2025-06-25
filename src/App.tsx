@@ -1,8 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
-import { useEffect } from "react";
-import useMode from "./hooks/useMode";
+
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
@@ -30,17 +29,17 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function App() {
-  const [mode] = useMode();
+  // const [mode] = useMode();
 
   // darkmode
 
-  useEffect(() => {
-    if (mode === "dark") {
-      document.documentElement.classList.toggle("dark", true);
-    } else {
-      document.documentElement.classList.toggle("dark", false);
-    }
-  }, [mode]);
+  // useEffect(() => {
+  //   if (mode === "dark") {
+  //     document.documentElement.classList.toggle("dark", true);
+  //   } else {
+  //     document.documentElement.classList.toggle("dark", false);
+  //   }
+  // }, [mode]);
 
   return (
     <Routes>
