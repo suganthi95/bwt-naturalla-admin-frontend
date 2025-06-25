@@ -1,15 +1,19 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Icons } from "@/assets/icons";
-import { useState } from "react";
-import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ASSETS } from "@/assets/assets";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAppContext } from "@/contexts/AuthContext";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getProfile, updateProfile } from "@/lib/apis";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 // import { useQuery } from "@tanstack/react-query";
 // import { getProfile } from "@/lib/apis";
 // import { useAppContext } from "@/contexts/AuthContext";
@@ -17,50 +21,80 @@ import { ASSETS } from "@/assets/assets";
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Invalid email"),
+    firstName: z.string({ required_error: "First name is required" }),
+    lastName: z.string({ required_error: "Last name is required" }),
+    email: z.string({ required_error: "Email is required" }).email("Invalid email"),
     phone: z
-      .string()
+      .string({ required_error: "Phone number is required" })
       .regex(/^[6-9]\d{9}$/, "Enter a valid Indian phone number"),
-      currentPassword: z.string().nonempty( "Current Password is required"),
+      // currentPassword: z.string().nonempty( "Current Password is required"),
 
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string(),
+    // password: z.string().min(6, "Password must be at least 6 characters"),
+    // confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Passwords do not match",
-  });
+  // .refine((data) => data.password === data.confirmPassword, {
+  //   path: ["confirmPassword"],
+  //   message: "Passwords do not match",
+  // });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export default function MyProfile() {
 
-  // const { auth } = useAppContext();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const { auth } = useAppContext();
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  // const [showConfirm, setShowConfirm] = useState(false);
 
   const navigate = useNavigate();
 
-  // const { isLoading, isError, data } = useQuery({
-  //   queryKey: ["getProfile"],
-  //   queryFn: () => getProfile(),
-  //   retry: 3,
-  //   refetchOnWindowFocus: false,
-  //   select: (data) => data?.data
-  // })
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["getProfile"],
+    queryFn: () => getProfile(auth?.token as string),
+    retry: 3,
+    refetchOnWindowFocus: false,
+    select: (data) => data.data.data
+  });
 
   
-  const { register, handleSubmit, formState: { errors }} = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const { register, handleSubmit, reset, formState: { errors }} = useForm<FormValues>({
     defaultValues: {},
   });
 
+  const { mutate, isPending } = useMutation({
+    mutationKey: [ "updateProfile" ],
+    mutationFn: updateProfile,
+    onSuccess: () => {
+      toast.success("Request Success", { description: "Profile updated successfully" })
+    },
+    onError: (error: AxiosError<any>) => {
+      console.log(error)
+      toast.error("Request Failed", {
+          description: error?.response?.data?.message
+      })
+    }
+  })
+
+  useEffect(() => {
+    if(data){
+      reset({
+        email: data.email,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        phone: data.phone_no,
+        // password: data.password
+      })
+    }
+  }, [ data, reset ])
+
   const onSubmit = (data: FormValues) => {
-    console.log('data: ', data);
-    // mutate(data);
+    mutate({
+      email: data.email,
+      firstname: data.firstName,
+      lastname: data.lastName,
+      phoneNumber: data.phone,
+      token: auth?.token as string
+    });
   };
 
   return (
@@ -77,19 +111,29 @@ export default function MyProfile() {
       className="bg-white p-4 px-6 max-w-3xl   space-y-6"
     >
       <div className="relative">
-        <img src={ASSETS.USER} alt="user" className=" w-36 rounded-full" />
-        <div className="bg-white p-2 absolute top-24 left-24 rounded-full">
+        <Avatar className="h-36 w-36 shadow-sm">
+          <AvatarImage src="" />
+          <AvatarFallback className="bg-orange-400 text-white text-5xl">
+            {auth?.firstname[0]}
+          </AvatarFallback>
+        </Avatar>
+        {/* <div className="bg-white p-2 absolute top-24 left-24 rounded-full shadow">
          <Icons.Camera className="w-6 h-6"/>
-
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label className="text-primary-black font-semibold">First Name</Label>
           <Input
+            disabled={isLoading || isError || isPending}
             placeholder="John"
-            className={` ${errors.phone ? "border-red-500" : "border-border"}`}
-            {...register("firstName")}
+            className={` ${errors.firstName ? "border-red-500" : "border-border"}`}
+            {...register("firstName", {
+              required: {
+                value: true,
+                message: "Firstname is required"
+              }
+            })}
           />
           {errors.firstName && (
             <p className="text-red-500 text-sm">{errors.firstName.message}</p>
@@ -98,9 +142,15 @@ export default function MyProfile() {
         <div>
           <Label className="text-primary-black font-semibold">Last Name</Label>
           <Input
+            disabled={isLoading || isError || isPending}
             placeholder="Doe"
-            className={` ${errors.phone ? "border-red-500" : "border-border"}`}
-            {...register("lastName")}
+            className={` ${errors.lastName ? "border-red-500" : "border-border"}`}
+            {...register("lastName", {
+              required: {
+                value: true,
+                message: "Lastname is required"
+              }
+            })}
           />
           {errors.lastName && (
             <p className="text-red-500 text-sm">{errors.lastName.message}</p>
@@ -109,9 +159,15 @@ export default function MyProfile() {
         <div>
           <Label className="text-primary-black font-semibold">Email</Label>
           <Input
+            disabled={isLoading || isError || isPending}
             placeholder="example@gmail.com"
-            className={` ${errors.phone ? "border-red-500" : "border-border"}`}
-            {...register("email")}
+            className={` ${errors.email ? "border-red-500" : "border-border"}`}
+            {...register("email", {
+              required: {
+                value: true,
+                message: "Email is required"
+              }
+            })}
           />
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -132,10 +188,20 @@ export default function MyProfile() {
             <div className="h-5 w-px bg-border" />
 
             <Input
+              disabled={isLoading || isError || isPending}
               type="tel"
               placeholder="Enter phone number"
               className="border-none p-0 focus:ring-0 bg-transparent  !h-10 focus-visible:ring-0 focus:outline-none "
-              {...register("phone")}
+              {...register("phone", {
+                required: {
+                  value: true,
+                  message: "Phone number is required"
+                },
+                pattern: {
+                  value: /^[6-9]\d{9}$/,
+                  message: "Enter a valid phone number"
+                }
+              })}
             />
           </div>
           {errors.phone && (
@@ -144,31 +210,10 @@ export default function MyProfile() {
         </div>
       </div>
 
-       <div className="relative">
-        <Label className="text-primary-black font-semibold">Current Password</Label>
-        <Input
-          type={showCurrentPassword ? "text" : "password"}
-          placeholder="******"
-          className={`pr-10 ${
-            errors.password ? "border-red-500" : "border-border"
-          }`}
-          {...register("currentPassword")}
-        />
-        <button
-          type="button"
-          onClick={() => setShowCurrentPassword(!showPassword)}
-          className="absolute right-3 top-[35px] text-muted-foreground"
-        >
-          {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
-        {errors.password && (
-          <p className="text-red-500 text-sm mt-1">{errors?.currentPassword?.message}</p>
-        )}
-      </div>
-
-      <div className="relative">
+      {/* <div className="relative">
         <Label className="text-primary-black font-semibold">Password</Label>
         <Input
+          disabled={isLoading || isError}
           type={showPassword ? "text" : "password"}
           placeholder="******"
           className={`pr-10 ${
@@ -186,48 +231,24 @@ export default function MyProfile() {
         {errors.password && (
           <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
         )}
-      </div>
+      </div> */}
 
-      <div className="relative">
-        <Label className="text-primary-black font-semibold">
-          Confirm Password
-        </Label>
-        <Input
-          type={showConfirm ? "text" : "password"}
-          placeholder="******"
-          className={`pr-10 ${
-            errors.confirmPassword ? "border-red-500" : "border-border"
-          }`}
-          {...register("confirmPassword")}
-        />
-        <button
-          type="button"
-          onClick={() => setShowConfirm(!showConfirm)}
-          className="absolute right-3 top-[35px] text-muted-foreground"
-        >
-          {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
-        {errors.confirmPassword && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.confirmPassword.message}
-          </p>
-        )}
-      </div>
 
       <div className="flex justify-end gap-3 pt-4">
         <Button
+          disabled={isLoading || isError || isPending}
           type="button"
           variant="outline"
           onClick={() => {
             
           }}
         >
-          Cancel
+          Back
         </Button>
         <Button type="submit"
-        //  disabled={isPending}
-         >
-          {!true ? <Loader2 className="animate-spin" /> : "Save Changes"}
+          disabled={isLoading || isError || isPending}
+        >
+          {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Save Changes"}
         </Button>
       </div>
     </form>
