@@ -41,7 +41,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
 import { Badge } from "../ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 function CategoryTable() {
   const [Isopen, setIsopen] = useState(false);
@@ -93,28 +98,28 @@ function CategoryTable() {
       },
       {
         accessorKey: "subcategory",
-        header: () => <div className="text-center">Sub-category</div>,
+        header: () => <div className="text-left">Sub-category</div>,
         cell: ({ row }) => {
           const subcategories = row.original.subcategories;
 
           return (
-            <div className="flex flex-wrap items-center justify-center gap-1 text-center">
+            <div className="flex items-center gap-1 flex-wrap">
               {subcategories?.slice(0, 2).map((item: any, index: number) => (
                 <Badge
                   key={index}
-                  className="text-xs px-4 border hover:bg-primary-black/5 border-primary-black bg-primary-black/5 text-primary-black rounded-full capitalize"
+                  variant="secondary"
+                  className="bg-primary-blue text-white hover:bg-primary-blue/80 text-xs"
                 >
                   {item.subcategory_name}
                 </Badge>
               ))}
 
               {subcategories.length > 2 && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Badge className="text-xs px-3 py-1 border hover:bg-primary-black/5 border-muted text-muted-foreground bg-muted/10 rounded-full cursor-pointer flex items-center gap-1">
+                <TooltipProvider >
+                  <Tooltip >
+                    <TooltipTrigger asChild >
+                      <Badge className="text-xs px-2 hover:bg-transparent py-0.5 border border-muted bg-muted/10 text-muted-foreground rounded-full cursor-pointer">
                         +{subcategories.length - 2}
-                        {/* <Plus className="w-3 h-3" /> */}
                       </Badge>
                     </TooltipTrigger>
                     <TooltipContent className="text-xs max-w-xs">
@@ -365,7 +370,7 @@ function CategoryTable() {
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
-                        className="font-semibold text-black text-center"
+                        className="  font-semibold text-black text-center"
                         key={header.id}
                         colSpan={header.colSpan}
                       >
