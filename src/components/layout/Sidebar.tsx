@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import LogoutDialog from "../ui/LogoutDialog";
 import { useAppContext } from "@/contexts/AuthContext";
+import { setAuthToken } from "@/lib/apis";
 
 export default function Sidebar() {
 
@@ -20,6 +21,7 @@ export default function Sidebar() {
 
   const signout = () => {
     setAuth(null);
+    setAuthToken(null)
     localStorage.clear();
   }
 

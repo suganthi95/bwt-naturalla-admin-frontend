@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAppContext } from "@/contexts/AuthContext"
-import { signin } from "@/lib/apis"
+import { setAuthToken, signin } from "@/lib/apis"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import { LoaderCircle } from "lucide-react"
@@ -34,7 +34,7 @@ function SignIn() {
       toast.success("Request Success", {
         description: "Signed Successfully",
       });
-      
+      setAuthToken(token)
       navigate("/", { replace: true })
     },
     onError: (error: AxiosError<any>) => {

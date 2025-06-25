@@ -4,7 +4,24 @@ import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
 //staging
+
 const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
+
+const axiosInstance = axios.create({
+  baseURL:BASE_URL,
+  headers:{
+        "Content-Type": "application/json",
+
+  }
+})
+
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    axiosInstance.defaults.headers.common.Authorization = `${token}`;
+  } else {
+    delete axiosInstance.defaults.headers.common["Authorization"];
+  }
+};
 
 export const signin = async ({
   email,
@@ -346,7 +363,7 @@ export const addProductSpecs = async (data: ProductFormValues) => {
     formdata.append("pdf", data.specificationPDF[0]);
   }
 
-  data.benefitKeywords.forEach((item: string, index: number) => {
+  data.benefitKeywords?.forEach((item: string, index: number) => {
     formdata.append(`benefit_keys[${index}]`, item);
   });
 
