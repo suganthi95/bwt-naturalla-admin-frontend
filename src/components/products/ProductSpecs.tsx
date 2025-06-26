@@ -98,8 +98,7 @@ function ProductSpecs() {
         const value = e.currentTarget.value.trim();
         if (value && !keywords?.includes(value)) {
             setKeywords([...keywords, value]);
-            // setke
-            // e.currentTarget.value = "";
+            e.currentTarget.value = "";
             setError("benefitKeywords", { message: "" })
         }
         }

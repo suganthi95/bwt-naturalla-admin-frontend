@@ -305,7 +305,7 @@ function ShipmentsTable() {
                     <div className="flex-1 text-sm text-muted-foreground">
                     {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
                     {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
-                    Total no.of products: {table.getFilteredRowModel().rows.length}
+                    Total no.of shipments: {table.getFilteredRowModel().rows.length}
                     </div>
                     <div className="space-x-2">
                     <Button
