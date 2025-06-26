@@ -338,7 +338,7 @@ function OrderTable() {
             <div className="flex items-center gap-x-3 ">
               <div>
                 <h2 className="font-semibold ">Order list</h2>
-                <p className="text-lead text-sm">21 orders found</p>
+                {/* <p className="text-lead text-sm">21 orders found</p> */}
               </div>
 
               {/* <div className="w-[180px]">
@@ -488,7 +488,7 @@ function OrderTable() {
           <div className="flex-1 text-sm text-muted-foreground">
             {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
             {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
-            Total no.of products: {table.getFilteredRowModel().rows.length}
+            Total no.of orders: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">
             <Button

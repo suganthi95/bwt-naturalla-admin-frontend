@@ -90,18 +90,21 @@ function ProductSpecs() {
             mutate({...data, benefitKeywords: keywords, productId})
         }
     };
-
+    
     const addKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
+            console.log(keywords);
         e.preventDefault();
         const value = e.currentTarget.value.trim();
         if (value && !keywords?.includes(value)) {
             setKeywords([...keywords, value]);
-            e.currentTarget.value = "";
+            // setke
+            // e.currentTarget.value = "";
             setError("benefitKeywords", { message: "" })
         }
         }
     };
+
 
     const removeKeyword = (keyword: string) => {
         setKeywords(keywords?.filter((k) => k !== keyword));
@@ -114,7 +117,7 @@ function ProductSpecs() {
     useEffect(() => {
         if(productSpecDefaults && productId){
             reset(productSpecDefaults);
-            setKeywords(productSpecDefaults?.benefitKeywords)
+         setKeywords(Array.isArray(productSpecDefaults?.benefitKeywords) ? productSpecDefaults?.benefitKeywords : []);
             setValue("benefitKeywords", []);
         }
     }, [ productSpecDefaults, reset, productId ]);

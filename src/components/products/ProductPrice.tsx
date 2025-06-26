@@ -107,15 +107,16 @@ export function ProductPrice() {
   });
 
   const onSubmit = (data: ProductPriceFormType) => {
+    console.log('hi hello')
+    
     const productId = sessionStorage.getItem("product-id");
     if (data.strikeThroughPrice < data.unitPrice) {
       toast.warning("Invalid Price", {
         description: "Strike Through Price should be greater than Unit Price.",
       });
-      return ;
     }
     if (productId === null) {
-      toast.success("Request Success", {
+      toast.success("Request Failure", {
         description: "Add Product Info to create description & specification",
       });
     } else {
@@ -205,6 +206,8 @@ export function ProductPrice() {
               </Select>
             )}
           />
+          {errors?.specialDiscountType && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountType?.message}</p>} 
+
         </div>
 
         {watch("specialDiscountType") === "flat" ? (
@@ -266,12 +269,14 @@ export function ProductPrice() {
             type="date"
             min={watch("discountPeriodStartat")}
             placeholder="YYYY-MM-DD"
-            {...register("discountPeriodendat", {
-              validate: (value) =>
-                !watch("discountPeriodStartat") ||
-                value >= watch("discountPeriodStartat") ||
-                "End date must be same or after start date",
-            })}
+            {...register("discountPeriodendat", 
+            //   {
+            //   validate: (value) =>
+            //     !watch("discountPeriodStartat") ||
+            //     value >= watch("discountPeriodStartat") ||
+            //     "End date must be same or after start date",
+            // }
+          )}
           />
         </div>
       </div>

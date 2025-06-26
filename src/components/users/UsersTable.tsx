@@ -303,7 +303,6 @@ function UsersTable() {
         <div className="flex items-center gap-x-3 ">
           <div>
             <h2 className="font-semibold ">User list</h2>
-            <p className="text-lead text-sm">21 users found</p>
           </div>
           <div className="relative w-full lg:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -431,7 +430,7 @@ function UsersTable() {
           <div className="flex-1 text-sm text-muted-foreground">
             {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
             {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
-            Total no.of products: {table.getFilteredRowModel().rows.length}
+            Total no.of users: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">
             <Button
