@@ -114,7 +114,7 @@ function ProductSpecs() {
     useEffect(() => {
         if(productSpecDefaults && productId){
             reset(productSpecDefaults);
-            setKeywords(productSpecDefaults.benefitKeywords)
+            setKeywords(productSpecDefaults?.benefitKeywords)
             setValue("benefitKeywords", []);
         }
     }, [ productSpecDefaults, reset, productId ]);
@@ -332,7 +332,7 @@ function ProductSpecs() {
                         }
                     })}
                 />
-                {errors?.benefitKeywords && <p className="text-sm text-red-500 mt-1">{errors?.benefitKeywords.message}</p>}
+                {errors?.benefitKeywords && <p className="text-sm text-red-500 mt-1">{errors?.benefitKeywords?.message}</p>}
                 <div className="flex flex-wrap gap-2 mt-2">
                     {keywords?.map((kw: any) => (
                         <Badge
@@ -378,7 +378,7 @@ function ProductSpecs() {
                             }
                         })} 
                     />
-                    {errors?.weight && <p className="text-sm text-red-500 mt-1">{errors?.weight.message}</p>}
+                    {errors?.weight && <p className="text-sm text-red-500 mt-1">{errors?.weight?.message}</p>}
                 </div>
                 <div>
                     <Label>Height (in CM)</Label>
