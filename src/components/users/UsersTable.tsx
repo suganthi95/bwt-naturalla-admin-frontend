@@ -138,8 +138,11 @@ function UsersTable() {
       header: () => "Actions",
       enableHiding: false,
       cell: ({ row }) => {
+        const role = row.original.role
+        if(role === 'customer') return null;
         const [open, setOpen] = useState(false);
         const [Isopen, setIsopen] = useState(false);
+
         return (
           <div className="flex flex-row items-center gap-5">
             <Dialog open={Isopen} onOpenChange={setIsopen}>

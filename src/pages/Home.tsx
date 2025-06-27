@@ -101,7 +101,7 @@ function Home() {
             </div>
             <div className="flex flex-row items-center justify-between">
               <h1 className="text-sm font-medium text-slate-500">
-            Total Admin Users
+            Total  Users
               </h1>
               <p className="text-lg text-secondary font-bold text-primary-black">{data?.metrics?.total_admin}</p>
             </div>
@@ -119,7 +119,7 @@ function Home() {
             </div>
             <div className="flex flex-row items-center justify-between">
               <h1 className="text-sm font-medium text-slate-500">
-            Total Users
+          Total costomers
               </h1>
               <p className="text-lg text-secondary font-bold text-primary-black">{data?.metrics?.total_customer}</p>
             </div>

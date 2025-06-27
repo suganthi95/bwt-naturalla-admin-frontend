@@ -43,13 +43,13 @@ const columns: ColumnDef<ProductSales>[] = [
   {
     accessorKey: "unit_price",
     header: "Price",
-    cell: ({ getValue }) => `₹${(getValue() as number).toFixed(2)}`,
+    cell: ({ getValue }) => `₹${(getValue() as number)?.toFixed(2)}`,
   },
   { accessorKey: "total_quantity", header: "Quantity" },
   {
     accessorKey: "total_revenue",
     header: "Revenue",
-    cell: ({ getValue }) => `₹${(getValue() as number).toFixed(2)}`,
+    cell: ({ getValue }) => `₹${(getValue() as number)?.toFixed(2)}`,
   },
   {
     accessorKey: "publish",
