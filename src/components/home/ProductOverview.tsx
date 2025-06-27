@@ -1,5 +1,5 @@
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
-import { ChevronLeft, ChevronRight, Ellipsis } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import  { useState } from 'react'
 import { Button } from '../ui/button';
 
@@ -89,7 +89,7 @@ export default function ProductOverview({product}:Props) {
     <div className='bg-white p-4 rounded-xl '>
          <div className='flex items-center justify-between'>
             <h2 className='font-semibold text-primary-black'>Product Overview</h2>
-            <Ellipsis/>
+            {/* <Ellipsis/> */}
         </div>
           <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-gray-700">

@@ -1,5 +1,5 @@
 export const ASSETS = {
-  LOGO: "https://ik.imagekit.io/zshycew5c/intelliresponse/intelli-response-logo.svg?updatedAt=1719985223239",
+  LOGO: "https://res.cloudinary.com/dnnaal9q5/image/upload/v1750919211/image_1_khofob.png",
   LOGO_WITH_NAME:
     "https://ik.imagekit.io/zshycew5c/temporary/Logo%20(10).png?updatedAt=1749724067015",
   PHONEPAY:
