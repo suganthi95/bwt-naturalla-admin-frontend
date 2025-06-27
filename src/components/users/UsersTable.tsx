@@ -53,20 +53,21 @@ import { useAppContext } from "@/contexts/AuthContext";
 
 function UsersTable() {
   const queryClinet = useQueryClient();
-  const {auth} = useAppContext()
+  const { auth } = useAppContext();
   const {
     data: users,
     isLoading,
     isSuccess,
   } = useQuery({
     queryKey: ["getusers"],
-    queryFn:()=> getUsers(auth?.token ?? ''),
+    queryFn: () => getUsers(auth?.token ?? ""),
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.users,
   });
   const { mutate: onDelete, isPending } = useMutation({
     mutationKey: ["deleteuser"],
-    mutationFn: (args:{token:string,id: string}) => deleteUser(args.token,args.id),
+    mutationFn: (args: { token: string; id: string }) =>
+      deleteUser(args.token, args.id),
   });
 
   const columns: ColumnDef<User>[] = [
@@ -133,15 +134,20 @@ function UsersTable() {
         }
       },
     },
-   
 
     {
       accessorKey: "actions",
       header: () => "Actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const role = row.original.role
-        if(role === 'customer') return null;
+        const role = row.original.role;
+        if (role === "customer") {
+          return (
+            <div className="text-sm text-muted-foreground italic">
+              No actions available
+            </div>
+          );
+        }
         const [open, setOpen] = useState(false);
         const [Isopen, setIsopen] = useState(false);
 
@@ -204,20 +210,26 @@ function UsersTable() {
                     variant="destructive"
                     disabled={isPending}
                     onClick={() => {
-                      onDelete({token:auth?.token ?? "", id:row.original.user_id.toString()}, {
-                        onSuccess(data) {
-                          setOpen(false);
-                          toast.success(data?.data?.message);
-                          queryClinet.invalidateQueries({
-                            queryKey: ["getusers"],
-                          });
+                      onDelete(
+                        {
+                          token: auth?.token ?? "",
+                          id: row.original.user_id.toString(),
                         },
-                        onError: (error) => {
-                          if (axios.isAxiosError(error)) {
-                            toast.error(error?.response?.data?.message);
-                          }
-                        },
-                      });
+                        {
+                          onSuccess(data) {
+                            setOpen(false);
+                            toast.success(data?.data?.message);
+                            queryClinet.invalidateQueries({
+                              queryKey: ["getusers"],
+                            });
+                          },
+                          onError: (error) => {
+                            if (axios.isAxiosError(error)) {
+                              toast.error(error?.response?.data?.message);
+                            }
+                          },
+                        }
+                      );
                     }}
                   >
                     {isPending ? (

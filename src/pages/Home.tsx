@@ -121,8 +121,7 @@ function Home() {
             </div>
             <div className="flex flex-row items-center justify-between">
               <h1 className="text-sm font-medium text-slate-500">
-          Total costomers
-              </h1>
+Total Customers              </h1>
               <p className="text-lg text-secondary font-bold text-primary-black">{data?.metrics?.total_customer}</p>
             </div>
           </div>
