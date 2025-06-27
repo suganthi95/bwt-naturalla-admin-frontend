@@ -187,16 +187,6 @@ export default function Sidebar() {
               <Icons.logo />
             </div>
           )}
-          <div
-            onClick={() => setResizeMenu(!resizeMenu)}
-            className="cursor-pointer p-1 rounded hover:bg-secondary-green/20 transition-all"
-          >
-            {resizeMenu ? (
-              <ChevronLeft className="h-5 w-5" />
-            ) : (
-              <ChevronRight className="h-5 w-5" />
-            )}
-          </div>
         </div>
 
         <div className="flex-1 overflow-hidden">
@@ -226,6 +216,19 @@ export default function Sidebar() {
                 ))}
             </TabsList>
           </Tabs>
+        </div>
+        <div className="grid place-items-center">
+
+        <div
+          onClick={() => setResizeMenu(!resizeMenu)}
+          className="w-8 h-8 cursor-pointer grid place-items-center text-white rounded-full bg-secondary-green hover:bg-secondary-green/20 transition-all shadow"
+        >
+          {resizeMenu ? (
+            <ChevronLeft className="h-5 w-5" />
+          ) : (
+            <ChevronRight className="h-5 w-5" />
+          )}
+        </div>
         </div>
 
         <div className="flex justify-center items-center py-4">
