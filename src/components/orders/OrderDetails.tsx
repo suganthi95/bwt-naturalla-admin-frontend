@@ -3,15 +3,17 @@ import { Mail, Phone } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getOrderDetails } from "@/lib/apis";
 import { Order } from "@/types/type";
+import { useAppContext } from "@/contexts/AuthContext";
 
 interface Props {
   Order: Order;
 }
 
 export default function OrderDetails({ Order }: Props) {
+  const {auth} = useAppContext()
   const { data } = useQuery({
     queryKey: ["getorderdetails", String(Order.order_id)],
-    queryFn: () => getOrderDetails(String(Order?.order_id)),
+    queryFn: () => getOrderDetails(auth?.token ?? "" ,String(Order?.order_id)),
     select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,

@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAppContext } from "@/contexts/AuthContext";
 
 const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
@@ -31,11 +32,12 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function AddCategory() {
+  const {auth} = useAppContext()
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationKey: ["addcategory"],
-    mutationFn: (data: FormValues) => addCategories(data),
+    mutationFn: ( data: FormValues) => addCategories(auth?.token??"",data),
     onSuccess: () => {
       toast.success("category added successfully");
       queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });

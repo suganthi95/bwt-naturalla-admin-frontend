@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useAppContext } from "@/contexts/AuthContext";
 import { deleteConfigureCoupons, getConfigureCouponlist } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -59,6 +60,7 @@ import { toast } from "sonner";
 
 function ConfigureCoupons() {
   const [IsAddOpen,setIsAddOpen] = useState(false)
+  const {auth} = useAppContext()
   const queryClient = useQueryClient()
   const {
     data: Coupons,
@@ -66,7 +68,7 @@ function ConfigureCoupons() {
     isFetching,
   } = useQuery({
     queryKey: ["couponlists"],
-    queryFn: getConfigureCouponlist,
+    queryFn:()=>getConfigureCouponlist(auth?.token ?? ""),
     select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,
@@ -74,7 +76,7 @@ function ConfigureCoupons() {
 
       const { mutate: onDelete, isPending } = useMutation({
         mutationKey: ["deletecoupon"],
-        mutationFn: (id: number) => deleteConfigureCoupons(id),
+        mutationFn: (args:{token:string,id: number}) => deleteConfigureCoupons(args.token ?? '',args.id),
       });
   
   const columns: ColumnDef<any>[] = [

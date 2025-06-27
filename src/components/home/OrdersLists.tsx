@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAppContext } from "@/contexts/AuthContext";
 import {
   getDashboardCities,
   getDashboardOrders,
@@ -14,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 export default function OrdersLists() {
+  const {auth} = useAppContext()
   const [Isorder, setIsOrder] = useState("7 days");
   const [Isproduct, setIsProduct] = useState("7 days");
   const [Iscities, setIsCities] = useState("7 days");
@@ -24,7 +26,7 @@ export default function OrdersLists() {
     isFetching: isOrdersFetching,
   } = useQuery({
     queryKey: ["getdahsboardorders", Isorder],
-    queryFn: () => getDashboardOrders(Isorder),
+    queryFn: () => getDashboardOrders(auth?.token ?? "" ,Isorder),
     staleTime: 1000 * 60 * 5,
     select: (data) => data?.data?.data,
     retry: 1,
@@ -36,7 +38,7 @@ export default function OrdersLists() {
     isFetching: isProductsFetching,
   } = useQuery({
     queryKey: ["getdahsboardproducts", Isproduct],
-    queryFn: () => getDashboardProducts(Isproduct),
+    queryFn: () => getDashboardProducts(auth?.token ?? "",Isproduct),
     staleTime: 1000 * 60 * 5,
     select: (data) => data?.data?.data,
     retry: 1,
@@ -48,7 +50,7 @@ export default function OrdersLists() {
     isFetching: isCitiesFetching,
   } = useQuery({
     queryKey: ["getdahsboardcities", Iscities],
-    queryFn: () => getDashboardCities(Iscities),
+    queryFn: () => getDashboardCities(auth?.token ?? "",Iscities),
     staleTime: 1000 * 60 * 5,
     select: (data) => data?.data?.data,
     retry: 1,

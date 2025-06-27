@@ -18,6 +18,7 @@ import { ProductPriceFormType } from "@/types";
 import { addProductPrice, getProductPrice } from "@/lib/apis";
 import { useEffect } from "react";
 import dayjs from "dayjs";
+import { useAppContext } from "@/contexts/AuthContext";
 
 // const formSchema = z.object({
 //   unitPrice: z.coerce.number().min(0),
@@ -34,6 +35,7 @@ import dayjs from "dayjs";
 // })
 
 export function ProductPrice() {
+  const { auth } = useAppContext();
   const navigate = useNavigate();
   const productId = sessionStorage.getItem("product-id") as string;
   const {
@@ -52,7 +54,7 @@ export function ProductPrice() {
 
   const { data: productPriceDefaults } = useQuery({
     queryKey: ["getProductPrice"],
-    queryFn: () => getProductPrice(productId),
+    queryFn: () => getProductPrice(auth?.token ?? "", productId),
     retry: 3,
     refetchOnWindowFocus: false,
     select: (data): ProductPriceFormType => {
@@ -107,8 +109,8 @@ export function ProductPrice() {
   });
 
   const onSubmit = (data: ProductPriceFormType) => {
-    console.log('hi hello')
-    
+    console.log("hi hello");
+
     const productId = sessionStorage.getItem("product-id");
     if (data.strikeThroughPrice < data.unitPrice) {
       toast.warning("Invalid Price", {
@@ -120,7 +122,7 @@ export function ProductPrice() {
         description: "Add Product Info to create description & specification",
       });
     } else {
-      mutate({ ...data, productId });
+      mutate({ token: auth?.token ?? "", data: { ...data, productId } });
     }
   };
 
@@ -206,8 +208,11 @@ export function ProductPrice() {
               </Select>
             )}
           />
-          {errors?.specialDiscountType && <p className="text-sm text-red-500 mt-1">{errors?.specialDiscountType?.message}</p>} 
-
+          {errors?.specialDiscountType && (
+            <p className="text-sm text-red-500 mt-1">
+              {errors?.specialDiscountType?.message}
+            </p>
+          )}
         </div>
 
         {watch("specialDiscountType") === "flat" ? (
@@ -269,14 +274,15 @@ export function ProductPrice() {
             type="date"
             min={watch("discountPeriodStartat")}
             placeholder="YYYY-MM-DD"
-            {...register("discountPeriodendat", 
-            //   {
-            //   validate: (value) =>
-            //     !watch("discountPeriodStartat") ||
-            //     value >= watch("discountPeriodStartat") ||
-            //     "End date must be same or after start date",
-            // }
-          )}
+            {...register(
+              "discountPeriodendat"
+              //   {
+              //   validate: (value) =>
+              //     !watch("discountPeriodStartat") ||
+              //     value >= watch("discountPeriodStartat") ||
+              //     "End date must be same or after start date",
+              // }
+            )}
           />
         </div>
       </div>
@@ -286,7 +292,7 @@ export function ProductPrice() {
           <div>
             <Label>Minimum Stock Warning</Label>
             <Input
-            min={1}
+              min={1}
               disabled={isPending}
               type="number"
               {...register("minimumStockWarning", {

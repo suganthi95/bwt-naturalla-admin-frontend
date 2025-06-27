@@ -4,13 +4,15 @@ import OrdersLists from "@/components/home/OrdersLists";
 import ProductOverview from "@/components/home/ProductOverview";
 import TopComments from "@/components/home/TopComments";
 import { Card } from "@/components/ui/card";
+import { useAppContext } from "@/contexts/AuthContext";
 import { getDashboard } from "@/lib/apis";
 import { useQuery } from "@tanstack/react-query";
 
 function Home() {
+  const {auth} = useAppContext()
   const {data} = useQuery({
     queryKey:['getdashboard'],
-    queryFn:getDashboard,
+    queryFn:()=>getDashboard(auth?.token ?? ''),
     select:(data)=>data?.data,
     staleTime:1000*60*5,
     retry:2,

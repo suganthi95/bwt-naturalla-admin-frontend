@@ -39,8 +39,10 @@ import {
 import OrderDetails from "./OrderDetails";
 import { Badge } from "../ui/badge";
 import { Filter } from "../ui/Filter";
+import { useAppContext } from "@/contexts/AuthContext";
 
 function OrderTable() {
+  const {auth} = useAppContext()
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "order_id",
@@ -252,7 +254,7 @@ function OrderTable() {
     isSuccess,
   } = useQuery({
     queryKey: ["getAllorders"],
-    queryFn: getAllOrders,
+    queryFn:()=>getAllOrders(auth?.token ?? ""),
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.data,
   });

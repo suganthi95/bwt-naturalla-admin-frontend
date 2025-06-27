@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import { AxiosError } from "axios"
 import { useLocation, useNavigate } from "react-router-dom"
 import { ProductInfoFormType } from "@/types"
+import { useAppContext } from "@/contexts/AuthContext"
 
 // const formSchema = z.object({
 //   productName: z.string({ required_error: "Product Name is required" }),
@@ -28,7 +29,7 @@ import { ProductInfoFormType } from "@/types"
 
 
 export function ProductInfo() {
-
+       const {auth} = useAppContext()
     const productId = sessionStorage.getItem("product-id") as string;
     const navigate = useNavigate();
     const location = useLocation();
@@ -38,7 +39,7 @@ export function ProductInfo() {
 
     const { data: categories, isLoading, isError, isSuccess } = useQuery({
         queryKey: [ "getCategories" ],
-        queryFn: () => getCategories(),
+        queryFn: () => getCategories(auth?.token ?? ""),
         retry: 3,
         refetchOnWindowFocus: false,
         select: (data) => data?.data?.data
@@ -46,7 +47,7 @@ export function ProductInfo() {
 
     const { data: productInfoDefaults } = useQuery({
         queryKey: [ "getProductInfo" ],
-        queryFn: () => getProductInfo(productId),
+        queryFn: () => getProductInfo(auth?.token ?? "" ,productId),
         retry: 3,
         refetchOnWindowFocus: true,
         select: (data):ProductInfoFormType => {
@@ -126,10 +127,10 @@ export function ProductInfo() {
         data.tags = tags;
         const productId = sessionStorage.getItem("product-id");
         if(productId === null){
-            mutate(data);
+            mutate({token:auth?.token ?? "" ,data});
         }else{
 
-            mutate({...data, productId})
+            mutate({token:auth?.token ?? "",data:{...data, productId}})
         }
     }
 

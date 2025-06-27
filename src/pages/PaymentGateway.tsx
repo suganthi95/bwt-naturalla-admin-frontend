@@ -5,6 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAppContext } from "@/contexts/AuthContext";
 import { PaymentProviders, togglePayment } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -17,10 +18,11 @@ import {
 } from "lucide-react";
 
 function PaymentGateway() {
+  const {auth} = useAppContext()
   const queryClient = useQueryClient();
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["payments"],
-    queryFn: () => PaymentProviders(),
+    queryFn: () => PaymentProviders(auth?.token ?? ""),
     select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,
@@ -29,14 +31,16 @@ function PaymentGateway() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["togglepayment"],
     mutationFn: ({
+      token,
       provider_id,
       enabled,
       user_id,
     }: {
+      token:string;
       provider_id: string;
       enabled: boolean;
       user_id: number;
-    }) => togglePayment({ provider_id, enabled, user_id }),
+    }) => togglePayment({token, provider_id, enabled, user_id }),
   });
   if (isLoading || isFetching) {
     return (
@@ -166,6 +170,7 @@ function PaymentGateway() {
                             if (payment?.enabled) {
                               mutate(
                                 {
+                                  token:auth?.token ?? "",
                                   enabled: false,
                                   provider_id: payment.id,
                                   user_id: payment.user_id,
@@ -181,6 +186,7 @@ function PaymentGateway() {
                             } else {
                               mutate(
                                 {
+                                  token:auth?.token ?? "",
                                   enabled: true,
                                   provider_id: payment.id,
                                   user_id: payment.user_id,

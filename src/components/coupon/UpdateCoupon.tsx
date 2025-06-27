@@ -17,6 +17,7 @@ import { updateConfigureCoupons } from "@/lib/apis";
 import { toast } from "sonner";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useAppContext } from "@/contexts/AuthContext";
 
 const couponSchema = z.object({
   coupon_name: z.string().min(1, "Coupon name is required"),
@@ -35,16 +36,19 @@ interface Props {
   CouponDetails: Coupon;
 }
 export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
+  const {auth} = useAppContext()
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationKey: ["updatecoupon"],
     mutationFn: ({
+      token,
       payload,
       coupon_id,
     }: {
+      token:string;
       payload: CouponInput;
       coupon_id: number;
-    }) => updateConfigureCoupons(payload, coupon_id),
+    }) => updateConfigureCoupons( token, payload, coupon_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["couponlists"] });
       onClose(false);
@@ -77,6 +81,7 @@ export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
 
   const onSubmit = (data: CouponFormData) => {
     mutate({
+      token:auth?.token ?? "" ,
       payload: {
         coupon_code: data.coupon_code,
         coupon_name: data.coupon_name,

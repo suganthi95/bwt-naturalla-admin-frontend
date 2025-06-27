@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createUser } from "@/lib/apis";
 import { toast } from "sonner";
 import axios from "axios";
+import { useAppContext } from "@/contexts/AuthContext";
 
 interface Props {
   onClose: (val: boolean) => void;
@@ -44,13 +45,14 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function AddUserForm({ onClose }: Props) {
+  const {auth} = useAppContext()
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const queryClinet = useQueryClient()
   const { mutate, isPending } = useMutation({
     mutationKey: ["createuser"],
     mutationFn: (data: FormValues) => {
-      return createUser({
+      return createUser(auth?.token ?? "",{
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,

@@ -49,22 +49,24 @@ import EditUserForm from "./EditUserForm";
 import { toast } from "sonner";
 import axios from "axios";
 import { User } from "@/types/type";
+import { useAppContext } from "@/contexts/AuthContext";
 
 function UsersTable() {
   const queryClinet = useQueryClient();
+  const {auth} = useAppContext()
   const {
     data: users,
     isLoading,
     isSuccess,
   } = useQuery({
     queryKey: ["getusers"],
-    queryFn: getUsers,
+    queryFn:()=> getUsers(auth?.token ?? ''),
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.users,
   });
   const { mutate: onDelete, isPending } = useMutation({
     mutationKey: ["deleteuser"],
-    mutationFn: (id: string) => deleteUser(id),
+    mutationFn: (args:{token:string,id: string}) => deleteUser(args.token,args.id),
   });
 
   const columns: ColumnDef<User>[] = [
@@ -202,7 +204,7 @@ function UsersTable() {
                     variant="destructive"
                     disabled={isPending}
                     onClick={() => {
-                      onDelete(row.original.user_id.toString(), {
+                      onDelete({token:auth?.token ?? "", id:row.original.user_id.toString()}, {
                         onSuccess(data) {
                           setOpen(false);
                           toast.success(data?.data?.message);

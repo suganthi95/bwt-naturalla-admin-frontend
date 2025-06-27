@@ -11,7 +11,7 @@ export default function Settings() {
   const {auth} =  useAppContext()
   const { data } = useQuery({
     queryKey: ["getshipping"],
-    queryFn: getShippingfee,
+    queryFn: ()=>getShippingfee(auth?.token ?? ""),
     select: (data) => data?.data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 2,

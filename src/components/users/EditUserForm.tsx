@@ -20,6 +20,7 @@ import { updateUser } from "@/lib/apis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
+import { useAppContext } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -37,6 +38,7 @@ interface Props {
   userDetails: User;
 }
 export default function EditUserForm({ onClose, userDetails }: Props) {
+  const {auth} = useAppContext()
   const [showPassword, setShowPassword] = useState(false);
   const queryClinet = useQueryClient();
 
@@ -44,6 +46,7 @@ export default function EditUserForm({ onClose, userDetails }: Props) {
     mutationKey: ["updateuser"],
     mutationFn: (data: FormValues) => {
       return updateUser(
+        auth?.token ?? "",
         {
           first_name: data.firstName,
           last_name: data.lastName,

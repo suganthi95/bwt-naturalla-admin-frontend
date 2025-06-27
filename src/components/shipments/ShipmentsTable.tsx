@@ -12,10 +12,11 @@ import { Filter } from "../ui/Filter";
 import { Checkbox } from "../ui/checkbox";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { useAppContext } from "@/contexts/AuthContext";
 
 
 function ShipmentsTable() {
-
+    const {auth} = useAppContext()
     const navigate  = useNavigate()
 
     const columns: ColumnDef<any>[] = [
@@ -115,7 +116,7 @@ function ShipmentsTable() {
 
     const { data: shipments, isLoading, isSuccess } = useQuery({
         queryKey: [ "getShipmentList" ],
-        queryFn: getShipmentList,
+        queryFn:()=>getShipmentList(auth?.token ?? ""),
         refetchOnWindowFocus: false,
         select:(data) => data?.data?.data
     });

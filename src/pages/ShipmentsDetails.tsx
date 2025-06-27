@@ -1,5 +1,6 @@
 import { Icons } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
+import { useAppContext } from "@/contexts/AuthContext";
 import { getShipmentDetails } from "@/lib/apis";
 import { ShipmentDetailsType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -9,11 +10,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function ShipmentsDetails() {
   const navigate = useNavigate();
+  const {auth} = useAppContext()
   const { shipmentId } = useParams();
 
   const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["getShipmentDetails"],
-    queryFn: () => getShipmentDetails(shipmentId as string),
+    queryFn: () => getShipmentDetails(auth?.token ?? "" ,shipmentId as string),
     refetchOnWindowFocus: false,
     select: (data): ShipmentDetailsType => data?.data,
     enabled: Boolean(shipmentId),

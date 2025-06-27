@@ -15,8 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { Download, LoaderCircle, X } from "lucide-react";
 import { downloadPDF } from "@/lib/utils";
 import TextEditor from "../ui/TextEditor";
+import { useAppContext } from "@/contexts/AuthContext";
 
 function ProductSpecs() {
+  const { auth } = useAppContext();
   const navigate = useNavigate();
   const productId = sessionStorage.getItem("product-id") as string;
   const {
@@ -34,7 +36,7 @@ function ProductSpecs() {
 
   const { data: productSpecDefaults } = useQuery({
     queryKey: ["getProductSpecs"],
-    queryFn: () => getProductSpecs(productId),
+    queryFn: () => getProductSpecs(auth?.token ?? "", productId),
     retry: 3,
     refetchOnWindowFocus: false,
     select: (data): ProductFormValues => {
@@ -107,7 +109,14 @@ function ProductSpecs() {
         description: "Add Product Info to create description & specification",
       });
     } else {
-      mutate({ ...data, benefitKeywords: keywords, productId });
+      mutate({
+        token: auth?.token ?? '',
+        data: {
+          ...data,
+          benefitKeywords: keywords,
+          productId,
+        },
+      });
     }
   };
 

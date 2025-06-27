@@ -15,10 +15,11 @@ import ProductToggle from "../ui/ProductToggle";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { useAppContext } from "@/contexts/AuthContext";
 
 
 function ProductsTable() {
-
+    const {auth} =useAppContext() 
     const navigate = useNavigate();
 
     const { mutate } = useMutation({
@@ -197,7 +198,7 @@ function ProductsTable() {
                                     <Button variant="outline">Cancel</Button>
                                 </DialogClose>
                                 <DialogClose asChild>
-                                    <Button onClick={() => mutate(row.getValue("product_id"))} variant="destructive">Delete</Button>
+                                    <Button onClick={() => mutate({token:auth?.token ?? "" , productId:row.getValue("product_id")})} variant="destructive">Delete</Button>
                                 </DialogClose>
                             </DialogFooter>
                         </DialogContent>
@@ -209,7 +210,7 @@ function ProductsTable() {
 
     const { data, isLoading, isSuccess } = useQuery({
         queryKey: [ "getAllProducts" ],
-        queryFn: getAllProducts,
+        queryFn: ()=>getAllProducts(auth?.token ?? ""),
         refetchOnWindowFocus: false
     });
 

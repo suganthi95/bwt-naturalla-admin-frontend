@@ -47,14 +47,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { useAppContext } from "@/contexts/AuthContext";
 
 function CategoryTable() {
+  const {auth} = useAppContext()
   const [Isopen, setIsopen] = useState(false);
   const queryClient = useQueryClient();
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const { mutate: onDelete, isPending } = useMutation({
     mutationKey: ["deleteuser"],
-    mutationFn: (id: string) => deleteCategory(id),
+    mutationFn: (args:{token:string,id: string}) => deleteCategory(args.token,args.id),
   });
 
   const {
@@ -63,7 +65,7 @@ function CategoryTable() {
     isSuccess,
   } = useQuery({
     queryKey: ["getAllcategories"],
-    queryFn: getAllCategories,
+    queryFn:()=>getAllCategories(auth?.token ?? ""),
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.categories,
   });
@@ -208,7 +210,7 @@ function CategoryTable() {
                       variant="destructive"
                       disabled={isPending}
                       onClick={() => {
-                        onDelete(row.original.category_id, {
+                        onDelete({token:auth?.token ?? "",id:row.original.category_id}, {
                           onSuccess(data) {
                             setOpen(false);
                             toast.success(data?.data?.message);

@@ -17,6 +17,7 @@ import { UpdateCategories } from "@/lib/apis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
+import { useAppContext } from "@/contexts/AuthContext";
 
 interface Props {
   onClose: (val: boolean) => void;
@@ -33,6 +34,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function UpdateCategory({ onClose, Data }: Props) {
+  const {auth} = useAppContext()
   const queryClient = useQueryClient();
   const [existingImage, setExistingImage] = useState(Data?.thumbnail_url || "");
   const [subCategoryInput, setSubCategoryInput] = useState("");
@@ -75,7 +77,7 @@ export default function UpdateCategory({ onClose, Data }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["addcategory"],
-    mutationFn: (data: FormValues) => UpdateCategories(data),
+    mutationFn: (args:{token:string,data: FormValues}) => UpdateCategories(args.token,args.data),
     onSuccess: () => {
       toast.success("Category updated successfully");
       queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });
@@ -131,7 +133,7 @@ export default function UpdateCategory({ onClose, Data }: Props) {
       category_id: Data.category_id,
     };
 
-    mutate(finalData);
+    mutate({token:auth?.token ?? "",data:finalData});
   };
 
   return (

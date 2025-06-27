@@ -17,6 +17,7 @@ import { addConfigureCoupons } from "@/lib/apis";
 import { toast } from "sonner";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useAppContext } from "@/contexts/AuthContext";
 
 const couponSchema = z
   .object({
@@ -58,10 +59,11 @@ interface Props {
   onClose: (val: boolean) => void;
 }
 export default function AddCoupon({ onClose }: Props) {
+  const {auth} = useAppContext()
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationKey: ["addcoupon"],
-    mutationFn: (payload: CouponInput) => addConfigureCoupons(payload),
+    mutationFn: (args:{token:string,payload: CouponInput}) => addConfigureCoupons(args.token,args.payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["couponlists"] });
       onClose(false);
@@ -87,14 +89,18 @@ export default function AddCoupon({ onClose }: Props) {
   });
 
   const onSubmit = (data: CouponFormData) => {
-    mutate({
+    mutate(
+    {token:auth?.token ?? "",
+      payload:{
       coupon_code: data.coupon_code,
       coupon_name: data.coupon_name,
       end_at: data.end_at,
       start_at: data.start_at,
       discount: data.discount,
       discount_type: data.discount_type,
-    });
+    }
+  }
+  );
   };
   const startAt = watch("start_at");
   const getMinEndDateTime = () => {
