@@ -1,4 +1,3 @@
-import { Ellipsis } from "lucide-react";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
@@ -67,7 +66,6 @@ export default function Earnings({ Data }: Props) {
     <div className="bg-white p-4 rounded-xl">
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-primary-black">Earnings</h2>
-        <Ellipsis />
       </div>
       <ul className="flex mt-4 space-x-5">
         <li>

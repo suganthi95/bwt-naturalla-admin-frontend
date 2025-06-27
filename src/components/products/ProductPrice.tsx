@@ -286,6 +286,7 @@ export function ProductPrice() {
           <div>
             <Label>Minimum Stock Warning</Label>
             <Input
+            min={1}
               disabled={isPending}
               type="number"
               {...register("minimumStockWarning", {

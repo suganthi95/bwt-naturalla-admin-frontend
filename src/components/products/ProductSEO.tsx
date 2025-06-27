@@ -94,7 +94,7 @@ function ProductSEO() {
         if (e.key === "Enter") {
             e.preventDefault();
             const value = e.currentTarget.value.trim();
-            if (value && !keywords.includes(value)) {
+            if (value && !keywords?.includes(value)) {
                 setKeywords([...keywords, value]);
                 e.currentTarget.value = "";
                 setError("metaKeyword", { message: "" })
@@ -109,7 +109,12 @@ function ProductSEO() {
     useEffect(() => {
         if(productSEODefaults && productId){
             reset(productSEODefaults);
-            setKeywords(productSEODefaults.metaKeyword)
+            // setKeywords(productSEODefaults.metaKeyword)
+              setKeywords(
+        Array.isArray(productSEODefaults?.metaKeyword)
+          ? productSEODefaults?.metaKeyword
+          : []
+      );
             setValue("metaKeyword", []);
         }
     }, [ productSEODefaults, reset, productId ]);
@@ -161,7 +166,7 @@ function ProductSEO() {
                     onKeyDown={addKeyword}
                     {...register("metaKeyword", {
                         validate: () => {
-                            if(keywords.length === 0){
+                            if(keywords?.length === 0){
                                 return "Meta keyword is required"
                             }
                         }

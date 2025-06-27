@@ -131,13 +131,7 @@ function UsersTable() {
         }
       },
     },
-    {
-      accessorKey: "lastLogin",
-      header: () => "Last Login",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("lastLogin")}</div>
-      ),
-    },
+   
 
     {
       accessorKey: "actions",
