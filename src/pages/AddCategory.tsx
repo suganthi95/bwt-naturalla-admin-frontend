@@ -27,17 +27,22 @@ const schema = z.object({
   thumbnail: z
     .any()
     .refine((file) => file?.length > 0, "Thumbnail is required"),
+  // products_icon: z.string().min(1, "product effect is required"),
+  // products_effect_name: z.string().min(1, "product effect is required"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export default function AddCategory() {
-  const {auth} = useAppContext()
+  const { auth } = useAppContext();
   const queryClient = useQueryClient();
+  // const [pairs, setPairs] = useState<
+  //   { products_icon: string; products_effect_name: string }[]
+  // >([]);
   const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationKey: ["addcategory"],
-    mutationFn: ( data: FormValues) => addCategories(auth?.token??"",data),
+    mutationFn: (data: FormValues) => addCategories(auth?.token ?? "", data),
     onSuccess: () => {
       toast.success("category added successfully");
       queryClient.invalidateQueries({ queryKey: ["getAllcategories"] });
@@ -120,7 +125,7 @@ export default function AddCategory() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 max-w-2xl bg-white p-4 rounded-lg"
+        className="space-y-6 max-w-2xl bg-white p-4  w-full rounded-lg"
       >
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
@@ -208,7 +213,59 @@ export default function AddCategory() {
             <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
           )}
         </div>
+        {/* <div className="flex items-center w-full">
+          <div className="w-full">
+            <label className="block text-sm font-semibold text-[#232323] mb-1">
+              Tax <span className="text-red-500">*</span>
+            </label>
 
+            <Select
+              onValueChange={(value) => setValue("tax", Number(value))}
+              defaultValue="0"
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select tax %" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">0%</SelectItem>
+                <SelectItem value="5">5%</SelectItem>
+                <SelectItem value="12">12%</SelectItem>
+                <SelectItem value="18">18%</SelectItem>
+                <SelectItem value="28">28%</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {errors.tax && (
+              <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-[#232323] mb-1">
+              Tax <span className="text-red-500">*</span>
+            </label>
+
+            <Select
+              onValueChange={(value) => setValue("tax", Number(value))}
+              defaultValue="0"
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select tax %" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">0%</SelectItem>
+                <SelectItem value="5">5%</SelectItem>
+                <SelectItem value="12">12%</SelectItem>
+                <SelectItem value="18">18%</SelectItem>
+                <SelectItem value="28">28%</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {errors.tax && (
+              <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
+            )}
+          </div>
+        </div> */}
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
             Thumbnail <span className="text-red-500">*</span>

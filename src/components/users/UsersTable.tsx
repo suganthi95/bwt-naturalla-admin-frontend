@@ -143,7 +143,7 @@ function UsersTable() {
         const role = row.original.role;
         if (role === "customer") {
           return (
-            <div className="text-sm text-muted-foreground italic">
+            <div className="text-sm text-muted-foreground">
               No actions available
             </div>
           );

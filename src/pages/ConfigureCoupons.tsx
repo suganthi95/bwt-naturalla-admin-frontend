@@ -234,7 +234,7 @@ function ConfigureCoupons() {
                     variant="destructive"
                     disabled={isPending}
                     onClick={() => {
-                      onDelete(row.original.coupon_id, {
+                      onDelete({token:auth?.token ?? '',id:row.original.coupon_id}, {
                         onSuccess(data) {
                           setIsDeleteOpen(false);
                           toast.success(data?.data?.message);

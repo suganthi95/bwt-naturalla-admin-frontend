@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-import { Eye, Search, X } from "lucide-react";
+import { Copy, Eye, Search, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -40,9 +40,10 @@ import OrderDetails from "./OrderDetails";
 import { Badge } from "../ui/badge";
 import { Filter } from "../ui/Filter";
 import { useAppContext } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 function OrderTable() {
-  const {auth} = useAppContext()
+  const { auth } = useAppContext();
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "order_id",
@@ -63,9 +64,27 @@ function OrderTable() {
     {
       accessorKey: "order_code",
       header: () => "Order Code",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("order_code")}</div>
-      ),
+      cell: ({ row }) => {
+        const orderCode = row.getValue("order_code") as string | null;
+
+        const handleCopy = () => {
+          if (orderCode) {
+            navigator.clipboard.writeText(orderCode);
+            toast.success("Order code copied to clipboard!");
+          }
+        };
+
+        return (
+          <div className="capitalize flex items-center justify-center gap-1">
+            {orderCode || "N/A"}
+            {orderCode && (
+              <button onClick={handleCopy} title="Copy Order Code">
+                <Copy className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary hover:scale-110 transition" />
+              </button>
+            )}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "shipmet_first_name",
@@ -108,10 +127,8 @@ function OrderTable() {
           refunded: "bg-blue-100 text-blue-700",
         };
 
-        if(status === null){
-          return(
-            <div className="text-center">-</div>
-          )
+        if (status === null) {
+          return <div className="text-center">-</div>;
         }
 
         return (
@@ -127,11 +144,33 @@ function OrderTable() {
     },
 
     {
-      accessorKey: "delivery_status",
-      header: () => "Delivery Status",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("delivery_status")}</div>
-      ),
+      accessorKey: "shipment_status",
+      header: () => "Shipment Status",
+      cell: ({ row }) => {
+        const shipmentStatus = row.getValue("shipment_status") as string | null;
+
+        if (shipmentStatus === "Canceled") {
+          return (
+            <span className="bg-orange-400/25 text-orange-400 rounded-full capitalize px-3 py-1">
+              {shipmentStatus || "N/A"}
+            </span>
+          );
+        }
+
+        if (shipmentStatus === "Pickup Generated") {
+          return (
+            <span className="bg-blue-400/25 text-blue-400 rounded-full capitalize px-3 py-1">
+              {shipmentStatus || "N/A"}
+            </span>
+          );
+        }
+
+        return (
+          <span className="bg-gray-300/25 text-gray-500 rounded-full capitalize px-3 py-1">
+            {shipmentStatus || "Pending"}
+          </span>
+        );
+      },
     },
     {
       accessorKey: "order_status",
@@ -141,11 +180,27 @@ function OrderTable() {
       ),
     },
     {
-      accessorKey: "awbawb_code",
+      accessorKey: "awb_code",
       header: () => "AWB Code",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("awbawb_code")}</div>
-      ),
+      cell: ({ row }) => {
+        const awbCode = row.getValue("awb_code") as string | null;
+        const handleCopy = () => {
+          if (awbCode) {
+            navigator.clipboard.writeText(awbCode);
+            toast.success("AWB code copied to clipboard!");
+          }
+        };
+        return (
+          <div className="capitalize text-center flex items-center justify-center gap-1">
+            {awbCode || "N/A"}
+            {awbCode && (
+              <button onClick={handleCopy} title="Copy AWB">
+                <Copy className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary transition" />
+              </button>
+            )}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "track_url",
@@ -254,7 +309,7 @@ function OrderTable() {
     isSuccess,
   } = useQuery({
     queryKey: ["getAllorders"],
-    queryFn:()=>getAllOrders(auth?.token ?? ""),
+    queryFn: () => getAllOrders(auth?.token ?? ""),
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.data,
   });

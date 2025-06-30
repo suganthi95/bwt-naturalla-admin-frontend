@@ -74,6 +74,13 @@ function ProductsTable() {
                 <div className="capitalize">{row.getValue("sku") ? row.getValue("sku") : "-"}</div>
             )
         },
+   {
+            accessorKey: "hsn_code",
+            header:()=> "HSN Code",
+            cell: ({ row }) => (
+                <div className="capitalize text-center">{row.getValue("hsn_code") ? row.getValue("hsn_code") : "N/A"}</div>
+            )
+        },
         {
             accessorKey: "stock",
             header:()=> "Current Stock",
