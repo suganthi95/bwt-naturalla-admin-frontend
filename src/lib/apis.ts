@@ -5,7 +5,8 @@ import axios from "axios";
 
 //staging
 
-const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
+// const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
+const BASE_URL = "https://adminapi.naturalla.store/api";
 
 const axiosInstance = axios.create({
   baseURL:BASE_URL,
