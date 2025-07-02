@@ -211,7 +211,11 @@ function OrderTable() {
             disabled={!row.original.track_url}
             onClick={() => {
               if (row.original.track_url) {
-                window.location.href = row.original.track_url;
+                window.open(
+                  row.original.track_url,
+                  "_blank",
+                  "noopener,noreferrer"
+                );
               }
             }}
           >
@@ -516,7 +520,6 @@ function OrderTable() {
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
-                    onClick={()=>alert('hi')}
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
