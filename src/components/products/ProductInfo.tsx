@@ -13,12 +13,18 @@ import { useEffect, useState } from "react";
 import { CloudUpload, LoaderCircle, X } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addProductInfo, getCategories, getProductInfo } from "@/lib/apis";
+import {
+  addProductInfo,
+  getCategories,
+  getCategoryBasedIcons,
+  getProductInfo,
+} from "@/lib/apis";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ProductInfoFormType } from "@/types";
+import { ProductIcon, ProductInfoFormType } from "@/types";
 import { useAppContext } from "@/contexts/AuthContext";
+import { ProductEffectIcon } from "@/types/type";
 
 // const formSchema = z.object({
 //   productName: z.string({ required_error: "Product Name is required" }),
@@ -38,7 +44,17 @@ export function ProductInfo() {
   const navigate = useNavigate();
   const location = useLocation();
   const [tags, setTags] = useState<string[]>([]);
+  const [selectedCategoryId, setSeletectedCategoryId] = useState<number>();
   const [tagInput, setTagInput] = useState("");
+  const { data: productIcons } = useQuery({
+    queryKey: ["getCategoriesbasedicons", selectedCategoryId],
+    queryFn: () =>
+      getCategoryBasedIcons(auth?.token ?? "", selectedCategoryId!.toString()),
+    enabled:
+      !!auth?.token && !!selectedCategoryId && !isNaN(selectedCategoryId),
+    retry: 3,
+    select: (data) => data?.data?.data,
+  });
 
   const {
     data: categories,
@@ -71,9 +87,12 @@ export function ProductInfo() {
         subcategory_name,
         tags,
         thumbnail_image,
+        icon_data,
         units,
       } = data?.data?.data;
       return {
+        category_id: category_id,
+
         productName: product_name,
         category: `${category_title}::${category_id.toString()}`,
         subCategory: `${subcategory_name}::${subcategory_id.toString()}`,
@@ -81,13 +100,19 @@ export function ProductInfo() {
         minOrderQty: min_order_quantity,
         tags: tags,
         hsn_code: hsn_code,
+        icon_data: icon_data || null,
         slug: slug,
+
         galleryImages: gallery_images,
         thumbnail: thumbnail_image[0],
       };
     },
     enabled: Boolean(productId) && isSuccess,
   });
+
+  const [pairs, setPairs] = useState<ProductIcon[] | null>(
+    productInfoDefaults?.icon_data || []
+  );
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["product-info"],
@@ -126,12 +151,22 @@ export function ProductInfo() {
       subCategory: "",
       unit: "",
       minOrderQty: 1,
+      product_effects: [],
       hsn_code: "",
       slug: "",
       galleryImages: [],
       thumbnail: null,
     },
   });
+
+  useEffect(() => {
+    if (productIcons?.length) {
+      reset((prev) => ({
+        ...prev,
+        product_effects: productIcons,
+      }));
+    }
+  }, [productIcons, reset]);
 
   const addTags = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -156,7 +191,7 @@ export function ProductInfo() {
     if (productId === null) {
       mutate({ token: auth?.token ?? "", data });
     } else {
-      mutate({ token: auth?.token ?? "", data: { ...data, productId } });
+      mutate({ token: auth?.token ?? "", data: { ...data, productId, pairs } });
     }
   };
 
@@ -164,12 +199,14 @@ export function ProductInfo() {
     if (productInfoDefaults && productId) {
       reset(productInfoDefaults);
       setTags(productInfoDefaults.tags);
+      setSeletectedCategoryId(productInfoDefaults.category_id);
+      setPairs(productInfoDefaults?.icon_data);
     }
   }, [productInfoDefaults, reset, productId]);
 
-  useEffect(() => {
-    watch((name) => console.log(name));
-  }, [watch]);
+  // useEffect(() => {
+  //   watch((name) => console.log(name));
+  // }, [watch]);
 
   return (
     <form
@@ -213,6 +250,15 @@ export function ProductInfo() {
                 disabled={isLoading || isError || isPending}
                 value={field.value}
                 onValueChange={(val) => {
+                  const [_, idStr] = val.split("::");
+                  const parsedId = Number(idStr?.trim());
+
+                  if (!isNaN(parsedId)) {
+                    setSeletectedCategoryId(parsedId);
+                  } else {
+                    toast.error("Invalid category selected");
+                  }
+
                   field.onChange(val);
                 }}
               >
@@ -331,7 +377,7 @@ export function ProductInfo() {
           )}
         </div>
       </div>
-
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <Label>Tags * (Type the Tag and Press "Enter")</Label>
         <Input
@@ -365,6 +411,104 @@ export function ProductInfo() {
           ))}
         </div>
       </div>
+      <div className="">
+        <label className="block text-sm font-semibold text-[#232323] mb-1">
+          Product Effects Icon <span className="text-red-500">*</span>
+        </label>
+        <Select
+          onValueChange={(value) => {
+            const selectedIcon = watch("product_effects")?.find(
+              (item: ProductEffectIcon) => item.icon_id === Number(value)
+            );
+
+            if (!selectedIcon) return;
+
+            const alreadyExists = pairs?.some(
+              (p) => p.icon_id === selectedIcon.icon_id
+            );
+
+            if (!alreadyExists) {
+              setPairs((prev) => [...(prev || []), selectedIcon]);
+            } else {
+              toast.warning("Icon already selected");
+            }
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            {watch("product_effects") && watch("product_effects").length > 0 ? (
+              watch("product_effects").map((item: ProductEffectIcon) => (
+                <SelectItem key={item.icon_id} value={item.icon_id.toString()}>
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={item.icon_url}
+                      alt={item.icon_name}
+                      className="w-5 h-5 object-contain"
+                    />
+                    <span className="text-sm text-[#232323] font-medium">
+                      {item.icon_name}
+                    </span>
+                  </div>
+                </SelectItem>
+              ))
+            ) : (
+              <div className="text-sm text-muted-foreground px-4 py-2">
+                Please select a category to load icons
+              </div>
+            )}
+          </SelectContent>
+        </Select>
+
+        {pairs && pairs?.length > 0 && (
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {pairs?.slice(0, 3)?.map((pair, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-1 px-4 border rounded-md bg-slate-50"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={pair?.icon_url}
+                      alt={pair?.icon_name}
+                      className="w-8 h-8 object-contain"
+                    />
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        {pair.icon_text}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPairs((prev) =>
+                        (prev ?? [])?.filter(
+                          (item) => item.icon_id !== pair?.icon_id
+                        )
+                      )
+                    }
+                    className="text-red-500 hover:text-red-700 transition"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              );
+            })}
+
+            {pairs?.length > 3 && (
+              <div className="flex items-center justify-center p-1 px-4 border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
+                +{pairs?.length - 3} more
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+</div>
 
       <div>
         <Label>Slug</Label>

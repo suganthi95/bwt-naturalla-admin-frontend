@@ -94,6 +94,12 @@ export default function Sidebar() {
       icon: <WalletMinimal className="w-5" />,
       shouldVisible: true,
     },
+     {
+      name: "User Sentiment",
+      route: "user-sentiment",
+      icon: <Icons.User_Sentiment className="" />,
+      shouldVisible: true,
+    },
   ];
 
   return (

@@ -1,9 +1,9 @@
-import { deleteUser, getUsers } from "@/lib/apis";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {  getUsers } from "@/lib/apis";
+import {  useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-import { Loader2, Search, SquarePen, UserRoundX, X } from "lucide-react";
+import { ArrowDownToLine, Eye, Search, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -38,22 +38,18 @@ import {
 } from "../ui/select";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import EditUserForm from "./EditUserForm";
-import { toast } from "sonner";
-import axios from "axios";
+
 import { User } from "@/types/type";
 import { useAppContext } from "@/contexts/AuthContext";
-import dayjs from "dayjs";
+import OrderHistoryDetails from "./OrderHistoryDetails";
 
-function UsersTable() {
-  const queryClinet = useQueryClient();
+function LastMonth() {
+//   const queryClinet = useQueryClient();
   const { auth } = useAppContext();
   const {
     data: users,
@@ -65,11 +61,7 @@ function UsersTable() {
     refetchOnWindowFocus: false,
     select: (data) => data?.data?.users,
   });
-  const { mutate: onDelete, isPending } = useMutation({
-    mutationKey: ["deleteuser"],
-    mutationFn: (args: { token: string; id: string }) =>
-      deleteUser(args.token, args.id),
-  });
+
 
   const columns: ColumnDef<User>[] = [
     {
@@ -115,24 +107,6 @@ function UsersTable() {
       ),
     },
     {
-      accessorKey: "last_login",
-      header: () => "Last Login",
-      cell: ({ row }) => (
-        <div className="capitalize">
-          {row.getValue("last_login") &&
-          dayjs(row.getValue("last_login")).isValid() ? (
-            dayjs(row.getValue("last_login")).format(
-              "dddd, DD MMM YYYY - HH:mm"
-            )
-          ) : (
-            <span className="text-muted-foreground ">
-              Never logged in
-            </span>
-          )}
-        </div>
-      ),
-    },
-    {
       accessorKey: "status",
       header: () => "Status",
       cell: ({ row }) => {
@@ -167,7 +141,6 @@ function UsersTable() {
             </div>
           );
         }
-        const [open, setOpen] = useState(false);
         const [Isopen, setIsopen] = useState(false);
 
         return (
@@ -175,10 +148,11 @@ function UsersTable() {
             <Dialog open={Isopen} onOpenChange={setIsopen}>
               <DialogTrigger>
                 <Button
-                  size={"icon"}
-                  className="rounded-full text-green-400 bg-green-400/25 hover:bg-green-400/10"
+                  size="icon"
+                  variant="ghost"
+                  className="rounded-full text-[#171925] bg-[#171925]/10 hover:bg-[#171925]/20"
                 >
-                  <SquarePen className="h-5 w-5" />
+                  <Eye className="w-5 h-5" />
                 </Button>
               </DialogTrigger>
               <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
@@ -193,73 +167,17 @@ function UsersTable() {
                     <X className="w-6 h-6" />
                   </div>
                 </DialogHeader>
-                <EditUserForm userDetails={row.original} onClose={setIsopen} />
+                <OrderHistoryDetails onClose={setIsopen} HistoryDetails={row.original} />
               </DialogContent>
             </Dialog>
 
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size={"icon"}
-                  className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
-                >
-                  <UserRoundX className="h-5 w-5" />
-                </Button>
-              </DialogTrigger>
-
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="text-lg font-semibold text-red-600">
-                    Delete User
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="text-sm text-muted-foreground">
-                  Are you sure you want to delete{" "}
-                  <span className="font-semibold text-black">
-                    {row.original.first_name} {row.original.last_name}
-                  </span>
-                  ? This action cannot be undone.
-                </div>
-
-                <DialogFooter className="mt-4 flex justify-end gap-2">
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button
-                    variant="destructive"
-                    disabled={isPending}
-                    onClick={() => {
-                      onDelete(
-                        {
-                          token: auth?.token ?? "",
-                          id: row.original.user_id.toString(),
-                        },
-                        {
-                          onSuccess(data) {
-                            setOpen(false);
-                            toast.success(data?.data?.message);
-                            queryClinet.invalidateQueries({
-                              queryKey: ["getusers"],
-                            });
-                          },
-                          onError: (error) => {
-                            if (axios.isAxiosError(error)) {
-                              toast.error(error?.response?.data?.message);
-                            }
-                          },
-                        }
-                      );
-                    }}
-                  >
-                    {isPending ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      "Delete"
-                    )}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="rounded-full text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20"
+            >
+              <ArrowDownToLine className="w-5 h-5" />
+            </Button>
           </div>
         );
       },
@@ -492,4 +410,4 @@ function UsersTable() {
   return content;
 }
 
-export default UsersTable;
+export default LastMonth;

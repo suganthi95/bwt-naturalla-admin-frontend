@@ -96,8 +96,15 @@ export type ProductPriceFormType = {
   stockVisibility: string;
   currentStock: number;
 };
-
+export type ProductIcon = {
+  icon_id: number;
+  icon_url: string;
+  icon_name: string;
+  icon_text: string;
+  prod_icon_id: number;
+};
 export type ProductInfoFormType = {
+  category_id:number
   productName: string;
   category: string;
   subCategory: string;
@@ -106,6 +113,8 @@ export type ProductInfoFormType = {
   tags: string[];
   slug: string;
   hsn_code:string
+  icon_data:ProductIcon[]
+  product_effects ?:any | null;
   galleryImages: any;
   thumbnail: FileList | null;
 };

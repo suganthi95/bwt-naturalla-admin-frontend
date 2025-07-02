@@ -6,8 +6,8 @@ import { CloudUpload, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addCategories } from "@/lib/apis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addCategories, getCategoriesProductsIcon } from "@/lib/apis";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppContext } from "@/contexts/AuthContext";
+import { ProductEffectIcon } from "@/types/type";
 
 const schema = z.object({
   category_name: z.string().min(1, "Category name is required"),
@@ -27,8 +28,11 @@ const schema = z.object({
   thumbnail: z
     .any()
     .refine((file) => file?.length > 0, "Thumbnail is required"),
-  // products_icon: z.string().min(1, "product effect is required"),
-  // products_effect_name: z.string().min(1, "product effect is required"),
+  products_icon: z.union([
+    z.number().min(1, "Product effect is required"),
+    z.null(),
+  ]),
+  products_effect_name: z.string(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -36,9 +40,16 @@ type FormValues = z.infer<typeof schema>;
 export default function AddCategory() {
   const { auth } = useAppContext();
   const queryClient = useQueryClient();
-  // const [pairs, setPairs] = useState<
-  //   { products_icon: string; products_effect_name: string }[]
-  // >([]);
+  const { data: ProductIcons } = useQuery({
+    queryKey: ["getproductsicon"],
+    queryFn: () => getCategoriesProductsIcon(auth?.token ?? ""),
+    staleTime: 1000 * 60 * 5,
+    select: (data) => data?.data?.data,
+  });
+
+  const [pairs, setPairs] = useState<
+    { icon_id: number; effect_name: string }[]
+  >([]);
   const navigate = useNavigate();
   const { mutate, isPending } = useMutation({
     mutationKey: ["addcategory"],
@@ -59,13 +70,45 @@ export default function AddCategory() {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       tax: 0,
+      products_icon: null,
     },
   });
+
+  const icon = watch("products_icon");
+  const effects = watch("products_effect_name");
+  // const isAddDisabled = !icon || !effects || effects.trim() === "";
+
+  const handleAdd = () => {
+    if (!icon) {
+      toast.warning("Select a new icon");
+      return;
+    }
+
+    if (!effects || effects.trim() === "") {
+      toast.warning("Add an effect name");
+      return;
+    }
+    if (icon && effects) {
+      const alreadyAdded = pairs.some(
+        (pair) => pair.icon_id === icon && pair.effect_name === effects
+      );
+      if (alreadyAdded) {
+        toast.warning("This icon-effect pair is already added");
+        return;
+      }
+      setPairs((prev) => [...prev, { icon_id: icon, effect_name: effects }]);
+      reset({
+        products_effect_name: "",
+      });
+      setValue("products_icon", null);
+    }
+  };
 
   const [subCategoryInput, setSubCategoryInput] = useState("");
   const [subCategories, setSubCategories] = useState<string[]>([]);
@@ -93,9 +136,20 @@ export default function AddCategory() {
   };
 
   const onSubmit = (data: FormValues) => {
+    if (pairs.length === 0) {
+      toast.warning("You must add at least one icon effect pair");
+      return;
+    }
+
+    if (subCategories.length === 0) {
+      toast.warning("You must add at least one subcategory");
+      return;
+    }
+
     const finalData = {
       ...data,
       thumbnail: data.thumbnail[0],
+      icon_data: pairs,
 
       subCategories,
     };
@@ -213,59 +267,123 @@ export default function AddCategory() {
             <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
           )}
         </div>
-        {/* <div className="flex items-center w-full">
-          <div className="w-full">
-            <label className="block text-sm font-semibold text-[#232323] mb-1">
-              Tax <span className="text-red-500">*</span>
-            </label>
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex items-end gap-4 w-full">
+            <div className="w-2/3">
+              <label className="block text-sm font-semibold text-[#232323] mb-1">
+                Product Effects Icon <span className="text-red-500">*</span>
+              </label>
+              <Select
+                onValueChange={(value) =>
+                  setValue("products_icon", Number(value))
+                }
+                value={icon !== null ? icon.toString() : undefined}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ProductIcons?.map((item: ProductEffectIcon) => (
+                    <SelectItem
+                      key={item.icon_id}
+                      value={item.icon_id.toString()}
+                    >
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={item.icon_url}
+                          alt={item.icon_name}
+                          className="w-5 h-5 object-contain"
+                        />
+                        <span className="text-sm text-[#232323] font-medium">
+                          {item.icon_name}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.products_icon && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.products_icon.message}
+                </p>
+              )}
+            </div>
 
-            <Select
-              onValueChange={(value) => setValue("tax", Number(value))}
-              defaultValue="0"
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select tax %" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">0%</SelectItem>
-                <SelectItem value="5">5%</SelectItem>
-                <SelectItem value="12">12%</SelectItem>
-                <SelectItem value="18">18%</SelectItem>
-                <SelectItem value="28">28%</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="w-2/3">
+              <label className="block text-sm font-semibold text-[#232323] mb-1">
+                Product Effects Name <span className="text-red-500">*</span>
+              </label>
+              <Input
+                {...register("products_effect_name")}
+                placeholder="Enter here"
+                className="w-full"
+              />
+              {errors.products_effect_name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.products_effect_name.message}
+                </p>
+              )}
+            </div>
 
-            {errors.tax && (
-              <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
-            )}
+            <div className="w-auto">
+              <Button
+                type="button"
+                // disabled={isAddDisabled}
+                onClick={handleAdd}
+                className="bg-blue-500"
+              >
+                Add
+              </Button>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-[#232323] mb-1">
-              Tax <span className="text-red-500">*</span>
-            </label>
+          {pairs.length > 0 && (
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {pairs.slice(0, 3).map((pair, index) => {
+                const matchedIcon = ProductIcons?.find(
+                  (icon: ProductEffectIcon) => icon.icon_id === pair.icon_id
+                );
 
-            <Select
-              onValueChange={(value) => setValue("tax", Number(value))}
-              defaultValue="0"
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select tax %" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">0%</SelectItem>
-                <SelectItem value="5">5%</SelectItem>
-                <SelectItem value="12">12%</SelectItem>
-                <SelectItem value="18">18%</SelectItem>
-                <SelectItem value="28">28%</SelectItem>
-              </SelectContent>
-            </Select>
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-1 px-4 border rounded-md bg-slate-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={matchedIcon?.icon_url}
+                        alt={matchedIcon?.icon_name}
+                        className="w-8 h-8 object-contain"
+                      />
+                      <div>
+                        <p className="text-xs text-muted-foreground">
+                          {pair.effect_name}
+                        </p>
+                      </div>
+                    </div>
 
-            {errors.tax && (
-              <p className="text-red-500 text-sm mt-1">{errors.tax.message}</p>
-            )}
-          </div>
-        </div> */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPairs((prev) => prev.filter((_, i) => i !== index))
+                      }
+                      className="text-red-500 hover:text-red-700 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                );
+              })}
+
+              {pairs.length > 3 && (
+                <div className="flex items-center justify-center border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
+                  +{pairs.length - 3} more
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
             Thumbnail <span className="text-red-500">*</span>

@@ -8,12 +8,11 @@ import axios from "axios";
 const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
 
 const axiosInstance = axios.create({
-  baseURL:BASE_URL,
-  headers:{
-        "Content-Type": "application/json",
-
-  }
-})
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export const setAuthToken = (token: string | null) => {
   if (token) {
@@ -40,109 +39,125 @@ export const signin = async ({
   });
 };
 
-export const getDashboard = async (token:string) => {
+export const getDashboard = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/dashboard/review/product`,
-    headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const getDashboardOrders = async (token:string,param: string) => {
+export const getDashboardOrders = async (token: string, param: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/dashboard/top/orders/${param}`,
-    headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const getDashboardCities = async (token:string,param: string) => {
+export const getDashboardCities = async (token: string, param: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/dashboard/top/cities/${param}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const getDashboardProducts = async (token:string ,param: string) => {
+export const getDashboardProducts = async (token: string, param: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/dashboard/top/products/${param}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getAllCategories = async (token:string) => {
+export const getAllCategories = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/category/getCategories`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getAllProducts = async (token:string) => {
+export const getAllProducts = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/products`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getAllOrders = async (token:string) => {
+export const getAllOrders = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/order`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const getOrderDetails = async (token:string,id: string) => {
+export const getOrderDetails = async (token: string, id: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/order/${id}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getProductCategories = async (token:string) => {
+export const getProductCategories = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/category/getCategories`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getCategories = async (token:string) => {
+export const getCategories = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/categories`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const getCategoriesProductsIcon = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/category/product/icon`,
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addCategories = async (token:string,data: any) => {
+export const addCategories = async (token: string, data: any) => {
   const formdata = new FormData();
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
   data.subCategories.forEach((subCategory: string, index: number) => {
     formdata.append(`subcategory_name[${index}]`, subCategory);
+  });
+
+  data.icon_data.forEach((item: any, index: number) => {
+    formdata.append(
+      `icon_data[${index}]`,
+      JSON.stringify({ icon_id: item.icon_id, icon_text: item.effect_name })
+    );
   });
 
   formdata.append("thumbnail_image", data.thumbnail);
@@ -152,13 +167,13 @@ export const addCategories = async (token:string,data: any) => {
     method: "post",
     url: `${BASE_URL}/category/addCategory`,
     data: formdata,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const UpdateCategories = async (token:string,data: any) => {
+export const UpdateCategories = async (token: string, data: any) => {
   const formdata = new FormData();
 
   formdata.append("category_name", data.category_name);
@@ -166,7 +181,12 @@ export const UpdateCategories = async (token:string,data: any) => {
   data.subCategories.forEach((subCategory: string) => {
     formdata.append("subcategory_name", subCategory);
   });
-
+  data.icon_data.forEach((item: any, index: number) => {
+    formdata.append(
+      `icon_data[${index}]`,
+      JSON.stringify({ icon_id: item.icon_id, icon_text: item.icon_text })
+    );
+  });
   formdata.append("thumbnail_image", data.thumbnail);
   formdata.append("category_id", data.category_id);
 
@@ -176,95 +196,102 @@ export const UpdateCategories = async (token:string,data: any) => {
     method: "put",
     url: `${BASE_URL}/category/updateCategory`,
     data: formdata,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getProductInfo = async (token:string,productId: string) => {
+export const getProductInfo = async (token: string, productId: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/primary/detail/${productId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const deleteCategory = async (token:string,id: string) => {
+export const deleteCategory = async (token: string, id: string) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/Category/deleteCategory/${id}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const getUsers = async (token:string) => {
+export const getUsers = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/auth/getAllUsers`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const createUser = async (token:string,payload: CreateUserPayload) => {
+export const createUser = async (token: string, payload: CreateUserPayload) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/auth/createUser`,
     data: payload,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const updateUser = async (token:string,payload: CreateUserPayload, id: string) => {
+export const updateUser = async (
+  token: string,
+  payload: CreateUserPayload,
+  id: string
+) => {
   return await axios({
     method: "put",
     url: `${BASE_URL}/auth/updateUser/${id}`,
     data: payload,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const deleteUser = async (token:string,id: string) => {
+export const deleteUser = async (token: string, id: string) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/auth/deleteUser/${id}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getConfigureCouponlist = async (token:string) => {
+export const getConfigureCouponlist = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/coupon/getcouponlisting`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addConfigureCoupons = async (token:string,payload: CouponInput) => {
+export const addConfigureCoupons = async (
+  token: string,
+  payload: CouponInput
+) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/coupon/addcoupon`,
     data: payload,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
 export const updateConfigureCoupons = async (
-  token:string,
+  token: string,
   payload: CouponInput,
   coupon_id: number
 ) => {
@@ -272,28 +299,28 @@ export const updateConfigureCoupons = async (
     method: "put",
     url: `${BASE_URL}/coupon/update/${coupon_id}`,
     data: payload,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
-export const deleteConfigureCoupons = async (token:string,id: number) => {
+export const deleteConfigureCoupons = async (token: string, id: number) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/coupon/delete/${id}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const PaymentProviders = async (token:string) => {
+export const PaymentProviders = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/payment/getAllPayments`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
@@ -303,7 +330,7 @@ export const togglePayment = async ({
   enabled,
   user_id,
 }: {
-  token:string;
+  token: string;
   provider_id: string;
   enabled: boolean;
   user_id: number;
@@ -315,19 +342,19 @@ export const togglePayment = async ({
       enabled,
       user_id,
     },
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getShippingfee = async (token:string) => {
+export const getShippingfee = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/shipment/getshipping-fee`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
@@ -352,17 +379,32 @@ export const updateShippingfee = async (
   });
 };
 
-export const getCoupons = async (token:string) => {
+export const getCoupons = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/coupons`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addProductInfo = async ({token,data}:{token:string,data: any}) => {
+export const getCategoryBasedIcons = async (token: string, id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/products/category/icon/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const addProductInfo = async ({
+  token,
+  data,
+}: {
+  token: string;
+  data: any;
+}) => {
   const formdata = new FormData();
   formdata.append("product_name", data.productName);
   formdata.append("category_id", data.category.split("::")[1]);
@@ -388,21 +430,29 @@ export const addProductInfo = async ({token,data}:{token:string,data: any}) => {
     }
   });
 
-  data.tags.forEach((tag: string, index: number) => {
+  data?.tags?.forEach((tag: string, index: number) => {
     formdata.append(`tags[${index}]`, tag);
   });
-
+  data?.pairs?.forEach((item: any, index: number) => {
+    formdata.append(`icon_ids[${index}]`, `${item.icon_id}`);
+  });
   return await axios({
     method: "post",
     url: `${BASE_URL}/products/add-product`,
     data: formdata,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addProductPrice = async ({token,data}:{token:string,data: any}) => {
+export const addProductPrice = async ({
+  token,
+  data,
+}: {
+  token: string;
+  data: any;
+}) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/products/product-price-stock`,
@@ -420,13 +470,19 @@ export const addProductPrice = async ({token,data}:{token:string,data: any}) => 
       minimum_stock_warning: data.minimumStockWarning,
       sku: data.sku,
     },
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addProductSpecs = async ({token,data}:{token:string ,data: ProductFormValues}) => {
+export const addProductSpecs = async ({
+  token,
+  data,
+}: {
+  token: string;
+  data: ProductFormValues;
+}) => {
   const formdata = new FormData();
   formdata.append("product_id", data.productId as string);
   formdata.append("short_description", data.shortDescription);
@@ -458,16 +514,19 @@ export const addProductSpecs = async ({token,data}:{token:string ,data: ProductF
     method: "post",
     url: `${BASE_URL}/products/product-description`,
     data: formdata,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addCoupons = async (token:string,data: {
-  coupon: number;
-  productId: string;
-}) => {
+export const addCoupons = async (
+  token: string,
+  data: {
+    coupon: number;
+    productId: string;
+  }
+) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/products/add/coupon`,
@@ -475,13 +534,19 @@ export const addCoupons = async (token:string,data: {
       coupon_id: data.coupon,
       product_id: parseInt(data.productId),
     },
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const addMetaSEO = async ({token,data}:{token:string,data: any}) => {
+export const addMetaSEO = async ({
+  token,
+  data,
+}: {
+  token: string;
+  data: any;
+}) => {
   const formdata = new FormData();
   formdata.append("product_id", data.productId as string);
   formdata.append("meta_title", data.metaTitle);
@@ -503,92 +568,98 @@ export const addMetaSEO = async ({token,data}:{token:string,data: any}) => {
     method: "post",
     url: `${BASE_URL}/products/meta/info`,
     data: formdata,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const updateProductToggle = async (token:string,data: any) => {
+export const updateProductToggle = async (token: string, data: any) => {
   return await axios({
     method: "put",
     url: `${BASE_URL}/products/update/toggles/${data.productId}`,
     data: {
       ...data,
     },
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getProductPrice = async (token:string,productId: string) => {
+export const getProductPrice = async (token: string, productId: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/price/stock/${productId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getProductSpecs = async (token:string,productId: string) => {
+export const getProductSpecs = async (token: string, productId: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/spec/${productId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getProductCoupons = async (token:string,productId: string) => {
+export const getProductCoupons = async (token: string, productId: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/coupon/${productId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getProductSEO = async (token:string,productId: string) => {
+export const getProductSEO = async (token: string, productId: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/meta/info/${productId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getShipmentList = async (token:string) => {
+export const getShipmentList = async (token: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/shipment/getShipmentList`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const getShipmentDetails = async (token:string,shipmentId: string) => {
+export const getShipmentDetails = async (token: string, shipmentId: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/shipment/getShipmentDetails/${shipmentId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-export const deleteProduct = async ({token,productId}:{token:string,productId: string}) => {
+export const deleteProduct = async ({
+  token,
+  productId,
+}: {
+  token: string;
+  productId: string;
+}) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/products/products/${productId}`,
-       headers:{
-      Authorization:token
-    }
+    headers: {
+      Authorization: token,
+    },
   });
 };
 

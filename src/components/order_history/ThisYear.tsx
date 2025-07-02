@@ -36,13 +36,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import OrderDetails from "./OrderDetails";
+import OrderDetails from "../orders/OrderDetails";
 import { Badge } from "../ui/badge";
 import { Filter } from "../ui/Filter";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-function OrderTable() {
+function ThisYear() {
   const { auth } = useAppContext();
   const columns: ColumnDef<any>[] = [
     {
@@ -516,7 +516,6 @@ function OrderTable() {
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
-                    onClick={()=>alert('hi')}
                     data-state={row.getIsSelected() && "selected"}
                   >
                     {row.getVisibleCells().map((cell) => (
@@ -580,4 +579,4 @@ function OrderTable() {
   return content;
 }
 
-export default OrderTable;
+export default ThisYear;

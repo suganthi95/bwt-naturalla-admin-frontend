@@ -20,6 +20,7 @@ export type User = {
   city: string | null;
   address: string | null;
   role: string;
+  last_login:string | null
   device_token: string | null;
   otp_verified: boolean | null;
   language: string | null;
@@ -125,3 +126,11 @@ export interface Coupon {
   usage: number;
   limits: number | null;
 }
+
+
+export type ProductEffectIcon = {
+  icon_id: number;
+  icon_name: string;
+  created_at: string;
+  icon_url: string;
+};

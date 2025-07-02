@@ -24,6 +24,8 @@ import MyProfile from "./pages/MyProfile";
 import EditProducts from "./pages/EditProducts";
 import ProductSEO from "./components/products/ProductSEO";
 import Settings from "./pages/Settings";
+import OrderHistory from "./pages/OrderHistory";
+import UserSentiment from "./pages/UserSentiment";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -66,11 +68,18 @@ function App() {
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/orders" element={<Orders />} />
+
         <Route path="/shipments" element={<Shipments />} />
-        <Route path="/shipment-details/:shipmentId" element={<ShipmentsDetails />} />
+        <Route
+          path="/shipment-details/:shipmentId"
+          element={<ShipmentsDetails />}
+        />
         <Route path="/users" element={<Users />} />
+       <Route path="/order-history/:id" element={<OrderHistory />} />
+
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />
+        <Route path="user-sentiment" element={<UserSentiment/>}/>
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="*" element={<p>no routes found</p>} />
