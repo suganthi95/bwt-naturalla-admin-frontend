@@ -7,6 +7,7 @@ import {
   Layers,
   LayoutDashboard,
   LogOut,
+  Newspaper,
   Truck,
   UsersRound,
   WalletMinimal,
@@ -98,6 +99,12 @@ export default function Sidebar() {
       name: "User Sentiment",
       route: "user-sentiment",
       icon: <Icons.User_Sentiment className="" />,
+      shouldVisible: true,
+    },
+         {
+      name: "Blogs",
+      route: "blogs",
+      icon: <Newspaper className="w-5" />,
       shouldVisible: true,
     },
   ];

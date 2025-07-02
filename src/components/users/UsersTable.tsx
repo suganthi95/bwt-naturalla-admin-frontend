@@ -50,7 +50,6 @@ import { toast } from "sonner";
 import axios from "axios";
 import { User } from "@/types/type";
 import { useAppContext } from "@/contexts/AuthContext";
-import dayjs from "dayjs";
 
 function UsersTable() {
   const queryClinet = useQueryClient();
@@ -119,15 +118,10 @@ function UsersTable() {
       header: () => "Last Login",
       cell: ({ row }) => (
         <div className="capitalize">
-          {row.getValue("last_login") &&
-          dayjs(row.getValue("last_login")).isValid() ? (
-            dayjs(row.getValue("last_login")).format(
-              "dddd, DD MMM YYYY - HH:mm"
-            )
+          {row.getValue("last_login") ? (
+            row.getValue("last_login")
           ) : (
-            <span className="text-muted-foreground ">
-              Never logged in
-            </span>
+            <span className="text-muted-foreground ">Never logged in</span>
           )}
         </div>
       ),

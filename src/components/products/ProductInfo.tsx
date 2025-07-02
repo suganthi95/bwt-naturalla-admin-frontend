@@ -448,7 +448,7 @@ export function ProductInfo() {
                       className="w-5 h-5 object-contain"
                     />
                     <span className="text-sm text-[#232323] font-medium">
-                      {item.icon_name}
+                      {item.icon_text}
                     </span>
                   </div>
                 </SelectItem>

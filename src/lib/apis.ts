@@ -461,8 +461,8 @@ export const addProductPrice = async ({
       unit_price: data.unitPrice,
       strike_through_price: data.strikeThroughPrice,
       special_discount_type: data.specialDiscountType,
-      special_discount_percent: data.specialDiscountPercentage,
-      special_discount_amount: data.specialDiscountAmount,
+      special_discount_percent: data?.specialDiscountPercentage ,
+      special_discount_amount: data?.specialDiscountAmount,
       discount_start_at: data.discountPeriodStartat,
       discount_end_at: data.discountPeriodendat,
       current_stock: data.currentStock,
@@ -711,6 +711,70 @@ export const updatePassword = async (
     data: {
       user_password,
       new_password,
+    },
+  });
+};
+
+export const getBlogs = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/blogs`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const createBlog = async (token: string, data: any) => {
+  const formdata = new FormData();
+  formdata.append("blog_title", data.title);
+  formdata.append("blog_desc", data.description);
+  formdata.append("blog_status", data.status);
+  formdata.append("blog_publish", data.showPublish);
+  formdata.append("blog_image", data.thumbnail);
+  formdata.append("blog_content", data.content);
+
+  data?.tags?.forEach((item: string, index: number) => {
+    formdata.append(`blog_tags[${index}]`, item);
+  });
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/blogs`,
+    data: formdata,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const editBlog = async (token: string, data: any) => {
+  const formdata = new FormData();
+
+  formdata.append("blog_title", data.title);
+  formdata.append("blog_desc", data.description);
+  formdata.append("blog_status", data.status);
+  formdata.append("blog_publish", data.showPublish);
+  formdata.append("blog_image", data.thumbnail);
+  formdata.append("blog_content", data.content);
+
+  data?.tags?.forEach((item: string, index: number) => {
+    formdata.append(`blog_tags[${index}]`, item);
+  });
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/blogs/${data.id}`,
+    data: formdata,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const deleteBlog = async (token: string, id: string) => {
+  return await axios({
+    method: "delete",
+    url: `${BASE_URL}/blogs/${id}`,
+    headers: {
+      Authorization: token,
     },
   });
 };

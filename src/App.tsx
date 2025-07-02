@@ -26,6 +26,9 @@ import ProductSEO from "./components/products/ProductSEO";
 import Settings from "./pages/Settings";
 import OrderHistory from "./pages/OrderHistory";
 import UserSentiment from "./pages/UserSentiment";
+import Blogs from "./pages/Blogs";
+import CreateBlog from "./pages/CreateBlog";
+import EditBlog from "./pages/EditBlog";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -79,7 +82,11 @@ function App() {
 
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />
-        <Route path="user-sentiment" element={<UserSentiment/>}/>
+        <Route path="/user-sentiment" element={<UserSentiment/>}/>
+                <Route path="/blogs" element={<Blogs/>}/>
+        <Route path="/blogs/create" element={<CreateBlog/>}/>
+        <Route path="/blogs/edit" element={<EditBlog/>}/>
+
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="*" element={<p>no routes found</p>} />
