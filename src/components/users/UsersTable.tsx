@@ -277,15 +277,17 @@ function UsersTable() {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const globalFilterFunction = (
-    row: any,
-    _columnId: string,
-    filterValue: any
-  ) => {
-    const username = row.original.username?.toLowerCase() || "";
+const globalFilterFunction = (
+  row: any,
+  _columnId: string,
+  filterValue: string
+) => {
+  const name = row.original.first_name?.toLowerCase() || "";
+  const email = row.original.email?.toLowerCase() || "";
+  const search = filterValue.trim().toLowerCase();
 
-    return username.includes(filterValue.toLowerCase());
-  };
+  return name.includes(search) || email.includes(search); 
+};
 
   const table = useReactTable({
     data: users,
