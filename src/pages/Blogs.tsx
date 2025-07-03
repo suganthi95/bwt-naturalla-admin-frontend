@@ -51,19 +51,30 @@ export default function Blogs() {
   useEffect(() => {
     const searchValue = searchTerm.trim().toLowerCase();
 
-    const filteredData = blogs?.filter((blog: Blog) => {
+    let filteredData = blogs?.filter((blog: Blog) => {
       const matchesSearch = blog.blog_title.toLowerCase().includes(searchValue);
       const matchesPriority =
         selectedPriority === "all" || selectedPriority === ""
           ? true
           : blog.blog_status === selectedPriority;
 
-      // const matchesFormat = selectedFormat
-      //   ? blog.date === selectedFormat
-      //   : true;
+     
 
       return matchesSearch && matchesPriority;
     });
+    if (selectedFormat === "new") {
+      filteredData = filteredData.sort(
+        (a: any, b: any) =>
+          new Date(b.created_time).getTime() -
+          new Date(a.created_time).getTime()
+      );
+    } else if (selectedFormat === "old") {
+      filteredData = filteredData.sort(
+        (a: any, b: any) =>
+          new Date(a.created_time).getTime() -
+          new Date(b.created_time).getTime()
+      );
+    }
 
     setFiltered(filteredData);
   }, [searchTerm, selectedPriority, selectedFormat, blogs]);

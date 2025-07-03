@@ -230,6 +230,16 @@ export const getUsers = async (token: string) => {
     },
   });
 };
+export const getUserHistory = async (token: string, id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/order/user-history/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 export const createUser = async (token: string, payload: CreateUserPayload) => {
   return await axios({
     method: "post",

@@ -24,11 +24,11 @@ import MyProfile from "./pages/MyProfile";
 import EditProducts from "./pages/EditProducts";
 import ProductSEO from "./components/products/ProductSEO";
 import Settings from "./pages/Settings";
-import OrderHistory from "./pages/OrderHistory";
 import UserSentiment from "./pages/UserSentiment";
 import Blogs from "./pages/Blogs";
 import CreateBlog from "./pages/CreateBlog";
 import EditBlog from "./pages/EditBlog";
+import UserHistory from "./pages/UserHistory";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -78,7 +78,7 @@ function App() {
           element={<ShipmentsDetails />}
         />
         <Route path="/users" element={<Users />} />
-       <Route path="/order-history/:id" element={<OrderHistory />} />
+       <Route path="/user-history/:id" element={<UserHistory />} />
 
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />

@@ -50,9 +50,11 @@ import { toast } from "sonner";
 import axios from "axios";
 import { User } from "@/types/type";
 import { useAppContext } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function UsersTable() {
   const queryClinet = useQueryClient();
+  const navigate = useNavigate();
   const { auth } = useAppContext();
   const {
     data: users,
@@ -93,11 +95,20 @@ function UsersTable() {
     {
       accessorKey: "first_name",
       header: () => "Username",
-      cell: ({ row }) => (
-        <div className="capitalize text-primary-blue font-semibold">
-          {row.getValue("first_name")}
-        </div>
-      ),
+      cell: ({ row }) => {
+        const { user_id } = row.original;
+        console.log('user_id: ', user_id);
+        return (
+          <div
+            onClick={() => {
+              navigate(`/user-history/${user_id}`);
+            }}
+            className="capitalize cursor-pointer text-primary-blue font-semibold"
+          >
+            {row.getValue("first_name")}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "email",
@@ -277,17 +288,17 @@ function UsersTable() {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-const globalFilterFunction = (
-  row: any,
-  _columnId: string,
-  filterValue: string
-) => {
-  const name = row.original.first_name?.toLowerCase() || "";
-  const email = row.original.email?.toLowerCase() || "";
-  const search = filterValue.trim().toLowerCase();
+  const globalFilterFunction = (
+    row: any,
+    _columnId: string,
+    filterValue: string
+  ) => {
+    const name = row.original.first_name?.toLowerCase() || "";
+    const email = row.original.email?.toLowerCase() || "";
+    const search = filterValue.trim().toLowerCase();
 
-  return name.includes(search) || email.includes(search); 
-};
+    return name.includes(search) || email.includes(search);
+  };
 
   const table = useReactTable({
     data: users,
