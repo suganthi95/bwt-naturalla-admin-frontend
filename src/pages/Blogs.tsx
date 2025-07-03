@@ -63,13 +63,13 @@ export default function Blogs() {
       return matchesSearch && matchesPriority;
     });
     if (selectedFormat === "new") {
-      filteredData = filteredData.sort(
+      filteredData = filteredData?.sort(
         (a: any, b: any) =>
           new Date(b.created_time).getTime() -
           new Date(a.created_time).getTime()
       );
     } else if (selectedFormat === "old") {
-      filteredData = filteredData.sort(
+      filteredData = filteredData?.sort(
         (a: any, b: any) =>
           new Date(a.created_time).getTime() -
           new Date(b.created_time).getTime()
