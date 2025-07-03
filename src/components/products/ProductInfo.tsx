@@ -73,46 +73,80 @@ export function ProductInfo() {
     queryFn: () => getProductInfo(auth?.token ?? "", productId),
     retry: 3,
     refetchOnWindowFocus: true,
+    // select: (data): ProductInfoFormType => {
+    //   const {
+    //     category_id,
+    //     hsn_code,
+    //     category_title,
+    //     gallery_images,
+    //     min_order_quantity,
+    //     product_name,
+    //     slug,
+    //     subcategory_id,
+    //     subcategory_name,
+    //     tags,
+    //     thumbnail_image,
+    //     icon_data,
+    //     units,
+    //   } = data?.data?.data;
+      
+    //   return {
+    //     category_id: category_id,
+
+    //     productName: product_name,
+    //     category: `${category_title}::${category_id.toString()}`,
+    //     subCategory: `${subcategory_name}::${subcategory_id.toString()}`,
+    //     unit: units,
+    //     minOrderQty: min_order_quantity,
+    //     tags: tags,
+    //     hsn_code: hsn_code,
+    //     icon_data: icon_data || null,
+    //     slug: slug,
+
+    //     galleryImages: gallery_images,
+    //     thumbnail: thumbnail_image[0],
+    //   };
+    // },
     select: (data): ProductInfoFormType => {
-      const {
-        category_id,
-        hsn_code,
-        category_title,
-        gallery_images,
-        min_order_quantity,
-        product_name,
-        slug,
-        // subcategory_id,
-        subcategory_name,
-        tags,
-        thumbnail_image,
-        icon_data,
-        units,
-      } = data?.data?.data;
+  const {
+    category_id,
+    hsn_code,
+    category_title,
+    gallery_images,
+    min_order_quantity,
+    product_name,
+    slug,
+    subcategory_id,
+    subcategory_name,
+    tags,
+    thumbnail_image,
+    icon_data,
+    units,
+  } = data?.data?.data;
 
-      return {
-        category_id: category_id,
-
-        productName: product_name,
-        // category: `${category_title}::${category_id.toString()}`,
-        // subCategory: `${subcategory_name}::${subcategory_id.toString()}`,
-        category: `${category_title}`,
-        subCategory: `${subcategory_name}`,
-        unit: units,
-        minOrderQty: min_order_quantity,
-        tags: tags,
-        hsn_code: hsn_code,
-        icon_data: icon_data || null,
-        slug: slug,
-
-        galleryImages: gallery_images,
-        thumbnail: thumbnail_image[0],
-      };
-    },
+  return {
+    category_id: category_id ?? null,
+    productName: product_name ?? "",
+    category:
+      category_title && category_id !== null && category_id !== undefined
+        ? `${category_title}::${category_id}`
+        : "",
+    subCategory:
+      subcategory_name && subcategory_id !== null && subcategory_id !== undefined
+        ? `${subcategory_name}::${subcategory_id}`
+        : "",
+    unit: units ?? "",
+    minOrderQty: min_order_quantity ?? 1,
+    tags: tags ?? [],
+    hsn_code: hsn_code ?? "",
+    icon_data: icon_data ?? [],
+    slug: slug ?? "",
+    galleryImages: gallery_images ?? [],
+    thumbnail: thumbnail_image?.[0] ?? null,
+  };
+},
     enabled: Boolean(productId),
   });
-
-  console.log(productInfoDefaults);
 
   const [pairs, setPairs] = useState<ProductIcon[] | null>(
     productInfoDefaults?.icon_data || []
@@ -382,140 +416,137 @@ export function ProductInfo() {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Label>Tags * (Type the Tag and Press "Enter")</Label>
-          <Input
-            disabled={isPending}
-            value={tagInput}
-            onKeyDown={addTags}
-            placeholder="Write & enter"
-            {...register("tags", {
-              onChange: (e) => setTagInput(e.target.value),
-              validate: () => {
-                if (tags.length === 0) {
-                  return "Atleast one tag is required";
-                }
-              },
-            })}
-          />
-          {errors?.tags && tags.length === 0 && (
-            <p className="text-sm text-red-500">{errors?.tags?.message}</p>
-          )}
-
-          <div className="flex flex-wrap gap-2 mt-2">
-            {tags?.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="cursor-pointer bg-primary-blue text-white hover:bg-primary-blue/80"
-                onClick={() => removeTag(tag)}
-              >
-                {tag} ✕
-              </Badge>
-            ))}
-          </div>
-        </div>
-        <div className="">
-          <label className="block text-sm font-semibold text-[#232323] mb-1">
-            Product Effects Icon <span className="text-red-500">*</span>
-          </label>
-          <Select
-            onValueChange={(value) => {
-              const selectedIcon = watch("product_effects")?.find(
-                (item: ProductEffectIcon) => item.icon_id === Number(value)
-              );
-
-              if (!selectedIcon) return;
-
-              const alreadyExists = pairs?.some(
-                (p) => p.icon_id === selectedIcon.icon_id
-              );
-
-              if (!alreadyExists) {
-                setPairs((prev) => [...(prev || []), selectedIcon]);
-              } else {
-                toast.warning("Icon already selected");
+      <div>
+        <Label>Tags * (Type the Tag and Press "Enter")</Label>
+        <Input
+          disabled={isPending}
+          value={tagInput}
+          onKeyDown={addTags}
+          placeholder="Write & enter"
+          {...register("tags", {
+            onChange: (e) => setTagInput(e.target.value),
+            validate: () => {
+              if (tags.length === 0) {
+                return "Atleast one tag is required";
               }
-            }}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {watch("product_effects") &&
-              watch("product_effects").length > 0 ? (
-                watch("product_effects").map((item: ProductEffectIcon) => (
-                  <SelectItem
-                    key={item.icon_id}
-                    value={item.icon_id.toString()}
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={item.icon_url}
-                        alt={item.icon_name}
-                        className="w-5 h-5 object-contain"
-                      />
-                      <span className="text-sm text-[#232323] font-medium">
-                        {item.icon_text}
-                      </span>
-                    </div>
-                  </SelectItem>
-                ))
-              ) : (
-                <div className="text-sm text-muted-foreground px-4 py-2">
-                  Please select a category to load icons
-                </div>
-              )}
-            </SelectContent>
-          </Select>
+            },
+          })}
+        />
+        {errors?.tags && tags.length === 0 && (
+          <p className="text-sm text-red-500">{errors?.tags?.message}</p>
+        )}
 
-          {pairs && pairs?.length > 0 && (
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {pairs?.slice(0, 3)?.map((pair, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-1 px-4 border rounded-md bg-slate-50"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={pair?.icon_url}
-                        alt={pair?.icon_name}
-                        className="w-8 h-8 object-contain"
-                      />
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          {pair.icon_text}
-                        </p>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setPairs((prev) =>
-                          (prev ?? [])?.filter(
-                            (item) => item.icon_id !== pair?.icon_id
-                          )
-                        )
-                      }
-                      className="text-red-500 hover:text-red-700 transition"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                );
-              })}
-
-              {pairs?.length > 3 && (
-                <div className="flex items-center justify-center p-1 px-4 border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
-                  +{pairs?.length - 3} more
-                </div>
-              )}
-            </div>
-          )}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {tags?.map((tag) => (
+            <Badge
+              key={tag}
+              variant="secondary"
+              className="cursor-pointer bg-primary-blue text-white hover:bg-primary-blue/80"
+              onClick={() => removeTag(tag)}
+            >
+              {tag} ✕
+            </Badge>
+          ))}
         </div>
       </div>
+      <div className="">
+        <label className="block text-sm font-semibold text-[#232323] mb-1">
+          Product Effects Icon <span className="text-red-500">*</span>
+        </label>
+        <Select
+          onValueChange={(value) => {
+            const selectedIcon = watch("product_effects")?.find(
+              (item: ProductEffectIcon) => item.icon_id === Number(value)
+            );
+
+            if (!selectedIcon) return;
+
+            const alreadyExists = pairs?.some(
+              (p) => p.icon_id === selectedIcon.icon_id
+            );
+
+            if (!alreadyExists) {
+              setPairs((prev) => [...(prev || []), selectedIcon]);
+            } else {
+              toast.warning("Icon already selected");
+            }
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            {watch("product_effects") && watch("product_effects").length > 0 ? (
+              watch("product_effects").map((item: ProductEffectIcon) => (
+                <SelectItem key={item.icon_id} value={item.icon_id.toString()}>
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={item.icon_url}
+                      alt={item.icon_name}
+                      className="w-5 h-5 object-contain"
+                    />
+                    <span className="text-sm text-[#232323] font-medium">
+                      {item.icon_text}
+                    </span>
+                  </div>
+                </SelectItem>
+              ))
+            ) : (
+              <div className="text-sm text-muted-foreground px-4 py-2">
+                Please select a category to load icons
+              </div>
+            )}
+          </SelectContent>
+        </Select>
+
+        {pairs && pairs?.length > 0 && (
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {pairs?.slice(0, 3)?.map((pair, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-1 px-4 border rounded-md bg-slate-50"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={pair?.icon_url}
+                      alt={pair?.icon_name}
+                      className="w-8 h-8 object-contain"
+                    />
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        {pair.icon_text}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPairs((prev) =>
+                        (prev ?? [])?.filter(
+                          (item) => item.icon_id !== pair?.icon_id
+                        )
+                      )
+                    }
+                    className="text-red-500 hover:text-red-700 transition"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              );
+            })}
+
+            {pairs?.length > 3 && (
+              <div className="flex items-center justify-center p-1 px-4 border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
+                +{pairs?.length - 3} more
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+</div>
 
       <div>
         <Label>Slug</Label>
