@@ -130,7 +130,11 @@ function ProductsTable() {
       accessorKey: "current_stock",
       header: () => "Current Stock",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("current_stock")}</div>
+        <div className="capitalize">
+          {row.getValue("current_stock")
+            ? row.getValue("current_stock")
+            : "N/A"}
+        </div>
       ),
     },
     {
