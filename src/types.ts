@@ -49,7 +49,7 @@ export type ProductsType = {
 }
 
 export type ProductFormValues = {
-    shortDescription: string;
+    // shortDescription: string;
     longDescription: string;
     benefits: string;
     howToUse: string;

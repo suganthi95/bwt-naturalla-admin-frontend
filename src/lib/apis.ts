@@ -495,7 +495,6 @@ export const addProductSpecs = async ({
 }) => {
   const formdata = new FormData();
   formdata.append("product_id", data.productId as string);
-  formdata.append("short_description", data.shortDescription);
   formdata.append("long_description", data.longDescription);
   formdata.append("benefits", data.benefits);
   formdata.append("how_to_use", data.howToUse);

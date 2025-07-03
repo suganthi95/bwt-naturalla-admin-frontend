@@ -1,5 +1,4 @@
 import { Label } from "@radix-ui/react-label";
-import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
 import { Badge } from "../ui/badge";
@@ -55,7 +54,7 @@ function ProductSpecs() {
         offer_ending_soon,
         pdf_id,
         pdf_url,
-        short_description,
+        // short_description,
         weight,
       } = data?.data?.data;
 
@@ -71,7 +70,7 @@ function ProductSpecs() {
         length,
         longDescription: long_description,
         offerEndingSoon: offer_ending_soon,
-        shortDescription: short_description,
+        // shortDescription: short_description,
         specificationPDF: { pdf_id, pdf_url },
         todayDeal: isin_todays_deal,
         weight,
@@ -158,8 +157,8 @@ function ProductSpecs() {
       className="space-y-6 p-6 bg-white rounded-xl mt-5 shadow-md w-[75%]"
     >
       <div>
-        <Label>Short Description</Label>
-        <div className="mt-1">
+        {/* <Label>Short Description</Label> */}
+        {/* <div className="mt-1">
           <Textarea
             rows={5}
             {...register("shortDescription", {
@@ -169,7 +168,7 @@ function ProductSpecs() {
               },
             })}
           />
-        </div>
+        </div> */}
         {/* <div className="mt-1">
                     <Controller
                         rules={{
@@ -196,11 +195,11 @@ function ProductSpecs() {
                     })} 
                 /> */}
 
-        {errors?.shortDescription && (
+        {/* {errors?.shortDescription && (
           <p className="text-sm text-red-500 mt-1">
             {errors?.shortDescription.message}
           </p>
-        )}
+        )} */}
       </div>
 
       <div>

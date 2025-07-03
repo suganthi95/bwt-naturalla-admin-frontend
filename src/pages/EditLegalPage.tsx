@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,6 +16,15 @@ import { Button } from "@/components/ui/button";
 
 import { useNavigate } from "react-router-dom";
 import TextEditor from "@/components/ui/TextEditor";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const blogSchema = z.object({
   title: z.string().min(3),
@@ -31,6 +40,7 @@ export default function EditLegalPage() {
   const navigate = useNavigate();
   // const queryClient = useQueryClient();
   const [editorContent, setEditorContent] = useState("");
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
   // const { mutate, isPending } = useMutation({
   //   mutationKey: ["createblog"],
@@ -49,22 +59,12 @@ export default function EditLegalPage() {
     },
   });
 
- 
-
-
-
-
-
-
-
-
   const onSubmit = (data: BlogFormValues) => {
     const finalData = {
       ...data,
-   
     };
     console.log(finalData);
-    
+
     // mutate(
     //   {
     //     token: auth?.token ?? "",
@@ -86,7 +86,7 @@ export default function EditLegalPage() {
   };
 
   return (
-    <div className="flex flex-col p-4  gap-4 w-full  overflow-y-auto bg-slate-100">
+    <div className="flex flex-col p-4  gap-4 w-full h-screen  overflow-y-auto bg-slate-100">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         <div className="flex justify-between items-center">
           <div className="flex items-start gap-1 text-xl font-semibold">
@@ -106,7 +106,40 @@ export default function EditLegalPage() {
             </div>
           </div>
           <div className="flex justify-between gap-x-2  mt-4 ">
-           
+            <Dialog
+              open={showPreviewDialog}
+              onOpenChange={setShowPreviewDialog}
+            >
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-slate-400  text-slate-500"
+                >
+                  Preview
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-3xl">
+                <DialogHeader>
+                  <DialogTitle>Blog Preview</DialogTitle>
+                  <DialogDescription>
+                    This is how your blog content will appear.
+                  </DialogDescription>
+                </DialogHeader>
+                <div
+                  className="prose max-w-full bg-white p-4 rounded-md border overflow-y-auto max-h-[500px]"
+                  dangerouslySetInnerHTML={{ __html: editorContent }}
+                />
+                <DialogFooter>
+                  <Button
+                    onClick={() => setShowPreviewDialog(false)}
+                    variant="secondary"
+                  >
+                    Close
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             <div className="space-x-3">
               <Button type="submit">
                 {/* {showPublish && isPending ? (
@@ -119,20 +152,37 @@ export default function EditLegalPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white p-4 space-y-4">
-          <div>
-            <label className="block font-medium mb-1 text-sm">Title</label>
-            <Input {...register("title")} placeholder="Enter blog title" />
-            {errors.title && (
-              <p className="text-red-500 text-sm">{errors.title.message}</p>
-            )}
-          </div>
-        
-          <div className="grid grid-cols-2 gap-x-4">
-         
+        <div className="grid grid-cols-6 gap-x-6 ">
+          <div className="bg-white  rounded-lg p-4 col-span-4 space-y-4">
+            <div>
+              <label className="block font-medium mb-1 text-sm">Title</label>
+              <Input {...register("title")} placeholder="Enter blog title" />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
+              )}
+            </div>
 
             <div>
-              <label className="block font-medium mb-1 text-sm">Status</label>
+              <label className="block font-medium mb-1 text-sm">Content</label>
+
+              <TextEditor
+                content={editorContent}
+                handleChange={(value: any) => {
+                  setEditorContent(value);
+                  setValue("content", value);
+                }}
+              />
+              {errors.content && (
+                <p className="text-red-500 text-sm">{errors.content.message}</p>
+              )}
+            </div>
+          </div>
+          <div className="  space-y-4 col-span-2 gap-x-4 bg-white p-4">
+            <h1 className="text-primary-black text-xl font-semibold">
+              Publishing Options
+            </h1>
+            <div>
+              <label className="block font-medium mb-2 text-sm">Status</label>
               <Select
                 onValueChange={(value) =>
                   setValue("status", value as "draft" | "published")
@@ -148,21 +198,26 @@ export default function EditLegalPage() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          <div>
-            <label className="block font-medium mb-1 text-sm">Content</label>
-
-            <TextEditor
-              content={editorContent}
-              handleChange={(value: any) => {
-                setEditorContent(value);
-                setValue("content", value);
-              }}
-            />
-            {errors.content && (
-              <p className="text-red-500 text-sm">{errors.content.message}</p>
-            )}
+            <ul className="space-y-2">
+              <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
+                Publishing Options:{" "}
+                <span className="text-[#808080] font-normal text-[15px]">
+                  Dec 15, 2024{" "}
+                </span>
+              </li>
+              <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
+                Updated By :{" "}
+                <span className="text-[#808080] text-[15px] font-normal">
+                  Dec 15, 2024{" "}
+                </span>
+              </li>
+              <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
+                Word Count :{" "}
+                <span className="text-[#808080] font-normal text-[15px]">
+                  Dec 15, 2024{" "}
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       </form>
