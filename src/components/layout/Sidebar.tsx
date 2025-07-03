@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   LogOut,
   Newspaper,
+  NotepadText,
   Truck,
   UsersRound,
   WalletMinimal,
@@ -95,16 +96,23 @@ export default function Sidebar() {
       icon: <WalletMinimal className="w-5" />,
       shouldVisible: true,
     },
-     {
+    {
       name: "User Sentiment",
       route: "user-sentiment",
       icon: <Icons.User_Sentiment className="" />,
       shouldVisible: true,
     },
-         {
+    {
       name: "Blogs",
       route: "blogs",
       icon: <Newspaper className="w-5" />,
+      shouldVisible: true,
+    },
+    {
+      name: "Legal Pages",
+      route: "legal-pages",
+      icon: <NotepadText className="w-5" />,
+
       shouldVisible: true,
     },
   ];
@@ -214,7 +222,9 @@ export default function Sidebar() {
                     value={item.route}
                     className="w-full px-3 py-2 rounded-full flex items-center justify-start bg-transparent gap-3 data-[state=active]:bg-secondary-green/20 dark:data-[state=active]:bg-white data-[state=active]:text-primary-green"
                   >
-                    <div className="min-w-[20px]" title={item.name}>{item.icon}</div>
+                    <div className="min-w-[20px]" title={item.name}>
+                      {item.icon}
+                    </div>
 
                     <span
                       className={`whitespace-nowrap transition-all duration-300 origin-left ${
@@ -231,25 +241,22 @@ export default function Sidebar() {
           </Tabs>
         </div>
         <div className="grid place-items-start px-3">
-<div           onClick={() => setResizeMenu(!resizeMenu)}
- className="flex items-center gap-x-3  cursor-pointer">
- 
-        <div
-          className="w-8 h-8 cursor-pointer grid place-items-center text-white rounded-full bg-secondary-green  transition-all shadow"
-        > 
-        
-          {resizeMenu ? (
-            <ChevronLeft className="h-5 w-5" />
-          ) : (
-            <ChevronRight className="h-5 w-5" />
-          )}
-        </div>
-      {resizeMenu &&  <p className="font-semibold  text-sm">Collapse</p>}
-</div>
-
+          <div
+            onClick={() => setResizeMenu(!resizeMenu)}
+            className="flex items-center gap-x-3  cursor-pointer"
+          >
+            <div className="w-8 h-8 cursor-pointer grid place-items-center text-white rounded-full bg-secondary-green  transition-all shadow">
+              {resizeMenu ? (
+                <ChevronLeft className="h-5 w-5" />
+              ) : (
+                <ChevronRight className="h-5 w-5" />
+              )}
+            </div>
+            {resizeMenu && <p className="font-semibold  text-sm">Collapse</p>}
+          </div>
         </div>
 
-        <div className="flex justify-start px-3 items-center py-4">
+        <div className="flex justify-start px-3 items-center py-1">
           <Button
             onClick={() => setOpenLogoutDialog(true)}
             size="icon"
@@ -257,7 +264,7 @@ export default function Sidebar() {
           >
             <LogOut className="h-5 w-5" />
           </Button>
-      {resizeMenu &&  <p className="font-semibold text-sm">Logout</p>}
+          {resizeMenu && <p className="font-semibold text-sm">Logout</p>}
         </div>
       </div>
       <LogoutDialog
