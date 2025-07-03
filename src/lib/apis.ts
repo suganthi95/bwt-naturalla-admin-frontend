@@ -461,7 +461,7 @@ export const addProductPrice = async ({
       unit_price: data.unitPrice,
       strike_through_price: data.strikeThroughPrice,
       special_discount_type: data.specialDiscountType,
-      special_discount_percent: data?.specialDiscountPercentage ,
+      special_discount_percent: data?.specialDiscountPercentage,
       special_discount_amount: data?.specialDiscountAmount,
       discount_start_at: data.discountPeriodStartat,
       discount_end_at: data.discountPeriodendat,
@@ -730,7 +730,9 @@ export const createBlog = async (token: string, data: any) => {
   formdata.append("blog_title", data.title);
   formdata.append("blog_desc", data.description);
   formdata.append("blog_status", data.status);
-  formdata.append("blog_publish", data.showPublish);
+  // formdata.append("blog_publish", data.showPublish);
+  formdata.append("blog_publish", "false");
+
   formdata.append("blog_image", data.thumbnail);
   formdata.append("blog_content", data.content);
 
@@ -752,7 +754,9 @@ export const editBlog = async (token: string, data: any) => {
   formdata.append("blog_title", data.title);
   formdata.append("blog_desc", data.description);
   formdata.append("blog_status", data.status);
-  formdata.append("blog_publish", data.showPublish);
+  // formdata.append("blog_publish", data.showPublish);
+  formdata.append("blog_publish", "false");
+
   formdata.append("blog_image", data.thumbnail);
   formdata.append("blog_content", data.content);
 

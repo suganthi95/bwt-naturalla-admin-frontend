@@ -76,7 +76,7 @@ export default function Blogs() {
       </div>
       <div className="p-4 bg-white">
         <div className="flex  justify-between mb-4">
-          <h2 className="font-bold  mb-4">Blog List</h2>
+          <h2 className="font-bold text-xl  mb-4">Blogs List</h2>
           <Button onClick={() => navigate("/blogs/create")}>
             Create a New Post
           </Button>

@@ -45,7 +45,7 @@ type BlogFormValues = z.infer<typeof blogSchema>;
 export default function CreateBlog() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [editorContent, setEditorContent] = useState("");
@@ -130,9 +130,9 @@ export default function CreateBlog() {
       },
       {
         onSuccess() {
-          toast.success('blog created successfully');
-          queryClient.invalidateQueries({queryKey:['getblogs']})
-          navigate('/blogs')
+          toast.success("blog created successfully");
+          queryClient.invalidateQueries({ queryKey: ["getblogs"] });
+          navigate("/blogs");
         },
         onError(error) {
           if (axios.isAxiosError(error)) {
@@ -145,18 +145,74 @@ export default function CreateBlog() {
 
   return (
     <div className="flex flex-col p-4  gap-4 w-full  overflow-y-auto bg-slate-100">
-      <h1 className="text-xl font-semibold flex items-center gap-x-1">
-        {" "}
-        <span className="cursor-pointer" onClick={() => navigate("/blogs")}>
-          <ChevronLeft />
-        </span>{" "}
-        Create Blog
-      </h1>
+    
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-3xl p-4 space-y-4 bg-white"
+        className="space-y-3"
       >
+        <div className="flex justify-between items-center">
+          <div className="flex items-start gap-1 text-xl font-semibold">
+        <button
+          onClick={() => navigate("/blogs")}
+          className="text-gray-700 mt-1 cursor-pointer hover:text-black transition-colors"
+          aria-label="Back to Blogs"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+
+        <div>
+          <h1 className="text-xl font-semibold">Create Blog</h1>
+          <p className="text-sm text-slate-500">
+            Create content that drives traffic and sales.
+          </p>
+        </div>
+      </div>
+ <div className="flex justify-between gap-x-2  mt-4 ">
+          <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+            <DialogTrigger asChild>
+                 <Button
+              type="button"
+              variant="outline"
+              className="border-slate-400  text-slate-500"
+            >
+             Preview
+            </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-3xl">
+              <DialogHeader>
+                <DialogTitle>Blog Preview</DialogTitle>
+                <DialogDescription>
+                  This is how your blog content will appear.
+                </DialogDescription>
+              </DialogHeader>
+              <div
+                className="prose max-w-full bg-white p-4 rounded-md border overflow-y-auto max-h-[500px]"
+                dangerouslySetInnerHTML={{ __html: editorContent }}
+              />
+              <DialogFooter>
+                <Button
+                  onClick={() => setShowPreviewDialog(false)}
+                  variant="secondary"
+                >
+                  Close
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <div className="space-x-3">
+         
+            <Button type="submit" onClick={() => setPublish(true)}>
+              {showPublish && isPending ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Save Changes"
+              )}
+            </Button>
+          </div>
+        </div>
+        </div>
+      <div className="bg-white p-4 space-y-4">
         <div>
           <label className="block font-medium mb-1 text-sm">Title</label>
           <Input {...register("title")} placeholder="Enter blog title" />
@@ -278,48 +334,9 @@ export default function CreateBlog() {
             <p className="text-red-500 text-sm">{errors.content.message}</p>
           )}
         </div>
-        <div className="flex justify-between  mt-4 ">
-          <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
-            <DialogTrigger asChild>
-              <Button type="button" variant="secondary">
-                Preview
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-3xl">
-              <DialogHeader>
-                <DialogTitle>Blog Preview</DialogTitle>
-                <DialogDescription>
-                  This is how your blog content will appear.
-                </DialogDescription>
-              </DialogHeader>
-              <div
-                className="prose max-w-full bg-white p-4 rounded-md border overflow-y-auto max-h-[500px]"
-                dangerouslySetInnerHTML={{ __html: editorContent }}
-              />
-              <DialogFooter>
-                <Button
-                  onClick={() => setShowPreviewDialog(false)}
-                  variant="secondary"
-                >
-                  Close
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <div className="space-x-3">
-            <Button
-              type="submit"
-              onClick={() => setPublish(false)}
-              variant="outline"
-            >
-             {!showPublish && isPending  ? <Loader2 className="animate-spin"/>: " Save as Draft"} 
-            </Button>
-            <Button type="submit" onClick={() => setPublish(true)}>
-                             {showPublish && isPending  ? <Loader2 className="animate-spin"/>: "Save & Publish"} 
 
-            </Button>
-          </div>
-        </div>
+      </div>
+       
       </form>
     </div>
   );
