@@ -30,6 +30,7 @@ import CreateBlog from "./pages/CreateBlog";
 import EditBlog from "./pages/EditBlog";
 import UserHistory from "./pages/UserHistory";
 import LegalPages from "./pages/LegalPages";
+import EditLegalPage from "./pages/EditLegalPage";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -88,6 +89,7 @@ function App() {
         <Route path="/blogs/create" element={<CreateBlog/>}/>
         <Route path="/blogs/edit" element={<EditBlog/>}/>
         <Route path="/legal-pages" element={<LegalPages/>}/>
+        <Route path="/legal-pages/edit/:id" element={<EditLegalPage/>}/>
 
       </Route>
       <Route path="/sign-in" element={<SignIn />} />

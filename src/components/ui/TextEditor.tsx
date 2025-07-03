@@ -11,7 +11,7 @@ const TextEditor = ({ content, handleChange }: any) => {
                 [{ 'header': [1, 2, false] }],
                 ['bold', 'italic', 'underline', 'strike', 'blockquote'],
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                ['link', 'image'],
+                ['link', ],
             ],
             // handlers: {
             //     'image': () => {}
@@ -23,7 +23,7 @@ const TextEditor = ({ content, handleChange }: any) => {
         'header',
         'bold', 'italic', 'underline', 'strike', 'blockquote',
         'list', 'bullet', 'indent',
-        'link', 'image'
+        'link', 
     ]
 
     return (

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Calendar, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const legalPages = [
   {
@@ -21,6 +22,7 @@ const legalPages = [
 ];
 
 export default function LegalPages() {
+    const navigate = useNavigate()
   return (
     <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
       <div>
@@ -69,7 +71,11 @@ export default function LegalPages() {
               <Button variant="outline" size="sm">
                 View
               </Button>
-              <Button size="sm">Edit</Button>
+              <Button size="sm" 
+              onClick={()=>{
+                navigate(`/legal-pages/edit/${'2'}`)
+              }}
+              >Edit</Button>
             </div>
 
                 </div>
