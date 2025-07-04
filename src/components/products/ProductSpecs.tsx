@@ -395,7 +395,7 @@ function ProductSpecs() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Label htmlFor="todayDeal">Today Deal :</Label>
+          <Label htmlFor="todayDeal">Today's Offer :</Label>
           <Switch
             id="todayDeal"
             checked={watch("todayDeal")}
@@ -404,7 +404,7 @@ function ProductSpecs() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Label htmlFor="offerEndingSoon">Offer Ending Soon :</Label>
+          <Label htmlFor="offerEndingSoon">Trending Now :</Label>
           <Switch
             id="offerEndingSoon"
             checked={watch("offerEndingSoon")}
@@ -413,7 +413,7 @@ function ProductSpecs() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Label htmlFor="bestSelling">Best Selling :</Label>
+          <Label htmlFor="bestSelling">Combo's :</Label>
           <Switch
             id="bestSelling"
             checked={watch("bestSelling")}

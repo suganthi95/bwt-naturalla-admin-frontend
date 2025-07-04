@@ -154,7 +154,7 @@ function ProductsTable() {
     },
     {
       accessorKey: "isin_todays_deal",
-      header: () => "Today's deal",
+      header: () => "Today's Offer",
       cell: ({ row }) => (
         <ProductToggle
           state={row.getValue("isin_todays_deal")}
@@ -179,7 +179,7 @@ function ProductsTable() {
     // },
     {
       accessorKey: "best_selling",
-      header: () => "Best Selling",
+      header: () => "Combo's",
       cell: ({ row }) => (
         <ProductToggle
           state={row.getValue("best_selling")}
@@ -190,7 +190,7 @@ function ProductsTable() {
     },
     {
       accessorKey: "offer_ending_soon",
-      header: () => "Offer Ending Soon",
+      header: () => "Trending Now",
       cell: ({ row }) => (
         <ProductToggle
           state={row.getValue("offer_ending_soon")}

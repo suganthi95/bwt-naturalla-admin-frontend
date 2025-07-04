@@ -235,7 +235,7 @@ export default function AddCategory() {
 
         <div>
           <label className="block text-sm font-semibold text-[#232323] mb-1">
-            Slug <span className="text-red-500">*</span>
+            Category Slug <span className="text-red-500">*</span>
           </label>
           <Input {...register("slug")} placeholder="product-slug" />
           {errors.slug && (

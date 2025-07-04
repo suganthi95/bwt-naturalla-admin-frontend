@@ -95,7 +95,7 @@ function PaymentGateway() {
           <CardHeader>
             <div className="text-xl text-primary-black flex flex-row items justify-between">
               <h1>Success Rate</h1>
-              <h1 className="text-2xl font-bold">12</h1>
+              <h1 className="text-2xl font-bold">{data?.dashboard[0]?.success_count}</h1>
             </div>
           </CardHeader>
          
