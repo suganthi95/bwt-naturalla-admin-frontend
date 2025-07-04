@@ -1,4 +1,4 @@
-import { deleteProduct, getAllProducts } from "@/lib/apis";
+import { BASE_FRONTEND_URL, deleteProduct, getAllProducts } from "@/lib/apis";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -206,13 +206,14 @@ function ProductsTable() {
       enableHiding: false,
       cell: ({ row }) => {
         const { slug } = row.original;
+        const Frontend_Url =BASE_FRONTEND_URL
         return (
           <div className="flex flex-row items-center gap-2">
             <Button
               size="icon"
               onClick={() => {
                 window.open(
-                  `https://stagingnaturalla.netlify.app/product/${slug}`,
+                  `${Frontend_Url}/product/${slug}`,
                   "_blank"
                 );
               }}

@@ -8,7 +8,7 @@ const BASE_URL = "https://adminapi.naturalla.store/api";
 // export const BASE_FRONTEND_URL = "https://adminnaturalla.netlify.app"
 
 // production
-export const BASE_FRONTEND_URL = "https://adminnaturalla.netlify.app"
+export const BASE_FRONTEND_URL = "https://naturalla.store"
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
