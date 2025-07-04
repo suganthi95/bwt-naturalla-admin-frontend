@@ -4,10 +4,13 @@ import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
 //staging
-const BASE_URL = "https://adminapi.naturalla.store/api";
+const BASE_URL = 'https://naturalla-admin-backend.onrender.com'
+
 // export const BASE_FRONTEND_URL = "https://adminnaturalla.netlify.app"
 
 // production
+// const BASE_URL = "https://adminapi.naturalla.store/api";
+
 export const BASE_FRONTEND_URL = "https://naturalla.store"
 
 const axiosInstance = axios.create({
