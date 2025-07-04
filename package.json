@@ -70,6 +70,7 @@
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.43.1",
     "@types/crypto-js": "^4.2.2",
+    "@types/luxon": "^3.6.2",
     "@types/node": "^20.14.8",
     "@types/react": "^18.3.3",
     "@types/react-csv": "^1.1.10",

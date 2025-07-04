@@ -24,6 +24,13 @@ import MyProfile from "./pages/MyProfile";
 import EditProducts from "./pages/EditProducts";
 import ProductSEO from "./components/products/ProductSEO";
 import Settings from "./pages/Settings";
+import UserSentiment from "./pages/UserSentiment";
+import Blogs from "./pages/Blogs";
+import CreateBlog from "./pages/CreateBlog";
+import EditBlog from "./pages/EditBlog";
+import UserHistory from "./pages/UserHistory";
+import LegalPages from "./pages/LegalPages";
+import EditLegalPage from "./pages/EditLegalPage";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -66,11 +73,24 @@ function App() {
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/orders" element={<Orders />} />
+
         <Route path="/shipments" element={<Shipments />} />
-        <Route path="/shipment-details/:shipmentId" element={<ShipmentsDetails />} />
+        <Route
+          path="/shipment-details/:shipmentId"
+          element={<ShipmentsDetails />}
+        />
         <Route path="/users" element={<Users />} />
+       <Route path="/user-history/:id" element={<UserHistory />} />
+
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />
+        <Route path="/user-sentiment" element={<UserSentiment/>}/>
+                <Route path="/blogs" element={<Blogs/>}/>
+        <Route path="/blogs/create" element={<CreateBlog/>}/>
+        <Route path="/blogs/edit" element={<EditBlog/>}/>
+        <Route path="/legal-pages" element={<LegalPages/>}/>
+        <Route path="/legal-pages/edit/:id" element={<EditLegalPage/>}/>
+
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="*" element={<p>no routes found</p>} />

@@ -138,7 +138,7 @@ export default function ShipmentsDetails() {
           </li>
 
           <li className="col-span-1">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-end gap-x-3 items-center">
               <Button
                 onClick={() => {
                   if (shipment.shipping_label) {
@@ -158,7 +158,7 @@ export default function ShipmentsDetails() {
                     window.location.href = shipment.manifest;
                   }
                 }}
-                className="border-slate-300 px-6 text-primary-black font-medium"
+                className="border-slate-300  text-primary-black font-medium"
                 variant={"outline"}
               >
                 Download Manifest

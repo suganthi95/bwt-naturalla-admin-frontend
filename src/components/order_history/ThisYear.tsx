@@ -36,13 +36,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import OrderDetails from "./OrderDetails";
+import OrderDetails from "../orders/OrderDetails";
 import { Badge } from "../ui/badge";
 import { Filter } from "../ui/Filter";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-function OrderTable() {
+function ThisYear() {
   const { auth } = useAppContext();
   const columns: ColumnDef<any>[] = [
     {
@@ -211,11 +211,7 @@ function OrderTable() {
             disabled={!row.original.track_url}
             onClick={() => {
               if (row.original.track_url) {
-                window.open(
-                  row.original.track_url,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                window.location.href = row.original.track_url;
               }
             }}
           >
@@ -583,4 +579,4 @@ function OrderTable() {
   return content;
 }
 
-export default OrderTable;
+export default ThisYear;

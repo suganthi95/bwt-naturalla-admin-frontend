@@ -261,12 +261,10 @@ function CategoryTable() {
     _columnId: string,
     filterValue: any
   ) => {
-    const customerName = row.original.shipmet_first_name?.toLowerCase() || "";
-    const phoneNumber = row.original.shipment_phone_no || "";
+    const customerName = (row.original?.category_title).toLowerCase() || "";
 
     return (
-      customerName.includes(filterValue.toLowerCase()) ||
-      phoneNumber.includes(filterValue.toLowerCase())
+      customerName.includes(filterValue.toLowerCase())
     );
   };
 
