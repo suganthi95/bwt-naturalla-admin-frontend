@@ -9,16 +9,10 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { PaymentProviders, togglePayment } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import {
-
-  EllipsisVertical,
-
-  Loader2,
-  Smartphone,
-} from "lucide-react";
+import { EllipsisVertical, Loader2, Smartphone } from "lucide-react";
 
 function PaymentGateway() {
-  const {auth} = useAppContext()
+  const { auth } = useAppContext();
   const queryClient = useQueryClient();
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["payments"],
@@ -36,11 +30,11 @@ function PaymentGateway() {
       enabled,
       user_id,
     }: {
-      token:string;
+      token: string;
       provider_id: string;
       enabled: boolean;
       user_id: number;
-    }) => togglePayment({token, provider_id, enabled, user_id }),
+    }) => togglePayment({ token, provider_id, enabled, user_id }),
   });
   if (isLoading || isFetching) {
     return (
@@ -95,24 +89,24 @@ function PaymentGateway() {
           <CardHeader>
             <div className="text-xl text-primary-black flex flex-row items justify-between">
               <h1>Success Rate</h1>
-              <h1 className="text-2xl font-bold">{data?.dashboard[0]?.success_count}</h1>
+              <h1 className="text-2xl font-bold">
+                {data?.dashboard[0]?.success_count}
+              </h1>
             </div>
           </CardHeader>
-         
         </Card>
         <Card>
           <CardHeader>
             <div className="text-xl text-primary-black flex flex-row items justify-between">
               <h1>Revenue</h1>
               <h1 className="text-2xl font-bold">
-                ₹ {data?.dashboard[0]?.transaction_amount}
+                {data?.dashboard[0]?.transaction_amount
+                  ? `₹ ${data?.dashboard[0]?.transaction_amount}`
+                  : `₹ 0`}
               </h1>
             </div>
           </CardHeader>
-        
         </Card>
-
-        
       </div>
 
       <div className="border bg-white p-4">
@@ -170,7 +164,7 @@ function PaymentGateway() {
                             if (payment?.enabled) {
                               mutate(
                                 {
-                                  token:auth?.token ?? "",
+                                  token: auth?.token ?? "",
                                   enabled: false,
                                   provider_id: payment.id,
                                   user_id: payment.user_id,
@@ -186,7 +180,7 @@ function PaymentGateway() {
                             } else {
                               mutate(
                                 {
-                                  token:auth?.token ?? "",
+                                  token: auth?.token ?? "",
                                   enabled: true,
                                   provider_id: payment.id,
                                   user_id: payment.user_id,
