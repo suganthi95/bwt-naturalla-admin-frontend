@@ -1,5 +1,5 @@
 import { BASE_FRONTEND_URL, deleteProduct, getAllProducts } from "@/lib/apis";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import {
@@ -60,7 +60,7 @@ import { useAppContext } from "@/contexts/AuthContext";
 function ProductsTable() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
-
+ const queryClient = useQueryClient()
   const { mutate } = useMutation({
     mutationKey: ["deleteProduct"],
     mutationFn: deleteProduct,
@@ -269,7 +269,12 @@ function ProductsTable() {
                         mutate({
                           token: auth?.token ?? "",
                           productId: row.getValue("product_id"),
-                        })
+                        },
+                      {
+                        onSuccess:()=>{
+                        queryClient.invalidateQueries({queryKey:['getAllProducts']})
+                        }
+                      })
                       }
                       variant="destructive"
                     >
