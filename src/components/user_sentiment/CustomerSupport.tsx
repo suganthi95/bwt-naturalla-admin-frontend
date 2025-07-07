@@ -10,9 +10,23 @@ import {
 import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { useAppContext } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { getCustomerQueries } from "@/lib/apis";
 
 export default function CustomerSupport() {
+  const {auth} = useAppContext()
   const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const {data} = useQuery({
+    queryKey:['customerReviews'],
+    queryFn:()=>getCustomerQueries(auth?.token ?? "",searchTerm ?? ""),
+    staleTime:1000*60*5,
+    select:(data)=>data?.data?.data,
+    retry:1,
+  })
+  console.log(data)
+  
   const [selectedPriority, setPriority] = useState<string>("");
   const getBadgeClass = (status: string) => {
     switch (status) {

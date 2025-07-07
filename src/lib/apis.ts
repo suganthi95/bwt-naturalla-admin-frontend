@@ -3,13 +3,11 @@ import { ProductFormValues } from "@/types";
 import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
-//staging
-const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
 
-// production
-// const BASE_URL = "https://adminapi.naturalla.store/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const BASE_FRONTEND_URL = "https://naturalla.store";
+
+export const BASE_FRONTEND_URL = import.meta.env.VITE_BASE_FRONTEND_URL;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -238,6 +236,16 @@ export const getUserHistory = async (token: string, id: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/order/user-history/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getUserOrderDetail = async (token: string, order_id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/order/user-history/${order_id}`,
     headers: {
       Authorization: token,
     },
@@ -825,3 +833,60 @@ export const editLegalPage = async (token: string, id: string) => {
     },
   });
 };
+
+export const getCustomerQueries = async (token: string, search: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/customer/support/?subject=${search}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getTicketDetails = async (token: string, id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/customer/support/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const addReply = async (token: string, ticket_id: string) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/customer/support/reply/${ticket_id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updatePriority = async (token: string, ticket_id: string,priority:string) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
+    data:{
+      priority
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updateStatus = async (token: string, ticket_id: string,status:string) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
+    data:{
+      status
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+

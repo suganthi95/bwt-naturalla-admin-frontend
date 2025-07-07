@@ -151,3 +151,12 @@ export type ProductEffectIcon = {
   created_at: string;
   icon_url: string;
 };
+
+
+export type UserOrderHistoryType = {
+  order_id: number;
+  order_date: string; // ISO date string
+  items: number | null; 
+  total_amount: number;
+  status: string;
+};

@@ -30,7 +30,7 @@ export default function EditFaq({onClose}:Props) {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded-md shadow">
+    <div className=" p-4  bg-white  rounded-md ">
       <h2 className="text-xl font-semibold mb-4">Add New FAQ</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
