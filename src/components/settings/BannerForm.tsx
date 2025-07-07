@@ -5,19 +5,20 @@ import { useForm } from "react-hook-form"
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addBanner } from "@/lib/apis";
+import { addBanner, updateBanner } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 interface Props {
     type: "add" | "edit",
+    defaultData?: any
 }
 
 
-function BannerForm({ type }: Props) {
+function BannerForm({ type, defaultData }: Props) {
 
     const { auth } = useAppContext();
     const [ open, setOpen ] = useState(false);
@@ -29,8 +30,17 @@ function BannerForm({ type }: Props) {
             type: "",
             ctaLink: "",
             bannerImage: null,
+            bannerImageId: null,
+            id: null
         }
     });
+
+    useEffect(() => {
+        if(type === "edit"){
+            reset(defaultData);
+            setPublish(defaultData.publish)
+        }
+    }, [ type, defaultData ])
 
     const { mutate, isPending } = useMutation({
         mutationKey: [ "addBanner" ],
@@ -46,15 +56,45 @@ function BannerForm({ type }: Props) {
         }
     })
 
+    const { mutate: updateBannerMutate, isPending: isPendingUpdateBanner } = useMutation({
+        mutationKey: [ "updateBanner" ],
+        mutationFn: updateBanner,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [ "getAllBanners" ] });
+            toast.success("Request Success", { description: "Banner Image updated successfully" });
+            setOpen(false);
+            reset();
+        },
+        onError: (error: AxiosError<any>) => {
+            toast.error("Request Failed", { description: error?.response?.data });
+        }
+    })
+
+
     const onSubmit = handleSubmit((data) => {
-        mutate({
-            token: auth?.token as string,
-            title: data.title,
-            type: data.type,
-            bannerImage: data.bannerImage as any,
-            publish: publish,
-            ctaLink: data.ctaLink
-        })
+
+        if(type === "add"){
+            mutate({
+                token: auth?.token as string,
+                title: data.title,
+                type: data.type,
+                bannerImage: data.bannerImage as any,
+                publish: publish,
+                ctaLink: data.ctaLink
+            })
+        }else{
+            updateBannerMutate({
+                token: auth?.token as string,
+                title: data.title,
+                type: data.type,
+                bannerImage: data.bannerImage as any,
+                publish: publish,
+                ctaLink: data.ctaLink,
+                id: data.id as any,
+                bannerImageId: data.bannerImageId as any
+            })
+        }
+        
     })
 
 
@@ -203,11 +243,11 @@ function BannerForm({ type }: Props) {
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button disabled={isPending} variant="outline">Cancel</Button>
+                        <Button disabled={isPending || isPendingUpdateBanner} variant="outline">Cancel</Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button disabled={isPending} onClick={onSubmit}>
-                            {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save Banner"}
+                        <Button disabled={isPending || isPendingUpdateBanner} onClick={onSubmit}>
+                            {isPending || isPendingUpdateBanner ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save Banner"}
                         </Button>
                     </DialogClose>
                 </DialogFooter>

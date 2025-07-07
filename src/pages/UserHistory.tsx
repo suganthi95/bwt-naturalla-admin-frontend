@@ -1,4 +1,7 @@
 import AllOrders from "@/components/order_history/AllOrders";
+import LastMonth from "@/components/order_history/LastMonth";
+import LastWeek from "@/components/order_history/LastWeek";
+import ThisYear from "@/components/order_history/ThisYear";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppContext } from "@/contexts/AuthContext";
@@ -12,23 +15,73 @@ export default function UserHistory() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["getuserhistory", id],
     queryFn: () => getUserHistory(auth?.token ?? "", id ?? ""),
     staleTime: 1000 * 60 * 5,
     retry: 1,
     select: (data) => data?.data,
   });
-  console.log(data);
 
   const [tabValue, setTabValue] = useState("all");
+ function exportMergedOrdersAsCSV(userData: any) {
+  const headers = [
+    "User ID",
+    "User Name",
+    "Email",
+    "Order ID",
+    "Order Date",
+    "Total Amount",
+    "Status",
+  ];
+
+  const mergedOrders = [
+    ...userData.all_orders,
+    ...userData.last_week_orders,
+    ...userData.last_month_orders,
+    ...userData.this_year_orders,
+  ];
+
+  const uniqueOrdersMap = new Map<number, any>();
+  for (const order of mergedOrders) {
+    uniqueOrdersMap.set(order.order_id, order)
+  }
+
+  const uniqueOrders = Array.from(uniqueOrdersMap.values());
+
+  const rows = uniqueOrders.map((order) => [
+    userData.user_id,
+    userData.user_name,
+    userData.email,
+    order.order_id,
+    order.order_date,
+    order.total_amount,
+    order.status,
+  ]);
+
+  const csvContent =
+    [headers, ...rows]
+      .map((row) => row.map((val) => `"${String(val)}"`).join(","))
+      .join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", "merged-orders.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 
   return (
     <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
       <div className="flex flex-row items-center justify-between">
-        <div className='flex items-start gap-x-1'>
+        <div className="flex items-start gap-x-1">
           <p
-          className="flex items-center gap-x-1 mt-1 cursor-pointer"
+            className="flex items-center gap-x-1 mt-1 cursor-pointer"
             onClick={() => {
               navigate("/users");
             }}
@@ -36,29 +89,25 @@ export default function UserHistory() {
             <ChevronLeft />
           </p>{" "}
           <div className="flex flex-col">
-
-        <h1 className="text-xl   font-semibold">
-         Order History
-        </h1>
-          <ul className="flex items-center gap-x-3">
-            <li className="text-[#4B5563] text-[13px] flex items-center gap-x-1">
-              <CircleUserRound className="w-4 h-4" />
-              Courtney Henry
-            </li>
-            <li className="text-[#4B5563] text-[13px]  flex items-center gap-x-1">
-              <Mail className="w-4 h-4" /> bava12@gmail.com
-            </li>
-            <li className="text-[#4B5563] text-[13px]  flex items-center gap-x-1">
-              <Briefcase className="w-4 h-4" />
-              11 Total Orders
-            </li>
-          </ul>
+            <h1 className="text-xl   font-semibold">Order History</h1>
+            <ul className="flex items-center gap-x-3">
+              <li className="text-[#4B5563] text-[13px] flex items-center gap-x-1">
+                <CircleUserRound className="w-4 h-4" />
+                {data?.user_name}
+              </li>
+              <li className="text-[#4B5563] text-[13px]  flex items-center gap-x-1">
+                <Mail className="w-4 h-4" /> {data?.email}
+              </li>
+              <li className="text-[#4B5563] text-[13px]  flex items-center gap-x-1">
+                <Briefcase className="w-4 h-4" />
+                {data?.total_orders} Total Orders
+              </li>
+            </ul>
           </div>
-
         </div>
 
         <div className="flex flex-row items-center gap-5">
-          <Button variant="outline" className="px-6">
+          <Button onClick={()=>exportMergedOrdersAsCSV(data)} variant="outline" className="px-6">
             Export
           </Button>
           <Button onClick={() => window.print()} className="px-6">
@@ -87,22 +136,26 @@ export default function UserHistory() {
                 </TabsTrigger>
               ))}
             </TabsList>
-
-            {/* <div className="relative w-full max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Search orders..."
-                className="pl-9 pr-4 py-2 text-sm border rounded-lg focus-visible:ring-1 focus-visible:ring-[#007AFF]"
-              />
-            </div> */}
           </div>
 
-          <TabsContent value="all">
-            <AllOrders />
-          </TabsContent>
-          <TabsContent value="last_week">Last Week's Orders</TabsContent>
-          <TabsContent value="this_month">This Month's Orders</TabsContent>
-          <TabsContent value="this_year">This Year's Orders</TabsContent>
+          {isLoading || isFetching ? (
+            <div className=" text-center">Loading...</div>
+          ) : (
+            <>
+              <TabsContent value="all">
+                <AllOrders orderHistory={data?.all_orders ?? []} />
+              </TabsContent>
+              <TabsContent value="last_week">
+                <LastWeek orderHistory={data?.last_week_orders ?? []} />
+              </TabsContent>
+              <TabsContent value="this_month">
+                <LastMonth orderHistory={data?.last_month_orders ?? []} />
+              </TabsContent>
+              <TabsContent value="this_year">
+                <ThisYear orderHistory={data?.this_year_orders ?? []} />
+              </TabsContent>
+            </>
+          )}
         </Tabs>
       </div>
     </div>

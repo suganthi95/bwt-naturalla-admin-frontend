@@ -1,5 +1,4 @@
-import {  getUsers } from "@/lib/apis";
-import {  useQuery } from "@tanstack/react-query";
+
 import { useState } from "react";
 import { Input } from "../ui/input";
 
@@ -29,13 +28,7 @@ import {
 } from "@tanstack/react-table";
 
 import { Checkbox } from "../ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+
 import {
   Dialog,
   DialogContent,
@@ -44,26 +37,19 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-import { User } from "@/types/type";
-import { useAppContext } from "@/contexts/AuthContext";
+import { UserOrderHistoryType } from "@/types/type";
 import OrderHistoryDetails from "./OrderHistoryDetails";
 
-function LastMonth() {
+
+interface Props{
+  orderHistory:UserOrderHistoryType[]
+}
+function LastMonth({orderHistory}:Props) {
 //   const queryClinet = useQueryClient();
-  const { auth } = useAppContext();
-  const {
-    data: users,
-    isLoading,
-    isSuccess,
-  } = useQuery({
-    queryKey: ["getusers"],
-    queryFn: () => getUsers(auth?.token ?? ""),
-    refetchOnWindowFocus: false,
-    select: (data) => data?.data?.users,
-  });
 
 
-  const columns: ColumnDef<User>[] = [
+
+  const columns: ColumnDef<UserOrderHistoryType>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -84,63 +70,72 @@ function LastMonth() {
       enableHiding: false,
     },
     {
-      accessorKey: "first_name",
-      header: () => "Username",
+      accessorKey: "order_id",
+      header: () => "Order ID",
       cell: ({ row }) => (
         <div className="capitalize text-primary-blue font-semibold">
-          {row.getValue("first_name")}
+          {row.getValue("order_id")}
         </div>
       ),
     },
     {
-      accessorKey: "email",
-      header: () => "Email Address",
+      accessorKey: "order_date",
+      header: () => "Order Date",
       cell: ({ row }) => (
-        <div className="font-semibold">{row.getValue("email")}</div>
+        <div className="font-semibold">{row.getValue("order_date")}</div>
       ),
     },
     {
-      accessorKey: "role",
-      header: () => "Role",
+      accessorKey: "items",
+      header: () => "Itmes",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("role")}</div>
+        <div className="capitalize">{row.getValue("items") ?? 0}</div>
       ),
     },
-    {
-      accessorKey: "status",
-      header: () => "Status",
-      cell: ({ row }) => {
-        if (row.getValue("status") === "active") {
-          return (
-            <span className="bg-green-400/25 text-green-400 rounded-full capitalize px-3 py-1">
-              {row.getValue("status")}
-            </span>
-          );
-        }
+        {
+      accessorKey: "total_amount",
+      header: () => "Total Amount",
+      cell: ({ row }) => (
+        <div className="capitalize"> ₹ {row.getValue("total_amount")}</div>
+      ),
+    },
+{
+  accessorKey: "status",
+  header: () => "Status",
+  cell: ({ row }) => {
+    const status = String(row.getValue("status")).toLowerCase();
 
-        if (row.getValue("status") === "inactive") {
-          return (
-            <span className="bg-red-400/25 text-red-400 rounded-full capitalize px-3 py-1">
-              {row.getValue("status")}
-            </span>
-          );
-        }
-      },
-    },
+    const statusColorMap: Record<string, string> = {
+        "order created": "bg-purple-500/20 text-purple-600",
+      "order confirmed": "bg-blue-500/20 text-blue-600",
+      "in progress": "bg-yellow-500/20 text-yellow-600",
+      "completed": "bg-green-500/20 text-green-600",
+      "delivered": "bg-emerald-500/20 text-emerald-600",
+      "cancelled": "bg-red-500/20 text-red-600",
+      "rto": "bg-orange-500/20 text-orange-600",
+      "in transit": "bg-sky-500/20 text-sky-600",
+      "processing": "bg-indigo-500/20 text-indigo-600",
+      "failed": "bg-rose-500/20 text-rose-600",
+    };
+
+    const statusClass =
+      statusColorMap[status] || "bg-gray-300/20 text-gray-700";
+
+    return (
+      <span className={`${statusClass} rounded-full capitalize px-3 py-1 text-xs`}>
+        {row.getValue("status")}
+      </span>
+    );
+  },
+},
+
 
     {
       accessorKey: "actions",
       header: () => "Actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const role = row.original.role;
-        if (role === "customer") {
-          return (
-            <div className="text-sm text-muted-foreground">
-              No actions available
-            </div>
-          );
-        }
+     
         const [Isopen, setIsopen] = useState(false);
 
         return (
@@ -155,9 +150,9 @@ function LastMonth() {
                   <Eye className="w-5 h-5" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
+              <DialogContent className="[&>button]:hidden  !p-0 overflow-y-auto !max-w-3xl">
                 <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
-                  <DialogTitle className=""> Update User Details</DialogTitle>
+                  <DialogTitle className=""> Order Details - {row.original.order_id}</DialogTitle>
                   <div
                     className="cursor-pointer"
                     onClick={() => {
@@ -167,7 +162,7 @@ function LastMonth() {
                     <X className="w-6 h-6" />
                   </div>
                 </DialogHeader>
-                <OrderHistoryDetails onClose={setIsopen} HistoryDetails={row.original} />
+                <OrderHistoryDetails onClose={setIsopen} order_id={row.original.order_id} />
               </DialogContent>
             </Dialog>
 
@@ -206,13 +201,15 @@ function LastMonth() {
     _columnId: string,
     filterValue: any
   ) => {
-    const username = row.original.username?.toLowerCase() || "";
+    const orderId = String(row.original.order_id)
+    const search = String(filterValue).toLowerCase().trim();
 
-    return username.includes(filterValue.toLowerCase());
+    return orderId.includes(search);
   };
 
+
   const table = useReactTable({
-    data: users,
+    data: orderHistory,
     columns,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -237,87 +234,27 @@ function LastMonth() {
 
   let content;
 
-  if (isLoading) {
-    content = <div className="mt-[10%] text-center">Loading...</div>;
-  }
+
 
   //   if(isError){
   //     content = <p>{error?.response?.data?.message || error?.message}</p>
   //   }
 
-  if (isSuccess && Array.isArray(users)) {
+  if (orderHistory) {
     content = (
-      <div className="bg-white rounded-lg p-4  space-y-2">
+      <div className="bg-white rounded-lg   space-y-2">
         <div className="flex items-center gap-x-3 ">
-          <div>
-            <h2 className="font-semibold ">User list</h2>
-          </div>
+         
           <div className="relative w-full lg:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
-              placeholder="Search users    .... "
+              placeholder="Search orders    .... "
               value={globalFilter}
               onChange={(event) => setGlobalFilter(event.target.value)}
               className="pl-10 pr-4 py-2"
             />
           </div>
-          <div className="w-[180px]">
-            <Select
-              onValueChange={(value) =>
-                table
-                  .getColumn("role")
-                  ?.setFilterValue(value === "all" ? undefined : value)
-              }
-              value={
-                (table.getColumn("role")?.getFilterValue() as string) ?? "all"
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                {Array.from(
-                  table.getColumn("role")?.getFacetedUniqueValues()?.keys() ??
-                    []
-                ).map((value) => (
-                  <SelectItem key={value} value={String(value)}>
-                    {String(value).charAt(0).toUpperCase() +
-                      String(value).slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="w-[180px]">
-            <Select
-              onValueChange={(value) =>
-                table
-                  .getColumn("status")
-                  ?.setFilterValue(value === "all" ? undefined : value)
-              }
-              value={
-                (table.getColumn("status")?.getFilterValue() as string) ?? "all"
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                {Array.from(
-                  table.getColumn("status")?.getFacetedUniqueValues()?.keys() ??
-                    []
-                ).map((value) => (
-                  <SelectItem key={value} value={String(value)}>
-                    {String(value).charAt(0).toUpperCase() +
-                      String(value).slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+    
         </div>
 
         <div>
@@ -403,8 +340,8 @@ function LastMonth() {
     );
   }
 
-  if (isSuccess && typeof users === "string") {
-    content = <p className="font-bold mt-20 text-center capitalize">{users}</p>;
+  if (orderHistory && typeof orderHistory === "string") {
+    content = <p className="font-bold mt-20 text-center capitalize">{orderHistory}</p>;
   }
 
   return content;

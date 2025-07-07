@@ -1,12 +1,22 @@
 import dayjs from "dayjs";
 import { Button } from "../ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getUserOrderDetail } from "@/lib/apis";
+import { useAppContext } from "@/contexts/AuthContext";
 
 interface Props {
-  HistoryDetails: any;
-  onClose:(val:boolean)=>void
+  order_id: number;
+  onClose: (val: boolean) => void;
 }
-export default function OrderHistoryDetails({ HistoryDetails,onClose }: Props) {
-  console.log("HistoryDetails: ", HistoryDetails);
+export default function OrderHistoryDetails({ order_id, onClose }: Props) {
+  const { auth } = useAppContext();
+  const {} = useQuery({
+    queryKey: ["userorderdetails", order_id],
+    queryFn: () => getUserOrderDetail(auth?.token ?? "", String(order_id)),
+    staleTime: 1000 * 60 * 5,
+    retry:1,
+    enabled: !!order_id,
+  });
   return (
     <div className="px-4 pb-4 ">
       <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
@@ -108,8 +118,14 @@ export default function OrderHistoryDetails({ HistoryDetails,onClose }: Props) {
         </div>
       </div>
       <div className="flex items-center justify-end gap-x-5 ">
-        <Button  onClick={()=>onClose(false)} variant={'outline'} className="border-slate-400 text-slate-400 hover:border-slate-400 hover:text-slate-400">Close</Button>
-        <Button > Download Invoice</Button>
+        <Button
+          onClick={() => onClose(false)}
+          variant={"outline"}
+          className="border-slate-400 text-slate-400 hover:border-slate-400 hover:text-slate-400"
+        >
+          Close
+        </Button>
+        <Button> Download Invoice</Button>
       </div>
     </div>
   );

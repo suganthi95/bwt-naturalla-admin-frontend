@@ -1,9 +1,8 @@
-import { getAllOrders } from "@/lib/apis";
-import { useQuery } from "@tanstack/react-query";
+
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-import { Copy, Eye, Search, X } from "lucide-react";
+import { ArrowDownToLine, Eye, Search, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -27,7 +26,8 @@ import {
   ColumnFiltersState,
   VisibilityState,
 } from "@tanstack/react-table";
-import dayjs from "dayjs";
+
+import { Checkbox } from "../ui/checkbox";
 
 import {
   Dialog,
@@ -36,303 +36,162 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import OrderDetails from "../orders/OrderDetails";
-import { Badge } from "../ui/badge";
-import { Filter } from "../ui/Filter";
-import { useAppContext } from "@/contexts/AuthContext";
-import { toast } from "sonner";
 
-function ThisYear() {
-  const { auth } = useAppContext();
-  const columns: ColumnDef<any>[] = [
+import { UserOrderHistoryType } from "@/types/type";
+import OrderHistoryDetails from "./OrderHistoryDetails";
+
+
+interface Props{
+  orderHistory:UserOrderHistoryType[]
+}
+function ThisYear({orderHistory}:Props) {
+//   const queryClinet = useQueryClient();
+
+
+
+  const columns: ColumnDef<UserOrderHistoryType>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "order_id",
       header: () => "Order ID",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("order_id")}</div>
+        <div className="capitalize text-primary-blue font-semibold">
+          {row.getValue("order_id")}
+        </div>
       ),
     },
     {
       accessorKey: "order_date",
       header: () => "Order Date",
       cell: ({ row }) => (
-        <div className="capitalize w-[100px]">
-          {dayjs(row.getValue("order_date")).format("DD-MM-YYYY")}
-        </div>
+        <div className="font-semibold">{row.getValue("order_date")}</div>
       ),
     },
     {
-      accessorKey: "order_code",
-      header: () => "Order Code",
-      cell: ({ row }) => {
-        const orderCode = row.getValue("order_code") as string | null;
-
-        const handleCopy = () => {
-          if (orderCode) {
-            navigator.clipboard.writeText(orderCode);
-            toast.success("Order code copied to clipboard!");
-          }
-        };
-
-        return (
-          <div className="capitalize flex items-center justify-center gap-1">
-            {orderCode || "N/A"}
-            {orderCode && (
-              <button onClick={handleCopy} title="Copy Order Code">
-                <Copy className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary hover:scale-110 transition" />
-              </button>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "shipmet_first_name",
-      header: () => "Customer Name",
+      accessorKey: "items",
+      header: () => "Itmes",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("shipmet_first_name")}</div>
+        <div className="capitalize">{row.getValue("items") ?? 0}</div>
       ),
     },
-    {
-      accessorKey: "shipment_phone_no",
-      header: () => "Customer Phone",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("shipment_phone_no")}</div>
-      ),
-    },
-    {
-      accessorKey: "city",
-      header: () => "City / State",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("city")}</div>
-      ),
-    },
-    {
-      accessorKey: "sub_total",
+        {
+      accessorKey: "total_amount",
       header: () => "Total Amount",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("sub_total")}</div>
+        <div className="capitalize"> ₹ {row.getValue("total_amount")}</div>
       ),
     },
+{
+  accessorKey: "status",
+  header: () => "Status",
+  cell: ({ row }) => {
+    const status = String(row.getValue("status")).toLowerCase();
 
-    {
-      accessorKey: "payment_status",
-      header: () => "Payment Status",
-      cell: ({ row }) => {
-        const status = row.getValue("payment_status") as string;
-        const statusStyles: Record<string, string> = {
-          paid: "bg-green-700 text-white",
-          pending: "bg-yellow-100 text-yellow-700",
-          failed: "bg-red-100 text-red-700",
-          refunded: "bg-blue-100 text-blue-700",
-        };
+    const statusColorMap: Record<string, string> = {
+        "order created": "bg-purple-500/20 text-purple-600",
+      "order confirmed": "bg-blue-500/20 text-blue-600",
+      "in progress": "bg-yellow-500/20 text-yellow-600",
+      "completed": "bg-green-500/20 text-green-600",
+      "delivered": "bg-emerald-500/20 text-emerald-600",
+      "cancelled": "bg-red-500/20 text-red-600",
+      "rto": "bg-orange-500/20 text-orange-600",
+      "in transit": "bg-sky-500/20 text-sky-600",
+      "processing": "bg-indigo-500/20 text-indigo-600",
+      "failed": "bg-rose-500/20 text-rose-600",
+    };
 
-        if (status === null) {
-          return <div className="text-center">-</div>;
-        }
+    const statusClass =
+      statusColorMap[status] || "bg-gray-300/20 text-gray-700";
 
-        return (
-          <span
-            className={`capitalize px-2 py-1 text-xs font-medium rounded-full ${
-              statusStyles[status?.toLowerCase()] || "bg-gray-100 text-gray-700"
-            }`}
-          >
-            {status}
-          </span>
-        );
-      },
-    },
+    return (
+      <span className={`${statusClass} rounded-full capitalize px-3 py-1 text-xs`}>
+        {row.getValue("status")}
+      </span>
+    );
+  },
+},
 
-    {
-      accessorKey: "shipment_status",
-      header: () => "Shipment Status",
-      cell: ({ row }) => {
-        const shipmentStatus = row.getValue("shipment_status") as string | null;
-
-        if (shipmentStatus === "Canceled") {
-          return (
-            <span className="bg-orange-400/25 text-orange-400 rounded-full capitalize px-3 py-1">
-              {shipmentStatus || "N/A"}
-            </span>
-          );
-        }
-
-        if (shipmentStatus === "Pickup Generated") {
-          return (
-            <span className="bg-blue-400/25 text-blue-400 rounded-full capitalize px-3 py-1">
-              {shipmentStatus || "N/A"}
-            </span>
-          );
-        }
-
-        return (
-          <span className="bg-gray-300/25 text-gray-500 rounded-full capitalize px-3 py-1">
-            {shipmentStatus || "Pending"}
-          </span>
-        );
-      },
-    },
-    {
-      accessorKey: "order_status",
-      header: () => "Order Status",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("order_status")}</div>
-      ),
-    },
-    {
-      accessorKey: "awb_code",
-      header: () => "AWB Code",
-      cell: ({ row }) => {
-        const awbCode = row.getValue("awb_code") as string | null;
-        const handleCopy = () => {
-          if (awbCode) {
-            navigator.clipboard.writeText(awbCode);
-            toast.success("AWB code copied to clipboard!");
-          }
-        };
-        return (
-          <div className="capitalize text-center flex items-center justify-center gap-1">
-            {awbCode || "N/A"}
-            {awbCode && (
-              <button onClick={handleCopy} title="Copy AWB">
-                <Copy className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary transition" />
-              </button>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      accessorKey: "track_url",
-      header: () => "Tracking URL",
-      cell: ({ row }) => (
-        <div>
-          <Button
-            disabled={!row.original.track_url}
-            onClick={() => {
-              if (row.original.track_url) {
-                window.location.href = row.original.track_url;
-              }
-            }}
-          >
-            Track
-          </Button>
-        </div>
-      ),
-    },
 
     {
       accessorKey: "actions",
       header: () => "Actions",
+      enableHiding: false,
       cell: ({ row }) => {
-        const statusStyles: Record<string, string> = {
-          paid: "bg-green-100 text-green-700",
-          pending: "bg-yellow-100 text-yellow-700",
-          failed: "bg-red-100 text-red-700",
-          refunded: "bg-blue-100 text-blue-700",
-        };
+     
         const [Isopen, setIsopen] = useState(false);
-        const { payment_status, order_status, order_code } = row.original;
+
         return (
-          // <DropdownMenu>
-          //     <DropdownMenuTrigger asChild>
-          //         <Button size="icon" variant={"ghost"}>
-          //             <Settings className="h-5 w-5 stroke-slate-500"/>
-          //         </Button>
-          //     </DropdownMenuTrigger>
-          //     <DropdownMenuContent className="w-[150px]">
-          //         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          //         <DropdownMenuSeparator />
-          //         <DropdownMenuItem className="cursor-pointer">View Order</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Cancel</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Track</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Generate Label</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Resend SMS</DropdownMenuItem>
-          //     </DropdownMenuContent>
-          //     </DropdownMenu>
-          <Dialog open={Isopen} onOpenChange={setIsopen}>
-            <DialogTrigger>
-              <Button
-                //   onClick={() => navigate("/shipment-details")}
-                size={"icon"}
-                className="rounded-full text-[#171925] bg-[#1719251A]/10  hover:bg-[#1719251A]/20 "
-              >
-                <Eye className="h-5 w-5" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="[&>button]:hidden  overflow-y-auto h-[40rem] !p-0 !max-w-6xl">
-              <DialogHeader className="border-b-2 p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
-                <div className="space-y-3">
-                  <DialogTitle className="">Order {order_code}</DialogTitle>
-                  <div className="space-x-3">
-                    {" "}
-                    <Badge
-                      className={`capitalize px-4  text-xs font-medium rounded-full ${
-                        statusStyles[payment_status?.toLowerCase()] ||
-                        "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {payment_status}
-                    </Badge>
-                    <Badge
-                      className={`capitalize px-4  text-xs font-medium rounded-full ${
-                        statusStyles[payment_status?.toLowerCase()] ||
-                        "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {order_status}
-                    </Badge>
-                    <span className="text-lead text-sm">
-                      Mar 30, 2025 22:02
-                    </span>
-                  </div>
-                </div>
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setIsopen(false);
-                  }}
+          <div className="flex flex-row items-center gap-5">
+            <Dialog open={Isopen} onOpenChange={setIsopen}>
+              <DialogTrigger>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="rounded-full text-[#171925] bg-[#171925]/10 hover:bg-[#171925]/20"
                 >
-                  <X className="w-6 h-6" />
-                </div>
-              </DialogHeader>
-              <OrderDetails Order={row.original} />
-            </DialogContent>
-          </Dialog>
+                  <Eye className="w-5 h-5" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="[&>button]:hidden  !p-0 overflow-y-auto !max-w-3xl">
+                <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
+                  <DialogTitle className=""> Order Details - {row.original.order_id}</DialogTitle>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setIsopen(false);
+                    }}
+                  >
+                    <X className="w-6 h-6" />
+                  </div>
+                </DialogHeader>
+                <OrderHistoryDetails onClose={setIsopen} order_id={row.original.order_id} />
+              </DialogContent>
+            </Dialog>
+
+            <Button
+              size="icon"
+              variant="ghost"
+              className="rounded-full text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20"
+            >
+              <ArrowDownToLine className="w-5 h-5" />
+            </Button>
+          </div>
         );
       },
     },
   ];
-  const {
-    data: orders,
-    isLoading,
-    isSuccess,
-  } = useQuery({
-    queryKey: ["getAllorders"],
-    queryFn: () => getAllOrders(auth?.token ?? ""),
-    refetchOnWindowFocus: false,
-    select: (data) => data?.data?.data,
-  });
-
   //   const headers = [
-  //     { label: "Order ID", key: "order_id" },
-  //     { label: "Order Date", key: "order_date" },
-  //     { label: "Order Code", key: "order_code" },
-  //     { label: "Customer Name", key: "shipmet_first_name" },
-  //     { label: "Customer Phone", key: "shipment_phone_no" },
-  //     { label: "City / State", key: "city" },
-  //     { label: "Total Amount", key: "sub_total" },
-  //     { label: "Payment Status", key: "payment_status" },
-  //     { label: "Delivery Status", key: "delivery_status" },
-  //     { label: "Order Status", key: "order_status" },
-  //     { label: "AWB Code", key: "awbawb_code" },
-  //     { label: "Tracking URL", key: "track_url" },
-  //     { label: "Actions", key: "actions" },
+  //     { label: "Username", key: "username" },
+  //     { label: "Email Address", key: "email" },
+  //     { label: "Role", key: "role" },
+  //     { label: "Status", key: "status" },
+  //     { label: "Last Login", key: "lastLogin" },
   //   ];
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    origin: false,
+  });
+
   const [rowSelection, setRowSelection] = useState({});
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -342,19 +201,15 @@ function ThisYear() {
     _columnId: string,
     filterValue: any
   ) => {
-    const customerName = row.original.shipmet_first_name?.toLowerCase() || "";
-    const phoneNumber = row.original.shipment_phone_no || "";
-    const orderCode = row.original.order_code?.toLowerCase() || "";
+    const orderId = String(row.original.order_id)
+    const search = String(filterValue).toLowerCase().trim();
 
-    return (
-      customerName.includes(filterValue.toLowerCase()) ||
-      phoneNumber.includes(filterValue.toLowerCase()) ||
-      orderCode.includes(filterValue.toLowerCase())
-    );
+    return orderId.includes(search);
   };
 
+
   const table = useReactTable({
-    data: orders,
+    data: orderHistory,
     columns,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -379,114 +234,29 @@ function ThisYear() {
 
   let content;
 
-  if (isLoading) {
-    content = <div className="mt-[10%] text-center">Loading...</div>;
-  }
+
 
   //   if(isError){
   //     content = <p>{error?.response?.data?.message || error?.message}</p>
   //   }
 
-  if (isSuccess && Array.isArray(orders)) {
+  if (orderHistory) {
     content = (
-      <div className="bg-white rounded-lg p-4  space-y-2">
-        <div className="flex flex-col gap-2 py-1">
-          <div className="flex flex-row justify-between gap-3 w-full">
-            <div className="flex items-center gap-x-3 ">
-              <div>
-                <h2 className="font-semibold ">Order list</h2>
-                {/* <p className="text-lead text-sm">21 orders found</p> */}
-              </div>
-
-              {/* <div className="w-[180px]">
-                <Select
-                  onValueChange={(value) =>
-                    table
-                      .getColumn("role")
-                      ?.setFilterValue(value === "all" ? undefined : value)
-                  }
-                  value={
-                    (table.getColumn("role")?.getFilterValue() as string) ??
-                    "all"
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {Array.from(
-                      table
-                        .getColumn("role")
-                        ?.getFacetedUniqueValues()
-                        ?.keys() ?? []
-                    ).map((value) => (
-                      <SelectItem key={value} value={String(value)}>
-                        {String(value).charAt(0).toUpperCase() +
-                          String(value).slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div> */}
-
-              {/* <div className="w-[180px]">
-                <Select
-                  onValueChange={(value) =>
-                    table
-                      .getColumn("status")
-                      ?.setFilterValue(value === "all" ? undefined : value)
-                  }
-                  value={
-                    (table.getColumn("status")?.getFilterValue() as string) ??
-                    "all"
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    {Array.from(
-                      table
-                        .getColumn("status")
-                        ?.getFacetedUniqueValues()
-                        ?.keys() ?? []
-                    ).map((value) => (
-                      <SelectItem key={value} value={String(value)}>
-                        {String(value).charAt(0).toUpperCase() +
-                          String(value).slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div> */}
-
-              {table.getColumn("order_status") && (
-                <Filter
-                  column={table.getColumn("order_status")}
-                  title="Filter by Order Status"
-                />
-              )}
-
-              {table.getColumn("payment_status") && (
-                <Filter
-                  column={table.getColumn("payment_status")}
-                  title="Filter by Payment Status"
-                />
-              )}
-            </div>
-            <div className="relative w-full lg:max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Search by CustomerName, OrderCode.... "
-                value={globalFilter}
-                onChange={(event) => setGlobalFilter(event.target.value)}
-                className="pl-10 pr-4 py-2"
-              />
-            </div>
+      <div className="bg-white rounded-lg   space-y-2">
+        <div className="flex items-center gap-x-3 ">
+         
+          <div className="relative w-full lg:max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="Search orders    .... "
+              value={globalFilter}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+              className="pl-10 pr-4 py-2"
+            />
           </div>
+    
         </div>
+
         <div>
           <Table>
             <TableHeader>
@@ -495,7 +265,7 @@ function ThisYear() {
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
-                        className="font-semibold text-black text-center"
+                        className="font-semibold text-black"
                         key={header.id}
                         colSpan={header.colSpan}
                       >
@@ -545,7 +315,7 @@ function ThisYear() {
           <div className="flex-1 text-sm text-muted-foreground">
             {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
             {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
-            Total no.of orders: {table.getFilteredRowModel().rows.length}
+            Total no.of users: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">
             <Button
@@ -570,10 +340,8 @@ function ThisYear() {
     );
   }
 
-  if (isSuccess && typeof orders === "string") {
-    content = (
-      <p className="font-bold mt-20 text-center capitalize">{orders}</p>
-    );
+  if (orderHistory && typeof orderHistory === "string") {
+    content = <p className="font-bold mt-20 text-center capitalize">{orderHistory}</p>;
   }
 
   return content;

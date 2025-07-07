@@ -3,13 +3,11 @@ import { ProductFormValues } from "@/types";
 import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
-//staging
-const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
 
-// production
-// const BASE_URL = "https://adminapi.naturalla.store/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const BASE_FRONTEND_URL = "https://naturalla.store";
+
+export const BASE_FRONTEND_URL = import.meta.env.VITE_BASE_FRONTEND_URL;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -238,6 +236,16 @@ export const getUserHistory = async (token: string, id: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/order/user-history/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getUserOrderDetail = async (token: string, order_id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/order/user-history/${order_id}`,
     headers: {
       Authorization: token,
     },
@@ -826,6 +834,16 @@ export const editLegalPage = async (token: string, id: string) => {
   });
 };
 
+export const getCustomerQueries = async (token: string, search: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/customer/support/?subject=${search}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 export const getAllBanners = async (token: string) => {
   return await axios({
     method: "get",
@@ -833,13 +851,26 @@ export const getAllBanners = async (token: string) => {
     headers: {
       Authorization: token,
     },
-  });
-};
+  })
+}
+
+
 
 export const deleteBanner = async ({ token, id }: { token: string, id: number }) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/banners/delete-banner/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  })
+}
+
+
+export const getTicketDetails = async (token: string, id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/customer/support/${id}`,
     headers: {
       Authorization: token,
     },
@@ -854,7 +885,7 @@ export const addBanner = async ({ token, title, type, bannerImage, publish, ctaL
   formdata.append("cta_link", ctaLink);
   formdata.append("published", publish ? "true" : "false");
   formdata.append("type", type);
-  formdata.append("images[0]", bannerImage[0]);
+  formdata.append("images", bannerImage[0]);
 
   return await axios({
     method: "post",
@@ -865,3 +896,67 @@ export const addBanner = async ({ token, title, type, bannerImage, publish, ctaL
     data: formdata
   });
 };
+
+export const updateBanner = async ({ token, title, type, bannerImage, publish, ctaLink, bannerImageId, id }: { token: string, title: string, type: string, bannerImage: FileList, publish: boolean, ctaLink: string, bannerImageId: number, id: number }) => {
+
+  const formdata = new FormData();
+
+  formdata.append("name", title);
+  formdata.append("cta_link", ctaLink);
+  formdata.append("published", publish ? "true" : "false");
+  formdata.append("type", type);
+
+  if (typeof bannerImage === "string") {
+    formdata.append("existing_image_ids", bannerImageId.toString());
+  }
+
+  if (bannerImage instanceof FileList) {
+    formdata.append("images", bannerImage[0]);
+  }
+
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/banners/update-banner/${id}`,
+    headers: {
+      Authorization: token,
+    },
+    data: formdata
+  });
+};
+
+export const addReply = async (token: string, ticket_id: string) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/customer/support/reply/${ticket_id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updatePriority = async (token: string, ticket_id: string,priority:string) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
+    data:{
+      priority
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updateStatus = async (token: string, ticket_id: string,status:string) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
+    data:{
+      status
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+

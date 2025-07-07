@@ -161,3 +161,11 @@ export type BannersType = {
   banner_image_id: number[]
   image_urls: string[]
 }
+
+export type UserOrderHistoryType = {
+  order_id: number;
+  order_date: string; // ISO date string
+  items: number | null; 
+  total_amount: number;
+  status: string;
+};

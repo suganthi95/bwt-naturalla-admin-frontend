@@ -100,7 +100,17 @@ export default function Banners() {
             <div className="flex items-center gap-4">
               
 
-              <BannerForm type="edit"/>
+              <BannerForm 
+                type="edit" 
+                defaultData={{ 
+                  id: item.banner_id, 
+                  title: item.name, 
+                  type: item.type, 
+                  ctaLink: item.cta_link, 
+                  bannerImage: item.image_urls[0],
+                  bannerImageId: item.banner_image_id[0],
+                  publish: item.published
+                 }}/>
 
               <Dialog>
                 <DialogTrigger asChild>

@@ -16,9 +16,12 @@ import {
 } from "../ui/dialog";
 import { useState } from "react";
 import AddFaq from "./AddFaq";
+import EditFaq from "./EditFaq";
 
 export default function ProductFaq() {
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
   const faqs = [
     {
       id: "1",
@@ -63,24 +66,36 @@ export default function ProductFaq() {
             value={faq.id}
             className="border rounded-lg"
           >
-            <div className="flex items-center justify-between w-full p-4">
-              <AccordionTrigger className="flex-1 text-left border-none  [&>svg]:hidden hover:no-underline font-semibold text-primary-black ">
-                {faq.question}
-                <span className="[&>svg]:block">
-                  {" "}
-                  <ChevronDown />
-                </span>
+            <div className="flex items-center justify-between w-full p-4 ">
+              <AccordionTrigger className="flex items-center flex-1 text-left font-medium hover:no-underline group [&>svg]:hidden">
+                <div className="flex items-center gap-2">
+                  <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  {faq.question}
+                </div>
               </AccordionTrigger>
+
               <div className="flex items-center gap-2 ml-2">
+                <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+                  <DialogTrigger>
+                    <Button
+                      size="icon"
+                      className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C759]/20"
+                    >
+                      <Edit className="h-5 w-5" />
+                    </Button>{" "}
+                  </DialogTrigger>
+                  <DialogContent className="[&>button]:hidden !p-0 !max-w-xl ">
+                    <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
+                      <DialogTitle className="">Edit FAQ</DialogTitle>
+                      <DialogClose className="cursor-pointer">
+                        <X className="w-6 h-6" />
+                      </DialogClose>
+                    </DialogHeader>
+                    <EditFaq onClose={setIsEditOpen} />
+                  </DialogContent>
+                </Dialog>
+
                 <Button
-                  onClick={() => console.log("Edit FAQ", faq.id)}
-                  size="icon"
-                  className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C759]/20"
-                >
-                  <Edit className="h-5 w-5" />
-                </Button>
-                <Button
-                  onClick={() => console.log("Delete FAQ", faq.id)}
                   size="icon"
                   className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
                 >
