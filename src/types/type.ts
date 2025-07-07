@@ -151,3 +151,13 @@ export type ProductEffectIcon = {
   created_at: string;
   icon_url: string;
 };
+
+export type BannersType = {
+  banner_id: number
+  name: string
+  cta_link: string
+  published: boolean
+  type: string
+  banner_image_id: number[]
+  image_urls: string[]
+}

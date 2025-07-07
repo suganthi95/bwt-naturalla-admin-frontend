@@ -1,4 +1,4 @@
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -10,37 +10,62 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useNavigate } from "react-router-dom";
-const data = [
-  {
-    image: "https://via.placeholder.com/80",
-    title: "Herbal Shampoo",
-    lead: "Deep cleanses and nourishes hair naturally.",
-    status: "active",
-    type: "website ",
-  },
-  {
-    image: "https://via.placeholder.com/80",
-    title: "Aloe Vera Soap",
-    lead: "Gentle on skin with herbal extracts.",
-    status: "inactive",
-    type: "mobile app",
-  },
-];
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteBanner, getAllBanners } from "@/lib/apis";
+import { useAppContext } from "@/contexts/AuthContext";
+import { BannersType } from "@/types/type";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import BannerForm from "./BannerForm";
 
 export default function Banners() {
-  const navigate = useNavigate();
-  return (
-    <div className="bg-white p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold">Settings</h1>
-          <p className="text-[15px] text-[#4B5563]">
-            Manage website and app banners displayed on the home page{" "}
-          </p>
-        </div>
-        <Button>Add Banner</Button>
+
+  const { auth } = useAppContext();
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isSuccess, isError, error } = useQuery({
+    queryKey: [ "getAllBanners" ],
+    queryFn: () => getAllBanners(auth?.token as string),
+    retry: 2,
+    select: (data): BannersType[] => data.data.banners
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: [ "deleteBanners" ],
+    mutationFn: deleteBanner,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ "getAllBanners" ] })
+      return toast.success("Request Success", {
+        description: "Banner deleted successfully"
+      })
+    },
+    onError: (error: AxiosError<any>) => {
+      return toast.error("Request Success", {
+        description: error.response?.data.message
+      })
+    },
+  })
+
+  let content;
+
+  if(isLoading){
+    content =  (
+      <div className="mt-[10%] text-center">
+        Loading...
       </div>
+    )
+  }
+
+  if(isError){
+    content =  (
+      <div className="mt-[10%] text-center">
+        {error.message}
+      </div>
+    )
+  }
+
+  if(isSuccess){
+    content = (
       <ul className="space-y-4 mt-3">
         {data.map((item, idx) => (
           <li
@@ -48,55 +73,34 @@ export default function Banners() {
             className="flex items-center justify-between border border-gray-200 rounded-lg p-4 bg-white shadow-sm"
           >
             <img
-              src={item.image}
-              alt={item.title}
+              src={item.image_urls[0]}
+              alt={item.name}
               className="w-20 h-20 object-cover rounded-md"
             />
 
             <div className="flex-1 px-4 space-y-1.5">
-              <h3 className="text font-semibold text-gray-900">{item.title}</h3>
-              <p className="text-sm text-gray-500">{item.lead}</p>
+              <h3 className="text font-semibold text-gray-900">{item.name}</h3>
               <div className="flex items-center gap-x-2">
                 <span
                   className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 bg-[#EEEFF2] text-primary-black rounded-full `}
                 >
                   {item.type}
                 </span>
-                <span
-                  className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${
-                    item.status === "active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-[#FEE2E2] text-[#991F27]"
-                  }`}
-                >
-                  {item.status}
-                </span>
+                {item.published &&
+                  <span
+                    className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700`}
+                  >
+                    Published
+                  </span>
+                }
+                
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <Button
-                onClick={() => {
-                  // sessionStorage.setItem("blog-id", blog.blog_id);
-                  navigate("/blogs/edit", { state: { banner: "" } });
-                }}
-                size="icon"
-                className="h-8 w-8 rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C7591A]/20"
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                onClick={() =>
-                  window.open(
-                    `https://stagingnaturalla.netlify.app/blogs/detail/${""}`,
-                    "_blank"
-                  )
-                }
-                className="h-8 w-8 rounded-full text-slate-800 bg-slate-800/10 hover:bg-slate-800/20"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
+              
+
+              <BannerForm type="edit"/>
 
               <Dialog>
                 <DialogTrigger asChild>
@@ -111,8 +115,7 @@ export default function Banners() {
                   <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>
                     <DialogDescription>
-                      This will permanently delete and remove your blog from the
-                      servers.
+                      This will permanently delete and remove the banner from the servers
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
@@ -121,28 +124,8 @@ export default function Banners() {
                     </DialogClose>
                     <DialogClose asChild>
                       <Button
-                        // onClick={() =>
-                        //   DeleteBlog(
-                        //     {
-                        //       token: auth?.token ?? "",
-                        //       id: String(blog.blog_id),
-                        //     },
-                        //     {
-                        //       onSuccess: () => {
-                        //         toast.success("blog deleted");
-                        //         queryClient.invalidateQueries({
-                        //           queryKey: ["getblogs"],
-                        //         });
-                        //       },
-                        //       onError: (error) => {
-                        //         if (axios.isAxiosError(error)) {
-                        //           toast.error(error?.response?.data?.message);
-                        //         }
-                        //       },
-                        //     }
-                        //   )
-                        // }
                         variant="destructive"
+                        onClick={() => mutate({ token: auth?.token as string, id: item.banner_id })}
                       >
                         Delete
                       </Button>
@@ -154,6 +137,21 @@ export default function Banners() {
           </li>
         ))}
       </ul>
+    )
+  }
+
+  return (
+    <div className="bg-white p-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold">Settings</h1>
+          <p className="text-[15px] text-[#4B5563]">
+            Manage website and app banners displayed on the home page{" "}
+          </p>
+        </div>
+        <BannerForm type="add"/>
+      </div>
+      {content}
     </div>
   );
 }

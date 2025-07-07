@@ -825,3 +825,43 @@ export const editLegalPage = async (token: string, id: string) => {
     },
   });
 };
+
+export const getAllBanners = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/banners/banners`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const deleteBanner = async ({ token, id }: { token: string, id: number }) => {
+  return await axios({
+    method: "delete",
+    url: `${BASE_URL}/banners/delete-banner/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const addBanner = async ({ token, title, type, bannerImage, publish, ctaLink }: { token: string, title: string, type: string, bannerImage: FileList, publish: boolean, ctaLink: string }) => {
+
+  const formdata = new FormData();
+
+  formdata.append("name", title);
+  formdata.append("cta_link", ctaLink);
+  formdata.append("published", publish ? "true" : "false");
+  formdata.append("type", type);
+  formdata.append("images[0]", bannerImage[0]);
+
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/banners/create-banner`,
+    headers: {
+      Authorization: token,
+    },
+    data: formdata
+  });
+};
