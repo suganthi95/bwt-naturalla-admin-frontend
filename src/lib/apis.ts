@@ -6,7 +6,6 @@ import axios from "axios";
 //staging
 const BASE_URL = 'https://naturalla-admin-backend.onrender.com/api'
 
-// export const BASE_FRONTEND_URL = "https://adminnaturalla.netlify.app"
 
 // production
 // const BASE_URL = "https://adminapi.naturalla.store/api";

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 
-import { Copy, Edit, Loader2, Search, Trash2, X } from "lucide-react";
+import { Edit, Loader2, Search, Trash2, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -171,12 +171,12 @@ function CategoryTable() {
                 <Edit className="h-5 w-5" />
               </Button>
 
-              <Button
+              {/* <Button
                 size="icon"
                 className="rounded-full text-[#007AFF] bg-[#007AFF1A]/10 hover:bg-[#007AFF1A]/20"
               >
                 <Copy className="h-5 w-5" />
-              </Button>
+              </Button> */}
 
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>

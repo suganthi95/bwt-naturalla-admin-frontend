@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppContext } from "@/contexts/AuthContext";
-import { deleteBlog, getBlogs } from "@/lib/apis";
+import { BASE_FRONTEND_URL, deleteBlog, getBlogs } from "@/lib/apis";
 import { Blog } from "@/types/type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -196,7 +196,7 @@ export default function Blogs() {
                     size="icon"
                     onClick={() =>
                       window.open(
-                        `https://stagingnaturalla.netlify.app/blogs/detail/${blog.blog_id}`,
+                        `${BASE_FRONTEND_URL}/blogs/detail/${blog.blog_id}`,
                         "_blank"
                       )
                     }
