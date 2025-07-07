@@ -31,6 +31,7 @@ import EditBlog from "./pages/EditBlog";
 import UserHistory from "./pages/UserHistory";
 import LegalPages from "./pages/LegalPages";
 import EditLegalPage from "./pages/EditLegalPage";
+import ProductFaq from "./components/products/ProductFaq";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,6 +61,7 @@ function App() {
           <Route path="product-specs" element={<ProductSpecs />} />
           <Route path="discounts" element={<ProductCoupons />} />
           <Route path="seo" element={<ProductSEO />} />
+          <Route path="faq" element={<ProductFaq />} />
         </Route>
         <Route path="/products/edit" element={<EditProducts />}>
           <Route path="product-info" element={<ProductInfo />} />
@@ -67,6 +69,7 @@ function App() {
           <Route path="product-specs" element={<ProductSpecs />} />
           <Route path="discounts" element={<ProductCoupons />} />
           <Route path="seo" element={<ProductSEO />} />
+          <Route path="faq" element={<ProductFaq />} />
         </Route>
         <Route path="/categories" element={<Categories />} />
         <Route path="/add-category" element={<AddCategory />} />
@@ -80,17 +83,16 @@ function App() {
           element={<ShipmentsDetails />}
         />
         <Route path="/users" element={<Users />} />
-       <Route path="/user-history/:id" element={<UserHistory />} />
+        <Route path="/user-history/:id" element={<UserHistory />} />
 
         <Route path="/configure-coupons" element={<ConfigureCoupons />} />
         <Route path="/payment-gateway" element={<PaymentGateway />} />
-        <Route path="/user-sentiment" element={<UserSentiment/>}/>
-                <Route path="/blogs" element={<Blogs/>}/>
-        <Route path="/blogs/create" element={<CreateBlog/>}/>
-        <Route path="/blogs/edit" element={<EditBlog/>}/>
-        <Route path="/legal-pages" element={<LegalPages/>}/>
-        <Route path="/legal-pages/edit/:id" element={<EditLegalPage/>}/>
-
+        <Route path="/user-sentiment" element={<UserSentiment />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blogs/create" element={<CreateBlog />} />
+        <Route path="/blogs/edit" element={<EditBlog />} />
+        <Route path="/legal-pages" element={<LegalPages />} />
+        <Route path="/legal-pages/edit/:id" element={<EditLegalPage />} />
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="*" element={<p>no routes found</p>} />

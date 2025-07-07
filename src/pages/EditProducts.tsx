@@ -29,6 +29,10 @@ function EditProducts() {
             name: "SEO",
             route: "seo"
         },
+         {
+            name: "FAQ’s",
+            route: "faq"
+        },
     ]
 
 

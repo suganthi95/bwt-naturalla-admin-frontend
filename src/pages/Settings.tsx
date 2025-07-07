@@ -1,5 +1,4 @@
 import Banners from "@/components/settings/Banners";
-import Faq from "@/components/settings/Faq";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -107,12 +106,7 @@ export default function Settings() {
           >
             Banners
           </TabsTrigger>
-          <TabsTrigger
-            value="faq"
-            className="w-full rounded-md data-[state=active]:text-primary-black font-semibold "
-          >
-            FAQs
-          </TabsTrigger>
+      
         </TabsList>
         <TabsContent value="shipping">
           <div className="bg-white rounded-xl space-y-3 p-4 col-span-2">
@@ -186,9 +180,7 @@ export default function Settings() {
         <TabsContent value="banner">
           <Banners />
         </TabsContent>
-        <TabsContent value="faq">
-          <Faq />
-        </TabsContent>
+       
       </Tabs>
     </div>
   );

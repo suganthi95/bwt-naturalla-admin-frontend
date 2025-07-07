@@ -4,13 +4,12 @@ import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
 //staging
-const BASE_URL = 'https://naturalla-admin-backend.onrender.com/api'
-
+const BASE_URL = "https://naturalla-admin-backend.onrender.com/api";
 
 // production
 // const BASE_URL = "https://adminapi.naturalla.store/api";
 
-export const BASE_FRONTEND_URL = "https://naturalla.store"
+export const BASE_FRONTEND_URL = "https://naturalla.store";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -791,6 +790,36 @@ export const deleteBlog = async (token: string, id: string) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/blogs/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getLegalPagesList = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/legal/page`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getLegalPageDetails = async (token: string, id: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/legal/page/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const editLegalPage = async (token: string, id: string) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/legal/page/update/${id}`,
     headers: {
       Authorization: token,
     },
