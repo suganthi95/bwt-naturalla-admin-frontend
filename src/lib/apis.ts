@@ -541,22 +541,16 @@ export const addProductSpecs = async ({
   });
 };
 
-export const addCoupons = async (
-  token: string,
-  data: {
-    coupon: number;
-    productId: string;
-  }
-) => {
+export const addCoupons = async (payload: { token: string, data: { coupon: number, productId: string} }) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/products/add/coupon`,
     data: {
-      coupon_id: data.coupon,
-      product_id: parseInt(data.productId),
+      coupon_id: payload.data.coupon,
+      product_id: parseInt(payload.data.productId),
     },
     headers: {
-      Authorization: token,
+      Authorization: payload.token,
     },
   });
 };
@@ -959,4 +953,15 @@ export const updateStatus = async (token: string, ticket_id: string,status:strin
     },
   });
 };
+
+export const getAllLegalPages = async (token: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/legal/page`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
 

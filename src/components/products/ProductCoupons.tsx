@@ -24,6 +24,7 @@ import { addCoupons, getCoupons, getProductCoupons } from "@/lib/apis";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppContext } from "@/contexts/AuthContext";
+import { AxiosError } from "axios";
 
 const FormSchema = z.object({
   coupon: z.number({
@@ -70,16 +71,13 @@ export function ProductCoupons() {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["addCoupon"],
-    mutationFn: ({
-      token,
-      data,
-    }: {
-      token: string;
-      data: {
-        coupon: number;
-        productId: string;
-      };
-    }) => addCoupons(token, data),
+    mutationFn: addCoupons,
+    onSuccess: () => {
+      toast.success("Request Success", { description: "Coupon Added Successfully" })
+    },
+    onError: (error: AxiosError<any>) => {
+      toast.error("Request Failed", { description: error?.response?.data.message })
+    }
   });
 
   const {

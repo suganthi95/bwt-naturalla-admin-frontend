@@ -73,79 +73,45 @@ export function ProductInfo() {
     queryFn: () => getProductInfo(auth?.token ?? "", productId),
     retry: 3,
     refetchOnWindowFocus: true,
-    // select: (data): ProductInfoFormType => {
-    //   const {
-    //     category_id,
-    //     hsn_code,
-    //     category_title,
-    //     gallery_images,
-    //     min_order_quantity,
-    //     product_name,
-    //     slug,
-    //     subcategory_id,
-    //     subcategory_name,
-    //     tags,
-    //     thumbnail_image,
-    //     icon_data,
-    //     units,
-    //   } = data?.data?.data;
-      
-    //   return {
-    //     category_id: category_id,
-
-    //     productName: product_name,
-    //     category: `${category_title}::${category_id.toString()}`,
-    //     subCategory: `${subcategory_name}::${subcategory_id.toString()}`,
-    //     unit: units,
-    //     minOrderQty: min_order_quantity,
-    //     tags: tags,
-    //     hsn_code: hsn_code,
-    //     icon_data: icon_data || null,
-    //     slug: slug,
-
-    //     galleryImages: gallery_images,
-    //     thumbnail: thumbnail_image[0],
-    //   };
-    // },
     select: (data): ProductInfoFormType => {
-  const {
-    category_id,
-    hsn_code,
-    category_title,
-    gallery_images,
-    min_order_quantity,
-    product_name,
-    slug,
-    subcategory_id,
-    subcategory_name,
-    tags,
-    thumbnail_image,
-    icon_data,
-    units,
-  } = data?.data?.data;
+      const {
+        category_id,
+        hsn_code,
+        category_title,
+        gallery_images,
+        min_order_quantity,
+        product_name,
+        slug,
+        subcategory_id,
+        subcategory_name,
+        tags,
+        thumbnail_image,
+        icon_data,
+        units,
+      } = data?.data?.data;
 
-  return {
-    category_id: category_id ?? null,
-    productName: product_name ?? "",
-    category:
-      category_title && category_id !== null && category_id !== undefined
-        ? `${category_title}::${category_id}`
-        : "",
-    subCategory:
-      subcategory_name && subcategory_id !== null && subcategory_id !== undefined
-        ? `${subcategory_name}::${subcategory_id}`
-        : "",
-    unit: units ?? "",
-    minOrderQty: min_order_quantity ?? 1,
-    tags: tags ?? [],
-    hsn_code: hsn_code ?? "",
-    icon_data: icon_data ?? [],
-    slug: slug ?? "",
-    galleryImages: gallery_images ?? [],
-    thumbnail: thumbnail_image?.[0] ?? null,
-  };
-},
-    enabled: Boolean(productId),
+      return {
+        category_id: category_id ?? null,
+        productName: product_name ?? "",
+        category:
+          category_title && category_id !== null && category_id !== undefined
+            ? `${category_title}::${category_id}`
+            : "",
+        subCategory:
+          subcategory_name && subcategory_id !== null && subcategory_id !== undefined
+            ? `${subcategory_name}::${subcategory_id}`
+            : "",
+        unit: units ?? "",
+        minOrderQty: min_order_quantity ?? 1,
+        tags: tags ?? [],
+        hsn_code: hsn_code ?? "",
+        icon_data: icon_data ?? [],
+        slug: slug ?? "",
+        galleryImages: gallery_images ?? [],
+        thumbnail: thumbnail_image?.[0] ?? null,
+      };
+    },
+    enabled: Boolean(productId) && Boolean(categories),
   });
 
   const [pairs, setPairs] = useState<ProductIcon[] | null>(
@@ -233,6 +199,8 @@ export function ProductInfo() {
     }
   };
 
+  console.log(productInfoDefaults)
+
   useEffect(() => {
     if (productInfoDefaults && productId) {
       reset(productInfoDefaults);
@@ -242,9 +210,20 @@ export function ProductInfo() {
     }
   }, [productInfoDefaults, reset, productId]);
 
-  // useEffect(() => {
-  //   watch((name) => console.log(name));
-  // }, [watch]);
+  useEffect(() => {
+    if (productInfoDefaults?.category && productInfoDefaults?.subCategory) {
+      // 1. Set category first (to make subcategories available)
+      setValue("category", productInfoDefaults.category);
+
+      // 2. Wait for next tick (after category is updated) to set subCategory
+      setTimeout(() => {
+        setValue("subCategory", productInfoDefaults.subCategory);
+      }, 0);
+    }
+  }, [productInfoDefaults, setValue]);
+
+
+
 
   return (
     <form
@@ -344,25 +323,21 @@ export function ProductInfo() {
                   !Boolean(watch("category"))
                 }
                 value={field.value}
-                onValueChange={(val) => field.onChange(val)}
+                onValueChange={(val) => {
+                  field.onChange(val)
+                }}
               >
                 <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select Sub-category" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories
-                    ?.filter(
-                      (item: any) =>
-                        item.category_id.toString() ===
-                        watch("category")?.split("::")[1]
-                    )[0]
+                    ?.filter((item: any) => item.category_id.toString() === watch("category")?.split("::")[1])[0]
                     ?.subcategories?.map((subcategory: any) => (
                       <SelectItem
                         key={subcategory.subcategory_name}
                         className="capitalize"
-                        value={`${
-                          subcategory.subcategory_name
-                        }::${subcategory.subcategory_id.toString()}`}
+                        value={`${subcategory.subcategory_name}::${subcategory.subcategory_id.toString()}`}
                       >
                         {subcategory.subcategory_name}
                       </SelectItem>
@@ -379,7 +354,7 @@ export function ProductInfo() {
         </div>
 
         <div>
-          <Label>Unit</Label>
+          <Label>Unit *</Label>
           <Input
             disabled={isPending}
             placeholder="Unit (eg kg, pc etc)"
@@ -549,7 +524,7 @@ export function ProductInfo() {
 </div>
 
       <div>
-        <Label>Slug</Label>
+        <Label>Slug *</Label>
         <Input
           disabled={isPending}
           placeholder="Product Slug"
@@ -567,7 +542,7 @@ export function ProductInfo() {
       </div>
 
       <div>
-        <Label>HSN Code</Label>
+        <Label>HSN Code *</Label>
         <Input
           disabled={isPending}
           placeholder="Enter HSN Code"
@@ -660,7 +635,7 @@ export function ProductInfo() {
       </div>
 
       <div>
-        <Label htmlFor="thumbnail">Thumbnail</Label>
+        <Label htmlFor="thumbnail">Thumbnail *</Label>
 
         {watch("thumbnail") !== null ? (
           <div className="relative w-fit my-4">

@@ -22,10 +22,13 @@ import LogoutDialog from "../ui/LogoutDialog";
 import { useAppContext } from "@/contexts/AuthContext";
 import { setAuthToken } from "@/lib/apis";
 import { ASSETS } from "@/assets/assets";
+import useScreenHeight from "@/hooks/useScreenHeight";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const { setAuth } = useAppContext();
+  const screenHeight = useScreenHeight();
+  const isScreenShort = screenHeight < 700;
 
   const path = useLocation();
 
@@ -210,7 +213,7 @@ export default function Sidebar() {
           )}
         </div>
 
-        <div className="flex-1 overflow-hidden">
+        <div className={`flex-1 overflow-x-hidden ${isScreenShort && "overflow-y-scroll"}`}>
           <Tabs value={tabValue}>
             <TabsList className="flex flex-col gap-3 items-start mt-3 h-full bg-white dark:bg-slate-950 rounded-none">
               {menu

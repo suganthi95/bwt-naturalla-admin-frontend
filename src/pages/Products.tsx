@@ -9,6 +9,7 @@ function Products() {
   const redirect = () => {
     sessionStorage.removeItem("product-id");
     navigate("add/product-info");
+    window.location.reload();
   }
 
   return (

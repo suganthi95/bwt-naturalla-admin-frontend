@@ -112,6 +112,7 @@ export default function AddCategory() {
 
   const [subCategoryInput, setSubCategoryInput] = useState("");
   const [subCategories, setSubCategories] = useState<string[]>([]);
+  const [ subCategoriesError, setSubCategoriesError ] = useState(false);
 
   const thumbnailFile = watch("thumbnail")?.[0];
   const [isDragging, setIsDragging] = useState(false);
@@ -136,15 +137,19 @@ export default function AddCategory() {
   };
 
   const onSubmit = (data: FormValues) => {
+
+    if (subCategories.length === 0) {
+      setSubCategoriesError(true)
+      toast.warning("You must add at least one subcategory");
+      return;
+    }
+
     if (pairs.length === 0) {
       toast.warning("You must add at least one icon effect pair");
       return;
     }
 
-    if (subCategories.length === 0) {
-      toast.warning("You must add at least one subcategory");
-      return;
-    }
+    
 
     const finalData = {
       ...data,
@@ -211,7 +216,7 @@ export default function AddCategory() {
               Add
             </Button>
           </div>
-          {subCategories?.length === 0 && (
+          {subCategoriesError && (
             <p className="text-sm text-red-500 mt-1">Subcategory is required</p>
           )}
           <div className="mt-3 flex flex-wrap gap-2">

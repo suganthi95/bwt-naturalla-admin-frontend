@@ -257,12 +257,7 @@ export function ProductPrice() {
             type="date"
             placeholder="YYYY-MM-DD"
             min={new Date().toISOString().split("T")[0]}
-            {...register("discountPeriodStartat", {
-              // required: {
-              //   value: true,
-              //   message: "Start at date is required"
-              // }
-            })}
+            {...register("discountPeriodStartat")}
           />
           {/* {errors?.discountPeriodStartat && <p className="text-sm text-red-500 mt-1">{errors?.discountPeriodStartat.message}</p>} */}
         </div>
@@ -274,15 +269,7 @@ export function ProductPrice() {
             type="date"
             min={watch("discountPeriodStartat")}
             placeholder="YYYY-MM-DD"
-            {...register(
-              "discountPeriodendat"
-              //   {
-              //   validate: (value) =>
-              //     !watch("discountPeriodStartat") ||
-              //     value >= watch("discountPeriodStartat") ||
-              //     "End date must be same or after start date",
-              // }
-            )}
+            {...register("discountPeriodendat")}
           />
         </div>
       </div>

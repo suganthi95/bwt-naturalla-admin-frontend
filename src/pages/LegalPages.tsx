@@ -1,46 +1,56 @@
 import { Button } from "@/components/ui/button";
+import { useAppContext } from "@/contexts/AuthContext";
+import { getAllLegalPages } from "@/lib/apis";
+import { GetLegalPagesType } from "@/types/type";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { Calendar, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const legalPages = [
-  {
-    id: 1,
-    title: "Privacy Policy",
-    description: "Details how we collect, use, and protect user information.",
-    status: "published",
-    date: "2024-07-01",
-    author: "Admin",
-  },
-  {
-    id: 2,
-    title: "Terms & Conditions",
-    description: "Outlines the rules and regulations for using our website.",
-    status: "draft",
-    date: "2024-06-20",
-    author: "Legal Team",
-  },
-];
 
 export default function LegalPages() {
-    const navigate = useNavigate()
-  return (
-    <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
-      <div>
-        <h1 className="text-xl font-semibold">Legal Pages</h1>
-        <p className="text-[15px] text-[#4B5563]">
-          Manage all your website legal pages and update them.
-        </p>
-      </div>
 
+  const navigate = useNavigate();
+  const { auth } = useAppContext();
+
+  const { data, isSuccess, isLoading, isError, error } = useQuery({
+    queryKey: [ "getAllLegalPages" ],
+    queryFn: () => getAllLegalPages(auth?.token as string),
+    retry: 2,
+    select: (data): GetLegalPagesType[] => data.data.data
+  });
+
+  console.log(data)
+
+  let content;
+
+  if(isLoading){
+    content =  (
+      <div className="mt-[10%] text-center">
+        Loading...
+      </div>
+    )
+  }
+
+  if(isError){
+    content =  (
+      <div className="mt-[10%] text-center">
+        {error.message}
+      </div>
+    )
+  }
+
+  if(isSuccess){
+    content = (
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-        {legalPages.map((page) => (
+        {data.map((page) => (
           <li
-            key={page.id}
+            key={page.page_id}
             className="bg-white p-5 rounded-lg shadow-sm border space-y-2"
           >
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-800">
-                {page.title}
+                {page.page_title}
               </h2>
               <span
                 className={`text-xs px-2 py-1 rounded-full font-medium capitalize ${
@@ -53,18 +63,18 @@ export default function LegalPages() {
               </span>
             </div>
 
-            <p className="text-sm text-gray-600">{page.description}</p>
+            <p className="text-sm text-gray-600">{page.page_content}</p>
 
             <div className="flex items-center justify-between text-sm text-gray-500 pt-4">
                 <div className="flex items-center gap-x-4">
 
               <div className="flex items-center gap-x-2">
                 <Calendar className="w-4 h-4" />
-                <span>{page.date}</span>
+                <span>{dayjs(page.updated_at).format("DD-MM-YYYY, h:mm A")}</span>
               </div>
               <div className="flex items-center gap-x-2">
                 <User className="w-4 h-4" />
-                <span>{page.author}</span>
+                <span>{page.first_name} {page.last_name}</span>
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-3">
@@ -82,6 +92,21 @@ export default function LegalPages() {
           </li>
         ))}
       </ul>
+    )
+  }
+
+  
+
+  return (
+    <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
+      <div>
+        <h1 className="text-xl font-semibold">Legal Pages</h1>
+        <p className="text-[15px] text-[#4B5563]">
+          Manage all your website legal pages and update them.
+        </p>
+      </div>
+      {content}
+      
     </div>
   );
 }

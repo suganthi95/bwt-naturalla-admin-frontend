@@ -169,3 +169,16 @@ export type UserOrderHistoryType = {
   total_amount: number;
   status: string;
 };
+
+export type GetLegalPagesType = {
+  page_id: number
+  page_title: string
+  page_content: string
+  status: string
+  word_count: number
+  updated_by: number
+  updated_at: string
+  first_name: string
+  last_name: string
+  updated_time: string
+}
