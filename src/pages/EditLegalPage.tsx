@@ -135,9 +135,9 @@ export default function EditLegalPage() {
               </DialogTrigger>
               <DialogContent className="max-w-3xl">
                 <DialogHeader>
-                  <DialogTitle>Blog Preview</DialogTitle>
+                  <DialogTitle>Preview</DialogTitle>
                   <DialogDescription>
-                    This is how your blog content will appear.
+                    This is how your Legal page content will appear.
                   </DialogDescription>
                 </DialogHeader>
                 <div

@@ -11,22 +11,23 @@ const faqSchema = z.object({
 });
 
 type FaqFormData = z.infer<typeof faqSchema>;
+
 interface Props{
-    onClose:(val:boolean)=>void
+  onClose:(val:boolean)=>void,
+  setFaqArray: React.Dispatch<React.SetStateAction<{
+    question: string;
+    answer: string;
+  }[]>>
 }
-export default function AddFaq({onClose}:Props) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FaqFormData>({
+export default function AddFaq({ onClose, setFaqArray }: Props) {
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FaqFormData>({
     resolver: zodResolver(faqSchema),
   });
 
   const onSubmit = (data: FaqFormData) => {
-    console.log("FAQ Submitted:", data);
-    onClose(false)
+    setFaqArray(prev => [ ...prev, data ]);
+    onClose(false);
   };
 
   return (

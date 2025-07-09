@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AuthContext";
-import { getAllLegalPages } from "@/lib/apis";
+import { BASE_FRONTEND_URL, getAllLegalPages } from "@/lib/apis";
 import { GetLegalPagesType } from "@/types/type";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function LegalPages() {
 
+  
   const navigate = useNavigate();
   const { auth } = useAppContext();
 
@@ -75,7 +76,7 @@ export default function LegalPages() {
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-3">
-              <Button variant="outline" size="sm">
+              <Button onClick={() => window.open(`${BASE_FRONTEND_URL}/${page.redirect_url}`)} variant="outline" size="sm">
                 View
               </Button>
               <Button size="sm" 

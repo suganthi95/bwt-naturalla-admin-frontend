@@ -1,16 +1,24 @@
 import { Badge } from "../ui/badge";
 import { Mail, Phone } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { getOrderDetails } from "@/lib/apis";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getOrderDetails, updateOrderStatus } from "@/lib/apis";
 import { Order } from "@/types/type";
 import { useAppContext } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 interface Props {
   Order: Order;
 }
 
 export default function OrderDetails({ Order }: Props) {
-  const {auth} = useAppContext()
+
+  const {auth} = useAppContext();
+  const [ orderStatus, setOrderStatus ] = useState("");
+  const queryClient = useQueryClient();
+
   const { data } = useQuery({
     queryKey: ["getorderdetails", String(Order.order_id)],
     queryFn: () => getOrderDetails(auth?.token ?? "" ,String(Order?.order_id)),
@@ -18,6 +26,34 @@ export default function OrderDetails({ Order }: Props) {
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: [ "updateOrderStatus" ],
+    mutationFn: updateOrderStatus,
+    onSuccess: () => {
+      toast.success("Request Success", { description: "Order status updated" });
+      queryClient.invalidateQueries({ queryKey: [ "getAllorders" ] })
+    },
+    onError: (error: AxiosError<any>) => {
+      toast.error("Request Failed", { description: error?.response?.data.messagae })
+    }
+  })
+
+  const handleChange = (val: string) => {
+    setOrderStatus(val);
+    mutate({
+      id: Order.order_id.toString(),
+      status: val,
+      token: auth?.token as string
+    })
+  }
+
+
+  useEffect(() => {
+    if(data){
+      setOrderStatus(Order.order_status)
+    }
+  }, [ data ])
 
   return (
     <>
@@ -193,6 +229,19 @@ export default function OrderDetails({ Order }: Props) {
               <p className="font-medium text-lead text-textPrimary">
                 Ph: {Order.billing_phone_no}
               </p>
+            </div>
+
+            <div className="space-y-3">
+              <Select disabled={isPending} value={orderStatus} onValueChange={handleChange}>
+                <SelectTrigger className="capitalize">
+                  <SelectValue placeholder="Select order status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[ "order confirmed", "Ready to Dispatch", "Shipped", "Delivered", "Not Delivered", "Cancelled" ].map(item => (
+                    <SelectItem className="capitalize" value={item}>{item}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>

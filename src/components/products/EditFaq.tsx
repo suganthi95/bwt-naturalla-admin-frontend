@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 const faqSchema = z.object({
   question: z.string().min(3, "Question must be at least 3 characters."),
@@ -11,23 +12,35 @@ const faqSchema = z.object({
 });
 
 type FaqFormData = z.infer<typeof faqSchema>;
+
 interface Props{
-    onClose:(val:boolean)=>void
+  onClose:(val:boolean)=>void
+  faq: { question: string; answer: string; },
+  index: number,
+  setFaqArray: React.Dispatch<React.SetStateAction<{
+    question: string;
+    answer: string;
+  }[]>>
 }
-export default function EditFaq({onClose}:Props) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FaqFormData>({
+
+export default function EditFaq({ onClose, setFaqArray, index, faq }:Props) {
+
+  console.log(faq)
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FaqFormData>({
     resolver: zodResolver(faqSchema),
   });
 
   const onSubmit = (data: FaqFormData) => {
-    console.log("FAQ Submitted:", data);
+    setFaqArray(prev => [ ...prev, data ]);
     onClose(false)
   };
+
+  useEffect(() => {
+    if(faq){
+      reset(faq)
+    }
+  }, [ faq, reset, index ])
 
   return (
     <div className=" p-4  bg-white  rounded-md ">

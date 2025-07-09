@@ -992,4 +992,17 @@ export const updateLegalPage = async ({ token, ...data }: any) => {
   });
 };
 
+export const updateOrderStatus = async ({ token, id, status }: { token: string, id: string, status: string }) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/order/update/status/${id}`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      status: status
+    }
+  });
+};
+
 

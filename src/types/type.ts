@@ -181,4 +181,5 @@ export type GetLegalPagesType = {
   first_name: string
   last_name: string
   updated_time: string
+  redirect_url: string
 }

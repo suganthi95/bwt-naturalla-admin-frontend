@@ -19,22 +19,13 @@ import AddFaq from "./AddFaq";
 import EditFaq from "./EditFaq";
 
 export default function ProductFaq() {
+
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [ faqArray, setFaqArray ] = useState<{ question: string, answer: string }[]>([]);
 
-  const faqs = [
-    {
-      id: "1",
-      question: "What is the return policy?",
-      answer:
-        "You can return the product within 30 days of purchase if it’s in original condition.",
-    },
-    {
-      id: "2",
-      question: "Do you offer international shipping?",
-      answer: "Yes, we ship internationally with additional shipping charges.",
-    },
-  ];
+  const deleteFaq = (itemIndex: number) => setFaqArray(prev => prev.filter((_item, index) => index !== itemIndex));
+
   return (
     <div className="bg-white p-4 max-w-5xl">
       <div className="flex items-center justify-between">
@@ -55,15 +46,15 @@ export default function ProductFaq() {
                 <X className="w-6 h-6" />
               </DialogClose>
             </DialogHeader>
-            <AddFaq onClose={setIsAddOpen} />
+            <AddFaq setFaqArray={setFaqArray} onClose={setIsAddOpen} />
           </DialogContent>
         </Dialog>
       </div>
       <Accordion type="multiple" className="space-y-2 mt-4">
-        {faqs.map((faq) => (
+        {faqArray.map((faq, index) => (
           <AccordionItem
-            key={faq.id}
-            value={faq.id}
+            key={index}
+            value={index.toString()}
             className="border rounded-lg"
           >
             <div className="flex items-center justify-between w-full p-4 ">
@@ -91,13 +82,14 @@ export default function ProductFaq() {
                         <X className="w-6 h-6" />
                       </DialogClose>
                     </DialogHeader>
-                    <EditFaq onClose={setIsEditOpen} />
+                    <EditFaq setFaqArray={setFaqArray} index={index} faq={faq} onClose={setIsEditOpen} />
                   </DialogContent>
                 </Dialog>
 
                 <Button
                   size="icon"
                   className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
+                  onClick={() => deleteFaq(index)}
                 >
                   <Trash2 className="h-5 w-5" />
                 </Button>
