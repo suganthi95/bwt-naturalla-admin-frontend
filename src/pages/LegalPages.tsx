@@ -20,7 +20,6 @@ export default function LegalPages() {
     select: (data): GetLegalPagesType[] => data.data.data
   });
 
-  console.log(data)
 
   let content;
 
@@ -63,8 +62,6 @@ export default function LegalPages() {
               </span>
             </div>
 
-            <p className="text-sm text-gray-600">{page.page_content}</p>
-
             <div className="flex items-center justify-between text-sm text-gray-500 pt-4">
                 <div className="flex items-center gap-x-4">
 
@@ -83,7 +80,7 @@ export default function LegalPages() {
               </Button>
               <Button size="sm" 
               onClick={()=>{
-                navigate(`/legal-pages/edit/${'2'}`)
+                navigate(`/legal-pages/edit/${page.page_id}`)
               }}
               >Edit</Button>
             </div>

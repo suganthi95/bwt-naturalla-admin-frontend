@@ -132,6 +132,8 @@ export function ProductPrice() {
     }
   }, [productPriceDefaults, reset, productId]);
 
+  useEffect(() => { watch(name => console.log(name)) }, [watch])
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -149,6 +151,12 @@ export function ProductPrice() {
                 value: true,
                 message: "Unit Price is required",
               },
+              valueAsNumber: true,
+              validate: (val) => {
+                if(val > watch("strikeThroughPrice")){
+                  return "Unit price must be lesser than Strike through Price"
+                }
+              }
             })}
           />
           {errors?.unitPrice && (
@@ -162,13 +170,18 @@ export function ProductPrice() {
           <Label>Strike through Price *</Label>
           <Input
             disabled={isPending}
-            min={watch("unitPrice")}
             type="number"
             {...register("strikeThroughPrice", {
               required: {
                 value: true,
                 message: "Strike through Price is required",
               },
+              valueAsNumber: true,
+              validate: (val) => {
+                if(val < watch("unitPrice")){
+                  return "Strike through Price must be lesser than Unit Price"
+                }
+              }
             })}
           />
           {errors?.strikeThroughPrice && (

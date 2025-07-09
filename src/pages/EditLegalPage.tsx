@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import "react-quill/dist/quill.snow.css";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, LoaderCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextEditor from "@/components/ui/TextEditor";
 import {
   Dialog,
@@ -25,10 +25,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getLegalPage, updateLegalPage } from "@/lib/apis";
+import { useAppContext } from "@/contexts/AuthContext";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
+import dayjs from "dayjs";
 
 const blogSchema = z.object({
   title: z.string().min(3),
-
   status: z.enum(["draft", "published"]),
   content: z.string().min(10),
 });
@@ -36,54 +41,65 @@ const blogSchema = z.object({
 type BlogFormValues = z.infer<typeof blogSchema>;
 
 export default function EditLegalPage() {
-  // const { auth } = useAppContext();
+
   const navigate = useNavigate();
-  // const queryClient = useQueryClient();
-  const [editorContent, setEditorContent] = useState("");
+  const { auth } = useAppContext();
+  const { id } = useParams();
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
-  // const { mutate, isPending } = useMutation({
-  //   mutationKey: ["createblog"],
-  //   mutationFn: (args: { token: string; data: any }) =>
-  //     createBlog(args.token, args.data),
-  // });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm<BlogFormValues>({
+  const { data } = useQuery({
+    queryKey: [ "getLegalPage", id ],
+    queryFn: () => getLegalPage({ token: auth?.token as string, id: id as string }),
+    enabled: Boolean(id),
+    select: (data) => data.data.data[0]
+  });
+
+  console.log(data)
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: [ "updateLegalPage" ],
+    mutationFn: updateLegalPage,
+    onSuccess: () => {
+      toast.success("Request Success", { description: "Legal Page updated successfully" })
+      navigate(-1)
+    },
+    onError: (error: AxiosError<any>) => {
+      toast.error("Request Failed", { description: error.response?.data.message })
+    }
+  })
+
+
+  const { register, handleSubmit, watch, reset, control, formState: { errors } } = useForm<BlogFormValues>({
     resolver: zodResolver(blogSchema),
     defaultValues: {
       status: "draft",
+      content: "",
+      title: ""
     },
   });
 
   const onSubmit = (data: BlogFormValues) => {
     const finalData = {
       ...data,
+      id: id,
+      token: auth?.token
     };
-    console.log(finalData);
 
-    // mutate(
-    //   {
-    //     token: auth?.token ?? "",
-    //     data: finalData,
-    //   },
-    //   {
-    //     onSuccess() {
-    //       toast.success("blog created successfully");
-    //       queryClient.invalidateQueries({ queryKey: ["getblogs"] });
-    //       navigate("/blogs");
-    //     },
-    //     onError(error) {
-    //       if (axios.isAxiosError(error)) {
-    //         toast.error(error?.response?.data?.message);
-    //       }
-    //     },
-    //   }
-    // );
+    mutate(finalData)
+    
   };
+
+  useEffect(() => {
+
+    if(data){
+      reset({
+        title: data.page_title,
+        content: data.page_content,
+        status: data.status
+      })
+    }
+
+  }, [ data ])
 
   return (
     <div className="flex flex-col p-4  gap-4 w-full h-screen  overflow-y-auto bg-slate-100">
@@ -91,7 +107,7 @@ export default function EditLegalPage() {
         <div className="flex justify-between items-center">
           <div className="flex items-start gap-1 text-xl font-semibold">
             <button
-              onClick={() => navigate("/blogs")}
+              onClick={() => navigate(-1)}
               className="text-gray-700 mt-1 cursor-pointer hover:text-black transition-colors"
               aria-label="Back to Blogs"
             >
@@ -99,10 +115,7 @@ export default function EditLegalPage() {
             </button>
 
             <div>
-              <h1 className="text-xl font-semibold">Create Blog</h1>
-              <p className="text-sm text-slate-500">
-                Create content that drives traffic and sales.
-              </p>
+              <h1 className="text-xl font-semibold">Edit Legal Page</h1>
             </div>
           </div>
           <div className="flex justify-between gap-x-2  mt-4 ">
@@ -112,6 +125,7 @@ export default function EditLegalPage() {
             >
               <DialogTrigger asChild>
                 <Button
+                  disabled={isPending}
                   type="button"
                   variant="outline"
                   className="border-slate-400  text-slate-500"
@@ -128,7 +142,7 @@ export default function EditLegalPage() {
                 </DialogHeader>
                 <div
                   className="prose max-w-full bg-white p-4 rounded-md border overflow-y-auto max-h-[500px]"
-                  dangerouslySetInnerHTML={{ __html: editorContent }}
+                  dangerouslySetInnerHTML={{ __html: watch("content") }}
                 />
                 <DialogFooter>
                   <Button
@@ -141,13 +155,8 @@ export default function EditLegalPage() {
               </DialogContent>
             </Dialog>
             <div className="space-x-3">
-              <Button type="submit">
-                {/* {showPublish && isPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Save Changes"
-                )} */}
-                save
+              <Button disabled={isPending} type="submit">
+                {isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save"}
               </Button>
             </div>
           </div>
@@ -156,7 +165,7 @@ export default function EditLegalPage() {
           <div className="bg-white  rounded-lg p-4 col-span-4 space-y-4">
             <div>
               <label className="block font-medium mb-1 text-sm">Title</label>
-              <Input {...register("title")} placeholder="Enter blog title" />
+              <Input disabled {...register("title")} placeholder="Enter blog title" />
               {errors.title && (
                 <p className="text-red-500 text-sm">{errors.title.message}</p>
               )}
@@ -165,12 +174,15 @@ export default function EditLegalPage() {
             <div>
               <label className="block font-medium mb-1 text-sm">Content</label>
 
-              <TextEditor
-                content={editorContent}
-                handleChange={(value: any) => {
-                  setEditorContent(value);
-                  setValue("content", value);
-                }}
+              <Controller
+                name="content"
+                control={control}
+                render={({ field }) => (
+                  <TextEditor
+                    content={field.value}
+                    handleChange={field.onChange}
+                  />
+                )}
               />
               {errors.content && (
                 <p className="text-red-500 text-sm">{errors.content.message}</p>
@@ -183,40 +195,44 @@ export default function EditLegalPage() {
             </h1>
             <div>
               <label className="block font-medium mb-2 text-sm">Status</label>
-              <Select
-                onValueChange={(value) =>
-                  setValue("status", value as "draft" | "published")
-                }
-                defaultValue="draft"
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="draft">Draft</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                </SelectContent>
-              </Select>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}  
+              />
             </div>
             <ul className="space-y-2">
               <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
-                Publishing Options:{" "}
+                Publishing date:{" "}
                 <span className="text-[#808080] font-normal text-[15px]">
-                  Dec 15, 2024{" "}
+                  {dayjs(data?.updated_at).format("DD-MM-YYYY, h:mm A")}
                 </span>
               </li>
               <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
                 Updated By :{" "}
                 <span className="text-[#808080] text-[15px] font-normal">
-                  Dec 15, 2024{" "}
+                  {data?.first_name} {data?.last_name}
                 </span>
               </li>
-              <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
+              {/* <li className="text-[#232323] flex items-center gap-x-1 text-sm font-semibold">
                 Word Count :{" "}
                 <span className="text-[#808080] font-normal text-[15px]">
                   Dec 15, 2024{" "}
                 </span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

@@ -485,8 +485,8 @@ export const addProductPrice = async ({
       special_discount_type: data.specialDiscountType,
       special_discount_percent: data?.specialDiscountPercentage,
       special_discount_amount: data?.specialDiscountAmount,
-      discount_start_at: data.discountPeriodStartat,
-      discount_end_at: data.discountPeriodendat,
+      discount_start_at: data.discountPeriodStartat === "Invalid Date" ? null : data.discountPeriodStartat,
+      discount_end_at: data.discountPeriodendat === "Invalid Date" ? null : data.discountPeriodendat,
       current_stock: data.currentStock,
       stock_visibility: data.stockVisibility === "show" ? true : false,
       minimum_stock_warning: data.minimumStockWarning,
@@ -961,6 +961,34 @@ export const getAllLegalPages = async (token: string) => {
     headers: {
       Authorization: token,
     },
+  });
+};
+
+export const getLegalPage = async ({ token, id }: { token: string, id: string }) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/legal/page/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updateLegalPage = async ({ token, ...data }: any) => {
+
+  const formdata = new FormData();
+
+  formdata.append("page_title", data.title);
+  formdata.append("page_content", data.content);
+  formdata.append("status", data.status);
+
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/legal/page/update/${data.id}`,
+    headers: {
+      Authorization: token,
+    },
+    data: formdata
   });
 };
 
