@@ -57,11 +57,13 @@ function ProductSEO() {
     mutationKey: ["addMetaSEO"],
     mutationFn: addMetaSEO,
     onSuccess: () => {
-      sessionStorage.removeItem("product-id");
-      navigate("/products");
       toast.success("Request Success", {
         description: "SEO added successfully",
       });
+
+      if(location.pathname === "/products/add/seo") {
+        navigate("/products/add/faq");
+      }
     },
     onError: (error: AxiosError<any>) => {
       console.log(error);

@@ -642,6 +642,32 @@ export const getProductSEO = async (token: string, productId: string) => {
   });
 };
 
+export const getProductFaq = async (token: string, productId: string) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/products/faq/${productId}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const postProductFaq = async ({ token, productId, faq }: { token: string, productId: string, faq: any  }) => {
+
+  const data = faq.map((item: any) => ({ qn: item.question, ans: item.answer }));
+
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/products/faq/${productId}`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      faq: data
+    }
+  });
+};
+
 export const getShipmentList = async (token: string) => {
   return await axios({
     method: "get",

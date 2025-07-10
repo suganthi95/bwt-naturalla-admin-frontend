@@ -1,4 +1,4 @@
-import { ChevronDown, Edit, Trash2, X } from "lucide-react";
+import { ChevronDown, Edit, LoaderCircle, Trash2 } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -6,25 +6,74 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddFaq from "./AddFaq";
-import EditFaq from "./EditFaq";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAppContext } from "@/contexts/AuthContext";
+import { getProductFaq, postProductFaq } from "@/lib/apis";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function ProductFaq() {
 
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const { auth } = useAppContext();
+  const navigate = useNavigate();
+  const productId = sessionStorage.getItem("product-id") as string;
+
+  const [isAddOpen, setIsAddOpen] = useState<any>({ open: false, type: "", faq: null });
   const [ faqArray, setFaqArray ] = useState<{ question: string, answer: string }[]>([]);
 
   const deleteFaq = (itemIndex: number) => setFaqArray(prev => prev.filter((_item, index) => index !== itemIndex));
+
+  const { data: productFaqDefaults } = useQuery({
+    queryKey: ["getProductSEO"],
+    queryFn: () => getProductFaq(auth?.token ?? "", productId),
+    retry: 3,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      return data.data.data.map((item: any) => ({ question: item.qn, answer: item.ans }))
+    },
+    enabled: Boolean(productId),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: [ "postProductFaq" ],
+    mutationFn: postProductFaq,
+    onSuccess: () => {
+      if(location.pathname === "/products/add/faq") {
+        sessionStorage.removeItem("product-id");
+        navigate("/products");
+      }
+
+      toast.success("Request Success", {
+        description: "Product FAQ added successfully",
+      });
+    },
+    onError: (error: AxiosError<any>) => {
+      console.log(error);
+      toast.error("Request Failed", {
+        description: error?.response?.data?.message,
+      });
+    }
+  });
+
+  const submitFaq = () => {
+    mutate({
+      faq: faqArray,
+      productId,
+      token: auth?.token as string
+    })
+  }
+
+  useEffect(() => {
+
+    if(productFaqDefaults && productFaqDefaults.length > 0){
+      setFaqArray(productFaqDefaults)
+    }
+
+  }, [ productFaqDefaults ])
+
 
   return (
     <div className="bg-white p-4 max-w-5xl">
@@ -35,20 +84,7 @@ export default function ProductFaq() {
             Manage frequently asked questions for your products
           </p>
         </div>
-        <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-          <DialogTrigger>
-            <Button>Add FAQ</Button>
-          </DialogTrigger>
-          <DialogContent className="[&>button]:hidden !p-0 !max-w-xl ">
-            <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
-              <DialogTitle className="">Add FAQ</DialogTitle>
-              <DialogClose className="cursor-pointer">
-                <X className="w-6 h-6" />
-              </DialogClose>
-            </DialogHeader>
-            <AddFaq setFaqArray={setFaqArray} onClose={setIsAddOpen} />
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => setIsAddOpen((prev: any) => ({ ...prev, open: true, faq: null, type: "add", index: null }))}>Add FAQ</Button>
       </div>
       <Accordion type="multiple" className="space-y-2 mt-4">
         {faqArray.map((faq, index) => (
@@ -66,25 +102,13 @@ export default function ProductFaq() {
               </AccordionTrigger>
 
               <div className="flex items-center gap-2 ml-2">
-                <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-                  <DialogTrigger>
-                    <Button
-                      size="icon"
-                      className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C759]/20"
-                    >
-                      <Edit className="h-5 w-5" />
-                    </Button>{" "}
-                  </DialogTrigger>
-                  <DialogContent className="[&>button]:hidden !p-0 !max-w-xl ">
-                    <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
-                      <DialogTitle className="">Edit FAQ</DialogTitle>
-                      <DialogClose className="cursor-pointer">
-                        <X className="w-6 h-6" />
-                      </DialogClose>
-                    </DialogHeader>
-                    <EditFaq setFaqArray={setFaqArray} index={index} faq={faq} onClose={setIsEditOpen} />
-                  </DialogContent>
-                </Dialog>
+                <Button
+                  size="icon"
+                  className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C759]/20"
+                  onClick={() => setIsAddOpen({ open: true, faq: faq, type: "edit", index: index })}
+                >
+                  <Edit className="h-5 w-5" />
+                </Button>
 
                 <Button
                   size="icon"
@@ -105,6 +129,13 @@ export default function ProductFaq() {
           </AccordionItem>
         ))}
       </Accordion>
+      {faqArray.length > 0 &&
+        <div className="flex justify-end mt-5">
+          <Button disabled={isPending} onClick={submitFaq}>{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save & Submit"}</Button>
+        </div>
+      }
+      
+      <AddFaq isAddOpen={isAddOpen} setIsAddOpen={setIsAddOpen} setFaqArray={setFaqArray} />
     </div>
   );
 }

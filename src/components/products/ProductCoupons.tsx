@@ -73,7 +73,11 @@ export function ProductCoupons() {
     mutationKey: ["addCoupon"],
     mutationFn: addCoupons,
     onSuccess: () => {
-      toast.success("Request Success", { description: "Coupon Added Successfully" })
+      toast.success("Request Success", { description: "Coupon Added Successfully" });
+
+      if (location.pathname === "/products/add/discounts") {
+        navigate("/products/add/seo");
+      }
     },
     onError: (error: AxiosError<any>) => {
       toast.error("Request Failed", { description: error?.response?.data.message })
