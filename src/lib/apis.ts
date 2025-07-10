@@ -245,7 +245,7 @@ export const getUserHistory = async (token: string, id: string) => {
 export const getUserOrderDetail = async (token: string, order_id: string) => {
   return await axios({
     method: "get",
-    url: `${BASE_URL}/order/user-history/${order_id}`,
+    url: `${BASE_URL}/order/user-order/${order_id}`,
     headers: {
       Authorization: token,
     },

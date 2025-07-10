@@ -97,7 +97,7 @@ function AllOrders({ orderHistory }: Props) {
       ),
     },
     {
-      accessorKey: "status",
+      accessorKey: "order_status",
       header: () => "Status",
       cell: ({ row }) => {
         const status = String(row.getValue("status")).toLowerCase();
@@ -122,10 +122,13 @@ function AllOrders({ orderHistory }: Props) {
           <span
             className={`${statusClass} rounded-full capitalize px-3 py-1 text-xs`}
           >
-            {row.getValue("status")}
+            {row.getValue("order_status")}
           </span>
         );
       },
+    },
+    {
+      accessorKey: "invoice_url",
     },
 
     {
@@ -165,11 +168,14 @@ function AllOrders({ orderHistory }: Props) {
                 <OrderHistoryDetails
                   onClose={setIsopen}
                   order_id={row.original.order_id}
+                  invoice_url={row.original.invoice_url}
                 />
               </DialogContent>
             </Dialog>
 
             <Button
+              disabled={!row.getValue("invoice_url")}
+              onClick={() => window.open(row.getValue("invoice_url"))}
               size="icon"
               variant="ghost"
               className="rounded-full text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20"
@@ -193,6 +199,7 @@ function AllOrders({ orderHistory }: Props) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     origin: false,
+    invoice_url: false
   });
 
   const [rowSelection, setRowSelection] = useState({});

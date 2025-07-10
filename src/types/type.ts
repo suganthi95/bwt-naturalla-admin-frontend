@@ -167,7 +167,8 @@ export type UserOrderHistoryType = {
   order_date: string; // ISO date string
   items: number | null; 
   total_amount: number;
-  status: string;
+  order_status: string;
+  invoice_url: string
 };
 
 export type GetLegalPagesType = {
@@ -182,4 +183,25 @@ export type GetLegalPagesType = {
   last_name: string
   updated_time: string
   redirect_url: string
+}
+
+export interface OrderDetailsByUserType {
+  order_id: number
+  order_code: string
+  order_date: string
+  status: string
+  total_amount: number
+  items: any[]
+  shipping_address: {
+    name: string
+    address: string
+    phone_no: string
+  }
+  payment_info: {
+    subtotal: number
+    tax: number
+    discount: number
+    shipping_cost: number
+    grand_total: number
+  }
 }
