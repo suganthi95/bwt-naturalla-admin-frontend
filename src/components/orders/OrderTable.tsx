@@ -236,7 +236,7 @@ function OrderTable() {
           refunded: "bg-blue-100 text-blue-700",
         };
         const [Isopen, setIsopen] = useState(false);
-        const { payment_status, order_status, order_code } = row.original;
+        const { payment_status, order_status, order_code, order_date } = row.original;
         return (
           // <DropdownMenu>
           //     <DropdownMenuTrigger asChild>
@@ -287,7 +287,7 @@ function OrderTable() {
                       {order_status}
                     </Badge>
                     <span className="text-lead text-sm">
-                      Mar 30, 2025 22:02
+                      {dayjs(order_date).format("DD-MM-YYYY")}
                     </span>
                   </div>
                 </div>

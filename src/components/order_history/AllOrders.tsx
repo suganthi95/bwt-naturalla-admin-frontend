@@ -84,7 +84,7 @@ function AllOrders({ orderHistory }: Props) {
     },
     {
       accessorKey: "items",
-      header: () => "Itmes",
+      header: () => "Items",
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("items") ?? 0}</div>
       ),

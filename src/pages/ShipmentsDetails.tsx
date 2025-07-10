@@ -78,9 +78,9 @@ export default function ShipmentsDetails() {
                 <div className="space-y-1.5">
                   <p className="text-lead text-sm">Pickup Scheduled Date</p>
                   <h3 className="text-primary-black font-medium">
-                    {dayjs(shipment.pickup_scheduled_date).format(
+                    {shipment.pickup_scheduled_date ? dayjs(shipment.pickup_scheduled_date).format(
                       "DD-MM-YYYY, hh:mm A"
-                    )}
+                    ): "-"}
                   </h3>
                 </div>
                 <div className="col-span-1 space-y-1.5">
@@ -92,9 +92,9 @@ export default function ShipmentsDetails() {
                 <div className="col-span-1 space-y-1.5">
                   <p className="text-lead text-sm">Estimated Delivery Date</p>
                   <h3 className="text-primary-black font-medium">
-                    {dayjs(shipment.estimated_delivery_date).format(
+                    {shipment.estimated_delivery_date ? dayjs(shipment.estimated_delivery_date).format(
                       "DD-MM-YYYY, hh:mm A"
-                    )}
+                    ) : "-"}
                   </h3>
                 </div>
                 <div className="col-span-1 space-y-1.5">

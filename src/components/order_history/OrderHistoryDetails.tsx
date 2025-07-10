@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getUserOrderDetail } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
@@ -10,7 +9,7 @@ interface Props {
   invoice_url: string;
   onClose: (val: boolean) => void;
 }
-export default function OrderHistoryDetails({ order_id, invoice_url, onClose }: Props) {
+export default function OrderHistoryDetails({ order_id }: Props) {
 
 
   const { auth } = useAppContext();
@@ -62,42 +61,45 @@ export default function OrderHistoryDetails({ order_id, invoice_url, onClose }: 
             <div className="p-3 text-gray-900 font-semibold">₹{data.total_amount}</div>
           </div>
         </div>
-        <div>
-          <h2 className="font-semibold">Items</h2>
-          <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
-            <div className="grid grid-cols-5 bg-gray-100 text-left font-medium text-gray-700">
-              <div className="p-3 col-span-2">Product</div>
-              <div className="p-3">Quantity</div>
-              <div className="p-3">Price</div>
-              <div className="p-3">Total</div>
-            </div>
-
-            {/* {data.items.map(item => (
-              <div className="grid grid-cols-5 items-center hover:bg-gray-50 transition text-gray-900 ">
-                <div className="p-3  col-span-2 flex items-start gap-3">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Product"
-                    className="w-12 h-12 rounded-md object-cover border"
-                  />
-                  <div>
-                    <p className="font-semibold text-[17px] text-primary-black">
-                      Naturalla Hair Oil
-                    </p>
-                    <p className="text-xs text-muted-foreground">100ml / Unit</p>
-                  </div>
-                </div>
-
-                <div className="p-3 font-semibold">1</div>
-
-                <div className="p-3 font-semibold">₹948.00</div>
-
-                <div className="p-3 font-semibold">₹948.00</div>
+        {data.items.length > 0 &&
+          <div className="h-[200px] overflow-y-scroll">
+            <h2 className="font-semibold">Items</h2>
+            <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
+              <div className="grid grid-cols-5 bg-gray-100 text-left font-medium text-gray-700">
+                <div className="p-3 col-span-2">Product</div>
+                <div className="p-3">Quantity</div>
+                <div className="p-3">Price</div>
+                <div className="p-3">Total</div>
               </div>
-            ))} */}
 
+              {data.items.map(item => (
+                <div key={item.product_id} className="grid grid-cols-5 items-center hover:bg-gray-50 transition text-gray-900 ">
+                  <div className="p-3  col-span-2 flex items-start gap-3">
+                    <img
+                      src={item.product_thumbnail_image}
+                      alt="Product"
+                      className="w-12 h-12 rounded-md object-cover border"
+                    />
+                    <div>
+                      <p className="font-semibold text-[17px] text-primary-black">
+                        {item.product_name}
+                      </p>
+                      {/* <p className="text-xs text-muted-foreground">100ml / Unit</p> */}
+                    </div>
+                  </div>
+
+                  <div className="p-3 font-semibold">{item.quantity}</div>
+
+                  <div className="p-3 font-semibold">₹ {item.price}</div>
+
+                  <div className="p-3 font-semibold">₹ {item.total}</div>
+                </div>
+              ))}
+
+            </div>
           </div>
-        </div>
+        }
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col p-4 text-primary-black  h-full">
             <h2 className="font-semibold mb-4">Shipping Address</h2>
@@ -143,7 +145,7 @@ export default function OrderHistoryDetails({ order_id, invoice_url, onClose }: 
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-x-5 ">
+        {/* <div className="flex items-center justify-end gap-x-5 ">
           <Button
             onClick={() => onClose(false)}
             variant={"outline"}
@@ -152,7 +154,7 @@ export default function OrderHistoryDetails({ order_id, invoice_url, onClose }: 
             Close
           </Button>
           <Button disabled={!invoice_url}>Download Invoice</Button>
-        </div>
+        </div> */}
       </div>
     )
   }
