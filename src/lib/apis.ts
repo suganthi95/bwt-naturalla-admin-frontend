@@ -443,8 +443,11 @@ export const addProductInfo = async ({
     formdata.append("thumbnail_image", data.thumbnail[0]);
   }
 
-  data.galleryImages.forEach((image: any, index: number) => {
-    if (image.media_id) {
+  data.galleryImages?.forEach((image: any, index: number) => {
+
+    if(image === null){
+      formdata.append(`gallery_images_id[${index}]`, "null");
+    }else if (image.media_id) {
       formdata.append(`gallery_images_id[${index}]`, image.media_id);
     } else {
       formdata.append(`gallery_images`, image[0]);

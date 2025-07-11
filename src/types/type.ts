@@ -150,6 +150,7 @@ export type ProductEffectIcon = {
   icon_name: string;
   created_at: string;
   icon_url: string;
+  prod_icon_id: number;
 };
 
 export type BannersType = {

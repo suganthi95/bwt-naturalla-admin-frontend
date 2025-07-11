@@ -46,12 +46,11 @@ export function ProductInfo() {
   const [tags, setTags] = useState<string[]>([]);
   const [selectedCategoryId, setSeletectedCategoryId] = useState<number>();
   const [tagInput, setTagInput] = useState("");
+
   const { data: productIcons } = useQuery({
     queryKey: ["getCategoriesbasedicons", selectedCategoryId],
-    queryFn: () =>
-      getCategoryBasedIcons(auth?.token ?? "", selectedCategoryId!.toString()),
-    enabled:
-      !!auth?.token && !!selectedCategoryId && !isNaN(selectedCategoryId),
+    queryFn: () => getCategoryBasedIcons(auth?.token ?? "", selectedCategoryId!.toString()),
+    enabled: !!auth?.token && !!selectedCategoryId && !isNaN(selectedCategoryId),
     retry: 3,
     select: (data) => data?.data?.data,
   });
@@ -476,7 +475,7 @@ export function ProductInfo() {
 
         {pairs && pairs?.length > 0 && (
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {pairs?.slice(0, 3)?.map((pair, index) => {
+            {pairs?.map((pair, index) => {
               return (
                 <div
                   key={index}
@@ -511,17 +510,11 @@ export function ProductInfo() {
                 </div>
               );
             })}
-
-            {pairs?.length > 3 && (
-              <div className="flex items-center justify-center p-1 px-4 border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
-                +{pairs?.length - 3} more
-              </div>
-            )}
           </div>
         )}
       </div>
 
-</div>
+    </div>
 
       <div>
         <Label>Slug *</Label>
