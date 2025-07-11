@@ -110,7 +110,8 @@ export default function Banners() {
                   bannerImage: item.image_urls[0],
                   bannerImageId: item.banner_image_id[0],
                   publish: item.published
-                 }}/>
+                }}
+              />
 
               <Dialog>
                 <DialogTrigger asChild>

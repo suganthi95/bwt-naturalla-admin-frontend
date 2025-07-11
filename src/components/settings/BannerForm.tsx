@@ -173,12 +173,12 @@ function BannerForm({ type, defaultData }: Props) {
                             {watch("bannerImage") !== null ? (
                                 <div className="relative my-4">
                                     <Button
-                                    onClick={() => setValue("bannerImage", null)}
-                                    type="button"
-                                    variant="destructive"
-                                    className="absolute z-[10] p-0 h-5 w-5 rounded-full -top-2 -right-2"
+                                        onClick={() => setValue("bannerImage", null)}
+                                        type="button"
+                                        variant="destructive"
+                                        className="absolute z-[10] p-0 h-5 w-5 rounded-full -top-2 -right-2"
                                     >
-                                    <X className="h-3 w-3" />
+                                        <X className="h-3 w-3" />
                                     </Button>
                                     <div className="rounded-lg w-full h-[200px] overflow-hidden border">
                                     {typeof watch("bannerImage") === "string" && (
@@ -215,16 +215,23 @@ function BannerForm({ type, defaultData }: Props) {
                                 Select click to browse
                                 </p>
                                 <Input
-                                id="bannerImage"
-                                className="hidden"
-                                type="file"
-                                accept="image/*"
-                                {...register("bannerImage", {
-                                    required: {
-                                    value: true,
-                                    message: "Banner Image is required",
-                                    },
-                                })}
+                                    id="bannerImage"
+                                    className="hidden"
+                                    type="file"
+                                    accept=".png, .jpg, .jpeg"
+                                    {...register("bannerImage", {
+                                        required: {
+                                            value: true,
+                                            message: "Banner Image is required",
+                                        },
+                                        validate: (file: any) => {
+                                            // console.log(file[0].size)
+
+                                            if(file[0]?.size > (1024 * 1024 * 1)){
+                                                return "Banner Image must be less than 5 MB"
+                                            }
+                                        },
+                                    })}
                                 />
                             </Label>
                             )}
