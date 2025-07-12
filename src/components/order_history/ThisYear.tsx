@@ -87,7 +87,7 @@ function ThisYear({orderHistory}:Props) {
     },
     {
       accessorKey: "items",
-      header: () => "Itmes",
+      header: () => "Items",
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("items") ?? 0}</div>
       ),
@@ -99,37 +99,38 @@ function ThisYear({orderHistory}:Props) {
         <div className="capitalize"> ₹ {row.getValue("total_amount")}</div>
       ),
     },
-{
-  accessorKey: "status",
-  header: () => "Status",
-  cell: ({ row }) => {
-    const status = String(row.getValue("status")).toLowerCase();
+    {
+      accessorKey: "invoice_url",
+    },
+    {
+      accessorKey: "order_status",
+      header: () => "Status",
+      cell: ({ row }) => {
+        const status = String(row.getValue("order_status")).toLowerCase();
 
-    const statusColorMap: Record<string, string> = {
-        "order created": "bg-purple-500/20 text-purple-600",
-      "order confirmed": "bg-blue-500/20 text-blue-600",
-      "in progress": "bg-yellow-500/20 text-yellow-600",
-      "completed": "bg-green-500/20 text-green-600",
-      "delivered": "bg-emerald-500/20 text-emerald-600",
-      "cancelled": "bg-red-500/20 text-red-600",
-      "rto": "bg-orange-500/20 text-orange-600",
-      "in transit": "bg-sky-500/20 text-sky-600",
-      "processing": "bg-indigo-500/20 text-indigo-600",
-      "failed": "bg-rose-500/20 text-rose-600",
-    };
+        const statusColorMap: Record<string, string> = {
+            "order created": "bg-purple-500/20 text-purple-600",
+          "order confirmed": "bg-blue-500/20 text-blue-600",
+          "in progress": "bg-yellow-500/20 text-yellow-600",
+          "completed": "bg-green-500/20 text-green-600",
+          "delivered": "bg-emerald-500/20 text-emerald-600",
+          "cancelled": "bg-red-500/20 text-red-600",
+          "rto": "bg-orange-500/20 text-orange-600",
+          "in transit": "bg-sky-500/20 text-sky-600",
+          "processing": "bg-indigo-500/20 text-indigo-600",
+          "failed": "bg-rose-500/20 text-rose-600",
+        };
 
-    const statusClass =
-      statusColorMap[status] || "bg-gray-300/20 text-gray-700";
+        const statusClass =
+          statusColorMap[status] || "bg-gray-300/20 text-gray-700";
 
-    return (
-      <span className={`${statusClass} rounded-full capitalize px-3 py-1 text-xs`}>
-        {row.getValue("status")}
-      </span>
-    );
-  },
-},
-
-
+        return (
+          <span className={`${statusClass} rounded-full capitalize px-3 py-1 text-xs`}>
+            {row.getValue("order_status")}
+          </span>
+        );
+      },
+    },
     {
       accessorKey: "actions",
       header: () => "Actions",
@@ -162,11 +163,17 @@ function ThisYear({orderHistory}:Props) {
                     <X className="w-6 h-6" />
                   </div>
                 </DialogHeader>
-                <OrderHistoryDetails onClose={setIsopen} order_id={row.original.order_id} />
+                <OrderHistoryDetails 
+                  onClose={setIsopen} 
+                  order_id={row.original.order_id} 
+                  invoice_url={row.original.invoice_url}
+                />
               </DialogContent>
             </Dialog>
 
             <Button
+              disabled={!row.getValue("invoice_url")}
+              onClick={() => window.open(row.getValue("invoice_url"))}
               size="icon"
               variant="ghost"
               className="rounded-full text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20"
@@ -190,6 +197,7 @@ function ThisYear({orderHistory}:Props) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     origin: false,
+    invoice_url: false
   });
 
   const [rowSelection, setRowSelection] = useState({});

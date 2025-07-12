@@ -74,10 +74,10 @@ function ConfigureCoupons() {
     retry: 1,
   });
 
-      const { mutate: onDelete, isPending } = useMutation({
-        mutationKey: ["deletecoupon"],
-        mutationFn: (args:{token:string,id: number}) => deleteConfigureCoupons(args.token ?? '',args.id),
-      });
+  const { mutate: onDelete, isPending } = useMutation({
+    mutationKey: ["deletecoupon"],
+    mutationFn: (args:{token:string,id: number}) => deleteConfigureCoupons(args.token ?? '',args.id),
+  });
   
   const columns: ColumnDef<any>[] = [
     {
@@ -274,21 +274,15 @@ function ConfigureCoupons() {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const globalFilterFunction = (
-    row: any,
-    _columnId: string,
-    filterValue: string
-  ) => {
-    const valuesToCheck = [
-      row.original.discount_name,
-      row.original.coupon_code,
-      row.original.type,
-      row.original.value,
-    ];
+  const globalFilterFunction = (row: any, _columnId: string, filterValue: string) => {
 
-    return valuesToCheck.some((val) =>
-      val?.toLowerCase().includes(filterValue.toLowerCase())
-    );
+    const name = row.original.coupon_name?.toLowerCase() || "";
+    const code = row.original.coupon_code?.toLowerCase() || "";
+    const type = row.original.discount_type?.toLowerCase() || "";
+    const search = filterValue.trim().toLowerCase();
+
+    return name.includes(search) || code.includes(search) || type.includes(search);
+
   };
 
   const table = useReactTable({

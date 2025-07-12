@@ -108,10 +108,10 @@ function OrderTable() {
       ),
     },
     {
-      accessorKey: "sub_total",
+      accessorKey: "order_amount",
       header: () => "Total Amount",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("sub_total")}</div>
+        <div className="capitalize">{row.getValue("order_amount")}</div>
       ),
     },
 
@@ -236,24 +236,8 @@ function OrderTable() {
           refunded: "bg-blue-100 text-blue-700",
         };
         const [Isopen, setIsopen] = useState(false);
-        const { payment_status, order_status, order_code } = row.original;
+        const { payment_status, order_status, order_code, order_date } = row.original;
         return (
-          // <DropdownMenu>
-          //     <DropdownMenuTrigger asChild>
-          //         <Button size="icon" variant={"ghost"}>
-          //             <Settings className="h-5 w-5 stroke-slate-500"/>
-          //         </Button>
-          //     </DropdownMenuTrigger>
-          //     <DropdownMenuContent className="w-[150px]">
-          //         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          //         <DropdownMenuSeparator />
-          //         <DropdownMenuItem className="cursor-pointer">View Order</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Cancel</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Track</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Generate Label</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Resend SMS</DropdownMenuItem>
-          //     </DropdownMenuContent>
-          //     </DropdownMenu>
           <Dialog open={Isopen} onOpenChange={setIsopen}>
             <DialogTrigger>
               <Button
@@ -287,7 +271,7 @@ function OrderTable() {
                       {order_status}
                     </Badge>
                     <span className="text-lead text-sm">
-                      Mar 30, 2025 22:02
+                      {dayjs(order_date).format("DD-MM-YYYY")}
                     </span>
                   </div>
                 </div>
@@ -325,7 +309,7 @@ function OrderTable() {
   //     { label: "Customer Name", key: "shipmet_first_name" },
   //     { label: "Customer Phone", key: "shipment_phone_no" },
   //     { label: "City / State", key: "city" },
-  //     { label: "Total Amount", key: "sub_total" },
+  //     { label: "Total Amount", key: "order_amount" },
   //     { label: "Payment Status", key: "payment_status" },
   //     { label: "Delivery Status", key: "delivery_status" },
   //     { label: "Order Status", key: "order_status" },

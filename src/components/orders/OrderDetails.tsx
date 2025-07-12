@@ -123,14 +123,13 @@ export default function OrderDetails({ Order }: Props) {
 
             <div className="flex justify-between">
               <span>Discount</span>
-              <span className="">  {Order?.discount_amount > 0 && '-'}₹{Order.discount_amount}</span>
+              <span>{Order?.coupon_discount ? `₹ ${Order.coupon_discount}` : '0'}</span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="flex flex-col">Shipping Cost</span>
               <span
-                className={`font-semibold  
-                         gap-x-1.5 flex items-center`}
+                className={`font-semibold gap-x-1.5 flex items-center`}
               >
                 ₹{Order.shipping_fee}
               </span>
@@ -232,12 +231,13 @@ export default function OrderDetails({ Order }: Props) {
             </div>
 
             <div className="space-y-3">
-              <Select disabled={isPending} value={orderStatus} onValueChange={handleChange}>
+              <label className="font-semibold" htmlFor="">Order Status</label>
+              <Select disabled={isPending || orderStatus === "failed"} value={orderStatus} onValueChange={handleChange}>
                 <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select order status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[ "order confirmed", "Ready to Dispatch", "Shipped", "Delivered", "Not Delivered", "Cancelled" ].map(item => (
+                  {[ "order confirmed", "Ready to Dispatch", "Shipped", "Delivered", "Not Delivered", "Cancelled", "failed" ].map(item => (
                     <SelectItem className="capitalize" value={item}>{item}</SelectItem>
                   ))}
                 </SelectContent>

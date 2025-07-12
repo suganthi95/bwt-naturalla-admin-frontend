@@ -150,6 +150,7 @@ export type ProductEffectIcon = {
   icon_name: string;
   created_at: string;
   icon_url: string;
+  prod_icon_id: number;
 };
 
 export type BannersType = {
@@ -167,7 +168,8 @@ export type UserOrderHistoryType = {
   order_date: string; // ISO date string
   items: number | null; 
   total_amount: number;
-  status: string;
+  order_status: string;
+  invoice_url: string
 };
 
 export type GetLegalPagesType = {
@@ -183,3 +185,58 @@ export type GetLegalPagesType = {
   updated_time: string
   redirect_url: string
 }
+
+export interface OrderDetailsByUserType {
+  order_id: number
+  order_code: string
+  order_date: string
+  status: string
+  total_amount: number
+  items: any[]
+  shipping_address: {
+    name: string
+    address: string
+    phone_no: string
+  }
+  payment_info: {
+    subtotal: number
+    tax: number
+    discount: number
+    shipping_cost: number
+    grand_total: number
+  }
+}
+
+
+export type ContactUsTicket = {
+  contactus_id: number;
+  first_name: string;
+  last_name: string;
+  contact_email: string;
+  contact_phone_no: string;
+  subject: string;
+  message_body: string;
+  attachment: any[];
+  priority: string
+  status: string;
+  customer_id: number;
+  created_at: string; 
+  created_time: string; 
+  attachment_data: any[]; 
+};
+
+
+export type ProductReview2 = {
+  review_id: number;
+  product_id: number;
+  review_author_id: number;
+  review_txt: string;
+  ratings: number;
+  created_at: string; // ISO timestamp as string
+  review_title: string;
+  review_media_files: string[] | null;
+  product_name: string;
+  product_thumbnail_image: string | null;
+  first_name: string;
+  last_name: string;
+};

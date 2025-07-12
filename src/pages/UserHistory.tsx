@@ -24,56 +24,56 @@ export default function UserHistory() {
   });
 
   const [tabValue, setTabValue] = useState("all");
- function exportMergedOrdersAsCSV(userData: any) {
-  const headers = [
-    "User ID",
-    "User Name",
-    "Email",
-    "Order ID",
-    "Order Date",
-    "Total Amount",
-    "Status",
-  ];
+  function exportMergedOrdersAsCSV(userData: any) {
+    const headers = [
+      "User ID",
+      "User Name",
+      "Email",
+      "Order ID",
+      "Order Date",
+      "Total Amount",
+      "Status",
+    ];
 
-  const mergedOrders = [
-    ...userData.all_orders,
-    ...userData.last_week_orders,
-    ...userData.last_month_orders,
-    ...userData.this_year_orders,
-  ];
+    const mergedOrders = [
+      ...userData.all_orders,
+      ...userData.last_week_orders,
+      ...userData.last_month_orders,
+      ...userData.this_year_orders,
+    ];
 
-  const uniqueOrdersMap = new Map<number, any>();
-  for (const order of mergedOrders) {
-    uniqueOrdersMap.set(order.order_id, order)
+    const uniqueOrdersMap = new Map<number, any>();
+    for (const order of mergedOrders) {
+      uniqueOrdersMap.set(order.order_id, order)
+    }
+
+    const uniqueOrders = Array.from(uniqueOrdersMap.values());
+
+    const rows = uniqueOrders.map((order) => [
+      userData.user_id,
+      userData.user_name,
+      userData.email,
+      order.order_id,
+      order.order_date,
+      order.total_amount,
+      order.order_status,
+    ]);
+
+    const csvContent =
+      [headers, ...rows]
+        .map((row) => row.map((val) => `"${String(val)}"`).join(","))
+        .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "merged-orders.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
-
-  const uniqueOrders = Array.from(uniqueOrdersMap.values());
-
-  const rows = uniqueOrders.map((order) => [
-    userData.user_id,
-    userData.user_name,
-    userData.email,
-    order.order_id,
-    order.order_date,
-    order.total_amount,
-    order.status,
-  ]);
-
-  const csvContent =
-    [headers, ...rows]
-      .map((row) => row.map((val) => `"${String(val)}"`).join(","))
-      .join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.setAttribute("download", "merged-orders.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
 
 
   return (
