@@ -132,14 +132,14 @@ export default function OrderHistoryDetails({ order_id }: Props) {
               </div>
               <div className="flex justify-between">
                 <span>Discount</span>
-                <span>₹ {data.payment_info.discount}</span>
+                <span>₹ {data.payment_info.discount > 0 ? `-${data.payment_info.discount}`: data.payment_info.discount}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span>Shipping Cost</span>
                 <span className="font-semibold">₹ {data.payment_info.shipping_cost}</span>
               </div>
               <div className="flex justify-between font-semibold text-base pt-2">
-                <span className="text-[#0B130B]">Grand Total</span>
+                <span className="text-[#0B130B]">Item Total</span>
                 <span className="text-[#0B130B] font-bold">₹ {data.payment_info.grand_total}</span>
               </div>
             </div>

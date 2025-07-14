@@ -62,6 +62,9 @@ export default function CustomerSupport() {
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
       toast.success(data?.data?.data ?? "Reply sent successfully");
+      if (InputRef.current) {
+        InputRef.current.value = "";
+      }
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -79,7 +82,7 @@ export default function CustomerSupport() {
     }) => updatePriority(args.token, args.ticket_id, args.priority),
     onSuccess: () => {
       toast.success("Priority updated");
-      setTicketId('')
+      setTicketId("");
       queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
     },
     onError: (error) => {

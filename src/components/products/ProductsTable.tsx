@@ -133,7 +133,7 @@ function ProductsTable() {
         <div className="capitalize">
           {row.getValue("current_stock")
             ? row.getValue("current_stock")
-            : "N/A"}
+            : "0"}
         </div>
       ),
     },
