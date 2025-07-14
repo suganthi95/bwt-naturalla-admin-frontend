@@ -209,7 +209,7 @@ export function ProductInfo() {
     data.tags = tags;
     const productId = sessionStorage.getItem("product-id");
     if (productId === null) {
-      mutate({ token: auth?.token ?? "", data });
+      mutate({ token: auth?.token ?? "", data:{ ...data,pairs} });
     } else {
       mutate({ token: auth?.token ?? "", data: { ...data, productId, pairs } });
     }
@@ -236,8 +236,9 @@ export function ProductInfo() {
     }
   }, [productInfoDefaults, setValue]);
 
-  console.log(errors.galleryImages)
 
+  console.log(pairs);
+  
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

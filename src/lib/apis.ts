@@ -239,6 +239,20 @@ export const getUserHistory = async (token: string, id: string) => {
     },
   });
 };
+// http://localhost:4000/api/order/user-order-history/yearly/79/2025
+
+export const getUserHistoryByYear = async (token: string, id: string , year ?:string ) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/order/user-order-history/yearly/${id}/${year}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+
+
 
 export const getUserOrderDetail = async (token: string, order_id: string) => {
   return await axios({
@@ -249,6 +263,7 @@ export const getUserOrderDetail = async (token: string, order_id: string) => {
     },
   });
 };
+
 
 export const createUser = async (token: string, payload: CreateUserPayload) => {
   return await axios({
