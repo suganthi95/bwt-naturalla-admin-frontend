@@ -1,4 +1,4 @@
-import { Loader2, Search, Send } from "lucide-react";
+import { Loader2, Search, Send, Tag } from "lucide-react";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -44,11 +44,7 @@ export default function CustomerSupport() {
     retry: 1,
   });
 
-  const {
-    data: QueriesDetails,
-    isLoading: DetailsLoading,
-    
-  } = useQuery({
+  const { data: QueriesDetails, isLoading: DetailsLoading } = useQuery({
     queryKey: ["customerQueryDetails", selectedTicketId],
     queryFn: () => getTicketDetails(auth?.token ?? "", selectedTicketId),
     staleTime: 1000 * 60 * 5,
@@ -65,7 +61,7 @@ export default function CustomerSupport() {
     }) => addReply(args.token, args.ticket_id, args.reply_message),
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
-    toast.success(data?.data?.data ?? "Reply sent successfully");
+      toast.success(data?.data?.data ?? "Reply sent successfully");
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -83,6 +79,8 @@ export default function CustomerSupport() {
     }) => updatePriority(args.token, args.ticket_id, args.priority),
     onSuccess: () => {
       toast.success("Priority updated");
+      setTicketId('')
+      queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -319,7 +317,6 @@ export default function CustomerSupport() {
             <div className="flex items-center justify-between">
               <div className="w-[180px]">
                 <Select
-                  value={selectedPriority}
                   onValueChange={(value) => {
                     mutatePriority({
                       token: auth?.token ?? "",
@@ -328,8 +325,12 @@ export default function CustomerSupport() {
                     });
                   }}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Priority" />
+                  <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
+                    <Tag className="w-4 h-4 text-muted-foreground " />
+                    <SelectValue
+                      placeholder="Select Priority"
+                      className="text-sm leading-none"
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Priority</SelectItem>

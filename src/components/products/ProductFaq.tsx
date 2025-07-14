@@ -26,7 +26,7 @@ export default function ProductFaq() {
 
   const deleteFaq = (itemIndex: number) => setFaqArray(prev => prev.filter((_item, index) => index !== itemIndex));
 
-  const { data: productFaqDefaults, isSuccess } = useQuery({
+  const { data: productFaqDefaults } = useQuery({
     queryKey: ["getProductSEO"],
     queryFn: () => getProductFaq(auth?.token ?? "", productId),
     retry: 3,
@@ -76,7 +76,7 @@ export default function ProductFaq() {
 
   let content;
 
-  if(isSuccess){
+  if(true){
     content = (
       <div className="bg-white p-4 max-w-5xl">
         <div className="flex items-center justify-between">
