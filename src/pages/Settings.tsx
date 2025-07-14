@@ -106,7 +106,6 @@ export default function Settings() {
           >
             Banners
           </TabsTrigger>
-      
         </TabsList>
         <TabsContent value="shipping">
           <div className="bg-white rounded-xl space-y-3 p-4 col-span-2">
@@ -172,7 +171,7 @@ export default function Settings() {
                 {isPending ? "Saving..." : "Save Configuration"}
               </Button>
               <p className="text-sm text-[#6B7280]">
-                Last updated: June 20, 2025 at 10:30 AM
+                 Last updated: {shipping?.updated_at}
               </p>
             </div>
           </div>
@@ -180,7 +179,6 @@ export default function Settings() {
         <TabsContent value="banner">
           <Banners />
         </TabsContent>
-       
       </Tabs>
     </div>
   );

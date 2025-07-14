@@ -29,9 +29,10 @@ interface Props {
 }
 export default function UpdatePassword({ onClose }: Props) {
   const { auth } = useAppContext();
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const { mutate ,isPending,isError} = useMutation({
+  const { mutate ,isPending} = useMutation({
     mutationKey: ["updatepassword"],
     mutationFn: (args: {
       token: string;
@@ -75,16 +76,23 @@ export default function UpdatePassword({ onClose }: Props) {
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white p-6 max-w-2xl space-y-6 rounded-md shadow"
     >
-      <div>
+      <div className="relative">
         <Label className="text-sm font-medium text-gray-700">
           Current Password
         </Label>
         <Input
-          type="password"
+          type={showCurrentPassword ? "text" : "password"}
           placeholder="Enter current password"
           {...register("currentPassword")}
           className={errors.currentPassword ? "border-red-500" : ""}
         />
+           <button
+          type="button"
+          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+          className="absolute right-3 top-9 text-muted-foreground"
+        >
+          {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
         {errors.currentPassword && (
           <p className="text-red-500 text-sm mt-1">
             {errors.currentPassword.message}
@@ -139,7 +147,7 @@ export default function UpdatePassword({ onClose }: Props) {
       </div>
 
       <div className="flex justify-end gap-3 pt-4">
-        <Button type="submit" disabled={isPending || isError}> {isPending ? <Loader2 className="animate-spin"/> : "Change Password"}</Button>
+        <Button type="submit" disabled={isPending}> {isPending ? <Loader2 className="animate-spin"/> : "Change Password"}</Button>
       </div>
     </form>
   );

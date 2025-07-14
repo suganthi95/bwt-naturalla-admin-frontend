@@ -70,7 +70,6 @@ export default function AddCategory() {
     handleSubmit,
     setValue,
     watch,
-    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -103,16 +102,15 @@ export default function AddCategory() {
         return;
       }
       setPairs((prev) => [...prev, { icon_id: icon, effect_name: effects }]);
-      reset({
-        products_effect_name: "",
-      });
+      setValue("products_effect_name", "");
       setValue("products_icon", null);
+
     }
   };
 
   const [subCategoryInput, setSubCategoryInput] = useState("");
   const [subCategories, setSubCategories] = useState<string[]>([]);
-  const [ subCategoriesError, setSubCategoriesError ] = useState(false);
+  const [subCategoriesError, setSubCategoriesError] = useState(false);
 
   const thumbnailFile = watch("thumbnail")?.[0];
   const [isDragging, setIsDragging] = useState(false);
@@ -137,9 +135,8 @@ export default function AddCategory() {
   };
 
   const onSubmit = (data: FormValues) => {
-
     if (subCategories.length === 0) {
-      setSubCategoriesError(true)
+      setSubCategoriesError(true);
       toast.warning("You must add at least one subcategory");
       return;
     }
@@ -148,8 +145,6 @@ export default function AddCategory() {
       toast.warning("You must add at least one icon effect pair");
       return;
     }
-
-    
 
     const finalData = {
       ...data,

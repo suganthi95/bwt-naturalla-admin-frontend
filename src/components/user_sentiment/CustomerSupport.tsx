@@ -107,7 +107,7 @@ export default function CustomerSupport() {
 
   return (
     <div className="grid grid-cols-6 gap-x-6">
-      <div className=" col-span-4 bg-white shadow">
+      <div className=" col-span-2  bg-white shadow">
         <div className="p-4">
           <h2 className="font-bold text-[22px] mb-4">User Feedback</h2>
 
@@ -139,6 +139,7 @@ export default function CustomerSupport() {
               </Select>
             </div>
           </div>
+        
         </div>
         <ul className="">
           {Queries?.map((item: ContactUsTicket) => {
@@ -147,9 +148,9 @@ export default function CustomerSupport() {
                 key={item.contactus_id}
                 className={`col-span-3 ${
                   Number(selectedTicketId) === item?.contactus_id
-                    ? "bg-[#F7FAFD]"
+                    ? "bg-[#F7FAFD] border-2  border-blue-300"
                     : ""
-                }  border-[#E5E7EB] p-4 space-y-3`}
+                }  border-[#E5E7EB] p-4 space-y-3 `}
                 onClick={() => setTicketId(String(item?.contactus_id))}
               >
                 <div className="text-primary-black flex justify-between items-center">
@@ -188,7 +189,9 @@ export default function CustomerSupport() {
       {DetailsLoading ? (
         <TicketDetailSkeleton />
       ) : (
-        <div className=" col-span-2  w-full  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
+    <div className=" col-span-4">
+
+        <div className="   w-full  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
           <div className="border-b">
             <div className="flex p-6 items-center justify-between  pb-3">
               <h2 className="text-lg font-semibold text-primary-black dark:text-neutral-100">
@@ -228,6 +231,7 @@ export default function CustomerSupport() {
               </div>
             </div>
           </div>
+<div className="h-64 overflow-y-auto">
 
           <div className="p-4 space-y-2">
             <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
@@ -237,7 +241,6 @@ export default function CustomerSupport() {
               {QueriesDetails[0]?.message_body}
             </p>
           </div>
-
           {/* <div className="border-b p-4 space-y-2">
           <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
             Attachments
@@ -255,9 +258,8 @@ export default function CustomerSupport() {
             />
           </div>
         </div> */}
-
           {QueriesDetails[0]?.replies?.length > 0 && (
-            <div className="px-4 space-y-4">
+            <div className="px-4 space-y-4 ">
               <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
                 Conversation
               </p>
@@ -303,6 +305,9 @@ export default function CustomerSupport() {
               </div>
             </div>
           )}
+</div>
+
+
 
           <div className="space-y-3 p-4">
             <div className="space-y-1">
@@ -365,6 +370,8 @@ export default function CustomerSupport() {
             </div>
           </div>
         </div>
+    </div>
+
       )}
     </div>
   );
