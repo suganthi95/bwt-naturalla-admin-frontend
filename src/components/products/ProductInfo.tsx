@@ -514,7 +514,7 @@ export function ProductInfo() {
                     onClick={() =>
                       setPairs((prev) =>
                         (prev ?? [])?.filter(
-                          (item) => item.prod_icon_id !== pair?.prod_icon_id
+                          (item) => item.icon_id !== pair?.icon_id
                         )
                       )
                     }

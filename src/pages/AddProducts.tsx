@@ -1,4 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChevronLeft } from "lucide-react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 function AddProducts() {
@@ -36,7 +37,18 @@ function AddProducts() {
   return (
     <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
       <div>
-        <h1 className="text-xl font-semibold">Add Products</h1>
+        <h1 className="text-xl font-semibold flex items-center gap-x-2 ">
+          {" "}
+          <p
+            className="flex items-center gap-x-1 cursor-pointer"
+            onClick={() => {
+              navigate("/products");
+            }}
+          >
+            <ChevronLeft />
+          </p>{" "}
+          Add Products
+        </h1>
       </div>
 
       <div>

@@ -89,8 +89,8 @@ export type ProductPriceFormType = {
   specialDiscountType: "flat" | "percent";
   specialDiscountAmount: number;
   specialDiscountPercentage: number;
-  discountPeriodStartat: string;
-  discountPeriodendat: string;
+  discountPeriodStartat: string | null;
+  discountPeriodendat: string | null;
   minimumStockWarning: number;
   sku: string;
   stockVisibility: string;

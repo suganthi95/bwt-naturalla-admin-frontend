@@ -154,7 +154,7 @@ export default function UserHistory() {
                     {
                       all: "All Orders",
                       last_week: "Last Week",
-                      this_month: "This Month",
+                      this_month: "Last Month",
                     }[value]
                   }
                 </TabsTrigger>
@@ -197,7 +197,7 @@ export default function UserHistory() {
                 <LastMonth orderHistory={data?.last_month_orders ?? []} />
               </TabsContent>
               <TabsContent value="this_year">
-                <ThisYear orderHistory={data?.this_year_orders ?? []} />
+                <ThisYear orderHistory={YearData?.orders ?? []} />
               </TabsContent>
             </>
           )}

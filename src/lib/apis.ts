@@ -239,7 +239,6 @@ export const getUserHistory = async (token: string, id: string) => {
     },
   });
 };
-// http://localhost:4000/api/order/user-order-history/yearly/79/2025
 
 export const getUserHistoryByYear = async (token: string, id: string , year ?:string ) => {
   return await axios({

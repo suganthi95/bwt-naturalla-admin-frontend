@@ -39,6 +39,7 @@ import {
 
 import { UserOrderHistoryType } from "@/types/type";
 import OrderHistoryDetails from "./OrderHistoryDetails";
+import dayjs from "dayjs";
 
 interface Props {
   orderHistory: UserOrderHistoryType[];
@@ -79,7 +80,7 @@ function AllOrders({ orderHistory }: Props) {
       accessorKey: "order_date",
       header: () => "Order Date",
       cell: ({ row }) => (
-        <div className="font-semibold">{row.getValue("order_date")}</div>
+        <div className="font-semibold">{dayjs(row.getValue("order_date")).format('MMMM DD YYYY')}</div>
       ),
     },
     {
