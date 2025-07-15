@@ -93,13 +93,10 @@ export default function CustomerSupport() {
     },
   });
 
-    const { mutate: mutateStauts } = useMutation({
+  const { mutate: mutateStauts } = useMutation({
     mutationKey: ["updatePriority"],
-    mutationFn: (args: {
-      token: string;
-      ticket_id: string;
-      status: string;
-    }) =>   updateStatus(args.token, args.ticket_id, args.status),
+    mutationFn: (args: { token: string; ticket_id: string; status: string }) =>
+      updateStatus(args.token, args.ticket_id, args.status),
     onSuccess: () => {
       toast.success("Status updated");
       setTicketId("");
@@ -159,7 +156,6 @@ export default function CustomerSupport() {
               </Select>
             </div>
           </div>
-        
         </div>
         <ul className=" overflow-y-auto h-[35rem]">
           {Queries?.map((item: ContactUsTicket) => {
@@ -209,59 +205,57 @@ export default function CustomerSupport() {
       {DetailsLoading ? (
         <TicketDetailSkeleton />
       ) : (
-    <div className=" col-span-3">
-
-        <div className="   w-full  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
-          <div className="border-b">
-            <div className="flex p-6 items-center justify-between  pb-3">
-              <h2 className="text-lg font-semibold text-primary-black dark:text-neutral-100">
-                {QueriesDetails[0]?.subject}
-              </h2>
-              <Badge className="bg-yellow-100 text-yellow-700">
-                {QueriesDetails[0]?.status}
-              </Badge>
+        <div className=" col-span-3">
+          <div className="   w-full  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
+            <div className="border-b">
+              <div className="flex p-6 items-center justify-between  pb-3">
+                <h2 className="text-lg font-semibold text-primary-black dark:text-neutral-100">
+                  {QueriesDetails[0]?.subject}
+                </h2>
+                <Badge className="bg-yellow-100 text-yellow-700">
+                  {QueriesDetails[0]?.status}
+                </Badge>
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-2 border-b pb-4">
-            <div className="flex p-4 items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <img
-                  src="https://ik.imagekit.io/nd8r7mpaev/Atlants/user.png?updatedAt=1738227108834"
-                  alt="User Profile"
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <div className="flex items-start flex-col">
-                    <p className="font-medium flex flex-col  gap-x-2 text-neutral-800 dark:text-neutral-100">
-                      {QueriesDetails[0]?.first_name}
-                    </p>
-                    <div className="bg-transparent text-sm text-primary-black">
-                      +91 {QueriesDetails[0]?.contact_phone_no}
+            <div className="space-y-2 border-b pb-4">
+              <div className="flex p-4 items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <img
+                    src="https://ik.imagekit.io/nd8r7mpaev/Atlants/user.png?updatedAt=1738227108834"
+                    alt="User Profile"
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div>
+                    <div className="flex items-start flex-col">
+                      <p className="font-medium flex flex-col  gap-x-2 text-neutral-800 dark:text-neutral-100">
+                        {QueriesDetails[0]?.first_name}
+                      </p>
+                      <div className="bg-transparent text-sm text-primary-black">
+                        +91 {QueriesDetails[0]?.contact_phone_no}
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {QueriesDetails[0]?.contact_email}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {QueriesDetails[0]?.contact_email}
-                    </p>
                   </div>
                 </div>
-              </div>
 
-              <div className="text-sm  truncate text-muted-foreground text-right">
-                {dayjs(QueriesDetails[0]?.created_at).format("MMM-DD-YYYY")}
+                <div className="text-sm  truncate text-muted-foreground text-right">
+                  {dayjs(QueriesDetails[0]?.created_at).format("MMM-DD-YYYY")}
+                </div>
               </div>
             </div>
-          </div>
-<div className="h-64 overflow-y-auto">
-
-          <div className="p-4 space-y-2">
-            <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
-              Message
-            </p>
-            <p className="text-sm text-neutral-600 dark:text-neutral-300">
-              {QueriesDetails[0]?.message_body}
-            </p>
-          </div>
-          {/* <div className="border-b p-4 space-y-2">
+            <div className="h-64 overflow-y-auto">
+              <div className="p-4 space-y-2">
+                <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
+                  Message
+                </p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-300">
+                  {QueriesDetails[0]?.message_body}
+                </p>
+              </div>
+              {/* <div className="border-b p-4 space-y-2">
           <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
             Attachments
           </p>
@@ -278,25 +272,25 @@ export default function CustomerSupport() {
             />
           </div>
         </div> */}
-          {QueriesDetails[0]?.replies?.length > 0 && (
-            <div className="px-4 space-y-4 ">
-              <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
-                Conversation
-              </p>
+              {QueriesDetails[0]?.replies?.length > 0 && (
+                <div className="px-4 space-y-4 ">
+                  <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
+                    Conversation
+                  </p>
 
-              <div className="space-y-3">
-                {QueriesDetails[0]?.replies?.map(
-                  (reply: any, index: number) => {
-                    const isAdmin = reply.admin_reply;
-                    return (
-                      <div
-                        key={index}
-                        className={`
+                  <div className="space-y-3">
+                    {QueriesDetails[0]?.replies?.map(
+                      (reply: any, index: number) => {
+                        const isAdmin = reply.admin_reply;
+                        return (
+                          <div
+                            key={index}
+                            className={`
               flex ${isAdmin ? "justify-start" : "justify-end"}
             `}
-                      >
-                        <div
-                          className={`
+                          >
+                            <div
+                              className={`
                 max-w-[85%] sm:max-w-[70%] md:max-w-[60%] lg:max-w-[50%]
                 p-3 rounded-lg shadow-sm
                 ${
@@ -305,122 +299,121 @@ export default function CustomerSupport() {
                     : "bg-gray-100 dark:bg-slate-700 text-neutral-800 dark:text-neutral-100"
                 }
               `}
-                        >
-                          <div className="flex justify-between  gap-x-3 items-center mb-1">
-                            <span className="text-xs font-semibold">
-                              {isAdmin ? "Admin" : "User"}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {reply?.replied_at ?? "Now"}
-                            </span>
+                            >
+                              <div className="flex justify-between  gap-x-3 items-center mb-1">
+                                <span className="text-xs font-semibold">
+                                  {isAdmin ? "Admin" : "User"}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {reply?.replied_at ?? "Now"}
+                                </span>
+                              </div>
+                              <p className="text-sm whitespace-pre-line">
+                                {reply?.reply_message}
+                              </p>
+                            </div>
                           </div>
-                          <p className="text-sm whitespace-pre-line">
-                            {reply?.reply_message}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-3 p-4">
+              <div className="space-y-1">
+                <label className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
+                  Your Reply
+                </label>
+                <textarea
+                  ref={InputRef}
+                  className="w-full border rounded-md px-3 py-2 text-sm bg-white dark:bg-slate-800 text-neutral-900 dark:text-neutral-100 resize-none"
+                  rows={4}
+                  placeholder="Type your message..."
+                ></textarea>
               </div>
-            </div>
-          )}
-</div>
 
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-x-2">
+                  <div className="w-[180px]">
+                    <Select
+                      onValueChange={(value) => {
+                        mutatePriority({
+                          token: auth?.token ?? "",
+                          ticket_id: QueriesDetails[0]?.contactus_id,
+                          priority: value,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
+                        <Tag className="w-4 h-4 text-muted-foreground " />
+                        <SelectValue
+                          placeholder="Update Priority"
+                          className="text-sm leading-none"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Priority</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="low">Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>{" "}
+                  <div className="w-[180px]">
+                    <Select
+                    
+                      onValueChange={(value) => {
+                        mutateStauts({
+                          token: auth?.token ?? "",
+                          ticket_id: QueriesDetails[0]?.contactus_id,
+                          status: value,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
+                        <Tag className="w-4 h-4 text-muted-foreground " />
+                        <SelectValue
+                          placeholder="Update Stauts"
+                          className="text-sm leading-none"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="inprogress">Pending</SelectItem>
+                        <SelectItem value="resolved">Resolved</SelectItem>
+                        <SelectItem value="unresolved">UnResolved</SelectItem>
 
-
-          <div className="space-y-3 p-4">
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
-                Your Reply
-              </label>
-              <textarea
-                ref={InputRef}
-                className="w-full border rounded-md px-3 py-2 text-sm bg-white dark:bg-slate-800 text-neutral-900 dark:text-neutral-100 resize-none"
-                rows={4}
-                placeholder="Type your message..."
-              ></textarea>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-2">
-
-              <div className="w-[180px]">
-                <Select
-                  onValueChange={(value) => {
-                    mutatePriority({
-                      token: auth?.token ?? "",
-                      ticket_id: QueriesDetails[0]?.contactus_id,
-                      priority: value,
-                    });
-                  }}
-                >
-                  <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
-                    <Tag className="w-4 h-4 text-muted-foreground " />
-                    <SelectValue
-                      placeholder="Update Priority"
-                      className="text-sm leading-none"
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Priority</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>{" "}
-
-               <div className="w-[180px]">
-                <Select
-                  onValueChange={(value) => {
-                    mutateStauts({
-                      token: auth?.token ?? "",
-                      ticket_id: QueriesDetails[0]?.contactus_id,
-                      status: value,
-                    });
-                  }}
-                >
-                  <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
-                    <Tag className="w-4 h-4 text-muted-foreground " />
-                    <SelectValue
-                      placeholder="Update Stauts"
-                      className="text-sm leading-none"
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    {/* <SelectItem value="high">High</SelectItem>
+                        {/* <SelectItem value="high">High</SelectItem>
                     <SelectItem value="medium">Medium</SelectItem>
                     <SelectItem value="low">Low</SelectItem> */}
-                  </SelectContent>
-                </Select>
-              </div>{" "}
+                      </SelectContent>
+                    </Select>
+                  </div>{" "}
+                </div>
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={() => {
+                    sendReplyMessage({
+                      token: auth?.token ?? "",
+                      ticket_id: QueriesDetails[0]?.contactus_id,
+                      reply_message: InputRef.current?.value ?? "",
+                    });
+                  }}
+                >
+                  {isPending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Send
+                    </>
+                  )}
+                </Button>
               </div>
-              <Button
-                className="flex items-center gap-2"
-                onClick={() => {
-                  sendReplyMessage({
-                    token: auth?.token ?? "",
-                    ticket_id: QueriesDetails[0]?.contactus_id,
-                    reply_message: InputRef.current?.value ?? "",
-                  });
-                }}
-              >
-                {isPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    Send
-                  </>
-                )}
-              </Button>
             </div>
           </div>
         </div>
-    </div>
-
       )}
     </div>
   );

@@ -240,7 +240,11 @@ export const getUserHistory = async (token: string, id: string) => {
   });
 };
 
-export const getUserHistoryByYear = async (token: string, id: string , year ?:string ) => {
+export const getUserHistoryByYear = async (
+  token: string,
+  id: string,
+  year?: string
+) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/order/user-order-history/yearly/${id}/${year}`,
@@ -249,9 +253,6 @@ export const getUserHistoryByYear = async (token: string, id: string , year ?:st
     },
   });
 };
-
-
-
 
 export const getUserOrderDetail = async (token: string, order_id: string) => {
   return await axios({
@@ -262,7 +263,6 @@ export const getUserOrderDetail = async (token: string, order_id: string) => {
     },
   });
 };
-
 
 export const createUser = async (token: string, payload: CreateUserPayload) => {
   return await axios({
@@ -427,6 +427,19 @@ export const getCategoryBasedIcons = async (token: string, id: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/products/category/icon/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const ImportProdcuts = async ({token,data}:{token: string, data: any}) => {
+  const formdata = new FormData();
+  formdata.append("file", data);
+
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/dataImport/import-csv`,
+    data: formdata,
     headers: {
       Authorization: token,
     },
@@ -1129,15 +1142,18 @@ export const updateOrderStatus = async ({
   });
 };
 
-
-export const getCustomerReviews = async({token,product_name}:{token:string,product_name?:string})=>{
+export const getCustomerReviews = async ({
+  token,
+  product_name,
+}: {
+  token: string;
+  product_name?: string;
+}) => {
   return await axios({
-    method:'get',
-    url:`${BASE_URL}/customer/support/list/reviews?product_name=${product_name}`,
-    headers:{
-      Authorization:token
+    method: "get",
+    url: `${BASE_URL}/customer/support/list/reviews?product_name=${product_name}`,
+    headers: {
+      Authorization: token,
     },
-    
-  })
-
-}
+  });
+};
