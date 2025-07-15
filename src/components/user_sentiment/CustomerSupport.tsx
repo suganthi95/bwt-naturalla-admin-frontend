@@ -17,6 +17,7 @@ import {
   getCustomerQueries,
   getTicketDetails,
   updatePriority,
+  updateStatus,
 } from "@/lib/apis";
 import { toast } from "sonner";
 import axios from "axios";
@@ -92,6 +93,25 @@ export default function CustomerSupport() {
     },
   });
 
+    const { mutate: mutateStauts } = useMutation({
+    mutationKey: ["updatePriority"],
+    mutationFn: (args: {
+      token: string;
+      ticket_id: string;
+      status: string;
+    }) =>   updateStatus(args.token, args.ticket_id, args.status),
+    onSuccess: () => {
+      toast.success("Status updated");
+      setTicketId("");
+      queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        toast.error(error?.response?.data?.message);
+      }
+    },
+  });
+
   const getBadgeClass = (status: string) => {
     switch (status) {
       case "unresolved":
@@ -107,7 +127,7 @@ export default function CustomerSupport() {
 
   return (
     <div className="grid grid-cols-6 gap-x-6">
-      <div className=" col-span-2  bg-white shadow">
+      <div className=" col-span-3   bg-white shadow">
         <div className="p-4">
           <h2 className="font-bold text-[22px] mb-4">User Feedback</h2>
 
@@ -141,7 +161,7 @@ export default function CustomerSupport() {
           </div>
         
         </div>
-        <ul className="">
+        <ul className=" overflow-y-auto h-[35rem]">
           {Queries?.map((item: ContactUsTicket) => {
             return (
               <li
@@ -189,7 +209,7 @@ export default function CustomerSupport() {
       {DetailsLoading ? (
         <TicketDetailSkeleton />
       ) : (
-    <div className=" col-span-4">
+    <div className=" col-span-3">
 
         <div className="   w-full  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
           <div className="border-b">
@@ -323,6 +343,8 @@ export default function CustomerSupport() {
             </div>
 
             <div className="flex items-center justify-between">
+              <div className="flex items-center gap-x-2">
+
               <div className="w-[180px]">
                 <Select
                   onValueChange={(value) => {
@@ -336,7 +358,7 @@ export default function CustomerSupport() {
                   <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
                     <Tag className="w-4 h-4 text-muted-foreground " />
                     <SelectValue
-                      placeholder="Select Priority"
+                      placeholder="Update Priority"
                       className="text-sm leading-none"
                     />
                   </SelectTrigger>
@@ -348,6 +370,33 @@ export default function CustomerSupport() {
                   </SelectContent>
                 </Select>
               </div>{" "}
+
+               <div className="w-[180px]">
+                <Select
+                  onValueChange={(value) => {
+                    mutateStauts({
+                      token: auth?.token ?? "",
+                      ticket_id: QueriesDetails[0]?.contactus_id,
+                      status: value,
+                    });
+                  }}
+                >
+                  <SelectTrigger className="h-10 px-3 flex items-center gap-2 [&>svg]:hidden">
+                    <Tag className="w-4 h-4 text-muted-foreground " />
+                    <SelectValue
+                      placeholder="Update Stauts"
+                      className="text-sm leading-none"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    {/* <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="low">Low</SelectItem> */}
+                  </SelectContent>
+                </Select>
+              </div>{" "}
+              </div>
               <Button
                 className="flex items-center gap-2"
                 onClick={() => {
