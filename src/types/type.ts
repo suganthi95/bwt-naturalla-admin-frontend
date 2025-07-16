@@ -208,22 +208,30 @@ export interface OrderDetailsByUserType {
 }
 
 
+
 export type ContactUsTicket = {
   contactus_id: number;
   first_name: string;
   last_name: string;
   contact_email: string;
   contact_phone_no: string;
-  subject: string;
+  subject: string | null;
   message_body: string;
-  attachment: any[];
-  priority: string
+  attachment: string[];
+  priority: string;
   status: string;
   customer_id: number;
-  created_at: string; 
-  created_time: string; 
-  attachment_data: any[]; 
+  created_at: string; // ISO date string
+  issue_type_id: number;
+  subissue_id: number;
+  admin_read_status: boolean;
+  customer_read_status: boolean;
+  issue_type: string;
+  sub_issue: string;
+  created_time: string; // formatted date string
+  attachment_data: string[];
 };
+
 
 
 export type ProductReview2 = {

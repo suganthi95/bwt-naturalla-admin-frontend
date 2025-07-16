@@ -19,6 +19,7 @@ import { addBanner, updateBanner } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface Props {
   type: "add" | "edit";
@@ -148,16 +149,22 @@ function BannerForm({ type, defaultData }: Props) {
                 )}
               </div>
 
-              {/* Type */}
               <div>
                 <Label htmlFor="type">Type</Label>
-                <Input
-                  id="type"
-                  placeholder="Enter Type"
-                  {...register("type", {
-                    required: "Type is required",
-                  })}
-                />
+                <Select
+                  onValueChange={(value) =>
+                    setValue("type", value)
+                  }
+                  defaultValue={watch("type")}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select CTA Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="webapp">Web App</SelectItem>
+                    <SelectItem value="mobileapp">Mobile App</SelectItem>
+                  </SelectContent>
+                </Select>
                 {errors.type && (
                   <p className="text-sm text-red-500 mt-1">
                     {errors.type.message}

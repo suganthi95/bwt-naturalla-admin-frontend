@@ -60,9 +60,9 @@ export default function CustomerSupport() {
       ticket_id: string;
       reply_message: string;
     }) => addReply(args.token, args.ticket_id, args.reply_message),
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
-      toast.success(data?.data?.data ?? "Reply sent successfully");
+      // toast.success(data?.data?.data ?? "Reply sent successfully");
       if (InputRef.current) {
         InputRef.current.value = "";
       }
@@ -83,7 +83,8 @@ export default function CustomerSupport() {
     }) => updatePriority(args.token, args.ticket_id, args.priority),
     onSuccess: () => {
       toast.success("Priority updated");
-      setTicketId("");
+      // setTicketId("");
+      queryClient.invalidateQueries({ queryKey: ["customerQueries"] });
       queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
     },
     onError: (error) => {
@@ -94,12 +95,13 @@ export default function CustomerSupport() {
   });
 
   const { mutate: mutateStauts } = useMutation({
-    mutationKey: ["updatePriority"],
+    mutationKey: ["updateStatus"],
     mutationFn: (args: { token: string; ticket_id: string; status: string }) =>
       updateStatus(args.token, args.ticket_id, args.status),
     onSuccess: () => {
       toast.success("Status updated");
-      setTicketId("");
+      // setTicketId("");
+      queryClient.invalidateQueries({ queryKey: ["customerQueries"] });
       queryClient.invalidateQueries({ queryKey: ["customerQueryDetails"] });
     },
     onError: (error) => {
@@ -170,7 +172,7 @@ export default function CustomerSupport() {
                 onClick={() => setTicketId(String(item?.contactus_id))}
               >
                 <div className="text-primary-black flex justify-between items-center">
-                  <p className=" font-semibold">{item?.subject}</p>
+                  <p className=" font-semibold">{item?.issue_type}</p>
                   <p className="text-[#6B7280] text-xs font-medium">
                     {item?.created_time}
                   </p>
@@ -184,6 +186,9 @@ export default function CustomerSupport() {
                     {item?.contact_phone_no}
                   </li>
                 </ul>
+                <p className="text-primary-black text-sm font-semibold ">
+                  {item?.sub_issue}
+                </p>
                 <p className="text-primary-black text-xs ">
                   {item?.message_body}
                 </p>
@@ -363,7 +368,6 @@ export default function CustomerSupport() {
                   </div>{" "}
                   <div className="w-[180px]">
                     <Select
-                    
                       onValueChange={(value) => {
                         mutateStauts({
                           token: auth?.token ?? "",
@@ -380,7 +384,7 @@ export default function CustomerSupport() {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="inprogress">Pending</SelectItem>
+                        <SelectItem value="in-progress">In-Progress</SelectItem>
                         <SelectItem value="resolved">Resolved</SelectItem>
                         <SelectItem value="unresolved">UnResolved</SelectItem>
 

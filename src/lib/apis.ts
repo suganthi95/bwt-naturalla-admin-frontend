@@ -1067,8 +1067,8 @@ export const updateStatus = async (
   status: string
 ) => {
   return await axios({
-    method: "post",
-    url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
+    method: "put",
+    url: `${BASE_URL}/customer/support/update/status/${ticket_id}`,
     data: {
       status,
     },
@@ -1157,3 +1157,4 @@ export const getCustomerReviews = async ({
     },
   });
 };
+
