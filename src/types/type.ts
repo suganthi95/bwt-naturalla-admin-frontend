@@ -229,7 +229,7 @@ export type ContactUsTicket = {
   issue_type: string;
   sub_issue: string;
   created_time: string; // formatted date string
-  attachment_data: string[];
+  attachment_data: any[];
 };
 
 

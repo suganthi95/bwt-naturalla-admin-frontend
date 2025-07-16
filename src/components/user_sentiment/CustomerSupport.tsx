@@ -192,12 +192,20 @@ export default function CustomerSupport() {
                 <p className="text-primary-black text-xs ">
                   {item?.message_body}
                 </p>
-                <div className="flex items-center justify-end">
-                  {/* <img
-                src="https://ik.imagekit.io/3t9llb0gx/Naturella/image%2010.png?updatedAt=1749127796779"
-                alt=""
-                className="size-10"
-              /> */}
+                <div
+                  className={` flex items-center ${
+                    item?.attachment_data[0]?.media_url
+                      ? "justify-between"
+                      : "justify-end"
+                  } `}
+                >
+                  {item?.attachment_data[0]?.media_url && (
+                    <img
+                      src={item?.attachment_data[0]?.media_url}
+                      alt=""
+                      className="size-10"
+                    />
+                  )}
                   <Badge className={getBadgeClass(item?.status)}>
                     {item?.status}
                   </Badge>
@@ -260,23 +268,20 @@ export default function CustomerSupport() {
                   {QueriesDetails[0]?.message_body}
                 </p>
               </div>
-              {/* <div className="border-b p-4 space-y-2">
-          <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
-            Attachments
-          </p>
-          <div className="flex gap-3 overflow-x-auto py-2">
-            <img
-              src="https://via.placeholder.com/120"
-              className="rounded border w-32 h-24 object-cover"
-              alt="attachment"
-            />
-            <img
-              src="https://via.placeholder.com/120"
-              className="rounded border w-32 h-24 object-cover"
-              alt="attachment"
-            />
-          </div>
-        </div> */}
+              {QueriesDetails[0]?.attachment_data[0]?.media_url && (
+                <div className="border-b p-4 space-y-2">
+                  <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
+                    Attachments
+                  </p>
+                  <div className="flex gap-3 overflow-x-auto py-2">
+                    <img
+                      src={QueriesDetails[0]?.attachment_data[0]?.media_url}
+                      className="rounded border w-32 h-24 object-cover"
+                      alt="attachment"
+                    />
+                  </div>
+                </div>
+              )}
               {QueriesDetails[0]?.replies?.length > 0 && (
                 <div className="px-4 space-y-4 ">
                   <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-100">
