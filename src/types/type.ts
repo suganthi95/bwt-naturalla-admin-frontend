@@ -36,6 +36,7 @@ export type User = {
   city: string | null;
   address: string | null;
   role: string;
+  status:string;
   last_login:string | null
   device_token: string | null;
   otp_verified: boolean | null;

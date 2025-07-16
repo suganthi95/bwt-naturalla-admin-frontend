@@ -178,8 +178,8 @@ export const UpdateCategories = async (token: string, data: any) => {
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
-  data.subCategories.forEach((subCategory: string) => {
-    formdata.append("subcategory_name", subCategory);
+  data.subCategories.forEach((subCategory: string,index:number) => {
+    formdata.append(`subcategory_name[${index}]`, subCategory);
   });
   data.icon_data.forEach((item: any, index: number) => {
     formdata.append(
@@ -230,6 +230,7 @@ export const getUsers = async (token: string) => {
     },
   });
 };
+
 export const getUserHistory = async (token: string, id: string) => {
   return await axios({
     method: "get",
@@ -432,7 +433,13 @@ export const getCategoryBasedIcons = async (token: string, id: string) => {
     },
   });
 };
-export const ImportProdcuts = async ({token,data}:{token: string, data: any}) => {
+export const ImportProdcuts = async ({
+  token,
+  data,
+}: {
+  token: string;
+  data: any;
+}) => {
   const formdata = new FormData();
   formdata.append("file", data);
 
@@ -900,14 +907,10 @@ export const editLegalPage = async (token: string, id: string) => {
   });
 };
 
-export const getCustomerQueries = async (
-  token: string,
-  search?: string,
-  priority?: string
-) => {
+export const getCustomerQueries = async (token: string) => {
   return await axios({
     method: "get",
-    url: `${BASE_URL}/customer/support/?subject=${search}&priority=${priority}`,
+    url: `${BASE_URL}/customer/support`,
     headers: {
       Authorization: token,
     },
@@ -1157,4 +1160,3 @@ export const getCustomerReviews = async ({
     },
   });
 };
-

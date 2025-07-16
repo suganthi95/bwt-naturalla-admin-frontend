@@ -93,7 +93,7 @@ export default function UpdateCategory({ onClose, Data }: Props) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey: ["addcategory"],
+    mutationKey: ["updateCategory"],
     mutationFn: (args: { token: string; data: FormValues }) =>
       UpdateCategories(args.token, args.data),
     onSuccess: () => {
@@ -180,6 +180,8 @@ export default function UpdateCategory({ onClose, Data }: Props) {
       handleAddSubCategory();
     }
   };
+  console.log(subCategories);
+  
 
   const onSubmit = async (data: FormValues) => {
     const isValid = await trigger();

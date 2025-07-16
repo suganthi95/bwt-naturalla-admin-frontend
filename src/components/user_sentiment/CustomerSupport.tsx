@@ -1,5 +1,4 @@
-import { Loader2, Search, Send, Tag } from "lucide-react";
-import { Input } from "../ui/input";
+import { Loader2, MessageCircleOff, Send, Tag } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -7,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { useAppContext } from "@/contexts/AuthContext";
@@ -30,20 +29,19 @@ export default function CustomerSupport() {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedPriority, setPriority] = useState<string>("");
+  const [selectedStatus, setStatus] = useState<string>("");
   const [selectedTicketId, setTicketId] = useState<string>("1");
   const InputRef = useRef<HTMLTextAreaElement>(null);
   const { data: Queries } = useQuery({
-    queryKey: ["customerQueries", searchTerm, selectedPriority],
-    queryFn: () =>
-      getCustomerQueries(
-        auth?.token ?? "",
-        searchTerm ?? "",
-        selectedPriority ?? ""
-      ),
+    queryKey: ["customerQueries"],
+    queryFn: () => getCustomerQueries(auth?.token ?? ""),
     staleTime: 1000 * 60 * 5,
-    select: (data) => data?.data?.data,
+    select: (data) => data?.data,
     retry: 1,
   });
+  const [filteredQueries, SetFilteredQueries] = useState<ContactUsTicket[]>(
+    Queries?.data
+  );
 
   const { data: QueriesDetails, isLoading: DetailsLoading } = useQuery({
     queryKey: ["customerQueryDetails", selectedTicketId],
@@ -123,25 +121,68 @@ export default function CustomerSupport() {
         return "bg-gray-100 text-gray-700";
     }
   };
+  useEffect(() => {
+    if (!Queries?.data) return;
+
+    const filteredData = Queries.data.filter((item: ContactUsTicket) => {
+      const matchedCategory = searchTerm
+        ? item.issue_type?.toLowerCase().includes(searchTerm.toLowerCase())
+        : item;
+
+      const matchedPriority =
+        selectedPriority === "all" || selectedPriority === ""
+          ? item
+          : item.priority?.toLowerCase() === selectedPriority.toLowerCase();
+      const matchedStatus =
+        selectedStatus === "all" || selectedStatus === ""
+          ? item
+          : item.status.toLowerCase() === selectedStatus.toLowerCase();
+      return matchedCategory && matchedPriority && matchedStatus;
+    });
+
+    SetFilteredQueries(filteredData);
+  }, [Queries?.data, searchTerm, selectedPriority, selectedStatus]);
+
+  console.log(filteredQueries);
 
   return (
     <div className="grid grid-cols-6 gap-x-6">
       <div className=" col-span-3   bg-white shadow">
         <div className="p-4">
-          <h2 className="font-bold text-[22px] mb-4">User Feedback</h2>
+          <h2 className="font-bold text-[22px] mb-4 flex items-center justify-between">
+            User Feedback{" "}
+            <span
+              className="text-sm font-medium text-red-400 cursor-pointer "
+              onClick={() => {
+                setSearchTerm("");
+                setPriority("");
+                setStatus("");
+              }}
+            >
+              Clear Filter
+            </span>{" "}
+          </h2>
 
-          <div className="flex justify-between gap-4 items-center">
-            <div className="relative w-full lg:max-w-xl">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Search users..."
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="pl-10 pr-4 py-2"
-              />
-            </div>
+          <div className="grid grid-cols-3 gap-x-3">
+            <Select
+              value={searchTerm}
+              onValueChange={(val) => {
+                setSearchTerm(val);
+              }}
+            >
+              <SelectTrigger className="w-full cursor-pointer">
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent className="w-full">
+                {Queries?.category?.map((cate: any) => (
+                  <SelectItem key={cate.issue_type_id} value={cate.issue_type}>
+                    {cate.issue_type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-            <div className="w-[180px]">
+            <div className="">
               <Select
                 value={selectedPriority}
                 onValueChange={(value) => setPriority(value)}
@@ -157,62 +198,92 @@ export default function CustomerSupport() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="">
+              <Select
+                value={selectedStatus}
+                onValueChange={(value) => setStatus(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Priority</SelectItem>
+                  <SelectItem value="in-progress">In-Progress</SelectItem>
+                  <SelectItem value="resolved">Resolved</SelectItem>
+                  <SelectItem value="unresolved">UnResolved</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
         <ul className=" overflow-y-auto h-[35rem]">
-          {Queries?.map((item: ContactUsTicket) => {
-            return (
-              <li
-                key={item.contactus_id}
-                className={`col-span-3 ${
-                  Number(selectedTicketId) === item?.contactus_id
-                    ? "bg-[#F7FAFD] border-2  border-blue-300"
-                    : ""
-                }  border-[#E5E7EB] p-4 space-y-3 `}
-                onClick={() => setTicketId(String(item?.contactus_id))}
-              >
-                <div className="text-primary-black flex justify-between items-center">
-                  <p className=" font-semibold">{item?.issue_type}</p>
-                  <p className="text-[#6B7280] text-xs font-medium">
-                    {item?.created_time}
-                  </p>
-                </div>
-                <ul className="flex items-center gap-x-10">
-                  <li className="text-[#4B5563] text-xs">{item?.first_name}</li>
-                  <li className="text-[#4B5563] text-xs list-disc">
-                    {item?.contact_email}
-                  </li>
-                  <li className="text-[#4B5563] text-xs list-disc">
-                    {item?.contact_phone_no}
-                  </li>
-                </ul>
-                <p className="text-primary-black text-sm font-semibold ">
-                  {item?.sub_issue}
-                </p>
-                <p className="text-primary-black text-xs ">
-                  {item?.message_body}
-                </p>
-                <div
-                  className={` flex items-center ${
-                    item?.attachment_data[0]?.media_url
-                      ? "justify-between"
-                      : "justify-end"
-                  } `}
+          {filteredQueries?.length > 0 ? (
+            filteredQueries?.map((item: ContactUsTicket) => {
+              return (
+                <li
+                  key={item.contactus_id}
+                  className={`col-span-3 ${
+                    Number(selectedTicketId) === item?.contactus_id
+                      ? "bg-[#F7FAFD] border-2  border-blue-300"
+                      : ""
+                  }  border-[#E5E7EB] p-4 space-y-3 `}
+                  onClick={() => setTicketId(String(item?.contactus_id))}
                 >
-                  {item?.attachment_data[0]?.media_url && (
-                    <img
-                      src={item?.attachment_data[0]?.media_url}
-                      alt=""
-                      className="size-10"
-                    />
-                  )}
-                  <Badge className={getBadgeClass(item?.status)}>
-                    {item?.status}
-                  </Badge>
-                </div>
-              </li>
-            );
-          })}
+                  <div className="text-primary-black flex justify-between items-center">
+                    <p className=" font-semibold">{item?.issue_type}</p>
+                    <p className="text-[#6B7280] text-xs font-medium">
+                      {item?.created_time}
+                    </p>
+                  </div>
+                  <ul className="flex items-center gap-x-10">
+                    <li className="text-[#4B5563] text-xs">
+                      {item?.first_name}
+                    </li>
+                    <li className="text-[#4B5563] text-xs list-disc">
+                      {item?.contact_email}
+                    </li>
+                    <li className="text-[#4B5563] text-xs list-disc">
+                      {item?.contact_phone_no}
+                    </li>
+                  </ul>
+                  <p className="text-primary-black text-sm font-semibold ">
+                    {item?.sub_issue}
+                  </p>
+                  <p className="text-primary-black text-xs ">
+                    {item?.message_body}
+                  </p>
+                  <div
+                    className={` flex items-center ${
+                      item?.attachment_data[0]?.media_url
+                        ? "justify-between"
+                        : "justify-end"
+                    } `}
+                  >
+                    {item?.attachment_data[0]?.media_url && (
+                      <img
+                        src={item?.attachment_data[0]?.media_url}
+                        alt=""
+                        className="size-10"
+                      />
+                    )}
+                    <Badge className={getBadgeClass(item?.status)}>
+                      {item?.status}
+                    </Badge>
+                  </div>
+                </li>
+              );
+            })
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[250px] w-full border border-dashed  rounded-md text-center px-6 py-8">
+              <MessageCircleOff className="w-10 h-10 text-gray-400 mb-2" />
+              <h3 className="text-lg font-semibold text-gray-600">
+                No User Feedback Available
+              </h3>
+              <p className="text-sm text-gray-500">
+                Try changing or resetting your filters to see feedback.
+              </p>
+            </div>
+          )}
         </ul>
       </div>
       {DetailsLoading ? (
@@ -223,9 +294,9 @@ export default function CustomerSupport() {
             <div className="border-b">
               <div className="flex p-6 items-center justify-between  pb-3">
                 <h2 className="text-lg font-semibold text-primary-black dark:text-neutral-100">
-                  {QueriesDetails[0]?.subject}
+                  {QueriesDetails[0]?.issue_type}
                 </h2>
-                <Badge className="bg-yellow-100 text-yellow-700">
+                <Badge className={getBadgeClass(QueriesDetails[0]?.status)}>
                   {QueriesDetails[0]?.status}
                 </Badge>
               </div>
@@ -392,10 +463,6 @@ export default function CustomerSupport() {
                         <SelectItem value="in-progress">In-Progress</SelectItem>
                         <SelectItem value="resolved">Resolved</SelectItem>
                         <SelectItem value="unresolved">UnResolved</SelectItem>
-
-                        {/* <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="low">Low</SelectItem> */}
                       </SelectContent>
                     </Select>
                   </div>{" "}
