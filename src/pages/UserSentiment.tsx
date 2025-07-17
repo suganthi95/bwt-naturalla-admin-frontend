@@ -31,8 +31,8 @@ export default function UserSentiment() {
       getCustomerReviews({
         token: auth?.token ?? "",
         category_id: selectedProducts,
-        sort: selectedTime,
-        selectby_time: selectedDate,
+        sort: selectedDate,
+        selectby_time: selectedTime,
         ratings: selectedRatings,
       }),
     retry: 1,
@@ -43,18 +43,15 @@ export default function UserSentiment() {
   const [filteredData, setFilteredData] = useState<ProductReview2[]>(
     Reviews?.data ?? []
   );
-useEffect(() => {
-  if (!Reviews) return;
+  useEffect(() => {
+    if (!Reviews) return;
 
-  const filtered = Reviews?.data?.filter((item: ProductReview2) =>
-    item?.first_name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const filtered = Reviews?.data?.filter((item: ProductReview2) =>
+      item?.first_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-  setFilteredData(filtered);
-}, [Reviews, searchTerm]);
-
-console.log(filteredData);
-
+    setFilteredData(filtered);
+  }, [Reviews, searchTerm]);
 
   return (
     <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">

@@ -143,7 +143,6 @@ export default function CustomerSupport() {
     SetFilteredQueries(filteredData);
   }, [Queries?.data, searchTerm, selectedPriority, selectedStatus]);
 
-  console.log(filteredQueries);
 
   return (
     <div className="grid grid-cols-6 gap-x-6">

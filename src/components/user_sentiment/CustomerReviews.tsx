@@ -99,7 +99,7 @@ export default function CustomerReviews({
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select Product" />
+              <SelectValue placeholder="Product Category" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Category</SelectItem>
@@ -133,7 +133,7 @@ export default function CustomerReviews({
 
           <Select value={selectedDate} onValueChange={(val) => setDate?.(val)}>
             <SelectTrigger>
-              <SelectValue placeholder="Sort by Date" />
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="newest">Newest First</SelectItem>
