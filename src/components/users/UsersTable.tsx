@@ -1,14 +1,9 @@
-import { deleteUser, getUsers } from "@/lib/apis";
+import { deleteUser, getUsers, toggleUserStatus } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
 
-import {
-  Loader2,
-  MoreVertical,
-  Search,
-  X,
-} from "lucide-react";
+import { Loader2, MoreVertical, Search, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -62,6 +57,8 @@ function UsersTable() {
   const queryClinet = useQueryClient();
   const navigate = useNavigate();
   const { auth } = useAppContext();
+          const [selectedId, setSelectedId] = useState<number>();
+
   const {
     data: users,
     isLoading,
@@ -78,6 +75,11 @@ function UsersTable() {
       deleteUser(args.token, args.id),
   });
 
+  const { mutate: onToggle , isPending:ToggleIsPending } = useMutation({
+    mutationKey: ["toggleuser"],
+    mutationFn: (args: { token: string; id: string; status: string }) =>
+      toggleUserStatus(args.token, args.id, args.status),
+  });
   const columns: ColumnDef<User>[] = [
     {
       id: "select",
@@ -176,6 +178,13 @@ function UsersTable() {
 
         return (
           <div className="flex flex-row items-center gap-5">
+            {selectedId === row.original.user_id && ToggleIsPending ? <div className="">
+           <Button  size="icon"
+                  variant="ghost">
+             <Loader2 className="w-4 h-4 animate-spin" /> 
+            </Button>
+           
+          </div> :
             <Popover>
               <PopoverTrigger>
                 <Button
@@ -220,11 +229,37 @@ function UsersTable() {
                   </Dialog>
                 )}
                 <p
-                  className={ ` text-sm ${
-                    status === "active" ?  "text-red-500":"text-green-500"
-                  }`}
+                  onClick={() =>
+                  {
+                    setSelectedId(row.original.user_id)
+                    onToggle(
+                      {
+                        id: String(row.original.user_id),
+                        token: auth?.token ?? "",
+                        status: status === "active" ? "inactive" : "active",
+                      },
+                      {
+                        onSuccess(data) {
+                          toast.success(data?.data?.message);
+                          queryClinet.invalidateQueries({
+                            queryKey: ["getusers"],
+                          });
+                        },
+                        onError: (error) => {
+                          if (axios.isAxiosError(error)) {
+                            toast.error(error?.response?.data?.message);
+                          }
+                        },
+                      }
+                    )
+                  }
+                  }
+                  className={` text-sm ${
+                    status === "active" ? "text-red-500" : "text-green-500"
+                  } cursor-pointer `}
                 >
                   {" "}
+                  
                   {status === "active" ? "Set Inactive" : "Set Active"}{" "}
                 </p>
 
@@ -274,6 +309,7 @@ function UsersTable() {
                                 });
                               },
                               onError: (error) => {
+                                
                                 if (axios.isAxiosError(error)) {
                                   toast.error(error?.response?.data?.message);
                                 }
@@ -293,6 +329,7 @@ function UsersTable() {
                 </Dialog>
               </PopoverContent>
             </Popover>
+      }
           </div>
         );
       },

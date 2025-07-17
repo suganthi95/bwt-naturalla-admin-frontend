@@ -300,6 +300,18 @@ export const deleteUser = async (token: string, id: string) => {
     },
   });
 };
+export const toggleUserStatus = async (token: string, id: string ,status:string) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/auth/update/status/${id}`,
+    data:{
+      status
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
 
 export const getConfigureCouponlist = async (token: string) => {
   return await axios({
