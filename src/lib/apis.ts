@@ -178,7 +178,7 @@ export const UpdateCategories = async (token: string, data: any) => {
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
-  data.subCategories.forEach((subCategory: string,index:number) => {
+  data.subCategories.forEach((subCategory: string, index: number) => {
     formdata.append(`subcategory_name[${index}]`, subCategory);
   });
   data.icon_data.forEach((item: any, index: number) => {
@@ -547,6 +547,7 @@ export const addProductSpecs = async ({
 }) => {
   const formdata = new FormData();
   formdata.append("product_id", data.productId as string);
+  formdata.append("short_description", data.shortDescription);
   formdata.append("long_description", data.longDescription);
   formdata.append("benefits", data.benefits);
   formdata.append("how_to_use", data.howToUse);

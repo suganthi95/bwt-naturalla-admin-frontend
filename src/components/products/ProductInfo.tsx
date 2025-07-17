@@ -237,7 +237,6 @@ export function ProductInfo() {
   }, [productInfoDefaults, setValue]);
 
 
-  console.log(pairs);
   
   return (
     <form

@@ -15,6 +15,7 @@ import { Download, LoaderCircle, X } from "lucide-react";
 import { downloadPDF } from "@/lib/utils";
 import TextEditor from "../ui/TextEditor";
 import { useAppContext } from "@/contexts/AuthContext";
+import { Textarea } from "../ui/textarea";
 
 function ProductSpecs() {
   const { auth } = useAppContext();
@@ -54,7 +55,7 @@ function ProductSpecs() {
         offer_ending_soon,
         pdf_id,
         pdf_url,
-        // short_description,
+        short_description,
         weight,
       } = data?.data?.data;
 
@@ -70,7 +71,7 @@ function ProductSpecs() {
         length,
         longDescription: long_description,
         offerEndingSoon: offer_ending_soon,
-        // shortDescription: short_description,
+        shortDescription: short_description,
         specificationPDF: { pdf_id, pdf_url },
         todayDeal: isin_todays_deal,
         weight,
@@ -157,8 +158,8 @@ function ProductSpecs() {
       className="space-y-6 p-6 bg-white rounded-xl mt-5 shadow-md w-[75%]"
     >
       <div>
-        {/* <Label>Short Description</Label> */}
-        {/* <div className="mt-1">
+        <Label>Short Description</Label>
+        <div className="mt-1">
           <Textarea
             rows={5}
             {...register("shortDescription", {
@@ -168,7 +169,7 @@ function ProductSpecs() {
               },
             })}
           />
-        </div> */}
+        </div>
         {/* <div className="mt-1">
                     <Controller
                         rules={{

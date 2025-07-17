@@ -100,6 +100,7 @@ export default function UpdatePassword({ onClose }: Props) {
         )}
       </div>
 
+
       <div className="relative">
         <Label className="text-sm font-medium text-gray-700">
           New Password
