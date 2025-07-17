@@ -249,3 +249,10 @@ export type ProductReview2 = {
   first_name: string;
   last_name: string;
 };
+
+
+export type Category = {
+  category_id: number;
+  category_title: string;
+};
+

@@ -226,7 +226,7 @@ export default function CustomerSupport() {
                     Number(selectedTicketId) === item?.contactus_id
                       ? "bg-[#F7FAFD] border-2  border-blue-300"
                       : ""
-                  }  border-[#E5E7EB] p-4 space-y-3 `}
+                  }  border-[#E5E7EB] p-4 space-y-3 cursor-pointer `}
                   onClick={() => setTicketId(String(item?.contactus_id))}
                 >
                   <div className="text-primary-black flex justify-between items-center">

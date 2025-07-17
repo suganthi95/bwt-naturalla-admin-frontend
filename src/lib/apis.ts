@@ -1145,17 +1145,24 @@ export const updateOrderStatus = async ({
     },
   });
 };
+// customer/support/list/reviews?category_id=1&sort=newest&selectby_time=1 week&ratings=3
 
 export const getCustomerReviews = async ({
   token,
-  product_name,
+  category_id,
+  sort,
+  selectby_time,
+  ratings,
 }: {
   token: string;
-  product_name?: string;
+  category_id?: string;
+  sort?: string;
+  selectby_time?: string;
+  ratings?: string;
 }) => {
   return await axios({
     method: "get",
-    url: `${BASE_URL}/customer/support/list/reviews?product_name=${product_name}`,
+    url: `${BASE_URL}/customer/support/list/reviews?category_id=${category_id}&sort=${sort}&selectby_time=${selectby_time}&ratings=${ratings}`,
     headers: {
       Authorization: token,
     },
