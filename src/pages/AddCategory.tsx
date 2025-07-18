@@ -84,10 +84,10 @@ export default function AddCategory() {
   // const isAddDisabled = !icon || !effects || effects.trim() === "";
 
   const handleAdd = () => {
-    if (!icon) {
-      toast.warning("Select a new icon");
-      return;
-    }
+    // if (!icon) {
+    //   toast.warning("Select a new icon");
+    //   return;
+    // }
 
     if (!effects || effects.trim() === "") {
       toast.warning("Add an effect name");
@@ -104,7 +104,6 @@ export default function AddCategory() {
       setPairs((prev) => [...prev, { icon_id: icon, effect_name: effects }]);
       setValue("products_effect_name", "");
       setValue("products_icon", null);
-
     }
   };
 
@@ -277,7 +276,7 @@ export default function AddCategory() {
                 onValueChange={(value) =>
                   setValue("products_icon", Number(value))
                 }
-                value={icon !== null ? icon.toString() : undefined}
+                value={icon !== null ? icon.toString() : ''}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select" />
