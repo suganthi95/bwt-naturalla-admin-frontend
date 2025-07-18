@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { CloudUpload, LoaderCircle, X } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addProductInfo,
   getCategories,
@@ -46,7 +46,7 @@ export function ProductInfo() {
   const [tags, setTags] = useState<string[]>([]);
   const [selectedCategoryId, setSeletectedCategoryId] = useState<number>();
   const [tagInput, setTagInput] = useState("");
-
+ const queryClient = useQueryClient()
   const { data: productIcons } = useQuery({
     queryKey: ["getCategoriesbasedicons", selectedCategoryId],
     queryFn: () => getCategoryBasedIcons(auth?.token ?? "", selectedCategoryId!.toString()),
@@ -121,6 +121,7 @@ export function ProductInfo() {
     mutationKey: ["product-info"],
     mutationFn: addProductInfo,
     onSuccess: (data) => {
+        queryClient.invalidateQueries({queryKey:["getAllProducts"]})
       sessionStorage.setItem("product-id", data.data.product_id);
       toast.success("Request Success", {
         description: "Product Info saved successfully",

@@ -5,7 +5,7 @@ import {
   ImportProdcuts,
 } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import {
   DropdownMenu,
@@ -74,11 +74,23 @@ function ProductsTable() {
   const [ImportOpen, SetImportOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const savedPage = sessionStorage.getItem("product-table-page");
-  const initialPage = savedPage ? parseInt(savedPage, 10) : 0;
+  console.log("savedPage: ", savedPage);
+  const initialPage = savedPage ? parseInt(savedPage) : 0;
   const [pagination, setPagination] = useState({
     pageIndex: initialPage,
     pageSize: 10,
   });
+
+  useEffect(() => {
+    const savedPage = sessionStorage.getItem("product-table-page");
+    if (savedPage) {
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex: parseInt(savedPage),
+      }));
+    }
+  }, []);
+
   const multiValueFilter: FilterFn<any> = (row, columnId, filterValue) => {
     if (!Array.isArray(filterValue)) return true;
     return filterValue.includes(row.getValue(columnId));
@@ -404,7 +416,6 @@ function ProductsTable() {
       globalFilter,
       pagination,
     },
-    onPaginationChange: setPagination,
   });
 
   let content;
