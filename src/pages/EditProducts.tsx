@@ -69,6 +69,7 @@ function EditProducts() {
                 <AlertDialogAction
                   onClick={() => {
                     navigate("/products");
+                    window.location.reload()
                   }}
                 >
                   Leave Page

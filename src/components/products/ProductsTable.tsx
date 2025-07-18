@@ -5,7 +5,7 @@ import {
   ImportProdcuts,
 } from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import {
   DropdownMenu,
@@ -81,16 +81,6 @@ function ProductsTable() {
     pageSize: 10,
   });
 
-  useEffect(() => {
-    const savedPage = sessionStorage.getItem("product-table-page");
-    if (savedPage) {
-      setPagination((prev) => ({
-        ...prev,
-        pageIndex: parseInt(savedPage),
-      }));
-    }
-  }, []);
-
   const multiValueFilter: FilterFn<any> = (row, columnId, filterValue) => {
     if (!Array.isArray(filterValue)) return true;
     return filterValue.includes(row.getValue(columnId));
@@ -116,6 +106,7 @@ function ProductsTable() {
     queryFn: () => getAllProducts(auth?.token ?? ""),
     refetchOnWindowFocus: false,
   });
+
   const columns: ColumnDef<ProductsType>[] = [
     {
       accessorKey: "product_id",
@@ -405,6 +396,7 @@ function ProductsTable() {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     globalFilterFn: globalFilterFunction,
+
     filterFns: {
       multiValueFilter,
     },
@@ -416,6 +408,7 @@ function ProductsTable() {
       globalFilter,
       pagination,
     },
+    onPaginationChange: setPagination,
   });
 
   let content;
