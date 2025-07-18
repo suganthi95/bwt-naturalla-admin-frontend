@@ -338,7 +338,7 @@ export default function AddCategory() {
 
           {pairs.length > 0 && (
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {pairs.slice(0, 3).map((pair, index) => {
+              {pairs?.map((pair, index) => {
                 const matchedIcon = ProductIcons?.find(
                   (icon: ProductEffectIcon) => icon.icon_id === pair.icon_id
                 );
@@ -374,11 +374,11 @@ export default function AddCategory() {
                 );
               })}
 
-              {pairs.length > 3 && (
+              {/* {pairs.length > 3 && (
                 <div className="flex items-center justify-center border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
                   +{pairs.length - 3} more
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>
