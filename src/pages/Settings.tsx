@@ -1,4 +1,5 @@
 import Banners from "@/components/settings/Banners";
+import PromotionalOffer from "@/components/settings/PromotionalOffer";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -106,6 +107,12 @@ export default function Settings() {
           >
             Banners
           </TabsTrigger>
+            <TabsTrigger
+            value="promotion"
+            className="w-full rounded-md data-[state=active]:text-primary-black font-semibold "
+          >
+            Promotional Offers
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="shipping">
           <div className="bg-white rounded-xl space-y-3 p-4 col-span-2">
@@ -178,6 +185,9 @@ export default function Settings() {
         </TabsContent>
         <TabsContent value="banner">
           <Banners />
+        </TabsContent>
+        <TabsContent value="promotion">
+            <PromotionalOffer/>
         </TabsContent>
       </Tabs>
     </div>

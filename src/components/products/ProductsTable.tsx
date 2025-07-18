@@ -45,6 +45,7 @@ import {
   SortingState,
   ColumnFiltersState,
   VisibilityState,
+  FilterFn,
 } from "@tanstack/react-table";
 import { ProductsType } from "@/types";
 import { Filter } from "../ui/Filter";
@@ -72,7 +73,16 @@ function ProductsTable() {
   const queryClient = useQueryClient();
   const [ImportOpen, SetImportOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const savedPage = sessionStorage.getItem("product-table-page");
+  const initialPage = savedPage ? parseInt(savedPage, 10) : 0;
+  const [pagination, setPagination] = useState({
+    pageIndex: initialPage,
+    pageSize: 10,
+  });
+  const multiValueFilter: FilterFn<any> = (row, columnId, filterValue) => {
+    if (!Array.isArray(filterValue)) return true;
+    return filterValue.includes(row.getValue(columnId));
+  };
   const { mutate } = useMutation({
     mutationKey: ["deleteProduct"],
     mutationFn: deleteProduct,
@@ -89,7 +99,7 @@ function ProductsTable() {
     },
   });
 
-    const { data, isLoading, isSuccess } = useQuery({
+  const { data, isLoading, isSuccess } = useQuery({
     queryKey: ["getAllProducts"],
     queryFn: () => getAllProducts(auth?.token ?? ""),
     refetchOnWindowFocus: false,
@@ -114,6 +124,7 @@ function ProductsTable() {
     {
       accessorKey: "category_title",
       header: () => "Category",
+      filterFn: multiValueFilter,
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("category_title")}</div>
       ),
@@ -240,6 +251,10 @@ function ProductsTable() {
                   "product-id",
                   row.getValue("product_id")
                 );
+                sessionStorage.setItem(
+                  "product-table-page",
+                  `${table.getState().pagination.pageIndex}`
+                );
                 navigate("/products/edit/product-info");
               }}
               size="icon"
@@ -305,8 +320,6 @@ function ProductsTable() {
       },
     },
   ];
-
-
 
   const { mutate: ImportCsv, isPending } = useMutation({
     mutationKey: ["ImportProduct"],
@@ -380,13 +393,18 @@ function ProductsTable() {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     globalFilterFn: globalFilterFunction,
+    filterFns: {
+      multiValueFilter,
+    },
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
       globalFilter,
+      pagination,
     },
+    onPaginationChange: setPagination,
   });
 
   let content;
@@ -493,9 +511,7 @@ function ProductsTable() {
                         className=""
                       >
                         {isPending ? (
-                         
-                             <Loader2 className="animate-spin" />
-                         
+                          <Loader2 className="animate-spin" />
                         ) : (
                           <>
                             <Upload className="w-4 h-4 mr-2" />
@@ -598,8 +614,6 @@ function ProductsTable() {
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
-            {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
             Total no.of products: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Switch } from "./switch";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { updateProductToggle } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
 
@@ -13,14 +13,14 @@ interface Props {
 function ProductToggle({ state, value, productId }: Props) {
   const { auth } = useAppContext();
   const [toggle, setToggle] = useState<boolean>(state);
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationKey: ["updateProductToggle"],
     mutationFn: ({ token, data }: { token: string; data: any }) =>
       updateProductToggle(token, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
+      // queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
     },
   });
 

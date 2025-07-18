@@ -57,7 +57,7 @@ function UsersTable() {
   const queryClinet = useQueryClient();
   const navigate = useNavigate();
   const { auth } = useAppContext();
-          const [selectedId, setSelectedId] = useState<number>();
+  const [selectedId, setSelectedId] = useState<number>();
 
   const {
     data: users,
@@ -75,7 +75,7 @@ function UsersTable() {
       deleteUser(args.token, args.id),
   });
 
-  const { mutate: onToggle , isPending:ToggleIsPending } = useMutation({
+  const { mutate: onToggle, isPending: ToggleIsPending } = useMutation({
     mutationKey: ["toggleuser"],
     mutationFn: (args: { token: string; id: string; status: string }) =>
       toggleUserStatus(args.token, args.id, args.status),
@@ -125,6 +125,14 @@ function UsersTable() {
       ),
     },
     {
+      accessorKey: "phone_no",
+      header: () => "Mobile Number",
+      cell: ({ row }) => (
+        <div className="font-semibold">{row.getValue("phone_no")}</div>
+      ),
+    },
+
+    {
       accessorKey: "role",
       header: () => "Role",
       cell: ({ row }) => (
@@ -173,163 +181,164 @@ function UsersTable() {
       cell: ({ row }) => {
         const role = row.original.role;
         const status = row.original.status;
+        const has_order = row.original.has_order;
         const [open, setOpen] = useState(false);
         const [Isopen, setIsopen] = useState(false);
 
         return (
           <div className="flex flex-row items-center gap-5">
-            {selectedId === row.original.user_id && ToggleIsPending ? <div className="">
-           <Button  size="icon"
-                  variant="ghost">
-             <Loader2 className="w-4 h-4 animate-spin" /> 
-            </Button>
-           
-          </div> :
-            <Popover>
-              <PopoverTrigger>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="text-gray-500 hover:text-primary"
-                >
-                  <MoreVertical className="w-4 h-4" />
+            {selectedId === row.original.user_id && ToggleIsPending ? (
+              <div className="">
+                <Button size="icon" variant="ghost">
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-fit space-y-2">
-                {role !== "customer" && (
-                  <Dialog open={Isopen} onOpenChange={setIsopen}>
-                    <DialogTrigger>
-                      <p
-                        className="cursor-pointer text-sm"
-                        // className="rounded-full text-green-400 bg-green-400/25 hover:bg-green-400/10"
-                      >
-                        Edit
-                      </p>
-                    </DialogTrigger>
-                    <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
-                      <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
-                        <DialogTitle className="">
-                          {" "}
-                          Update User Details
-                        </DialogTitle>
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => {
-                            setIsopen(false);
-                          }}
+              </div>
+            ) : (
+              <Popover>
+                <PopoverTrigger>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="text-gray-500 hover:text-primary"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-fit space-y-2">
+                  {role !== "customer" && (
+                    <Dialog open={Isopen} onOpenChange={setIsopen}>
+                      <DialogTrigger>
+                        <p
+                          className="cursor-pointer text-sm"
+                          // className="rounded-full text-green-400 bg-green-400/25 hover:bg-green-400/10"
                         >
-                          <X className="w-6 h-6" />
-                        </div>
-                      </DialogHeader>
-                      <EditUserForm
-                        userDetails={row.original}
-                        onClose={setIsopen}
-                      />
-                    </DialogContent>
-                  </Dialog>
-                )}
-                <p
-                  onClick={() =>
-                  {
-                    setSelectedId(row.original.user_id)
-                    onToggle(
-                      {
-                        id: String(row.original.user_id),
-                        token: auth?.token ?? "",
-                        status: status === "active" ? "inactive" : "active",
-                      },
-                      {
-                        onSuccess(data) {
-                          toast.success(data?.data?.message);
-                          queryClinet.invalidateQueries({
-                            queryKey: ["getusers"],
-                          });
+                          Edit
+                        </p>
+                      </DialogTrigger>
+                      <DialogContent className="[&>button]:hidden  !p-0 !max-w-xl">
+                        <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
+                          <DialogTitle className="">
+                            {" "}
+                            Update User Details
+                          </DialogTitle>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setIsopen(false);
+                            }}
+                          >
+                            <X className="w-6 h-6" />
+                          </div>
+                        </DialogHeader>
+                        <EditUserForm
+                          userDetails={row.original}
+                          onClose={setIsopen}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  )}
+
+                  <p
+                    onClick={() => {
+                      setSelectedId(row.original.user_id);
+                      onToggle(
+                        {
+                          id: String(row.original.user_id),
+                          token: auth?.token ?? "",
+                          status: status === "active" ? "inactive" : "active",
                         },
-                        onError: (error) => {
-                          if (axios.isAxiosError(error)) {
-                            toast.error(error?.response?.data?.message);
-                          }
-                        },
-                      }
-                    )
-                  }
-                  }
-                  className={` text-sm ${
-                    status === "active" ? "text-red-500" : "text-green-500"
-                  } cursor-pointer `}
-                >
-                  {" "}
-                  
-                  {status === "active" ? "Set Inactive" : "Set Active"}{" "}
-                </p>
-
-                <Dialog open={open} onOpenChange={setOpen}>
-                  <DialogTrigger asChild>
-                    <p
-                      className="cursor-pointer text-sm"
-                      // className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
-                    >
-                      Delete
-                    </p>
-                  </DialogTrigger>
-
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle className="text-lg font-semibold text-red-600">
-                        Delete User
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="text-sm text-muted-foreground">
-                      Are you sure you want to delete{" "}
-                      <span className="font-semibold text-black">
-                        {row.original.first_name} {row.original.last_name}
-                      </span>
-                      ? This action cannot be undone.
-                    </div>
-
-                    <DialogFooter className="mt-4 flex justify-end gap-2">
-                      <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </DialogClose>
-                      <Button
-                        variant="destructive"
-                        disabled={isPending}
-                        onClick={() => {
-                          onDelete(
-                            {
-                              token: auth?.token ?? "",
-                              id: row.original.user_id.toString(),
-                            },
-                            {
-                              onSuccess(data) {
-                                setOpen(false);
-                                toast.success(data?.data?.message);
-                                queryClinet.invalidateQueries({
-                                  queryKey: ["getusers"],
-                                });
-                              },
-                              onError: (error) => {
-                                
-                                if (axios.isAxiosError(error)) {
-                                  toast.error(error?.response?.data?.message);
-                                }
-                              },
+                        {
+                          onSuccess(data) {
+                            toast.success(data?.data?.message);
+                            queryClinet.invalidateQueries({
+                              queryKey: ["getusers"],
+                            });
+                          },
+                          onError: (error) => {
+                            if (axios.isAxiosError(error)) {
+                              toast.error(error?.response?.data?.message);
                             }
-                          );
-                        }}
-                      >
-                        {isPending ? (
-                          <Loader2 className="animate-spin" />
-                        ) : (
-                          "Delete"
-                        )}
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </PopoverContent>
-            </Popover>
-      }
+                          },
+                        }
+                      );
+                    }}
+                    className={` text-sm ${
+                      status === "active" ? "text-red-500" : "text-green-500"
+                    } cursor-pointer `}
+                  >
+                    {" "}
+                    {status === "active" ? "Set Inactive" : "Set Active"}{" "}
+                  </p>
+                  {!has_order && (
+                    <Dialog open={open} onOpenChange={setOpen}>
+                      <DialogTrigger asChild>
+                        <p
+                          className="cursor-pointer text-sm"
+                          // className="rounded-full text-red-400 bg-red-400/25 hover:bg-red-400/10"
+                        >
+                          Delete
+                        </p>
+                      </DialogTrigger>
+
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle className="text-lg font-semibold text-red-600">
+                            Delete User
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="text-sm text-muted-foreground">
+                          Are you sure you want to delete{" "}
+                          <span className="font-semibold text-black">
+                            {row.original.first_name} {row.original.last_name}
+                          </span>
+                          ? This action cannot be undone.
+                        </div>
+
+                        <DialogFooter className="mt-4 flex justify-end gap-2">
+                          <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                          <Button
+                            variant="destructive"
+                            disabled={isPending}
+                            onClick={() => {
+                              onDelete(
+                                {
+                                  token: auth?.token ?? "",
+                                  id: row.original.user_id.toString(),
+                                },
+                                {
+                                  onSuccess(data) {
+                                    setOpen(false);
+                                    toast.success(data?.data?.message);
+                                    queryClinet.invalidateQueries({
+                                      queryKey: ["getusers"],
+                                    });
+                                  },
+                                  onError: (error) => {
+                                    if (axios.isAxiosError(error)) {
+                                      toast.error(
+                                        error?.response?.data?.message
+                                      );
+                                    }
+                                  },
+                                }
+                              );
+                            }}
+                          >
+                            {isPending ? (
+                              <Loader2 className="animate-spin" />
+                            ) : (
+                              "Delete"
+                            )}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         );
       },

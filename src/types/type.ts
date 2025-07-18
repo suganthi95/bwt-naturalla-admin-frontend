@@ -25,6 +25,7 @@ export type Blog = {
 
 export type User = {
   user_id: number;
+  has_order:boolean;
   first_name: string;
   last_name: string;
   email: string;
