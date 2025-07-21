@@ -300,12 +300,16 @@ export const deleteUser = async (token: string, id: string) => {
     },
   });
 };
-export const toggleUserStatus = async (token: string, id: string ,status:string) => {
+export const toggleUserStatus = async (
+  token: string,
+  id: string,
+  status: string
+) => {
   return await axios({
     method: "put",
     url: `${BASE_URL}/auth/update/status/${id}`,
-    data:{
-      status
+    data: {
+      status,
     },
     headers: {
       Authorization: token,
@@ -1175,6 +1179,70 @@ export const getCustomerReviews = async ({
   return await axios({
     method: "get",
     url: `${BASE_URL}/customer/support/list/reviews?category_id=${category_id}&sort=${sort}&selectby_time=${selectby_time}&ratings=${ratings}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const getAllPromo = async ({ token }: { token: string }) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/promo/offer`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const addPromo = async ({
+  token,
+  promo_offer_txt,
+}: {
+  token: string;
+  promo_offer_txt: string;
+}) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/promo/offer`,
+    data: {
+      promo_offer_txt,
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const editPromo = async ({
+  token,
+  id,
+  promo_offer_txt,
+}: {
+  token: string;
+  id: string;
+  promo_offer_txt: string;
+}) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/promo/offer/${id}`,
+    data: {
+      promo_offer_txt,
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const deletePromo = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: string;
+}) => {
+  return await axios({
+    method: "delete",
+    url: `${BASE_URL}/promo/offer/${id}`,
+  
     headers: {
       Authorization: token,
     },
