@@ -159,7 +159,7 @@ export default function CustomerReviews({
                       className="w-24 h-24 object-cover rounded-md"
                     />
                   )}
-                  <div className="w-full">
+                  <div className="w-full space-y-1">
                     <div className="flex justify-between items-center ">
                       <h3 className="text-base font-semibold text-primary-black">
                         {review.product_name}
@@ -199,15 +199,24 @@ export default function CustomerReviews({
                     <p className="mt-1 text-sm text-gray-600">
                       {review.review_txt}
                     </p>
-
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge className="bg-green-100 text-[#166A51] text-xs font-medium  py-1 rounded-full inline-flex items-center gap-1">
-                        <CheckCircle2 className="  fill-[#166A51]   text-white" />
-                        Verified Purchase
-                      </Badge>
-                      <span className="text-sm text-muted-foreground ml-2">
-                        by {review.first_name}
-                      </span>
+                    <div className="flex items-center justify-between">
+                      {(review?.review_media_urls &&
+                        review?.review_media_urls[0])? (
+                          <img
+                            src={review?.review_media_urls[0]}
+                            alt="avatar"
+                            className="w-14 h-14 object-cover"
+                          />
+                        ):<div></div>}
+                      <div className="flex items-center gap-2 mt-2">
+                        <Badge className="bg-green-100 text-[#166A51] text-xs font-medium  py-1 rounded-full inline-flex items-center gap-1">
+                          <CheckCircle2 className="  fill-[#166A51]   text-white" />
+                          Verified Purchase
+                        </Badge>
+                        <span className="text-sm text-muted-foreground ml-2">
+                          by {review.first_name}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>

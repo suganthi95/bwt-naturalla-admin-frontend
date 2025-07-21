@@ -249,6 +249,7 @@ export type ProductReview2 = {
   product_thumbnail_image: string | null;
   first_name: string;
   last_name: string;
+  review_media_urls:string[] | null
 };
 
 
