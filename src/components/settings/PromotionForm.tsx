@@ -14,6 +14,7 @@ import { addPromo, editPromo } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import axios from "axios";
+import { Label } from "../ui/label";
 
 interface Props {
   type: "add" | "edit";
@@ -21,10 +22,10 @@ interface Props {
   id: string;
 }
 
-export default function PromotionDialog({ type, PromotionTitle ,id}: Props) {
+export default function PromotionDialog({ type, PromotionTitle, id }: Props) {
   const [title, setTitle] = useState(PromotionTitle);
   console.log(PromotionTitle);
-  
+
   const queryClient = useQueryClient();
   const { auth } = useAppContext();
   const { mutate: AddPromo, isPending } = useMutation({
@@ -95,11 +96,17 @@ export default function PromotionDialog({ type, PromotionTitle ,id}: Props) {
             {type === "add" ? "Add Promotion" : "Edit Promotion"}
           </DialogTitle>
         </DialogHeader>
-        <div className="mt-2">
+        <div className="mt-2 space-y-2">
+          <Label htmlFor="promo-text" className="mb-2">
+            Enter Promotion Text <span className="text-red-500">*</span>
+          </Label>{" "}
           <Input
+            id="promo-text"
             value={title}
+            maxLength={60}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter promotion text ..."
+            placeholder="Enter promotion text (60 characters max)"
+            aria-label="Ecommerce promotion text (20 characters max)"
           />
         </div>
 
