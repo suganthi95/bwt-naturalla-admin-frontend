@@ -193,8 +193,8 @@ export function ProductInfo() {
     let galleryImagesError = false;
 
     for(let i = 0; i < data.galleryImages.length; i++){
-      if(data.galleryImages[i] instanceof FileList && data.galleryImages[i][0]?.size > 1024 * 1024){
-        setError(`galleryImages.${i}`, { message: "Image size is more than 1 MB" });
+      if(data.galleryImages[i] instanceof FileList && data.galleryImages[i][0]?.size > 5 * 1024 * 1024){
+        setError(`galleryImages.${i}`, { message: "Image size is more than 5 MB" });
         galleryImagesError = true
       }
     }
@@ -203,8 +203,8 @@ export function ProductInfo() {
       return;
     }
 
-    if(data.thumbnail instanceof FileList && data.thumbnail[0].size > 1024 * 1024){
-      return setError("thumbnail", { message: "Thumbnail size must be less than 1MB" })
+    if(data.thumbnail instanceof FileList && data.thumbnail[0].size > 5 * 1024 * 1024){
+      return setError("thumbnail", { message: "Thumbnail size must be less than 5 MB" })
     }
 
     data.tags = tags;
