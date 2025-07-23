@@ -27,9 +27,10 @@ import { useAppContext } from "@/contexts/AuthContext";
 import { AxiosError } from "axios";
 
 const FormSchema = z.object({
-  coupon: z.number({
-    required_error: "Please select a coupon.",
-  }),
+  // coupon: z.number({
+  //   required_error: "Please select a coupon.",
+  // }),
+   coupon: z.number().optional(),
 });
 
 export function ProductCoupons() {
@@ -78,6 +79,9 @@ export function ProductCoupons() {
       if (location.pathname === "/products/add/discounts") {
         navigate("/products/add/seo");
       }
+        if (location.pathname === "/products/edit/discounts") {
+        navigate("/products/edit/seo");
+      }
     },
     onError: (error: AxiosError<any>) => {
       toast.error("Request Failed", { description: error?.response?.data.message })
@@ -105,7 +109,7 @@ export function ProductCoupons() {
       mutate({
         token: auth?.token ?? "",
         data: {
-          coupon: data.coupon,
+          coupon: data.coupon ?? null,
           productId: productId,
         },
       });
@@ -191,7 +195,7 @@ export function ProductCoupons() {
           {isPending ? (
             <LoaderCircle className="h-5 w-5 animate-spin" />
           ) : (
-            "Submit"
+            "Next"
           )}
         </Button>
       </div>

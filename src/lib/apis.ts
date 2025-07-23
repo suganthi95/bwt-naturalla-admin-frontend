@@ -600,7 +600,7 @@ export const addProductSpecs = async ({
 
 export const addCoupons = async (payload: {
   token: string;
-  data: { coupon: number; productId: string };
+  data: { coupon: number | null; productId: string };
 }) => {
   return await axios({
     method: "post",

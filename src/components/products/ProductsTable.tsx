@@ -208,7 +208,7 @@ function ProductsTable() {
     // },
     {
       accessorKey: "best_selling",
-      header: () => "Combo's",
+      header: () => "Bset Selling",
       cell: ({ row }) => (
         <ProductToggle
           state={row.getValue("best_selling")}

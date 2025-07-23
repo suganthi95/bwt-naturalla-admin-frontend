@@ -414,7 +414,7 @@ function ProductSpecs() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Label htmlFor="bestSelling">Combo's :</Label>
+          <Label htmlFor="bestSelling">Best Selling :</Label>
           <Switch
             id="bestSelling"
             checked={watch("bestSelling")}
