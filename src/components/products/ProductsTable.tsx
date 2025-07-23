@@ -74,7 +74,6 @@ function ProductsTable() {
   const [ImportOpen, SetImportOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const savedPage = sessionStorage.getItem("product-table-page");
-  console.log("savedPage: ", savedPage);
   const initialPage = savedPage ? parseInt(savedPage) : 0;
   const [pagination, setPagination] = useState({
     pageIndex: initialPage,
@@ -208,7 +207,7 @@ function ProductsTable() {
     // },
     {
       accessorKey: "best_selling",
-      header: () => "Bset Selling",
+      header: () => "Best Selling",
       cell: ({ row }) => (
         <ProductToggle
           state={row.getValue("best_selling")}
