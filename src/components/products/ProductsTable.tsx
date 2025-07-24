@@ -426,7 +426,7 @@ function ProductsTable() {
         <div className="flex flex-col gap-2 py-1">
           <div className="flex flex-row gap-3 w-full">
             <div className="flex flex-col lg:flex-row gap-3 justify-between w-full">
-              <div className="flex flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
+              <div className="flex flex-col gap-y-3 xl:flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
                 <Input
                   placeholder="Search by Product Name..."
                   value={globalFilter}

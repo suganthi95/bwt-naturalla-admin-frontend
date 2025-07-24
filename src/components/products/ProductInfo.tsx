@@ -580,7 +580,7 @@ export function ProductInfo() {
           dimensions. Notice that the product shows all the details.
         </p>
 
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 xl:grid-cols-5 gap-4">
           {[0, 1, 2, 3, 4].map((_, i) => (
             <div key={i}>
               {(watch(`galleryImages.${i}`) instanceof FileList &&

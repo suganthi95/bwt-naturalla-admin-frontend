@@ -1,17 +1,61 @@
-import { Settings } from "lucide-react";
+import { Menu, Settings, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAppContext } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import TabMenu from "./TabMenu";
+import { ASSETS } from "@/assets/assets";
 
 function Navbar() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
+  const [Ismenu, setIsMenu] = useState(false);
+
+  const closeMenu = () => {
+    setIsMenu(false);
+  };
   return (
     <div>
       <div className="px-3 py-3 border flex items-center flex-row justify-between w-full">
-        <div>
-          <h1 className="text-xl font-semibold">Naturalla Store Admin Portal</h1>
+        <div className="flex items-center gap-x-2">
+          <Sheet open={Ismenu} onOpenChange={setIsMenu}>
+            <SheetTrigger>
+              <Menu className="xl:hidden" />
+            </SheetTrigger>
+            <SheetContent className="[&>button]:hidden !p-0 w-56" side={"left"}>
+              <SheetHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg  w-full flex flex-row  items-start justify-between">
+                <SheetTitle className="">
+                  {" "}
+                  <img
+                    src={ASSETS.LOGO}
+                    alt="logo"
+                    className="w-28 transition-all duration-300"
+                  />
+                </SheetTitle>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setIsMenu(false);
+                  }}
+                >
+                  <X className="w-5 h-5" />
+                </div>
+              </SheetHeader>
+              <TabMenu onClose={closeMenu} />
+            </SheetContent>
+          </Sheet>
+
+          <h1 className="text-xl font-semibold">
+            Naturalla Store Admin Portal
+          </h1>
         </div>
         <div className="flex flex-row items-center gap-5">
           {/* <Button size="icon" variant="secondary">

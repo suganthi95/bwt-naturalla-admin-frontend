@@ -122,8 +122,8 @@ export default function Sidebar() {
 
   return (
     <section
-      className={`hidden lg:block  transition-all ease-out ${
-        resizeMenu ? "w-52" : "w-16"
+      className={`hidden xl:block  transition-all ease-out ${
+        resizeMenu ? "w-52" : "lg:w-16"
       } `}
     >
       {/* <div
@@ -243,16 +243,16 @@ export default function Sidebar() {
             </TabsList>
           </Tabs>
         </div>
-        <div className="grid place-items-start px-3">
+        <div className="grid place-items-start mt-5 lg:mt-0 px-3">
           <div
             onClick={() => setResizeMenu(!resizeMenu)}
             className="flex items-center gap-x-3  cursor-pointer"
           >
             <div className="w-8 h-8 cursor-pointer grid place-items-center text-white rounded-full bg-secondary-green  transition-all shadow">
               {resizeMenu ? (
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="w-4 h-4 lg:h-5 lg:w-5" />
               ) : (
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="w-4 h-4 lg:h-5 lg:w-5" />
               )}
             </div>
             {resizeMenu && <p className="font-semibold  text-sm">Collapse</p>}
@@ -265,7 +265,7 @@ export default function Sidebar() {
             size="icon"
             className="rounded-full text-primary-green bg-transparent hover:bg-secondary-green/20"
           >
-            <LogOut className="h-5 w-5" />
+            <LogOut className="w-4 h-4 lg:h-5 lg:w-5" />
           </Button>
           {resizeMenu && <p className="font-semibold text-sm">Logout</p>}
         </div>

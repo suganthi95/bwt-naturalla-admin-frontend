@@ -57,7 +57,7 @@ export default function OrdersLists() {
   });
 
   return (
-    <div className=" grid grid-cols-3 gap-x-3 shadow-sm p-4">
+    <div className=" grid  grid-cols-2 gap-y-6 lg:grid-cols-3 gap-x-3 shadow-sm p-4">
       <div className="bg-white p-4 h-fit rounded-xl">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-neutral-800">

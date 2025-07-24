@@ -42,7 +42,7 @@ export default function OrderHistoryDetails({ order_id }: Props) {
   if(isSuccess){
     content = (
       <div className="px-4 pb-4 ">
-        <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
+        <div className="w-full border border-gray-200 rounded-lg text-sm  xl:overflow-hidden">
           <div className="grid grid-cols-3 text-gray-700">
             <div className="p-3">Order Date</div>
             <div className="p-3">Status</div>
@@ -62,7 +62,7 @@ export default function OrderHistoryDetails({ order_id }: Props) {
           </div>
         </div>
         {data.items.length > 0 &&
-          <div className="h-[200px] overflow-y-scroll">
+          <div className="">
             <h2 className="font-semibold">Items</h2>
             <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
               <div className="grid grid-cols-5 bg-gray-100 text-left font-medium text-gray-700">

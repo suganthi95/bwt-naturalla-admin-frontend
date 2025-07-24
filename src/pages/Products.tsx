@@ -13,7 +13,7 @@ function Products() {
   }
 
   return (
-    <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
+    <div className="flex flex-col p-4 gap-3 lg:p-4 w-full h-screen overflow-y-scroll lg:pb-20 bg-slate-100">
       <div className="flex flex-row items-center justify-between">
         <h1 className="text-xl font-semibold">Products</h1>
 

@@ -248,7 +248,7 @@ function OrderTable() {
                 <Eye className="h-5 w-5" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="[&>button]:hidden  overflow-y-auto h-[40rem] !p-0 !max-w-6xl">
+            <DialogContent className="[&>button]:hidden  overflow-y-auto max-w-2xl h-[30rem] xl:h-[40rem] !p-0 xl:!max-w-6xl">
               <DialogHeader className="border-b-2 p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
                 <div className="space-y-3">
                   <DialogTitle className="">Order {order_code}</DialogTitle>
@@ -382,7 +382,7 @@ function OrderTable() {
           <div className="flex flex-row justify-between gap-3 w-full">
             <div className="flex items-center gap-x-3 ">
               <div>
-                <h2 className="font-semibold ">Order list</h2>
+                <h2 className="font-semibold hidden xl:block ">Order list</h2>
                 {/* <p className="text-lead text-sm">21 orders found</p> */}
               </div>
 

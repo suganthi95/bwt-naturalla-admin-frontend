@@ -413,7 +413,7 @@ function UsersTable() {
       <div className="bg-white rounded-lg p-4  space-y-2">
         <div className="flex items-center gap-x-3 ">
           <div>
-            <h2 className="font-semibold ">User list</h2>
+            <h2 className="font-semibold hidden xl:block ">User list</h2>
           </div>
           <div className="relative w-full lg:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />

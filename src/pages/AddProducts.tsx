@@ -53,7 +53,7 @@ function AddProducts() {
 
       <div>
         <Tabs value={tabValue}>
-          <TabsList>
+          <TabsList className="overflow-x-scroll">
             {tabs.map((item) => (
               <TabsTrigger
                 key={item.route}

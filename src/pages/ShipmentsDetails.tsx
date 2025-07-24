@@ -33,7 +33,7 @@ export default function ShipmentsDetails() {
     content = (
       <div className="flex flex-col p-4 gap-3 md:p-4 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
         <ul className="grid grid-cols-4 gap-x-5 items-stretch">
-          <li className="col-span-3">
+          <li className=" col-span-2  xl:col-span-3">
             <div className="flex items-center justify-between">
               <div
                 className="flex items-center gap-x-2 cursor-pointer"
@@ -49,7 +49,7 @@ export default function ShipmentsDetails() {
               </div>
             </div>
 
-            <div className="border rounded-lg bg-white p-4 h-[350px] mt-4">
+            <div className="border overflow-y-scroll rounded-lg bg-white p-4 h-[350px] mt-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-[#0A0A0A] font-semibold">
                   Shipment Information
@@ -137,7 +137,7 @@ export default function ShipmentsDetails() {
             </div>
           </li>
 
-          <li className="col-span-1">
+          <li className="col-span-2 xl:col-span-1">
             <div className="flex justify-end gap-x-3 items-center">
               <Button
                 onClick={() => {

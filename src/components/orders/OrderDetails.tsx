@@ -57,7 +57,7 @@ export default function OrderDetails({ Order }: Props) {
 
   return (
     <>
-      <div className="p-4 grid grid-cols-6">
+      <div className="p-4 grid grid-cols-2 xl:grid-cols-6">
         <div className=" col-span-4">
           <div className="p-4 space-y-4">
             <h2 className="font-semibold">Products</h2>

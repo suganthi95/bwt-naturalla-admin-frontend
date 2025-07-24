@@ -21,7 +21,7 @@ function Home() {
   
   return (
     <div className="flex flex-col p-4 gap-3 md:p-2 w-full h-screen overflow-y-scroll md:pb-20 bg-slate-100">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
         <Card className="p-3 rounded-xl">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -127,7 +127,7 @@ Total Customers              </h1>
           </div>
         </Card>
       </div>
-      <div className="grid grid-cols-2 gap-x-5">
+      <div className="grid  gap-y-4 lg:grid-cols-2 gap-x-5">
         <Earnings Data={data?.revenueByMonth}/>
         <ProductOverview product={data?.productOverview}/>
       </div>
