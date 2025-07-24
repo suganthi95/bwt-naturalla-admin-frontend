@@ -1,4 +1,4 @@
-import { Loader2, MessageCircleOff, Send, Tag } from "lucide-react";
+import { AlertCircle, Loader2, MessageCircleOff, Send, Tag } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -143,7 +143,6 @@ export default function CustomerSupport() {
     SetFilteredQueries(filteredData);
   }, [Queries?.data, searchTerm, selectedPriority, selectedStatus]);
 
-
   return (
     <div className="grid grid-cols-6 gap-x-6">
       <div className=" col-span-3   bg-white shadow">
@@ -287,7 +286,7 @@ export default function CustomerSupport() {
       </div>
       {DetailsLoading ? (
         <TicketDetailSkeleton />
-      ) : (
+      ) : QueriesDetails[0] ? (
         <div className=" col-span-3">
           <div className="   w-full  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
             <div className="border-b">
@@ -486,6 +485,21 @@ export default function CustomerSupport() {
                   )}
                 </Button>
               </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className=" col-span-3">
+          <div className="   w-full h-full grid place-items-center  mx-auto bg-white dark:bg-slate-900 shadow rounded-lg  space-y-6">
+            <div className="grid place-items-center">
+            <AlertCircle className="w-12 h-12 mx-auto text-neutral-400" />
+            <h3 className="text-lg font-semibold text-neutral-700 dark:text-neutral-300">
+              No Ticket Details Available
+            </h3>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              Please select a ticket to view details.
+            </p>
+
             </div>
           </div>
         </div>
