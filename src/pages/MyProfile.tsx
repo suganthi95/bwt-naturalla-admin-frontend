@@ -288,7 +288,7 @@ export default function MyProfile() {
             >
               Back
             </Button>
-            <Button type="submit" disabled={isLoading || isError || isPending}>
+            <Button type="submit" disabled={isLoading  || isPending}>
               {isPending ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (

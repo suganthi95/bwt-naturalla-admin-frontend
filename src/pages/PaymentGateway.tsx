@@ -68,12 +68,12 @@ function PaymentGateway() {
         </div> */}
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3  gap-2 xl:gap-5">
         <Card>
           <CardHeader>
-            <div className="text-xl text-primary-black flex flex-row items justify-between">
+            <div className="text-sm xl:text-xl text-primary-black flex flex-row items justify-between">
               <h1>Total Transactions</h1>
-              <h1 className="text-2xl font-bold">
+              <h1 className=" xl:text-2xl font-bold">
                 {data?.dashboard[0]?.transaction_count}
               </h1>
             </div>
@@ -87,9 +87,9 @@ function PaymentGateway() {
         </Card>
         <Card>
           <CardHeader>
-            <div className="text-xl text-primary-black flex flex-row items justify-between">
+            <div className="text-sm xl:text-xl text-primary-black flex flex-row items justify-between">
               <h1>Success Rate</h1>
-              <h1 className="text-2xl font-bold">
+              <h1 className="xl:text-2xl font-bold">
                 {data?.dashboard[0]?.success_count}
               </h1>
             </div>
@@ -97,9 +97,9 @@ function PaymentGateway() {
         </Card>
         <Card>
           <CardHeader>
-            <div className="text-xl text-primary-black flex flex-row items justify-between">
+            <div className="text-sm xl:text-xl text-primary-black flex flex-row items justify-between">
               <h1>Revenue</h1>
-              <h1 className="text-2xl font-bold">
+              <h1 className="xl:text-2xl font-bold">
                 {data?.dashboard[0]?.transaction_amount
                   ? `₹ ${data?.dashboard[0]?.transaction_amount}`
                   : `₹ 0`}

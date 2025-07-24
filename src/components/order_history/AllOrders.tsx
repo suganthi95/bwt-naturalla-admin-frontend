@@ -39,6 +39,7 @@ import {
 
 import { UserOrderHistoryType } from "@/types/type";
 import OrderHistoryDetails from "./OrderHistoryDetails";
+import dayjs from "dayjs";
 
 interface Props {
   orderHistory: UserOrderHistoryType[];
@@ -79,7 +80,7 @@ function AllOrders({ orderHistory }: Props) {
       accessorKey: "order_date",
       header: () => "Order Date",
       cell: ({ row }) => (
-        <div className="font-semibold">{row.getValue("order_date")}</div>
+        <div className="font-semibold">{dayjs(row.getValue("order_date")).format('MMMM DD YYYY')}</div>
       ),
     },
     {
@@ -150,7 +151,7 @@ function AllOrders({ orderHistory }: Props) {
                   <Eye className="w-5 h-5" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="[&>button]:hidden  !p-0 overflow-y-auto !max-w-3xl">
+              <DialogContent className="[&>button]:hidden  !p-0 overflow-y-auto  max-w-2xl h-[30rem] xl:h-auto xl:!max-w-3xl">
                 <DialogHeader className="bg-[#F5F5F5] p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
                   <DialogTitle className="">
                     {" "}

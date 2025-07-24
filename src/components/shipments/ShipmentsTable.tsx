@@ -16,6 +16,7 @@ import { useAppContext } from "@/contexts/AuthContext";
 
 
 function ShipmentsTable() {
+
     const {auth} = useAppContext()
     const navigate  = useNavigate()
 
@@ -92,6 +93,10 @@ function ShipmentsTable() {
                         <span className="bg-blue-400/25 text-blue-400 rounded-full capitalize px-3 py-1">{row.getValue("current_status")}</span>
                     )
                 }
+
+                return(
+                    <span className="bg-blue-400/25 text-blue-400 rounded-full capitalize px-3 py-1">{row.getValue("current_status")}</span>
+                )
             }
         },
         {

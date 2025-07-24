@@ -49,7 +49,7 @@ export type ProductsType = {
 }
 
 export type ProductFormValues = {
-    // shortDescription: string;
+    shortDescription: string;
     longDescription: string;
     benefits: string;
     howToUse: string;
@@ -87,10 +87,10 @@ export type ProductPriceFormType = {
   unitPrice: number;
   strikeThroughPrice: number;
   specialDiscountType: "flat" | "percent";
-  specialDiscountAmount: number;
-  specialDiscountPercentage: number;
-  discountPeriodStartat: string;
-  discountPeriodendat: string;
+  specialDiscountAmount: number | null;
+  specialDiscountPercentage: number | null;
+  discountPeriodStartat: string | null;
+  discountPeriodendat: string | null;
   minimumStockWarning: number;
   sku: string;
   stockVisibility: string;

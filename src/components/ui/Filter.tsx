@@ -19,7 +19,6 @@ export function Filter({ column, title }: Props) {
 
   const options = [...facets.keys()].filter(item => item !== null).map(item => ({ value: item, label: item }));
 
-  console.log(options)
 
 
   return (
@@ -83,7 +82,6 @@ export function Filter({ column, title }: Props) {
                         selectedValues.add(option.value);
                       }
                       const filterValues = Array.from(selectedValues)
-                      console.log(filterValues);
                       column?.setFilterValue(
                         filterValues.length ? filterValues : undefined
                       )

@@ -70,7 +70,6 @@ export default function AddCategory() {
     handleSubmit,
     setValue,
     watch,
-    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -85,10 +84,10 @@ export default function AddCategory() {
   // const isAddDisabled = !icon || !effects || effects.trim() === "";
 
   const handleAdd = () => {
-    if (!icon) {
-      toast.warning("Select a new icon");
-      return;
-    }
+    // if (!icon) {
+    //   toast.warning("Select a new icon");
+    //   return;
+    // }
 
     if (!effects || effects.trim() === "") {
       toast.warning("Add an effect name");
@@ -103,16 +102,14 @@ export default function AddCategory() {
         return;
       }
       setPairs((prev) => [...prev, { icon_id: icon, effect_name: effects }]);
-      reset({
-        products_effect_name: "",
-      });
+      setValue("products_effect_name", "");
       setValue("products_icon", null);
     }
   };
 
   const [subCategoryInput, setSubCategoryInput] = useState("");
   const [subCategories, setSubCategories] = useState<string[]>([]);
-  const [ subCategoriesError, setSubCategoriesError ] = useState(false);
+  const [subCategoriesError, setSubCategoriesError] = useState(false);
 
   const thumbnailFile = watch("thumbnail")?.[0];
   const [isDragging, setIsDragging] = useState(false);
@@ -137,9 +134,8 @@ export default function AddCategory() {
   };
 
   const onSubmit = (data: FormValues) => {
-
     if (subCategories.length === 0) {
-      setSubCategoriesError(true)
+      setSubCategoriesError(true);
       toast.warning("You must add at least one subcategory");
       return;
     }
@@ -148,8 +144,6 @@ export default function AddCategory() {
       toast.warning("You must add at least one icon effect pair");
       return;
     }
-
-    
 
     const finalData = {
       ...data,
@@ -282,7 +276,7 @@ export default function AddCategory() {
                 onValueChange={(value) =>
                   setValue("products_icon", Number(value))
                 }
-                value={icon !== null ? icon.toString() : undefined}
+                value={icon !== null ? icon.toString() : ''}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select" />
@@ -344,7 +338,7 @@ export default function AddCategory() {
 
           {pairs.length > 0 && (
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {pairs.slice(0, 3).map((pair, index) => {
+              {pairs?.map((pair, index) => {
                 const matchedIcon = ProductIcons?.find(
                   (icon: ProductEffectIcon) => icon.icon_id === pair.icon_id
                 );
@@ -380,11 +374,11 @@ export default function AddCategory() {
                 );
               })}
 
-              {pairs.length > 3 && (
+              {/* {pairs.length > 3 && (
                 <div className="flex items-center justify-center border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
                   +{pairs.length - 3} more
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>

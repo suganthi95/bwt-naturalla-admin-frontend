@@ -93,7 +93,7 @@ export default function UpdateCategory({ onClose, Data }: Props) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey: ["addcategory"],
+    mutationKey: ["updateCategory"],
     mutationFn: (args: { token: string; data: FormValues }) =>
       UpdateCategories(args.token, args.data),
     onSuccess: () => {
@@ -180,6 +180,8 @@ export default function UpdateCategory({ onClose, Data }: Props) {
       handleAddSubCategory();
     }
   };
+  console.log(subCategories);
+  
 
   const onSubmit = async (data: FormValues) => {
     const isValid = await trigger();
@@ -364,7 +366,7 @@ export default function UpdateCategory({ onClose, Data }: Props) {
 
           {pairs.length > 0 && (
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {pairs.slice(0, 3).map((pair, index) => {
+              {pairs?.map((pair, index) => {
                 const matchedIcon = ProductIcons?.find(
                   (icon: ProductEffectIcon) => icon.icon_id === pair.icon_id
                 );
@@ -400,11 +402,11 @@ export default function UpdateCategory({ onClose, Data }: Props) {
                 );
               })}
 
-              {pairs.length > 3 && (
+              {/* {pairs.length > 3 && (
                 <div className="flex items-center justify-center p-1 px-4 border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
                   +{pairs.length - 3} more
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>

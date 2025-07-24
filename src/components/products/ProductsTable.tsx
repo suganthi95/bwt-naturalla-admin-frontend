@@ -1,4 +1,9 @@
-import { BASE_FRONTEND_URL, deleteProduct, getAllProducts } from "@/lib/apis";
+import {
+  BASE_FRONTEND_URL,
+  deleteProduct,
+  getAllProducts,
+  ImportProdcuts,
+} from "@/lib/apis";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -10,10 +15,13 @@ import {
 } from "../ui/dropdown-menu";
 import {
   ChevronDown,
+  CloudUpload,
   Download,
   Edit,
   ExternalLink,
+  Loader2,
   Trash2,
+  Upload,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -37,6 +45,7 @@ import {
   SortingState,
   ColumnFiltersState,
   VisibilityState,
+  FilterFn,
 } from "@tanstack/react-table";
 import { ProductsType } from "@/types";
 import { Filter } from "../ui/Filter";
@@ -56,11 +65,25 @@ import {
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useAppContext } from "@/contexts/AuthContext";
+import { Label } from "../ui/label";
 
 function ProductsTable() {
   const { auth } = useAppContext();
   const navigate = useNavigate();
- const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  const [ImportOpen, SetImportOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const savedPage = sessionStorage.getItem("product-table-page");
+  const initialPage = savedPage ? parseInt(savedPage) : 0;
+  const [pagination, setPagination] = useState({
+    pageIndex: initialPage,
+    pageSize: 10,
+  });
+
+  const multiValueFilter: FilterFn<any> = (row, columnId, filterValue) => {
+    if (!Array.isArray(filterValue)) return true;
+    return filterValue.includes(row.getValue(columnId));
+  };
   const { mutate } = useMutation({
     mutationKey: ["deleteProduct"],
     mutationFn: deleteProduct,
@@ -75,6 +98,12 @@ function ProductsTable() {
         description: error?.response?.data?.message,
       });
     },
+  });
+
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ["getAllProducts"],
+    queryFn: () => getAllProducts(auth?.token ?? ""),
+    refetchOnWindowFocus: false,
   });
 
   const columns: ColumnDef<ProductsType>[] = [
@@ -97,6 +126,7 @@ function ProductsTable() {
     {
       accessorKey: "category_title",
       header: () => "Category",
+      filterFn: multiValueFilter,
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("category_title")}</div>
       ),
@@ -131,9 +161,7 @@ function ProductsTable() {
       header: () => "Current Stock",
       cell: ({ row }) => (
         <div className="capitalize">
-          {row.getValue("current_stock")
-            ? row.getValue("current_stock")
-            : "N/A"}
+          {row.getValue("current_stock") ? row.getValue("current_stock") : "0"}
         </div>
       ),
     },
@@ -179,7 +207,7 @@ function ProductsTable() {
     // },
     {
       accessorKey: "best_selling",
-      header: () => "Combo's",
+      header: () => "Best Selling",
       cell: ({ row }) => (
         <ProductToggle
           state={row.getValue("best_selling")}
@@ -206,16 +234,13 @@ function ProductsTable() {
       enableHiding: false,
       cell: ({ row }) => {
         const { slug } = row.original;
-        const Frontend_Url =BASE_FRONTEND_URL
+        const Frontend_Url = BASE_FRONTEND_URL;
         return (
           <div className="flex flex-row items-center gap-2">
             <Button
               size="icon"
               onClick={() => {
-                window.open(
-                  `${Frontend_Url}/product/${slug}`,
-                  "_blank"
-                );
+                window.open(`${Frontend_Url}/product/${slug}`, "_blank");
               }}
               className="rounded-full text-slate-800 bg-slate-800/10 hover:bg-slate-800/20"
             >
@@ -227,6 +252,10 @@ function ProductsTable() {
                 sessionStorage.setItem(
                   "product-id",
                   row.getValue("product_id")
+                );
+                sessionStorage.setItem(
+                  "product-table-page",
+                  `${table.getState().pagination.pageIndex}`
                 );
                 navigate("/products/edit/product-info");
               }}
@@ -266,15 +295,19 @@ function ProductsTable() {
                   <DialogClose asChild>
                     <Button
                       onClick={() =>
-                        mutate({
-                          token: auth?.token ?? "",
-                          productId: row.getValue("product_id"),
-                        },
-                      {
-                        onSuccess:()=>{
-                        queryClient.invalidateQueries({queryKey:['getAllProducts']})
-                        }
-                      })
+                        mutate(
+                          {
+                            token: auth?.token ?? "",
+                            productId: row.getValue("product_id"),
+                          },
+                          {
+                            onSuccess: () => {
+                              queryClient.invalidateQueries({
+                                queryKey: ["getAllProducts"],
+                              });
+                            },
+                          }
+                        )
                       }
                       variant="destructive"
                     >
@@ -290,12 +323,31 @@ function ProductsTable() {
     },
   ];
 
-  const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ["getAllProducts"],
-    queryFn: () => getAllProducts(auth?.token ?? ""),
-    refetchOnWindowFocus: false,
+  const { mutate: ImportCsv, isPending } = useMutation({
+    mutationKey: ["ImportProduct"],
+    mutationFn: ImportProdcuts,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
+      toast.success("Request Success", {
+        description: "Product Imported Successfully",
+      });
+      SetImportOpen(false);
+    },
+    onError: (error: AxiosError<any>) => {
+      toast.error("Request Failed", {
+        description: error?.response?.data?.message,
+      });
+    },
   });
-
+  const handleFileUpload = () => {
+    if (!selectedFile) {
+      toast.warning("Must add a csv file ");
+    }
+    ImportCsv({
+      token: auth?.token ?? "",
+      data: selectedFile,
+    });
+  };
   const headers = [
     { label: "Product ID", key: "product_id" },
     { label: "Product Title", key: "product_name" },
@@ -343,13 +395,19 @@ function ProductsTable() {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     globalFilterFn: globalFilterFunction,
+
+    filterFns: {
+      multiValueFilter,
+    },
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
       globalFilter,
+      pagination,
     },
+    onPaginationChange: setPagination,
   });
 
   let content;
@@ -368,7 +426,7 @@ function ProductsTable() {
         <div className="flex flex-col gap-2 py-1">
           <div className="flex flex-row gap-3 w-full">
             <div className="flex flex-col lg:flex-row gap-3 justify-between w-full">
-              <div className="flex flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
+              <div className="flex flex-col gap-y-3 xl:flex-row gap-1 justify-between flex-wrap lg:flex-nowrap">
                 <Input
                   placeholder="Search by Product Name..."
                   value={globalFilter}
@@ -385,7 +443,7 @@ function ProductsTable() {
               </div>
             </div>
 
-            <div className="flex flex-row items-center gap-1">
+            <div className="flex flex-row items-center gap-3">
               <CSVLink
                 data={data?.data?.products}
                 headers={headers}
@@ -399,7 +457,75 @@ function ProductsTable() {
                   Export
                 </Button>
               </CSVLink>
+              <Dialog open={ImportOpen} onOpenChange={SetImportOpen}>
+                <DialogTrigger>
+                  <Button variant="default" className="gap-3">
+                    <CloudUpload className="h-5 w-5" />
+                    Import
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Import Products</DialogTitle>
+                    <DialogDescription>
+                      Upload a CSV file to import multiple products at once.
+                    </DialogDescription>
+                  </DialogHeader>
 
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <Label
+                        htmlFor="file"
+                        className="text-sm font-semibold text-title"
+                      >
+                        Upload CSV File
+                      </Label>
+                      <Input
+                        id="file"
+                        type="file"
+                        accept=".csv"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setSelectedFile(file);
+                          }
+                        }}
+                      />
+                      {selectedFile && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Selected File:{" "}
+                          <span className="font-medium">
+                            {selectedFile.name}
+                          </span>
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => SetImportOpen(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        disabled={!selectedFile}
+                        onClick={handleFileUpload}
+                        className=""
+                      >
+                        {isPending ? (
+                          <Loader2 className="animate-spin" />
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="ml-auto">
@@ -491,8 +617,6 @@ function ProductsTable() {
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {/* {table.getFilteredSelectedRowModel().rows.length} of{" "} */}
-            {/* {table.getFilteredRowModel().rows.length} row(s) selected. */}
             Total no.of products: {table.getFilteredRowModel().rows.length}
           </div>
           <div className="space-x-2">

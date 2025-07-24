@@ -25,6 +25,7 @@ export type Blog = {
 
 export type User = {
   user_id: number;
+  has_order:boolean;
   first_name: string;
   last_name: string;
   email: string;
@@ -36,6 +37,7 @@ export type User = {
   city: string | null;
   address: string | null;
   role: string;
+  status:string;
   last_login:string | null
   device_token: string | null;
   otp_verified: boolean | null;
@@ -150,6 +152,7 @@ export type ProductEffectIcon = {
   icon_name: string;
   created_at: string;
   icon_url: string;
+  prod_icon_id: number;
 };
 
 export type BannersType = {
@@ -205,3 +208,53 @@ export interface OrderDetailsByUserType {
     grand_total: number
   }
 }
+
+
+
+export type ContactUsTicket = {
+  contactus_id: number;
+  first_name: string;
+  last_name: string;
+  contact_email: string;
+  contact_phone_no: string;
+  subject: string | null;
+  message_body: string;
+  attachment: string[];
+  priority: string;
+  status: string;
+  customer_id: number;
+  created_at: string; // ISO date string
+  issue_type_id: number;
+  subissue_id: number;
+  admin_read_status: boolean;
+  customer_read_status: boolean;
+  issue_type: string;
+  sub_issue: string;
+  created_time: string; // formatted date string
+  attachment_data: any[];
+};
+
+
+
+export type ProductReview2 = {
+  review_id: number;
+  product_id: number;
+  review_author_id: number;
+  review_txt: string;
+  ratings: number;
+  created_at: string; // ISO timestamp as string
+  review_title: string;
+  review_media_files: string[] | null;
+  product_name: string;
+  product_thumbnail_image: string | null;
+  first_name: string;
+  last_name: string;
+  review_media_urls:string[] | null
+};
+
+
+export type Category = {
+  category_id: number;
+  category_title: string;
+};
+

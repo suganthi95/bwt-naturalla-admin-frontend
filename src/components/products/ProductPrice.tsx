@@ -280,7 +280,7 @@ export function ProductPrice() {
           <Input
             disabled={isPending}
             type="date"
-            min={watch("discountPeriodStartat")}
+            min={watch("discountPeriodStartat") ?? ""}
             placeholder="YYYY-MM-DD"
             {...register("discountPeriodendat")}
           />

@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { CloudUpload, LoaderCircle, X } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addProductInfo,
   getCategories,
@@ -46,12 +46,11 @@ export function ProductInfo() {
   const [tags, setTags] = useState<string[]>([]);
   const [selectedCategoryId, setSeletectedCategoryId] = useState<number>();
   const [tagInput, setTagInput] = useState("");
+ const queryClient = useQueryClient()
   const { data: productIcons } = useQuery({
     queryKey: ["getCategoriesbasedicons", selectedCategoryId],
-    queryFn: () =>
-      getCategoryBasedIcons(auth?.token ?? "", selectedCategoryId!.toString()),
-    enabled:
-      !!auth?.token && !!selectedCategoryId && !isNaN(selectedCategoryId),
+    queryFn: () => getCategoryBasedIcons(auth?.token ?? "", selectedCategoryId!.toString()),
+    enabled: !!auth?.token && !!selectedCategoryId && !isNaN(selectedCategoryId),
     retry: 3,
     select: (data) => data?.data?.data,
   });
@@ -122,6 +121,7 @@ export function ProductInfo() {
     mutationKey: ["product-info"],
     mutationFn: addProductInfo,
     onSuccess: (data) => {
+        queryClient.invalidateQueries({queryKey:["getAllProducts"]})
       sessionStorage.setItem("product-id", data.data.product_id);
       toast.success("Request Success", {
         description: "Product Info saved successfully",
@@ -189,17 +189,32 @@ export function ProductInfo() {
   };
 
   const onSubmit = (data: any) => {
-    console.log(errors);
+
+    let galleryImagesError = false;
+
+    for(let i = 0; i < data.galleryImages.length; i++){
+      if(data.galleryImages[i] instanceof FileList && data.galleryImages[i][0]?.size > 5 * 1024 * 1024){
+        setError(`galleryImages.${i}`, { message: "Image size is more than 5 MB" });
+        galleryImagesError = true
+      }
+    }
+
+    if(galleryImagesError){
+      return;
+    }
+
+    if(data.thumbnail instanceof FileList && data.thumbnail[0].size > 5 * 1024 * 1024){
+      return setError("thumbnail", { message: "Thumbnail size must be less than 5 MB" })
+    }
+
     data.tags = tags;
     const productId = sessionStorage.getItem("product-id");
     if (productId === null) {
-      mutate({ token: auth?.token ?? "", data });
+      mutate({ token: auth?.token ?? "", data:{ ...data,pairs} });
     } else {
       mutate({ token: auth?.token ?? "", data: { ...data, productId, pairs } });
     }
   };
-
-  console.log(productInfoDefaults)
 
   useEffect(() => {
     if (productInfoDefaults && productId) {
@@ -223,8 +238,7 @@ export function ProductInfo() {
   }, [productInfoDefaults, setValue]);
 
 
-
-
+  
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -431,13 +445,13 @@ export function ProductInfo() {
         <Select
           onValueChange={(value) => {
             const selectedIcon = watch("product_effects")?.find(
-              (item: ProductEffectIcon) => item.icon_id === Number(value)
+              (item: ProductEffectIcon) => item.prod_icon_id === Number(value)
             );
 
             if (!selectedIcon) return;
 
             const alreadyExists = pairs?.some(
-              (p) => p.icon_id === selectedIcon.icon_id
+              (p) => p.prod_icon_id === selectedIcon.prod_icon_id
             );
 
             if (!alreadyExists) {
@@ -453,7 +467,7 @@ export function ProductInfo() {
           <SelectContent>
             {watch("product_effects") && watch("product_effects").length > 0 ? (
               watch("product_effects").map((item: ProductEffectIcon) => (
-                <SelectItem key={item.icon_id} value={item.icon_id.toString()}>
+                <SelectItem key={item.prod_icon_id} value={item.prod_icon_id.toString()}>
                   <div className="flex items-center gap-2">
                     <img
                       src={item.icon_url}
@@ -476,7 +490,7 @@ export function ProductInfo() {
 
         {pairs && pairs?.length > 0 && (
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {pairs?.slice(0, 3)?.map((pair, index) => {
+            {pairs?.map((pair, index) => {
               return (
                 <div
                   key={index}
@@ -511,17 +525,11 @@ export function ProductInfo() {
                 </div>
               );
             })}
-
-            {pairs?.length > 3 && (
-              <div className="flex items-center justify-center p-1 px-4 border rounded-md bg-slate-50 text-sm font-medium text-gray-600">
-                +{pairs?.length - 3} more
-              </div>
-            )}
           </div>
         )}
       </div>
 
-</div>
+    </div>
 
       <div>
         <Label>Slug *</Label>
@@ -567,12 +575,12 @@ export function ProductInfo() {
         <Label>Upload Product Image *</Label>
         <p className="text-sm text-muted-foreground mb-2">
           You need to Upload at least 4 images (1000×1000 px) for best display
-          quality, Pay attention to the quality of the pictures you add, comply
+          quality, Pay attention to the quality of the pictures you add <span className="font-semibold">(maximum size is 5 MB)</span>, comply
           with the background color standards. Pictures must be in certain
           dimensions. Notice that the product shows all the details.
         </p>
 
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 xl:grid-cols-5 gap-4">
           {[0, 1, 2, 3, 4].map((_, i) => (
             <div key={i}>
               {(watch(`galleryImages.${i}`) instanceof FileList &&
@@ -590,13 +598,15 @@ export function ProductInfo() {
                   <div className="rounded-lg w-[150px] h-[150px] overflow-hidden border">
                     {watch(`galleryImages.${i}`) instanceof FileList &&
                       watch(`galleryImages.${i}`)[0] && (
-                        <img
-                          className="h-full w-full object-cover"
-                          src={URL.createObjectURL(
-                            watch(`galleryImages.${i}`)[0]
-                          )}
-                          alt="thumbnail"
-                        />
+                        <>
+                          <img
+                            className="h-full w-full object-cover"
+                            src={URL.createObjectURL(
+                              watch(`galleryImages.${i}`)[0]
+                            )}
+                            alt="thumbnail"
+                          />
+                        </>
                       )}
                     {watch(`galleryImages.${i}`)?.media_url && (
                       <img
@@ -624,13 +634,28 @@ export function ProductInfo() {
                     id={`galleryImages.${i}`}
                     className="hidden"
                     type="file"
-                    accept="image/*"
-                    {...register(`galleryImages.${i}`)}
+                    accept=".png, .jpg, .jpeg"
+                    {...register(`galleryImages.${i}`, {
+                      validate: {
+                        fileSize: (value) => {
+                          const file = value && value[0];
+                          const maxSize = 1024 * 1024; // 5MB in bytes
+                          if (file?.size > maxSize) return 'Image size is more than 1 MB';
+                        },
+                      }
+                    })}
                   />
                 </Label>
               )}
+              {errors.galleryImages && (errors?.galleryImages as any)[i] &&
+                <p className="text-sm text-red-500">
+                  {(errors?.galleryImages as any)[i].message}
+                </p>
+              }
+              
             </div>
           ))}
+           
         </div>
       </div>
 
@@ -686,12 +711,20 @@ export function ProductInfo() {
               id="thumbnail"
               className="hidden"
               type="file"
-              accept="image/*"
+              accept=".png, .jpg, .jpeg"
               {...register("thumbnail", {
                 required: {
                   value: true,
                   message: "Thumbnail is required",
                 },
+                validate: {
+                  fileSize: (value) => {
+                  const file = value && value[0];
+                  if (!file) return 'Please select a file.';
+                    const maxSize = 1024 * 1024; // 5MB in bytes
+                    return file.size <= maxSize || 'Thumbnail size must be less than 1MB.';
+                  },
+                }
               })}
             />
           </Label>

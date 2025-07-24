@@ -74,68 +74,79 @@ export default function ProductFaq() {
 
   }, [ productFaqDefaults ])
 
+  let content;
 
-  return (
-    <div className="bg-white p-4 max-w-5xl">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold">Product FAQs</h1>
-          <p className="text-[15px] text-[#4B5563]">
-            Manage frequently asked questions for your products
-          </p>
+  if(true){
+    content = (
+      <div className="bg-white p-4 max-w-5xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold">Product FAQs</h1>
+            <p className="text-[15px] text-[#4B5563]">
+              Manage frequently asked questions for your products
+            </p>
+          </div>
+          <Button onClick={() => setIsAddOpen((prev: any) => ({ ...prev, open: true, faq: null, type: "add", index: null }))}>Add FAQ</Button>
         </div>
-        <Button onClick={() => setIsAddOpen((prev: any) => ({ ...prev, open: true, faq: null, type: "add", index: null }))}>Add FAQ</Button>
-      </div>
-      <Accordion type="multiple" className="space-y-2 mt-4">
-        {faqArray.map((faq, index) => (
-          <AccordionItem
-            key={index}
-            value={index.toString()}
-            className="border rounded-lg"
-          >
-            <div className="flex items-center justify-between w-full p-4 ">
-              <AccordionTrigger className="flex items-center flex-1 text-left font-medium hover:no-underline group [&>svg]:hidden">
-                <div className="flex items-center gap-2">
-                  <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                  {faq.question}
+        {faqArray.length > 0 ?
+          <Accordion type="multiple" className="space-y-2 mt-4">
+            {faqArray.map((faq, index) => (
+              <AccordionItem
+                key={index}
+                value={index.toString()}
+                className="border rounded-lg"
+              >
+                <div className="flex items-center justify-between w-full p-4 ">
+                  <AccordionTrigger className="flex items-center flex-1 text-left font-medium hover:no-underline group [&>svg]:hidden">
+                    <div className="flex items-center gap-2">
+                      <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                      {faq.question}
+                    </div>
+                  </AccordionTrigger>
+
+                  <div className="flex items-center gap-2 ml-2">
+                    <Button
+                      size="icon"
+                      className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C759]/20"
+                      onClick={() => setIsAddOpen({ open: true, faq: faq, type: "edit", index: index })}
+                    >
+                      <Edit className="h-5 w-5" />
+                    </Button>
+
+                    <Button
+                      size="icon"
+                      className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
+                      onClick={() => deleteFaq(index)}
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
-              </AccordionTrigger>
 
-              <div className="flex items-center gap-2 ml-2">
-                <Button
-                  size="icon"
-                  className="rounded-full text-[#34C759] bg-[#34C759]/10 hover:bg-[#34C759]/20"
-                  onClick={() => setIsAddOpen({ open: true, faq: faq, type: "edit", index: index })}
-                >
-                  <Edit className="h-5 w-5" />
-                </Button>
+                <AccordionContent className="px-4 pb-4 text-sm text-primary-black">
+                  <span className="font-semibold block mb-1 text-base">
+                    Answer:
+                  </span>
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion> :
 
-                <Button
-                  size="icon"
-                  className="rounded-full text-red-400 bg-red-400/10 hover:bg-red-400/20"
-                  onClick={() => deleteFaq(index)}
-                >
-                  <Trash2 className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-
-            <AccordionContent className="px-4 pb-4 text-sm text-primary-black">
-              <span className="font-semibold block mb-1 text-base">
-                Answer:
-              </span>
-              {faq.answer}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-      {faqArray.length > 0 &&
+          <div className="h-[200px] flex items-center justify-center text-slate-500">
+            No FAQ's for this product
+          </div>
+        }
+        
         <div className="flex justify-end mt-5">
           <Button disabled={isPending} onClick={submitFaq}>{isPending ? <LoaderCircle className="h-5 w-5 animate-spin"/> : "Save & Submit"}</Button>
         </div>
-      }
-      
-      <AddFaq isAddOpen={isAddOpen} setIsAddOpen={setIsAddOpen} setFaqArray={setFaqArray} />
-    </div>
-  );
+        
+        <AddFaq isAddOpen={isAddOpen} setIsAddOpen={setIsAddOpen} setFaqArray={setFaqArray} />
+      </div>
+    )
+  }
+
+
+  return content;
 }

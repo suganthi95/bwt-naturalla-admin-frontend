@@ -42,7 +42,7 @@ export default function OrderHistoryDetails({ order_id }: Props) {
   if(isSuccess){
     content = (
       <div className="px-4 pb-4 ">
-        <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
+        <div className="w-full border border-gray-200 rounded-lg text-sm  xl:overflow-hidden">
           <div className="grid grid-cols-3 text-gray-700">
             <div className="p-3">Order Date</div>
             <div className="p-3">Status</div>
@@ -62,7 +62,7 @@ export default function OrderHistoryDetails({ order_id }: Props) {
           </div>
         </div>
         {data.items.length > 0 &&
-          <div className="h-[200px] overflow-y-scroll">
+          <div className="">
             <h2 className="font-semibold">Items</h2>
             <div className="w-full border border-gray-200 rounded-lg text-sm overflow-hidden">
               <div className="grid grid-cols-5 bg-gray-100 text-left font-medium text-gray-700">
@@ -132,14 +132,14 @@ export default function OrderHistoryDetails({ order_id }: Props) {
               </div>
               <div className="flex justify-between">
                 <span>Discount</span>
-                <span>₹ {data.payment_info.discount}</span>
+                <span>₹ {data.payment_info.discount > 0 ? `-${data.payment_info.discount}`: data.payment_info.discount}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span>Shipping Cost</span>
                 <span className="font-semibold">₹ {data.payment_info.shipping_cost}</span>
               </div>
               <div className="flex justify-between font-semibold text-base pt-2">
-                <span className="text-[#0B130B]">Grand Total</span>
+                <span className="text-[#0B130B]">Item Total</span>
                 <span className="text-[#0B130B] font-bold">₹ {data.payment_info.grand_total}</span>
               </div>
             </div>

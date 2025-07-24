@@ -10,8 +10,8 @@
 //   );
 // }
 
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import ReactQuill from "react-quill";
@@ -48,7 +48,7 @@ const blogSchema = z.object({
   title: z.string().min(3),
   description: z.string().min(10),
   tags: z.array(z.string()).optional(),
-  status: z.enum(["draft", "published"]),
+  status: z.string(),
   content: z.string().min(10),
 });
 
@@ -77,6 +77,8 @@ export default function EditBlog() {
   const {
     register,
     handleSubmit,
+    control,
+    reset,
     formState: { errors },
     setValue,
   } = useForm<BlogFormValues>({
@@ -89,6 +91,15 @@ export default function EditBlog() {
       tags: blog?.blog_tags,
     },
   });
+  useEffect(() => {
+    reset({
+      status: blog?.blog_status,
+      title: blog?.blog_title,
+      description: blog?.blog_desc,
+      content: blog?.blog_content,
+      tags: blog?.blog_tags,
+    });
+  }, [blog]);
 
   const handleClick = () => {
     fileInputRef.current?.click();
@@ -164,12 +175,7 @@ export default function EditBlog() {
 
   return (
     <div className="flex flex-col p-4  gap-4 w-full  overflow-y-auto bg-slate-100">
-    
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-3"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
         <div className="flex justify-between items-center">
           <div className="flex items-start gap-1 text-xl font-semibold">
             <button
@@ -182,7 +188,6 @@ export default function EditBlog() {
 
             <div>
               <h1 className="text-xl font-semibold"> Edit Blog</h1>
-             
             </div>
           </div>
           <div className="flex justify-between gap-x-2  mt-4 ">
@@ -231,132 +236,151 @@ export default function EditBlog() {
             </div>
           </div>
         </div>
-      <div className="bg-white p-4 space-y-4">
-          
-        <div>
-          <label className="block font-medium mb-1 text-sm">Title</label>
-          <Input {...register("title")} placeholder="Enter blog title" />
-          {errors.title && (
-            <p className="text-red-500 text-sm">{errors.title.message}</p>
-          )}
-        </div>
-        <div>
-          <label className="block font-medium mb-1 text-sm">Description</label>
-          <Textarea
-            {...register("description")}
-            placeholder="Short description"
-          />
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
-        </div>
-        <div className="grid grid-cols-2 gap-x-4">
+        <div className="bg-white p-4 space-y-4">
           <div>
-            <label className="block font-medium mb-1 text-sm">Tags</label>
-            <Input
-              placeholder="Type tag and press Enter"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
+            <label className="block font-medium mb-1 text-sm">Title</label>
+            <Input {...register("title")} placeholder="Enter blog title" />
+            {errors.title && (
+              <p className="text-red-500 text-sm">{errors.title.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="block font-medium mb-1 text-sm">
+              Description
+            </label>
+            <Textarea
+              {...register("description")}
+              placeholder="Short description"
             />
-            <div className="flex flex-wrap gap-2 mt-2">
-              {tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="outline"
-                  className="px-2 py-1 rounded-lg text-sm flex items-center gap-1"
-                >
-                  {tag}
-                  <X
-                    className="w-4 h-4 cursor-pointer ml-1"
-                    onClick={() => removeTag(tag)}
-                  />
-                </Badge>
-              ))}
+            {errors.description && (
+              <p className="text-red-500 text-sm">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
+          <div className="grid grid-cols-2 gap-x-4">
+            <div>
+              <label className="block font-medium mb-1 text-sm">Tags</label>
+              <Input
+                placeholder="Type tag and press Enter"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleTagKeyDown}
+              />
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="outline"
+                    className="px-2 py-1 rounded-lg text-sm flex items-center gap-1"
+                  >
+                    {tag}
+                    <X
+                      className="w-4 h-4 cursor-pointer ml-1"
+                      onClick={() => removeTag(tag)}
+                    />
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* <div>
+              <label className="block font-medium mb-1 text-sm">Status</label>
+              <Select
+                {...register("status")}
+                onValueChange={(value) => setValue("status", value)}
+                defaultValue="draft"
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="published">Published</SelectItem>
+                </SelectContent>
+              </Select>
+            </div> */}
+            <div>
+              <label className="block font-medium mb-1 text-sm">Status</label>
+
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
           </div>
 
           <div>
-            <label className="block font-medium mb-1 text-sm">Status</label>
-            <Select
-              onValueChange={(value) =>
-                setValue("status", value as "draft" | "published")
-              }
-              defaultValue="draft"
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="draft">Draft</SelectItem>
-                <SelectItem value="published">Published</SelectItem>
-              </SelectContent>
-            </Select>
+            <label className="block font-medium text-sm mb-1 text-slate-700">
+              Thumbnail
+            </label>
+
+            {!preview ? (
+              <div
+                className="relative border-2 border-dashed border-slate-300 rounded-lg p-6 flex flex-col items-center justify-center text-center bg-white transition hover:bg-slate-50 cursor-pointer"
+                onClick={handleClick}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                <UploadCloud className="w-10 h-10 text-slate-400 mb-2" />
+                <p className="text-sm text-slate-500">
+                  <span className="font-medium text-slate-600">
+                    Click to upload
+                  </span>{" "}
+                  or drag and drop
+                </p>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleThumbnailChange}
+                  className="hidden"
+                />
+              </div>
+            ) : (
+              <div className="relative mt-2 w-full   group">
+                <img
+                  src={preview}
+                  alt="Thumbnail Preview"
+                  className="rounded-md w-full  object-cover border border-slate-200 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={removeThumbnail}
+                  className="absolute top-2 right-2 bg-white text-red-500 hover:text-red-600 hover:bg-red-100 p-1 rounded-full shadow transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+          <div>
+            <label className="block font-medium mb-1 text-sm">Content</label>
+            <ReactQuill
+              value={editorContent}
+              onChange={(value) => {
+                setEditorContent(value);
+                setValue("content", value);
+              }}
+              theme="snow"
+              className="bg-white rounded-md "
+            />
+            {errors.content && (
+              <p className="text-red-500 text-sm">{errors.content.message}</p>
+            )}
           </div>
         </div>
-
-        <div>
-          <label className="block font-medium text-sm mb-1 text-slate-700">
-            Thumbnail
-          </label>
-
-          {!preview ? (
-            <div
-              className="relative border-2 border-dashed border-slate-300 rounded-lg p-6 flex flex-col items-center justify-center text-center bg-white transition hover:bg-slate-50 cursor-pointer"
-              onClick={handleClick}
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-            >
-              <UploadCloud className="w-10 h-10 text-slate-400 mb-2" />
-              <p className="text-sm text-slate-500">
-                <span className="font-medium text-slate-600">
-                  Click to upload
-                </span>{" "}
-                or drag and drop
-              </p>
-              <Input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleThumbnailChange}
-                className="hidden"
-              />
-            </div>
-          ) : (
-            <div className="relative mt-2 w-full   group">
-              <img
-                src={preview}
-                alt="Thumbnail Preview"
-                className="rounded-md w-full  object-cover border border-slate-200 shadow-sm"
-              />
-              <button
-                type="button"
-                onClick={removeThumbnail}
-                className="absolute top-2 right-2 bg-white text-red-500 hover:text-red-600 hover:bg-red-100 p-1 rounded-full shadow transition-all"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-        </div>
-        <div>
-          <label className="block font-medium mb-1 text-sm">Content</label>
-          <ReactQuill
-            value={editorContent}
-            onChange={(value) => {
-              setEditorContent(value);
-              setValue("content", value);
-            }}
-            theme="snow"
-            className="bg-white rounded-md "
-          />
-          {errors.content && (
-            <p className="text-red-500 text-sm">{errors.content.message}</p>
-          )}
-        </div>
-
-        </div>
-       
       </form>
     </div>
   );

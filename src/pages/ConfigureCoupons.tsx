@@ -46,39 +46,32 @@ import {
 } from "@tanstack/react-table";
 import axios from "axios";
 import dayjs from "dayjs";
-import {
-  BadgePercent,
-  Edit,
-  Loader2,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
+import { BadgePercent, Edit, Loader2, Search, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-
 function ConfigureCoupons() {
-  const [IsAddOpen,setIsAddOpen] = useState(false)
-  const {auth} = useAppContext()
-  const queryClient = useQueryClient()
+  const [IsAddOpen, setIsAddOpen] = useState(false);
+  const { auth } = useAppContext();
+  const queryClient = useQueryClient();
   const {
     data: Coupons,
     isLoading,
     isFetching,
   } = useQuery({
     queryKey: ["couponlists"],
-    queryFn:()=>getConfigureCouponlist(auth?.token ?? ""),
+    queryFn: () => getConfigureCouponlist(auth?.token ?? ""),
     select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
 
-      const { mutate: onDelete, isPending } = useMutation({
-        mutationKey: ["deletecoupon"],
-        mutationFn: (args:{token:string,id: number}) => deleteConfigureCoupons(args.token ?? '',args.id),
-      });
-  
+  const { mutate: onDelete, isPending } = useMutation({
+    mutationKey: ["deletecoupon"],
+    mutationFn: (args: { token: string; id: number }) =>
+      deleteConfigureCoupons(args.token ?? "", args.id),
+  });
+
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "coupon_name",
@@ -134,11 +127,7 @@ function ConfigureCoupons() {
     {
       accessorKey: "usage_count",
       header: () => "Usage",
-      cell: ({ row }) => (
-        <div>
-          {row.getValue("usage_count")}
-        </div>
-      ),
+      cell: ({ row }) => <div>{row.getValue("usage_count")}</div>,
     },
     {
       accessorKey: "end_at",
@@ -199,7 +188,10 @@ function ConfigureCoupons() {
                     <X className="w-6 h-6" />
                   </div>
                 </DialogHeader>
-                <UpdateCoupon onClose={setIsopen} CouponDetails={row.original}/>
+                <UpdateCoupon
+                  onClose={setIsopen}
+                  CouponDetails={row.original}
+                />
               </DialogContent>
             </Dialog>
             <Dialog open={IsDeleteOpen} onOpenChange={setIsDeleteOpen}>
@@ -234,20 +226,26 @@ function ConfigureCoupons() {
                     variant="destructive"
                     disabled={isPending}
                     onClick={() => {
-                      onDelete({token:auth?.token ?? '',id:row.original.coupon_id}, {
-                        onSuccess(data) {
-                          setIsDeleteOpen(false);
-                          toast.success(data?.data?.message);
-                          queryClient.invalidateQueries({
-                            queryKey: ["couponlists"],
-                          });
+                      onDelete(
+                        {
+                          token: auth?.token ?? "",
+                          id: row.original.coupon_id,
                         },
-                        onError: (error) => {
-                          if (axios.isAxiosError(error)) {
-                            toast.error(error?.response?.data?.message);
-                          }
-                        },
-                      });
+                        {
+                          onSuccess(data) {
+                            setIsDeleteOpen(false);
+                            toast.success(data?.data?.message);
+                            queryClient.invalidateQueries({
+                              queryKey: ["couponlists"],
+                            });
+                          },
+                          onError: (error) => {
+                            if (axios.isAxiosError(error)) {
+                              toast.error(error?.response?.data?.message);
+                            }
+                          },
+                        }
+                      );
                     }}
                   >
                     {isPending ? (
@@ -279,15 +277,13 @@ function ConfigureCoupons() {
     _columnId: string,
     filterValue: string
   ) => {
-    const valuesToCheck = [
-      row.original.discount_name,
-      row.original.coupon_code,
-      row.original.type,
-      row.original.value,
-    ];
+    const name = row.original.coupon_name?.toLowerCase() || "";
+    const code = row.original.coupon_code?.toLowerCase() || "";
+    const type = row.original.discount_type?.toLowerCase() || "";
+    const search = filterValue.trim().toLowerCase();
 
-    return valuesToCheck.some((val) =>
-      val?.toLowerCase().includes(filterValue.toLowerCase())
+    return (
+      name.includes(search) || code.includes(search) || type.includes(search)
     );
   };
 
@@ -333,9 +329,7 @@ function ConfigureCoupons() {
           </DialogTrigger>
           <DialogContent className="[&>button]:hidden  !p-0 !max-w-2xl">
             <DialogHeader className="bg-[#F5F5F5] p-3 rounded-lg items-center w-full flex flex-row  justify-between">
-              <DialogTitle className="">
-                Add Coupon 
-              </DialogTitle>
+              <DialogTitle className="">Add Coupon</DialogTitle>
               <div
                 className="cursor-pointer"
                 onClick={() => {
@@ -345,15 +339,15 @@ function ConfigureCoupons() {
                 <X className="w-6 h-6" />
               </div>
             </DialogHeader>
-            <AddCoupon onClose={setIsAddOpen}/>
+            <AddCoupon onClose={setIsAddOpen} />
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3 gap-2 xl:gap-5">
         <Card>
           <CardHeader>
-            <div className="text-xl flex flex-row items justify-between">
+            <div className=" text-sm xl:text-xl flex flex-row items justify-between">
               <h1>Active Discounts</h1>
               <h1>{Coupons?.dashboard?.active_coupons}</h1>
             </div>
@@ -367,22 +361,23 @@ function ConfigureCoupons() {
         </Card>
         <Card>
           <CardHeader>
-            <div className="text-xl flex flex-row items justify-between">
+            <div className=" text-sm xl:text-xl flex flex-row items justify-between">
               <h1>Discount Amount</h1>
-                            <h1>{Coupons?.dashboard?.discount_amount ? `₹ ${Coupons?.dashboard?.discount_amount}` : '0' }</h1>
-
+              <h1>
+                {Coupons?.dashboard?.discount_amount
+                  ? `₹ ${Coupons?.dashboard?.discount_amount}`
+                  : "0"}
+              </h1>
             </div>
           </CardHeader>
-         
         </Card>
         <Card>
           <CardHeader>
-            <div className="text-xl flex flex-row items justify-between">
+            <div className="text-sm xl:text-xl flex flex-row items justify-between">
               <h1>Coupon Usage</h1>
               <h1> {Coupons?.dashboard?.coupon_usage_count}</h1>
             </div>
           </CardHeader>
-        
         </Card>
       </div>
 
@@ -407,7 +402,9 @@ function ConfigureCoupons() {
 
             <Select
               value={
-                (table.getColumn("discount_type")?.getFilterValue() as string) ?? "all"
+                (table
+                  .getColumn("discount_type")
+                  ?.getFilterValue() as string) ?? "all"
               }
               onValueChange={(value) => {
                 table

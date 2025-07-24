@@ -64,7 +64,7 @@ export default function LegalPages() {
             </div>
 
             <div className="flex items-center justify-between text-sm text-gray-500 pt-4">
-                <div className="flex items-center gap-x-4">
+                <div className="flex flex-col items-start gap-y-2 xl:flex-row xl:items-center gap-x-4">
 
               <div className="flex items-center gap-x-2">
                 <Calendar className="w-4 h-4" />

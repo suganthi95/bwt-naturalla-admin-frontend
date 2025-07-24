@@ -108,10 +108,10 @@ function OrderTable() {
       ),
     },
     {
-      accessorKey: "sub_total",
+      accessorKey: "order_amount",
       header: () => "Total Amount",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("sub_total")}</div>
+        <div className="capitalize">{row.getValue("order_amount")}</div>
       ),
     },
 
@@ -238,22 +238,6 @@ function OrderTable() {
         const [Isopen, setIsopen] = useState(false);
         const { payment_status, order_status, order_code, order_date } = row.original;
         return (
-          // <DropdownMenu>
-          //     <DropdownMenuTrigger asChild>
-          //         <Button size="icon" variant={"ghost"}>
-          //             <Settings className="h-5 w-5 stroke-slate-500"/>
-          //         </Button>
-          //     </DropdownMenuTrigger>
-          //     <DropdownMenuContent className="w-[150px]">
-          //         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          //         <DropdownMenuSeparator />
-          //         <DropdownMenuItem className="cursor-pointer">View Order</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Cancel</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Track</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Generate Label</DropdownMenuItem>
-          //         <DropdownMenuItem className="cursor-pointer">Resend SMS</DropdownMenuItem>
-          //     </DropdownMenuContent>
-          //     </DropdownMenu>
           <Dialog open={Isopen} onOpenChange={setIsopen}>
             <DialogTrigger>
               <Button
@@ -264,7 +248,7 @@ function OrderTable() {
                 <Eye className="h-5 w-5" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="[&>button]:hidden  overflow-y-auto h-[40rem] !p-0 !max-w-6xl">
+            <DialogContent className="[&>button]:hidden  overflow-y-auto max-w-2xl h-[30rem] xl:h-[40rem] !p-0 xl:!max-w-6xl">
               <DialogHeader className="border-b-2 p-3 px-6 rounded-lg items-center w-full flex flex-row  justify-between">
                 <div className="space-y-3">
                   <DialogTitle className="">Order {order_code}</DialogTitle>
@@ -325,7 +309,7 @@ function OrderTable() {
   //     { label: "Customer Name", key: "shipmet_first_name" },
   //     { label: "Customer Phone", key: "shipment_phone_no" },
   //     { label: "City / State", key: "city" },
-  //     { label: "Total Amount", key: "sub_total" },
+  //     { label: "Total Amount", key: "order_amount" },
   //     { label: "Payment Status", key: "payment_status" },
   //     { label: "Delivery Status", key: "delivery_status" },
   //     { label: "Order Status", key: "order_status" },
@@ -398,7 +382,7 @@ function OrderTable() {
           <div className="flex flex-row justify-between gap-3 w-full">
             <div className="flex items-center gap-x-3 ">
               <div>
-                <h2 className="font-semibold ">Order list</h2>
+                <h2 className="font-semibold hidden xl:block ">Order list</h2>
                 {/* <p className="text-lead text-sm">21 orders found</p> */}
               </div>
 

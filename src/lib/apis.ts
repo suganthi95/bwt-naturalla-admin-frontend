@@ -3,9 +3,7 @@ import { ProductFormValues } from "@/types";
 import { CouponInput, CreateUserPayload } from "@/types/type";
 import axios from "axios";
 
-
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-
 
 export const BASE_FRONTEND_URL = import.meta.env.VITE_BASE_FRONTEND_URL;
 
@@ -180,8 +178,8 @@ export const UpdateCategories = async (token: string, data: any) => {
 
   formdata.append("category_name", data.category_name);
   formdata.append("slug", data.slug);
-  data.subCategories.forEach((subCategory: string) => {
-    formdata.append("subcategory_name", subCategory);
+  data.subCategories.forEach((subCategory: string, index: number) => {
+    formdata.append(`subcategory_name[${index}]`, subCategory);
   });
   data.icon_data.forEach((item: any, index: number) => {
     formdata.append(
@@ -232,10 +230,25 @@ export const getUsers = async (token: string) => {
     },
   });
 };
+
 export const getUserHistory = async (token: string, id: string) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/order/user-history/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const getUserHistoryByYear = async (
+  token: string,
+  id: string,
+  year?: string
+) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/order/user-order-history/yearly/${id}/${year}`,
     headers: {
       Authorization: token,
     },
@@ -282,6 +295,22 @@ export const deleteUser = async (token: string, id: string) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/auth/deleteUser/${id}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const toggleUserStatus = async (
+  token: string,
+  id: string,
+  status: string
+) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/auth/update/status/${id}`,
+    data: {
+      status,
+    },
     headers: {
       Authorization: token,
     },
@@ -420,6 +449,25 @@ export const getCategoryBasedIcons = async (token: string, id: string) => {
     },
   });
 };
+export const ImportProdcuts = async ({
+  token,
+  data,
+}: {
+  token: string;
+  data: any;
+}) => {
+  const formdata = new FormData();
+  formdata.append("file", data);
+
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/dataImport/import-csv`,
+    data: formdata,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
 export const addProductInfo = async ({
   token,
   data,
@@ -443,8 +491,10 @@ export const addProductInfo = async ({
     formdata.append("thumbnail_image", data.thumbnail[0]);
   }
 
-  data.galleryImages.forEach((image: any, index: number) => {
-    if (image.media_id) {
+  data.galleryImages?.forEach((image: any, index: number) => {
+    if (image === null) {
+      formdata.append(`gallery_images_id[${index}]`, "null");
+    } else if (image.media_id) {
       formdata.append(`gallery_images_id[${index}]`, image.media_id);
     } else {
       formdata.append(`gallery_images`, image[0]);
@@ -485,8 +535,14 @@ export const addProductPrice = async ({
       special_discount_type: data.specialDiscountType,
       special_discount_percent: data?.specialDiscountPercentage,
       special_discount_amount: data?.specialDiscountAmount,
-      discount_start_at: data.discountPeriodStartat === "Invalid Date" ? null : data.discountPeriodStartat,
-      discount_end_at: data.discountPeriodendat === "Invalid Date" ? null : data.discountPeriodendat,
+      discount_start_at:
+        data.discountPeriodStartat === "Invalid Date"
+          ? null
+          : data.discountPeriodStartat,
+      discount_end_at:
+        data.discountPeriodendat === "Invalid Date"
+          ? null
+          : data.discountPeriodendat,
       current_stock: data.currentStock,
       stock_visibility: data.stockVisibility === "show" ? true : false,
       minimum_stock_warning: data.minimumStockWarning,
@@ -507,6 +563,7 @@ export const addProductSpecs = async ({
 }) => {
   const formdata = new FormData();
   formdata.append("product_id", data.productId as string);
+  formdata.append("short_description", data.shortDescription);
   formdata.append("long_description", data.longDescription);
   formdata.append("benefits", data.benefits);
   formdata.append("how_to_use", data.howToUse);
@@ -541,7 +598,10 @@ export const addProductSpecs = async ({
   });
 };
 
-export const addCoupons = async (payload: { token: string, data: { coupon: number, productId: string} }) => {
+export const addCoupons = async (payload: {
+  token: string;
+  data: { coupon: number | null; productId: string };
+}) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/products/add/coupon`,
@@ -652,9 +712,19 @@ export const getProductFaq = async (token: string, productId: string) => {
   });
 };
 
-export const postProductFaq = async ({ token, productId, faq }: { token: string, productId: string, faq: any  }) => {
-
-  const data = faq.map((item: any) => ({ qn: item.question, ans: item.answer }));
+export const postProductFaq = async ({
+  token,
+  productId,
+  faq,
+}: {
+  token: string;
+  productId: string;
+  faq: any;
+}) => {
+  const data = faq.map((item: any) => ({
+    qn: item.question,
+    ans: item.answer,
+  }));
 
   return await axios({
     method: "post",
@@ -663,8 +733,8 @@ export const postProductFaq = async ({ token, productId, faq }: { token: string,
       Authorization: token,
     },
     data: {
-      faq: data
-    }
+      faq: data,
+    },
   });
 };
 
@@ -854,10 +924,10 @@ export const editLegalPage = async (token: string, id: string) => {
   });
 };
 
-export const getCustomerQueries = async (token: string, search: string) => {
+export const getCustomerQueries = async (token: string) => {
   return await axios({
     method: "get",
-    url: `${BASE_URL}/customer/support/?subject=${search}`,
+    url: `${BASE_URL}/customer/support`,
     headers: {
       Authorization: token,
     },
@@ -871,21 +941,24 @@ export const getAllBanners = async (token: string) => {
     headers: {
       Authorization: token,
     },
-  })
-}
+  });
+};
 
-
-
-export const deleteBanner = async ({ token, id }: { token: string, id: number }) => {
+export const deleteBanner = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: number;
+}) => {
   return await axios({
     method: "delete",
     url: `${BASE_URL}/banners/delete-banner/${id}`,
     headers: {
       Authorization: token,
     },
-  })
-}
-
+  });
+};
 
 export const getTicketDetails = async (token: string, id: string) => {
   return await axios({
@@ -897,8 +970,21 @@ export const getTicketDetails = async (token: string, id: string) => {
   });
 };
 
-export const addBanner = async ({ token, title, type, bannerImage, publish, ctaLink }: { token: string, title: string, type: string, bannerImage: FileList, publish: boolean, ctaLink: string }) => {
-
+export const addBanner = async ({
+  token,
+  title,
+  type,
+  bannerImage,
+  publish,
+  ctaLink,
+}: {
+  token: string;
+  title: string;
+  type: string;
+  bannerImage: FileList;
+  publish: boolean;
+  ctaLink: string;
+}) => {
   const formdata = new FormData();
 
   formdata.append("name", title);
@@ -913,12 +999,29 @@ export const addBanner = async ({ token, title, type, bannerImage, publish, ctaL
     headers: {
       Authorization: token,
     },
-    data: formdata
+    data: formdata,
   });
 };
 
-export const updateBanner = async ({ token, title, type, bannerImage, publish, ctaLink, bannerImageId, id }: { token: string, title: string, type: string, bannerImage: FileList, publish: boolean, ctaLink: string, bannerImageId: number, id: number }) => {
-
+export const updateBanner = async ({
+  token,
+  title,
+  type,
+  bannerImage,
+  publish,
+  ctaLink,
+  bannerImageId,
+  id,
+}: {
+  token: string;
+  title: string;
+  type: string;
+  bannerImage: FileList;
+  publish: boolean;
+  ctaLink: string;
+  bannerImageId: number;
+  id: number;
+}) => {
   const formdata = new FormData();
 
   formdata.append("name", title);
@@ -940,26 +1043,20 @@ export const updateBanner = async ({ token, title, type, bannerImage, publish, c
     headers: {
       Authorization: token,
     },
-    data: formdata
+    data: formdata,
   });
 };
 
-export const addReply = async (token: string, ticket_id: string) => {
+export const addReply = async (
+  token: string,
+  ticket_id: string,
+  reply_message: string
+) => {
   return await axios({
     method: "post",
     url: `${BASE_URL}/customer/support/reply/${ticket_id}`,
-    headers: {
-      Authorization: token,
-    },
-  });
-};
-
-export const updatePriority = async (token: string, ticket_id: string,priority:string) => {
-  return await axios({
-    method: "post",
-    url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
-    data:{
-      priority
+    data: {
+      reply_message,
     },
     headers: {
       Authorization: token,
@@ -967,12 +1064,33 @@ export const updatePriority = async (token: string, ticket_id: string,priority:s
   });
 };
 
-export const updateStatus = async (token: string, ticket_id: string,status:string) => {
+export const updatePriority = async (
+  token: string,
+  ticket_id: string,
+  priority: string
+) => {
   return await axios({
-    method: "post",
+    method: "put",
     url: `${BASE_URL}/customer/support/update/priority/${ticket_id}`,
-    data:{
-      status
+    data: {
+      priority,
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+
+export const updateStatus = async (
+  token: string,
+  ticket_id: string,
+  status: string
+) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/customer/support/update/status/${ticket_id}`,
+    data: {
+      status,
     },
     headers: {
       Authorization: token,
@@ -990,7 +1108,13 @@ export const getAllLegalPages = async (token: string) => {
   });
 };
 
-export const getLegalPage = async ({ token, id }: { token: string, id: string }) => {
+export const getLegalPage = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: string;
+}) => {
   return await axios({
     method: "get",
     url: `${BASE_URL}/legal/page/${id}`,
@@ -1001,7 +1125,6 @@ export const getLegalPage = async ({ token, id }: { token: string, id: string })
 };
 
 export const updateLegalPage = async ({ token, ...data }: any) => {
-
   const formdata = new FormData();
 
   formdata.append("page_title", data.title);
@@ -1014,11 +1137,19 @@ export const updateLegalPage = async ({ token, ...data }: any) => {
     headers: {
       Authorization: token,
     },
-    data: formdata
+    data: formdata,
   });
 };
 
-export const updateOrderStatus = async ({ token, id, status }: { token: string, id: string, status: string }) => {
+export const updateOrderStatus = async ({
+  token,
+  id,
+  status,
+}: {
+  token: string;
+  id: string;
+  status: string;
+}) => {
   return await axios({
     method: "put",
     url: `${BASE_URL}/order/update/status/${id}`,
@@ -1026,9 +1157,94 @@ export const updateOrderStatus = async ({ token, id, status }: { token: string, 
       Authorization: token,
     },
     data: {
-      status: status
-    }
+      status: status,
+    },
+  });
+};
+// customer/support/list/reviews?category_id=1&sort=newest&selectby_time=1 week&ratings=3
+
+export const getCustomerReviews = async ({
+  token,
+  category_id,
+  sort,
+  selectby_time,
+  ratings,
+}: {
+  token: string;
+  category_id?: string;
+  sort?: string;
+  selectby_time?: string;
+  ratings?: string;
+}) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/customer/support/list/reviews?category_id=${category_id}&sort=${sort}&selectby_time=${selectby_time}&ratings=${ratings}`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const getAllPromo = async ({ token }: { token: string }) => {
+  return await axios({
+    method: "get",
+    url: `${BASE_URL}/promo/offer`,
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const addPromo = async ({
+  token,
+  promo_offer_txt,
+}: {
+  token: string;
+  promo_offer_txt: string;
+}) => {
+  return await axios({
+    method: "post",
+    url: `${BASE_URL}/promo/offer`,
+    data: {
+      promo_offer_txt,
+    },
+    headers: {
+      Authorization: token,
+    },
+  });
+};
+export const editPromo = async ({
+  token,
+  id,
+  promo_offer_txt,
+}: {
+  token: string;
+  id: string;
+  promo_offer_txt: string;
+}) => {
+  return await axios({
+    method: "put",
+    url: `${BASE_URL}/promo/offer/${id}`,
+    data: {
+      promo_offer_txt,
+    },
+    headers: {
+      Authorization: token,
+    },
   });
 };
 
-
+export const deletePromo = async ({
+  token,
+  id,
+}: {
+  token: string;
+  id: string;
+}) => {
+  return await axios({
+    method: "delete",
+    url: `${BASE_URL}/promo/offer/${id}`,
+  
+    headers: {
+      Authorization: token,
+    },
+  });
+};
