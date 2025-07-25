@@ -237,7 +237,7 @@ export default function OrderDetails({ Order }: Props) {
                   <SelectValue placeholder="Select order status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[ "order confirmed", "Ready to Dispatch", "Shipped", "Delivered", "Not Delivered", "Cancelled", "failed" ].map(item => (
+                  {[ "order confirmed", "Ready to Dispatch","Processing", "Shipped", "Delivered", "Not Delivered", "Cancelled", "failed" ].map(item => (
                     <SelectItem className="capitalize" value={item}>{item}</SelectItem>
                   ))}
                 </SelectContent>
