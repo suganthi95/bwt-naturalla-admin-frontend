@@ -155,6 +155,9 @@ function UsersTable() {
     {
       accessorKey: "status",
       header: () => "Status",
+      filterFn: (row, columnId, filterValue) =>
+        (row.getValue(columnId) as string)?.toLowerCase() ===
+        filterValue?.toLowerCase(),
       cell: ({ row }) => {
         if (row.getValue("status") === "active") {
           return (
@@ -455,11 +458,11 @@ function UsersTable() {
 
           <div className="w-[180px]">
             <Select
-              onValueChange={(value) =>
+              onValueChange={(value) => {
                 table
                   .getColumn("status")
-                  ?.setFilterValue(value === "all" ? undefined : value)
-              }
+                  ?.setFilterValue(value === "all" ? undefined : value);
+              }}
               value={
                 (table.getColumn("status")?.getFilterValue() as string) ?? "all"
               }
@@ -472,12 +475,14 @@ function UsersTable() {
                 {Array.from(
                   table.getColumn("status")?.getFacetedUniqueValues()?.keys() ??
                     []
-                ).map((value) => (
-                  <SelectItem key={value} value={String(value)}>
-                    {String(value).charAt(0).toUpperCase() +
-                      String(value).slice(1)}
-                  </SelectItem>
-                ))}
+                ).map((value) => {
+                  return (
+                    <SelectItem key={value} value={String(value)}>
+                      {String(value).charAt(0).toUpperCase() +
+                        String(value).slice(1)}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </div>

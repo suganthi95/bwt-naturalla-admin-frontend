@@ -16,7 +16,7 @@ import { Coupon, CouponInput } from "@/types/type";
 import { updateConfigureCoupons } from "@/lib/apis";
 import { toast } from "sonner";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { useAppContext } from "@/contexts/AuthContext";
 
 const couponSchema = z.object({
@@ -36,7 +36,7 @@ interface Props {
   CouponDetails: Coupon;
 }
 export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
-  const {auth} = useAppContext()
+  const { auth } = useAppContext();
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationKey: ["updatecoupon"],
@@ -45,10 +45,10 @@ export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
       payload,
       coupon_id,
     }: {
-      token:string;
+      token: string;
       payload: CouponInput;
       coupon_id: number;
-    }) => updateConfigureCoupons( token, payload, coupon_id),
+    }) => updateConfigureCoupons(token, payload, coupon_id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["couponlists"] });
       onClose(false);
@@ -81,7 +81,7 @@ export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
 
   const onSubmit = (data: CouponFormData) => {
     mutate({
-      token:auth?.token ?? "" ,
+      token: auth?.token ?? "",
       payload: {
         coupon_code: data.coupon_code,
         coupon_name: data.coupon_name,
@@ -97,6 +97,25 @@ export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className=" space-y-4 p-4">
+      {/* <span className="text-xs text-muted-foreground">
+        This coupon has expired and is automatically set to{" "}
+        <span className="font-medium text-red-500">Inactive</span>. To
+        reactivate, update the <span className="font-medium">Start Date</span>,{" "}
+        <span className="font-medium">End Date</span>, and set the{" "}
+        <span className="font-medium text-green-600">Status</span> to Active.
+      </span> */}
+
+      <div className="flex items-start gap-1.5 text-xs text-muted-foreground mt-1">
+        <Info className="w-4 h-4 mt-0.5 text-blue-500" />
+        <span>
+          This coupon has expired and is automatically set to
+          <span className="text-red-500 font-medium"> Inactive</span>. To
+          reactivate, update the <span className="font-medium">Start Date</span>
+          ,<span className="font-medium"> End Date</span>, and set the
+          <span className="text-green-600 font-medium"> Status</span> to Active.
+        </span>
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
         <div>
           <Label className="block text-sm font-semibold text-[#232323] mb-1">
@@ -201,7 +220,7 @@ export default function UpdateCoupon({ onClose, CouponDetails }: Props) {
 
       <div className="flex items-center gap-x-3 justify-end">
         <Button type="submit" className="">
-         {isPending ? <Loader2 className="animate-spin"/> : "Update Coupon"} 
+          {isPending ? <Loader2 className="animate-spin" /> : "Update Coupon"}
         </Button>
       </div>
     </form>
