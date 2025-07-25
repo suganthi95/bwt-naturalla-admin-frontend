@@ -133,7 +133,7 @@ function ProductsTable() {
     },
     {
       accessorKey: "unit_price",
-      header: () => "Detail",
+      header: () => "Price",
       cell: ({ row }) => (
         <div className="capitalize">₹ {row.getValue("unit_price")} / Nos</div>
       ),

@@ -1,4 +1,4 @@
-import { CheckCircle2, Search, XCircle } from "lucide-react";
+import { CheckCircle2, OctagonAlert, Search, XCircle } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import {
@@ -144,7 +144,7 @@ export default function CustomerReviews({
 
         {isFetching || isLoading ? (
           <ReviewListSkeleton />
-        ) : (
+        ) : Reviews?.length > 0 && Reviews ? (
           <ul className="pt-4 space-y-6">
             {Reviews?.map((review: ProductReview2, index: number) => (
               <li
@@ -200,14 +200,16 @@ export default function CustomerReviews({
                       {review.review_txt}
                     </p>
                     <div className="flex items-center justify-between">
-                      {(review?.review_media_urls &&
-                        review?.review_media_urls[0])? (
-                          <img
-                            src={review?.review_media_urls[0]}
-                            alt="avatar"
-                            className="w-14 h-14 object-cover"
-                          />
-                        ):<div></div>}
+                      {review?.review_media_urls &&
+                      review?.review_media_urls[0] ? (
+                        <img
+                          src={review?.review_media_urls[0]}
+                          alt="avatar"
+                          className="w-14 h-14 object-cover"
+                        />
+                      ) : (
+                        <div></div>
+                      )}
                       <div className="flex items-center gap-2 mt-2">
                         <Badge className="bg-green-100 text-[#166A51] text-xs font-medium  py-1 rounded-full inline-flex items-center gap-1">
                           <CheckCircle2 className="  fill-[#166A51]   text-white" />
@@ -223,6 +225,16 @@ export default function CustomerReviews({
               </li>
             ))}
           </ul>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-[250px] w-full border border-dashed  rounded-md text-center px-6 py-8">
+            <OctagonAlert className="w-10 h-10 text-gray-400 mb-2" />
+            <h3 className="text-lg font-semibold text-gray-600">
+              No User Reviews Available
+            </h3>
+            <p className="text-sm text-gray-500">
+              Try changing or resetting your filters to see feedback.
+            </p>
+          </div>
         )}
       </div>
     </div>
