@@ -30,7 +30,7 @@ const FormSchema = z.object({
   // coupon: z.number({
   //   required_error: "Please select a coupon.",
   // }),
-   coupon: z.number().optional(),
+   coupon: z.number().nullable().optional(),
 });
 
 export function ProductCoupons() {
@@ -140,11 +140,13 @@ export function ProductCoupons() {
                 !watch("coupon") && "text-muted-foreground"
               )}
             >
-              {watch("coupon")
+              {/* {watch("coupon")
                 ? coupons?.find(
                     (coupon: any) => coupon.value === watch("coupon")
                   )?.label
-                : "Select coupon"}
+                : "Select coupon"} */}
+                {coupons?.find((coupon: any) => coupon.value === watch("coupon"))?.label ?? "Select coupon"}
+
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
