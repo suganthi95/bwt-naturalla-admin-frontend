@@ -5,7 +5,13 @@ import { getOrderDetails, updateOrderStatus } from "@/lib/apis";
 import { Order } from "@/types/type";
 import { useAppContext } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
@@ -14,46 +20,46 @@ interface Props {
 }
 
 export default function OrderDetails({ Order }: Props) {
-
-  const {auth} = useAppContext();
-  const [ orderStatus, setOrderStatus ] = useState("");
+  const { auth } = useAppContext();
+  const [orderStatus, setOrderStatus] = useState("");
   const queryClient = useQueryClient();
 
   const { data } = useQuery({
     queryKey: ["getorderdetails", String(Order.order_id)],
-    queryFn: () => getOrderDetails(auth?.token ?? "" ,String(Order?.order_id)),
+    queryFn: () => getOrderDetails(auth?.token ?? "", String(Order?.order_id)),
     select: (data) => data?.data,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey: [ "updateOrderStatus" ],
+    mutationKey: ["updateOrderStatus"],
     mutationFn: updateOrderStatus,
     onSuccess: () => {
       toast.success("Request Success", { description: "Order status updated" });
-      queryClient.invalidateQueries({ queryKey: [ "getAllorders" ] })
+      queryClient.invalidateQueries({ queryKey: ["getAllorders"] });
     },
     onError: (error: AxiosError<any>) => {
-      toast.error("Request Failed", { description: error?.response?.data.messagae })
-    }
-  })
+      toast.error("Request Failed", {
+        description: error?.response?.data.messagae,
+      });
+    },
+  });
 
   const handleChange = (val: string) => {
     setOrderStatus(val);
     mutate({
       id: Order.order_id.toString(),
       status: val,
-      token: auth?.token as string
-    })
-  }
-
+      token: auth?.token as string,
+    });
+  };
 
   useEffect(() => {
-    if(data){
-      setOrderStatus(Order.order_status)
+    if (data) {
+      setOrderStatus(Order.order_status);
     }
-  }, [ data ])
+  }, [data]);
 
   return (
     <>
@@ -101,7 +107,7 @@ export default function OrderDetails({ Order }: Props) {
             <div className="border-2 flex justify-between items-center p-3">
               <p className="font-medium text-sm text-lead">Status</p>
               <Badge className="bg-[#F1E1F9] text-purple-500">
-               {data?.shipment[0]?.current_status}
+                {data?.shipment[0]?.current_status}
               </Badge>
             </div>
           </div>
@@ -110,34 +116,36 @@ export default function OrderDetails({ Order }: Props) {
             <h3 className="text-lg font-semibold">Payment Summary </h3>
 
             <div className="flex justify-between">
-              <span>Subtotal</span>
-              <span className="font-semibold">₹{Order.sub_total}</span>
-            </div>
-            <div className="flex justify-between items-start text-sm text-muted-foreground">
               <p className="flex flex-col leading-tight">
-                <span className="text-foreground font-medium">Tax</span>
-                <span className="text-xs">Inclusive of 18% tax</span>
+                <span>Total MRP</span>
+                <span className="text-xs">Inclusive of all tax</span>
               </p>
-              <span className=" font-semibold ">₹{Order.tax}</span>
+              <span className="font-semibold">₹{Order.total_mrp}.00</span>
             </div>
 
             <div className="flex justify-between">
-              <span>Discount</span>
-              <span>{Order?.coupon_discount ? `₹ ${Order.coupon_discount}` : '0'}</span>
+              <span>Bag Discount</span>
+              <span>- ₹{Order.bag_discount}.00</span>
             </div>
+            {Order.coupon_discount && (
+              <div className="flex justify-between ">
+                <span className="flex flex-col">Coupon</span>
+                <span className=" font-semibold ">
+                  - ₹{Order.coupon_discount}.00
+                </span>
+              </div>
+            )}
 
             <div className="flex justify-between items-center">
               <span className="flex flex-col">Shipping Cost</span>
-              <span
-                className={`font-semibold gap-x-1.5 flex items-center`}
-              >
-                ₹{Order.shipping_fee}
+              <span className={`font-semibold gap-x-1.5 flex items-center`}>
+                ₹{Order.shipping_fee}.00
               </span>
             </div>
             <div className="flex justify-between font-semibold text-base">
               <span className="font-semibold text-[#0B130B]">Grand Total</span>
               <span className="text-[#0B130B] font-bold">
-                ₹ {Order.order_amount}
+                ₹{Order.order_amount}.00
               </span>
             </div>
           </div>
@@ -149,7 +157,10 @@ export default function OrderDetails({ Order }: Props) {
             <div className="border p-2 px-4 flex items-center gap-x-3">
               {Order?.profile_pic ? (
                 <img
-                  src={ Order?.profile_pic || 'https://ik.imagekit.io/nd8r7mpaev/Atlants/user.png?updatedAt=1738227108834'}
+                  src={
+                    Order?.profile_pic ||
+                    "https://ik.imagekit.io/nd8r7mpaev/Atlants/user.png?updatedAt=1738227108834"
+                  }
                   alt="user"
                   className="size-10 rounded-full"
                 />
@@ -221,7 +232,8 @@ export default function OrderDetails({ Order }: Props) {
                 <p>{Order.address}</p>
                 {/* <p>Seetha Nagar</p> */}
                 <p>
-                  {Order.billing_city}, {Order.billing_state} - {Order.billing_pincode}.
+                  {Order.billing_city}, {Order.billing_state} -{" "}
+                  {Order.billing_pincode}.
                 </p>
               </div>
 
@@ -231,14 +243,31 @@ export default function OrderDetails({ Order }: Props) {
             </div>
 
             <div className="space-y-3">
-              <label className="font-semibold" htmlFor="">Order Status</label>
-              <Select disabled={isPending || orderStatus === "failed"} value={orderStatus} onValueChange={handleChange}>
+              <label className="font-semibold" htmlFor="">
+                Order Status
+              </label>
+              <Select
+                disabled={isPending || orderStatus === "failed"}
+                value={orderStatus}
+                onValueChange={handleChange}
+              >
                 <SelectTrigger className="capitalize">
                   <SelectValue placeholder="Select order status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[ "order confirmed", "Ready to Dispatch","Processing", "Shipped", "Delivered", "Not Delivered", "Cancelled", "failed" ].map(item => (
-                    <SelectItem className="capitalize" value={item}>{item}</SelectItem>
+                  {[
+                    "order confirmed",
+                    "Ready to Dispatch",
+                    "Processing",
+                    "Shipped",
+                    "Delivered",
+                    "Not Delivered",
+                    "Cancelled",
+                    "failed",
+                  ].map((item) => (
+                    <SelectItem className="capitalize" value={item}>
+                      {item}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -246,7 +275,6 @@ export default function OrderDetails({ Order }: Props) {
           </div>
         </div>
       </div>
-
     </>
   );
 }
