@@ -16,10 +16,10 @@ function AddProducts() {
       name: "Product Price & Stocks",
       route: "product-price",
     },
-    {
-      name:"Varients",
-      route:'varients'
-    },
+    // {
+    //   name:"Varients",
+    //   route:'varients'
+    // },
     {
       name: "Description & Specification",
       route: "product-specs",
