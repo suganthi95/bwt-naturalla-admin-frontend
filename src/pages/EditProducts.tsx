@@ -27,6 +27,10 @@ function EditProducts() {
       name: "Product Price & Stocks",
       route: "product-price",
     },
+     {
+      name:"Varients",
+      route:'varients'
+    },
     {
       name: "Description & Specification",
       route: "product-specs",

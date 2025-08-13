@@ -17,6 +17,10 @@ function AddProducts() {
       route: "product-price",
     },
     {
+      name:"Varients",
+      route:'varients'
+    },
+    {
       name: "Description & Specification",
       route: "product-specs",
     },
@@ -53,7 +57,7 @@ function AddProducts() {
 
       <div>
         <Tabs value={tabValue}>
-          <TabsList className="overflow-x-scroll">
+          <TabsList className="md:overflow-x-scroll xl:overflow-visible">
             {tabs.map((item) => (
               <TabsTrigger
                 key={item.route}
