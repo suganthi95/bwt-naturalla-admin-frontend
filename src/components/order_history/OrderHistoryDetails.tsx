@@ -129,7 +129,7 @@ export default function OrderHistoryDetails({ order_id }: Props) {
                 <div className="flex justify-between ">
                   <span className="flex flex-col">Coupon</span>
                   <span className=" font-semibold ">
-                    - ₹{data?.payment_info?.coupon_discount}.00
+                    - ₹{data?.payment_info?.discount}.00
                   </span>
                 </div>
               )}
