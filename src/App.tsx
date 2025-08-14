@@ -32,6 +32,7 @@ import UserHistory from "./pages/UserHistory";
 import LegalPages from "./pages/LegalPages";
 import EditLegalPage from "./pages/EditLegalPage";
 import ProductFaq from "./components/products/ProductFaq";
+import ProductVariants from "./components/products/ProductVariants";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -58,6 +59,7 @@ function App() {
         <Route path="/products/add" element={<AddProducts />}>
           <Route path="product-info" element={<ProductInfo />} />
           <Route path="product-price" element={<ProductPrice />} />
+          <Route path="varients" element={<ProductVariants />} />
           <Route path="product-specs" element={<ProductSpecs />} />
           <Route path="discounts" element={<ProductCoupons />} />
           <Route path="seo" element={<ProductSEO />} />
@@ -65,7 +67,10 @@ function App() {
         </Route>
         <Route path="/products/edit" element={<EditProducts />}>
           <Route path="product-info" element={<ProductInfo />} />
+
           <Route path="product-price" element={<ProductPrice />} />
+          <Route path="varients" element={<ProductVariants />} />
+
           <Route path="product-specs" element={<ProductSpecs />} />
           <Route path="discounts" element={<ProductCoupons />} />
           <Route path="seo" element={<ProductSEO />} />

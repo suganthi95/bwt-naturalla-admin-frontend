@@ -54,6 +54,8 @@ export type User = {
 };
 
 export type Order = {
+  total_mrp: any;
+  bag_discount: any;
   billing_first_name: string;
   billing_last_name: string;
   billing_city: string;
@@ -201,6 +203,8 @@ export interface OrderDetailsByUserType {
     phone_no: string
   }
   payment_info: {
+    total_mrp: any;
+    coupon_discount: any;
     subtotal: number
     tax: number
     discount: number
