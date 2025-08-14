@@ -125,7 +125,7 @@ export default function OrderHistoryDetails({ order_id }: Props) {
                 <span>Bag Discount</span>
                 <span>- ₹{data?.payment_info?.bag_discount}.00</span>
               </div>
-              {data?.payment_info?.coupon_discount && (
+              {data?.payment_info?.discount && (
                 <div className="flex justify-between ">
                   <span className="flex flex-col">Coupon</span>
                   <span className=" font-semibold ">
