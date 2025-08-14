@@ -203,6 +203,7 @@ export interface OrderDetailsByUserType {
     phone_no: string
   }
   payment_info: {
+    bag_discount: any;
     total_mrp: any;
     coupon_discount: any;
     subtotal: number
