@@ -115,15 +115,15 @@ export default function OrderHistoryDetails({ order_id }: Props) {
             <div className="border rounded-lg p-4 space-y-3.5 flex-grow">
               <div className="flex justify-between">
                 <p className="flex flex-col leading-tight">
-                  <span>Total MRP</span>
-                  <span className="text-xs">Inclusive of all tax</span>
+                  <span>Subtotal</span>
+                  {/* <span className="text-xs">Inclusive of all tax</span> */}
                 </p>
-                <span className="font-semibold">₹{data?.payment_info?.total_mrp}.00</span>
+                <span className="font-semibold">₹{data?.payment_info?.subtotal}.00</span>
               </div>
 
               <div className="flex justify-between">
-                <span>Bag Discount</span>
-                <span>- ₹{data?.payment_info?.discount}.00</span>
+                <span>Tax</span>
+                <span>- ₹{data?.payment_info?.tax}.00</span>
               </div>
               {data?.payment_info?.coupon_discount && (
                 <div className="flex justify-between ">

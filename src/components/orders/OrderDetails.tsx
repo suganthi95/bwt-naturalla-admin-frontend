@@ -117,15 +117,15 @@ export default function OrderDetails({ Order }: Props) {
 
             <div className="flex justify-between">
               <p className="flex flex-col leading-tight">
-                <span>Total MRP</span>
-                <span className="text-xs">Inclusive of all tax</span>
+                <span>Subtotal</span>
+                {/* <span className="text-xs">Inclusive of all tax</span> */}
               </p>
-              <span className="font-semibold">₹{Order.total_mrp}.00</span>
+              <span className="font-semibold">₹{Order.sub_total}.00</span>
             </div>
 
             <div className="flex justify-between">
-              <span>Bag Discount</span>
-              <span>- ₹{Order.bag_discount}.00</span>
+              <span>Tax</span>
+              <span>- ₹{Order.tax}.00</span>
             </div>
             {Order.coupon_discount && (
               <div className="flex justify-between ">
