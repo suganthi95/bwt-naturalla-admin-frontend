@@ -7,7 +7,7 @@ export default function PasswordUpdated() {
   return (
     <section className="min-h-screen flex items-center justify-center bg-[#F7F7F7] ">
       <div className="grid place-items-center  px-4">
-        <div className="w-full max-w-md px-4 py-6 sm:px-6 lg:px-8 space-y-2.5 md:space-y-6 text-center">
+        <div className="w-full max-w-xl px-4 py-6 sm:px-6 lg:px-8 space-y-2.5 md:space-y-6 text-center">
           <div className="flex justify-center">
             <Icons.ForgotPasswordSuccess />
           </div>

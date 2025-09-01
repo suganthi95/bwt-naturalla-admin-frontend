@@ -78,11 +78,11 @@ export default function ResetPassword() {
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-[#F7F7F7] ">
-      <div className="  md:w-[400px] p-6 space-y-6 shadow-2xl bg-white rounded-xl">
+      <div className="  md:w-[500px] p-6 space-y-6 shadow-2xl bg-white rounded-xl">
         <div className=" flex items-center justify-center gap-x-1.5">
   <div className="flex items-center justify-center">
               <img src={ASSETS.LOGO_WITH_NAME} alt="logo" />
-          </div>          <h1 className="text-2xl  text-primary roundica">naturalla</h1>
+          </div>        
         </div>
         <div className="grid place-items-center">
           <p className="text-xl font-bold">ResetPassword</p>
@@ -169,7 +169,7 @@ export default function ResetPassword() {
               {isPending ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                "Reset Pasword"
+                "Reset Password"
               )}
             </Button>
           </form>

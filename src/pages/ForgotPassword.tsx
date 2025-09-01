@@ -44,7 +44,7 @@ export default function ForgotPassword() {
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-[#F7F7F7] ">
-      <div className="  md:w-[400px] p-6 space-y-6 shadow-2xl bg-white rounded-xl">
+      <div className="  md:w-[500px] p-6 space-y-6 shadow-2xl bg-white rounded-xl">
         <div className=" flex items-center justify-center gap-x-1.5">
           <CardTitle className="flex items-center justify-center">
             <img src={ASSETS.LOGO_WITH_NAME} alt="logo" />

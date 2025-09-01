@@ -13,19 +13,19 @@ export const Icons = {
       <rect
         width="72"
         height="72"
-        fill="#1E401D"
+        fill="#007AFF"
         fillOpacity="0.1"
         rx="36"
       ></rect>
       <path
-        stroke="#1E401D"
+        stroke="#007AFF"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
         d="M48.501 37.5c-1 5-4.77 9.708-10.06 10.76a12.5 12.5 0 0 1-11.694-20.664C30.375 23.6 36.501 22.5 41.501 24.5"
       ></path>
       <path
-        stroke="#1E401D"
+        stroke="#007AFF"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="3"
