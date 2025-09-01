@@ -26,7 +26,7 @@ export default function PasswordUpdated() {
             <Button
               type="submit"
               className="p-2 px-4 md:h-12 md:rounded-[12px] dark:text-white w-full"
-              onClick={()=>navigate('/login')}
+              onClick={()=>navigate('/sign-in')}
             >
              Login
             </Button>
