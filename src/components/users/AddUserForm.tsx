@@ -83,6 +83,13 @@ export default function AddUserForm({ onClose }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       isActive: true,
+      confirmPassword:"",
+      email:"",
+      firstName:"",
+      lastName:"",
+      password:"",
+      phone:"",
+      role:""
     },
   });
 
