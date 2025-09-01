@@ -54,7 +54,7 @@ return await axios({
 
 export const verifyForgorPasswordToken = async(token:string)=>{
 return await axios({
-  method:'post',
+  method:'get',
   url:`${BASE_URL}/auth/verify/link/${token}`,
 })
 }

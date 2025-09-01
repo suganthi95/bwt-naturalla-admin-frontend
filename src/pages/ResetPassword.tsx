@@ -57,7 +57,7 @@ export default function ResetPassword() {
   });
 
   if (data?.data?.status === false || isError) {
-    navigate("/login");
+    navigate("/sign-in");
     if (isAxiosError(error)) {
       toast.warning(error?.response?.data?.message);
     }
