@@ -68,7 +68,7 @@ export default function ResetPassword() {
         { password: values.password, token: token ?? "" },
         {
           onSuccess: (data:any) => {
-            toast.success(data?.message);
+            toast.success(data?.data?.message);
             navigate("/password-updated");
           },
         }

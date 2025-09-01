@@ -63,13 +63,12 @@ return await axios({
 
 export const resetPassword = async(password: string, token: string)=>{
 return await axios({
-  method:'post',
+  method:'put',
   url:`${BASE_URL}/auth/reset/password`,
-  headers:{
-    Authorization:token
-  },
+
   data:{
-    password
+    password,
+    token
   }
 })
 }
