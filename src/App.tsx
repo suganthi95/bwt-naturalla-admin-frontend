@@ -33,6 +33,10 @@ import LegalPages from "./pages/LegalPages";
 import EditLegalPage from "./pages/EditLegalPage";
 import ProductFaq from "./components/products/ProductFaq";
 import ProductVariants from "./components/products/ProductVariants";
+import ForgotPassword from "./pages/ForgotPassword";
+import OpenEmail from "./pages/OpenEmail";
+import ResetPassword from "./pages/ResetPassword";
+import PasswordUpdated from "./pages/PasswordUpdated";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -100,7 +104,12 @@ function App() {
         <Route path="/legal-pages/edit/:id" element={<EditLegalPage />} />
       </Route>
       <Route path="/sign-in" element={<SignIn />} />
+
       <Route path="*" element={<p>no routes found</p>} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/open-mail" element={<OpenEmail />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/password-updated" element={<PasswordUpdated />} />
     </Routes>
   );
 }

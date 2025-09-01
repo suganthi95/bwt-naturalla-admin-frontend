@@ -1,6 +1,64 @@
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const Icons = {
+    ForgotPasswordSuccess: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      fill="none"
+      viewBox="0 0 72 72"
+    >
+      <rect
+        width="72"
+        height="72"
+        fill="#1E401D"
+        fillOpacity="0.1"
+        rx="36"
+      ></rect>
+      <path
+        stroke="#1E401D"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+        d="M48.501 37.5c-1 5-4.77 9.708-10.06 10.76a12.5 12.5 0 0 1-11.694-20.664C30.375 23.6 36.501 22.5 41.501 24.5"
+      ></path>
+      <path
+        stroke="#1E401D"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+        d="m31.5 35.5 5 5 12-13"
+      ></path>
+    </svg>
+  ),
+  ForgotEmail: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="72"
+      height="72"
+      fill="none"
+      viewBox="0 0 72 72"
+    >
+      <rect width="72" height="72" fill="#DFF5E1" rx="36" />
+      <path
+        stroke="#007AFF"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.667"
+        d="M24 29.334a2.667 2.667 0 0 1 2.667-2.667h18.666A2.667 2.667 0 0 1 48 29.334v13.333a2.667 2.667 0 0 1-2.667 2.667H26.667A2.667 2.667 0 0 1 24 42.667z"
+      />
+      <path
+        stroke="#007AFF"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.667"
+        d="m24 29.334 12 8 12-8"
+      />
+    </svg>
+  ),
   Un_Star: (props: IconProps) => (
     <svg
       {...props}

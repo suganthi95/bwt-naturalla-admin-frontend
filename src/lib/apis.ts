@@ -39,6 +39,41 @@ export const signin = async ({
   });
 };
 
+
+export const forgotPassword = async(email:string)=>{
+return await axios({
+  method:'post',
+  url:`${BASE_URL}/auth/forgot/password`,
+  data:{
+    email
+  }
+})
+}
+
+
+
+export const verifyForgorPasswordToken = async(token:string)=>{
+return await axios({
+  method:'post',
+  url:`${BASE_URL}/auth/verify/link/${token}`,
+})
+}
+
+
+
+export const resetPassword = async(password: string, token: string)=>{
+return await axios({
+  method:'post',
+  url:`${BASE_URL}/auth/reset/password`,
+  headers:{
+    Authorization:token
+  },
+  data:{
+    password
+  }
+})
+}
+
 export const getDashboard = async (token: string) => {
   return await axios({
     method: "get",
