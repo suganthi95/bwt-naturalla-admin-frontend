@@ -73,26 +73,26 @@ export default function OrderDetails({ Order }: Props) {
                 className="flex gap-4 bg-white border rounded-lg p-4 shadow-sm"
               >
                 <img
-                  src={product.product_thumbnail_image}
-                  alt={product.product_name}
+                  src={product?.product_thumbnail_image}
+                  alt={product?.product_name}
                   className="w-24 h-28 object-cover rounded-md"
                 />
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <h3 className="font-semibold text-neutral-800">
-                      {product.product_name}
+                      {product?.product_name}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
-                      SKU: {product.sku}
+                      SKU: {product?.sku}
                     </p>
                     <p className="text-sm text-gray-500">
-                      Quantity: {product.quantity}
+                      Quantity: {product?.quantity}
                     </p>
                   </div>
                 </div>
                 <div className="flex  flex-col gap-2 items-center mt-2">
                   <span className="text-base font-semibold text-primary-black">
-                    Rs.{product.order_amount}
+                    Rs.{product?.unit_price}
                   </span>
                   {/* <span className="text-sm text-gray-400 line-through">
                     Rs.{product.oldPrice}
@@ -117,15 +117,15 @@ export default function OrderDetails({ Order }: Props) {
 
             <div className="flex justify-between">
               <p className="flex flex-col leading-tight">
-                <span>Subtotal</span>
-                {/* <span className="text-xs">Inclusive of all tax</span> */}
+                <span>Total MRP</span>
+                 <span className="text-xs">Inclusive of all tax</span> 
               </p>
-              <span className="font-semibold">₹{Order.sub_total}.00</span>
+              <span className="font-semibold">₹{Order.total_mrp}.00</span>
             </div>
 
             <div className="flex justify-between">
-              <span>Tax</span>
-              <span>- ₹{Order.tax}.00</span>
+              <span>Bag Discount</span>
+              <span>- ₹{Order.bag_discount}.00</span>
             </div>
             {Order.coupon_discount && (
               <div className="flex justify-between ">

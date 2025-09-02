@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForgotPassword } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -38,6 +39,11 @@ export default function ForgotPassword() {
       onSuccess: (data: any) => {
         toast.success(data?.data?.message);
         navigate("/open-mail", { state: { email: values.email } });
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          toast.error(error?.response?.data?.message);
+        }
       },
     });
   };
