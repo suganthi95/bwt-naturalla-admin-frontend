@@ -147,3 +147,55 @@ export interface ShipmentDetailsType {
   tracking_timeline: any[]
 }
 
+export type OrderTimeline = {
+  order_history_id: number;
+  order_id: number;
+  status: string;
+  order_code: string;
+  updated_time: string;
+  shipment_status: string;
+  user_id: number;
+  order_date: string;
+  quantity: number | null;
+  address: string;
+  city: string;
+  state: string;
+  country: string | null;
+  pincode: string;
+  order_amount: number;
+  cash_on_delivery: boolean;
+  payment_method: string;
+  phone_number: string | null;
+  payment_status: string;
+  delivery_status: string;
+  shipping_type_id: number | null;
+  sub_total: number;
+  discount_amount: number | null;
+  coupon_discount: number | null;
+  tax: number;
+  shipping_fee: number;
+  product_ids: number[];
+  assign_delivery: boolean;
+  order_status: string;
+  shipmet_first_name: string;
+  shipment_last_name: string;
+  shipment_email: string;
+  shipment_phone_no: string;
+  coupon_id: number | null;
+  cart_ids: number[] | null;
+  coupon_dis_amount: number | null;
+  shipment_retry_count: number;
+  billing_first_name: string;
+  billing_last_name: string;
+  billing_email: string;
+  billing_phone_no: string;
+  billing_address: string;
+  billing_city: string;
+  billing_state: string;
+  billing_pincode: string;
+  source: string;
+  updated_at: string | null;
+  updated_by: string | null;
+  bag_discount: number;
+  total_mrp: number;
+};
