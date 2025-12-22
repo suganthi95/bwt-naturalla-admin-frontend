@@ -54,7 +54,7 @@ function Navbar() {
           </Sheet>
 
           <h1 className="text-xl font-semibold">
-            Naturalla Store Admin Portal
+            BWT Store Admin Portal
           </h1>
         </div>
         <div className="flex flex-row items-center gap-5">

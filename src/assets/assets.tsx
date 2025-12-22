@@ -1,5 +1,5 @@
 export const ASSETS = {
-  LOGO: "https://res.cloudinary.com/dg8grzdsh/image/upload/v1753769790/naturalla-banner-images/cuwoydfbmywagly3werf.png",
+  LOGO: "https://ik.imagekit.io/otakqhif9/Blackwins-official-site/ChatGPT_Image_Dec_22__2025__04_09_49_PM-removebg-preview.png",
   LOGO_WITH_NAME:
     "https://ik.imagekit.io/zshycew5c/temporary/Logo%20(10).png?updatedAt=1749724067015",
   PHONEPAY:

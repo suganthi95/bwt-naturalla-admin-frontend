@@ -208,7 +208,7 @@ export default function Sidebar() {
             />
           ) : (
             <div className="h-10 w-full flex justify-center items-center">
-              <Icons.logo />
+             BWT
             </div>
           )}
         </div>
