@@ -72,14 +72,14 @@ export default function OrderDetails({ Order }: Props) {
 
   useEffect(() => {
     if (data) {
-      setOrderStatus(Order.order_status);
+      setOrderStatus(Order?.order_status);
     }
   }, [data]);
   const currentStatus =
     data?.orderTimeLine[0]?.order_status || "";
 
-  const activeIndex = STAGES.findIndex(
-    (stage) => stage.toLowerCase() === currentStatus.toLowerCase()
+  const activeIndex = STAGES?.findIndex(
+    (stage) => stage?.toLowerCase() === currentStatus?.toLowerCase()
   );
 
   return (
@@ -175,7 +175,7 @@ export default function OrderDetails({ Order }: Props) {
                                 <div className="w-2 h-2 bg-white rounded-full" />
                               )}
                             </div>
-                            {index !== STAGES.length - 1 && (
+                            {index !== STAGES?.length - 1 && (
                               <div
                                 className={`w-[2px]  h-10  ${
                                   isCompleted || isActive
@@ -227,18 +227,18 @@ export default function OrderDetails({ Order }: Props) {
                 <span>Total MRP</span>
                 <span className="text-xs">Inclusive of all tax</span>
               </p>
-              <span className="font-semibold">₹{Order.total_mrp}.00</span>
+              <span className="font-semibold">₹{Order?.total_mrp}.00</span>
             </div>
 
             <div className="flex justify-between">
               <span>Bag Discount</span>
-              <span>- ₹{Order.bag_discount}.00</span>
+              <span>- ₹{Order?.bag_discount}.00</span>
             </div>
-            {Order.coupon_discount && (
+            {Order?.coupon_discount && (
               <div className="flex justify-between ">
                 <span className="flex flex-col">Coupon</span>
                 <span className=" font-semibold ">
-                  - ₹{Order.coupon_discount}.00
+                  - ₹{Order?.coupon_discount}.00
                 </span>
               </div>
             )}
@@ -246,13 +246,13 @@ export default function OrderDetails({ Order }: Props) {
             <div className="flex justify-between items-center">
               <span className="flex flex-col">Shipping Cost</span>
               <span className={`font-semibold gap-x-1.5 flex items-center`}>
-                ₹{Order.shipping_fee}.00
+                ₹{Order?.shipping_fee}.00
               </span>
             </div>
             <div className="flex justify-between font-semibold text-base">
               <span className="font-semibold text-[#0B130B]">Grand Total</span>
               <span className="text-[#0B130B] font-bold">
-                ₹{Order.order_amount}.00
+                ₹{Order?.order_amount}.00
               </span>
             </div>
           </div>
@@ -279,7 +279,7 @@ export default function OrderDetails({ Order }: Props) {
                 />
               )}
               <p className="text-primary-black">
-                {Order.shipmet_first_name} {Order.shipment_last_name}
+                {Order?.shipmet_first_name} {Order?.shipment_last_name}
               </p>
             </div>
           </div>
@@ -290,12 +290,12 @@ export default function OrderDetails({ Order }: Props) {
             <div className=" p-2 px-4 space-y-2 border ">
               <p className="text-sm flex items-center gap-x-2 text-[#6C7D95]">
                 {" "}
-                <Mail /> {Order.shipment_email}
+                <Mail /> {Order?.shipment_email}
               </p>
               {Order.phone_number && (
                 <p className="text-sm flex items-center gap-x-2 text-[#6C7D95]">
                   {" "}
-                  <Phone /> {Order.phone_number}
+                  <Phone /> {Order?.phone_number}
                 </p>
               )}
             </div>
@@ -307,20 +307,20 @@ export default function OrderDetails({ Order }: Props) {
             <div className="border rounded-lg  p-2 px-4 space-y-3.5">
               <div className="flex items-center gap-x-4 justify-between">
                 <h2 className="font-semibold">
-                  {Order.shipmet_first_name} {Order.shipment_last_name}
+                  {Order?.shipmet_first_name} {Order?.shipment_last_name}
                 </h2>
               </div>
 
               <div className="text-textPrimary">
-                <p>{Order.address}</p>
+                <p>{Order?.address}</p>
                 {/* <p>Seetha Nagar</p> */}
                 <p>
-                  {Order.city}, {Order.state} - {Order.pincode}.
+                  {Order?.city}, {Order?.state} - {Order?.pincode}.
                 </p>
               </div>
 
               <p className="font-medium text-lead text-textPrimary">
-                Ph: {Order.shipment_phone_no}
+                Ph: {Order?.shipment_phone_no}
               </p>
             </div>
           </div>
@@ -331,21 +331,21 @@ export default function OrderDetails({ Order }: Props) {
             <div className="border rounded-lg  p-2 px-4 space-y-3.5">
               <div className="flex items-center gap-x-4 justify-between">
                 <h2 className="font-semibold">
-                  {Order.billing_first_name} {Order.billing_last_name}
+                  {Order?.billing_first_name} {Order?.billing_last_name}
                 </h2>
               </div>
 
               <div className="text-textPrimary">
-                <p>{Order.address}</p>
+                <p>{Order?.address}</p>
                 {/* <p>Seetha Nagar</p> */}
                 <p>
-                  {Order.billing_city}, {Order.billing_state} -{" "}
-                  {Order.billing_pincode}.
+                  {Order?.billing_city}, {Order?.billing_state} -{" "}
+                  {Order?.billing_pincode}.
                 </p>
               </div>
 
               <p className="font-medium text-lead text-textPrimary">
-                Ph: {Order.billing_phone_no}
+                Ph: {Order?.billing_phone_no}
               </p>
             </div>
 

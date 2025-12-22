@@ -60,7 +60,7 @@ function SignIn() {
       <Card className="w-1/3 border-none shadow-md rounded-2xl">
         <CardHeader className="text-center">
           <CardTitle className="flex items-center justify-center">
-            <img src={ASSETS.LOGO_WITH_NAME} alt="logo" />
+            <img src={ASSETS.LOGO} alt="logo" />
           </CardTitle>
           <CardDescription className="text-xl font-semibold">
             Login to your account
