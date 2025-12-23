@@ -58,8 +58,8 @@ function SignIn() {
   return (
     <div className="h-screen flex items-center justify-center bg-slate-50">
       <Card className="w-1/3 border-none shadow-md rounded-2xl">
-        <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center">
+        <CardHeader className="text-center grid place-items-center">
+          <CardTitle className="flex items-center justify-center w-40" >
             <img src={ASSETS.LOGO} alt="logo" />
           </CardTitle>
           <CardDescription className="text-xl font-semibold">
