@@ -9,7 +9,6 @@ import {
   LogOut,
   Newspaper,
   NotepadText,
-  Truck,
   UsersRound,
   WalletMinimal,
 } from "lucide-react";
@@ -75,12 +74,12 @@ export default function Sidebar() {
       icon: <FileText className="w-5" />,
       shouldVisible: true,
     },
-    {
-      name: "Shipments",
-      route: "shipments",
-      icon: <Truck className="w-5" />,
-      shouldVisible: true,
-    },
+    // {
+    //   name: "Shipments",
+    //   route: "shipments",
+    //   icon: <Truck className="w-5" />,
+    //   shouldVisible: true,
+    // },
     {
       name: "Users",
       route: "users",

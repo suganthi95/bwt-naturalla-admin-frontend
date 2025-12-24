@@ -202,28 +202,28 @@ function OrderTable() {
         );
       },
     },
-    {
-      accessorKey: "track_url",
-      header: () => "Tracking URL",
-      cell: ({ row }) => (
-        <div>
-          <Button
-            disabled={!row.original.track_url}
-            onClick={() => {
-              if (row.original.track_url) {
-                window.open(
-                  row.original.track_url,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }
-            }}
-          >
-            Track
-          </Button>
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "track_url",
+    //   header: () => "Tracking URL",
+    //   cell: ({ row }) => (
+    //     <div>
+    //       <Button
+    //         disabled={!row.original.track_url}
+    //         onClick={() => {
+    //           if (row.original.track_url) {
+    //             window.open(
+    //               row.original.track_url,
+    //               "_blank",
+    //               "noopener,noreferrer"
+    //             );
+    //           }
+    //         }}
+    //       >
+    //         Track
+    //       </Button>
+    //     </div>
+    //   ),
+    // },
 
     {
       accessorKey: "actions",

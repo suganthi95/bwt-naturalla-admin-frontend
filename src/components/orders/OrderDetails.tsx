@@ -1,4 +1,3 @@
-import { Badge } from "../ui/badge";
 import { Mail, Phone } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getOrderDetails, updateOrderStatus } from "@/lib/apis";
@@ -14,26 +13,12 @@ import {
 } from "../ui/select";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
-import dayjs from "dayjs";
+
 
 interface Props {
   Order: Order;
 }
-const STAGES = [
-  "Order Confirmed",
-  "Processing",
-  "Ready to Dispatch",
-  "In Transit",
-  "Delivered",
-  "Cancelled",
-  "RTO",
-];
+
 export default function OrderDetails({ Order }: Props) {
   const { auth } = useAppContext();
   const [orderStatus, setOrderStatus] = useState("");
@@ -75,12 +60,12 @@ export default function OrderDetails({ Order }: Props) {
       setOrderStatus(Order?.order_status);
     }
   }, [data]);
-  const currentStatus =
-    data?.orderTimeLine[0]?.order_status || "";
+  // const currentStatus =
+  //   data?.orderTimeLine[0]?.order_status || "";
 
-  const activeIndex = STAGES?.findIndex(
-    (stage) => stage?.toLowerCase() === currentStatus?.toLowerCase()
-  );
+  // const activeIndex = STAGES?.findIndex(
+  //   (stage) => stage?.toLowerCase() === currentStatus?.toLowerCase()
+  // );
 
   return (
     <>
@@ -123,7 +108,7 @@ export default function OrderDetails({ Order }: Props) {
             ))}
           </div>
 
-          <div className="p-4 space-y-4">
+          {/* <div className="p-4 space-y-4">
             <h2 className="font-semibold">Shipment Details</h2>
 
             <Accordion
@@ -217,7 +202,7 @@ export default function OrderDetails({ Order }: Props) {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          </div>
+          </div> */}
 
           <div className="space-y-4  p-4 text-[15px] font-medium text-title">
             <h3 className="text-lg font-semibold">Payment Summary </h3>
