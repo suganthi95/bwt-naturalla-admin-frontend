@@ -368,10 +368,10 @@ export function ProductInfo() {
         </div>
 
         <div>
-          <Label>Unit *</Label>
+          <Label>Size *</Label>
           <Input
             disabled={isPending}
-            placeholder="Unit (eg kg, pc etc)"
+            placeholder="Size"
             {...register("unit", {
               required: {
                 value: true,
