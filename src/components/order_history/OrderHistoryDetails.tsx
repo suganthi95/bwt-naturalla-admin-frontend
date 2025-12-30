@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
 import { getUserOrderDetail } from "@/lib/apis";
 import { useAppContext } from "@/contexts/AuthContext";
@@ -40,9 +39,9 @@ export default function OrderHistoryDetails({ order_id }: Props) {
           </div>
 
           <div className="grid grid-cols-3 hover:bg-gray-50 transition ">
-            <div className="p-3 text-gray-900">
+            {/* <div className="p-3 text-gray-900">
               {dayjs(data.order_date).format("DD-MM-YYYY")}
-            </div>
+            </div> */}
             <div className="p-3">
               <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
                 {data.status}

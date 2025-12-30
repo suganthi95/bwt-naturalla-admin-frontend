@@ -179,29 +179,31 @@ function OrderTable() {
     //     <div className="capitalize">{row.getValue("order_status")}</div>
     //   ),
     // },
-    {
-      accessorKey: "awb_code",
-      header: () => "AWB Code",
-      cell: ({ row }) => {
-        const awbCode = row.getValue("awb_code") as string | null;
-        const handleCopy = () => {
-          if (awbCode) {
-            navigator.clipboard.writeText(awbCode);
-            toast.success("AWB code copied to clipboard!");
-          }
-        };
-        return (
-          <div className="capitalize text-center flex items-center justify-center gap-1">
-            {awbCode || "N/A"}
-            {awbCode && (
-              <button onClick={handleCopy} title="Copy AWB">
-                <Copy className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary transition" />
-              </button>
-            )}
-          </div>
-        );
-      },
-    },
+
+    // {
+    //   accessorKey: "awb_code",
+    //   header: () => "AWB Code",
+    //   cell: ({ row }) => {
+    //     const awbCode = row.getValue("awb_code") as string | null;
+    //     const handleCopy = () => {
+    //       if (awbCode) {
+    //         navigator.clipboard.writeText(awbCode);
+    //         toast.success("AWB code copied to clipboard!");
+    //       }
+    //     };
+    //     return (
+    //       <div className="capitalize text-center flex items-center justify-center gap-1">
+    //         {awbCode || "N/A"}
+    //         {awbCode && (
+    //           <button onClick={handleCopy} title="Copy AWB">
+    //             <Copy className="w-4 h-4 cursor-pointer text-muted-foreground hover:text-primary transition" />
+    //           </button>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
+
     // {
     //   accessorKey: "track_url",
     //   header: () => "Tracking URL",
